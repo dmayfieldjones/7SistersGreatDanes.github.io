@@ -1,0 +1,402 @@
+1:"$Sreact.fragment"
+3:I[8506,["7177","static/chunks/app/layout-4142ed14ae10557c.js"],"default"]
+4:I[5244,[],""]
+5:I[3866,[],""]
+6:I[766,["7177","static/chunks/app/layout-4142ed14ae10557c.js"],"GoogleAnalytics"]
+8:I[6213,[],"OutletBoundary"]
+a:I[6213,[],"MetadataBoundary"]
+c:I[6213,[],"ViewportBoundary"]
+e:I[4835,[],""]
+:HL["/_next/static/css/9feb500ea96c5180.css","style"]
+2:T91f,{"@context":"https://schema.org","@type":"LocalBusiness","@id":"https://dmayfieldjones.github.io/#business","name":"7Sisters Farm","alternateName":"7Sisters Great Danes","description":"Premier Illinois Great Dane breeders at 7Sisters Farm in Central Illinois. AKC registered Great Danes, health tested, family raised.","url":"https://dmayfieldjones.github.io","telephone":"dustin@mayfieldjones.com","email":"dustin@mayfieldjones.com","address":{"@type":"PostalAddress","addressLocality":"Champaign","addressRegion":"IL","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":"40.1164","longitude":"-88.2434"},"areaServed":[{"@type":"State","name":"Illinois"},{"@type":"State","name":"Indiana"},{"@type":"State","name":"Iowa"},{"@type":"State","name":"Missouri"},{"@type":"State","name":"Wisconsin"}],"serviceType":"Great Dane Breeding","priceRange":"$$","paymentAccepted":"Cash, Check","currenciesAccepted":"USD","openingHours":"Mo-Su 09:00-18:00","image":["https://dmayfieldjones.github.io/img/wedding.png","https://dmayfieldjones.github.io/img/2021_5pt_BOW_BOBOH_Waukesha_Mimi_Kim.jpg","https://dmayfieldjones.github.io/img/Colorlogo_nobackground.png"],"logo":"https://dmayfieldjones.github.io/img/Colorlogo_nobackground.png","sameAs":["https://www.tiktok.com/@7sistersgreatdanes"],"founder":[{"@type":"Person","name":"Dustin Mayfield-Jones","jobTitle":"Great Dane Breeder"},{"@type":"Person","name":"Karen Mayfield-Jones","jobTitle":"Great Dane Breeder"}],"keywords":["Illinois Great Dane breeders","Illinois dogs","Illinois breeders","Great Dane breeders Illinois","Central Illinois Great Danes","AKC Great Danes Illinois","Illinois dog breeders","Great Dane puppies Illinois","7Sisters Farm","Champaign Illinois breeders","Urbana Illinois dogs","Illinois Great Dane kennel"],"hasOfferCatalog":{"@type":"OfferCatalog","name":"Great Dane Services","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Product","name":"Great Dane Puppies","description":"AKC registered Great Dane puppies, health tested, family raised"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Great Dane Breeding Consultation","description":"Expert advice on Great Dane breeding, health testing, and care"}}]},"aggregateRating":{"@type":"AggregateRating","ratingValue":"5.0","reviewCount":"1","bestRating":"5","worstRating":"1"}}0:{"P":null,"b":"tuYq7gvHhHsWXKWXd1UUf","p":"","c":["","posts","2025-06-23-more-than-show-and-go"],"i":false,"f":[[["",{"children":["posts",{"children":[["id","2025-06-23-more-than-show-and-go","d"],{"children":["__PAGE__",{}]}]}]},"$undefined","$undefined",true],["",["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/9feb500ea96c5180.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","html",null,{"lang":"en","children":[["$","head",null,{"children":["$","script",null,{"type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"$2"}}]}],["$","body",null,{"children":[["$","$L3",null,{}],["$","div",null,{"className":"wrapper","children":["$","$L4",null,{"parallelRouterKey":"children","segmentPath":["children"],"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L5",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[[],[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":404}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]]],"forbidden":"$undefined","unauthorized":"$undefined"}]}]]}],["$","$L6",null,{"gaId":"G-SDSX26JETX"}]]}]]}],{"children":["posts",["$","$1","c",{"children":[null,["$","$L4",null,{"parallelRouterKey":"children","segmentPath":["children","posts","children"],"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L5",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":[["id","2025-06-23-more-than-show-and-go","d"],["$","$1","c",{"children":[null,["$","$L4",null,{"parallelRouterKey":"children","segmentPath":["children","posts","children","$0:f:0:1:2:children:2:children:0","children"],"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L5",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["__PAGE__",["$","$1","c",{"children":["$L7",null,["$","$L8",null,{"children":"$L9"}]]}],{},null,false]},null,false]},null,false]},null,false],["$","$1","h",{"children":[null,["$","$1","qFx1LsfeudeKgInOv9nIR",{"children":[["$","$La",null,{"children":"$Lb"}],["$","$Lc",null,{"children":"$Ld"}],null]}]]}],false]],"m":"$undefined","G":["$e","$undefined"],"s":false,"S":true}
+d:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+f:T23e1,
+            :root {
+              --primary-color: #bf141c;
+              --text-color: #000000;
+              --background-color: #ffffff;
+              --accent-bg-color: #f8f8f8;
+              --border-color: #e0e0e0;
+              --hover-color: #f0f0f0;
+              --spacing-unit: 0.5rem;
+              --font-family: Arial, sans-serif;
+              --transition-speed: 0.3s;
+            }
+            
+            .content {
+              max-width: 800px;
+              margin: 0 auto;
+              padding: calc(var(--spacing-unit) * 2);
+              font-family: var(--font-family);
+              line-height: 1.6;
+              color: var(--text-color);
+              background-color: var(--background-color);
+            }
+            
+            .post-title {
+              text-align: center;
+              margin-bottom: calc(var(--spacing-unit) * 3);
+            }
+            
+            .post-title h1 {
+              font-size: 2.5rem;
+              color: var(--primary-color);
+              margin-bottom: calc(var(--spacing-unit) * 0.5);
+              font-weight: 600;
+              letter-spacing: 0.5px;
+            }
+            
+            .post-meta {
+              display: flex;
+              flex-wrap: wrap;
+              gap: 1rem;
+              justify-content: center;
+              align-items: center;
+              margin-top: 0.5rem;
+            }
+            
+            .post-date {
+              font-size: 1.1rem;
+              color: #666;
+              font-style: italic;
+            }
+            
+            .post-category {
+              background-color: #bf141c;
+              color: white;
+              padding: 0.25rem 0.75rem;
+              border-radius: 1rem;
+              font-size: 0.9rem;
+              font-weight: 600;
+            }
+            
+            .post-tags {
+              display: flex;
+              flex-wrap: wrap;
+              gap: 0.5rem;
+              justify-content: center;
+            }
+            
+            .post-tag {
+              background-color: #bf141c;
+              color: white;
+              padding: 0.25rem 0.75rem;
+              border-radius: 1rem;
+              font-size: 0.9rem;
+              font-weight: 600;
+            }
+            
+            .post-reading-time {
+              color: #666;
+              font-size: 0.9rem;
+              font-style: italic;
+            }
+            
+            .content-wrapper {
+              max-width: 800px;
+              margin: 0 auto;
+              font-family: var(--font-family);
+              line-height: 1.6;
+              color: var(--text-color);
+              background-color: var(--background-color);
+            }
+            
+            .blog-content {
+              font-size: 1.1rem;
+              line-height: 1.8;
+            }
+            
+            .blog-content h1,
+            .blog-content h2,
+            .blog-content h3,
+            .blog-content h4,
+            .blog-content h5,
+            .blog-content h6 {
+              color: var(--text-color);
+              margin-top: calc(var(--spacing-unit) * 2);
+              margin-bottom: var(--spacing-unit);
+              font-weight: 600;
+            }
+            
+            .blog-content h1 {
+              font-size: 2rem;
+              border-bottom: 2px solid var(--border-color);
+              padding-bottom: calc(var(--spacing-unit) * 0.5);
+            }
+            
+            .blog-content h2 {
+              font-size: 1.75rem;
+              border-left: 4px solid var(--border-color);
+              padding-left: var(--spacing-unit);
+            }
+            
+            .blog-content h3 {
+              font-size: 1.5rem;
+            }
+            
+            .blog-content h4 {
+              font-size: 1.25rem;
+            }
+            
+            .blog-content p {
+              margin-bottom: calc(var(--spacing-unit) * 1.5);
+              text-align: justify;
+            }
+            
+            .blog-content strong {
+              color: var(--text-color);
+              font-weight: 600;
+            }
+            
+            .blog-content em {
+              font-style: italic;
+              color: #666;
+            }
+            
+            .blog-content ul,
+            .blog-content ol {
+              margin-bottom: calc(var(--spacing-unit) * 1.5);
+              padding-left: calc(var(--spacing-unit) * 2);
+            }
+            
+            .blog-content li {
+              margin-bottom: calc(var(--spacing-unit) * 0.5);
+            }
+            
+            .blog-content blockquote {
+              border-left: 4px solid var(--border-color);
+              padding-left: var(--spacing-unit);
+              margin: calc(var(--spacing-unit) * 2) 0;
+              font-style: italic;
+              background-color: var(--accent-bg-color);
+              padding: var(--spacing-unit);
+              border-radius: 4px;
+            }
+            
+            .blog-content code {
+              background-color: var(--accent-bg-color);
+              padding: calc(var(--spacing-unit) * 0.25) calc(var(--spacing-unit) * 0.5);
+              border-radius: 3px;
+              font-family: monospace;
+              color: var(--text-color);
+            }
+            
+            .blog-content pre {
+              background-color: var(--accent-bg-color);
+              padding: var(--spacing-unit);
+              border-radius: 4px;
+              overflow-x: auto;
+              margin: calc(var(--spacing-unit) * 1.5) 0;
+            }
+            
+            .blog-content pre code {
+              background-color: transparent;
+              padding: 0;
+              color: var(--text-color);
+            }
+            
+            .blog-content a {
+              color: var(--primary-color);
+              text-decoration: none;
+              transition: color var(--transition-speed) ease;
+            }
+            
+            .blog-content a:hover {
+              color: #8f0f15;
+              text-decoration: underline;
+            }
+            
+            /* Accordion Styles - matching Common Questions */
+            .blog-content details {
+              margin: calc(var(--spacing-unit) * 1.5) 0;
+              border: 1px solid var(--border-color);
+              border-radius: 4px;
+              overflow: hidden;
+              background-color: var(--background-color);
+            }
+            
+            .blog-content summary {
+              background-color: var(--accent-bg-color);
+              padding: var(--spacing-unit);
+              cursor: pointer;
+              font-weight: 600;
+              color: var(--text-color);
+              transition: background-color var(--transition-speed) ease;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              user-select: none;
+            }
+            
+            .blog-content summary:hover {
+              background-color: var(--hover-color);
+            }
+            
+            .blog-content summary::after {
+              content: '+';
+              font-size: 1.2rem;
+              font-weight: bold;
+              color: var(--primary-color);
+              transition: transform var(--transition-speed) ease;
+            }
+            
+            .blog-content details[open] summary::after {
+              content: '−';
+              transform: rotate(180deg);
+            }
+            
+            .blog-content details[open] summary {
+              border-bottom: 1px solid var(--border-color);
+            }
+            
+            .blog-content details > div {
+              padding: var(--spacing-unit);
+            }
+            
+            .blog-content details > *:not(summary) {
+              padding: var(--spacing-unit);
+            }
+            
+            .accent-color {
+              color: var(--primary-color);
+              font-weight: 600;
+            }
+            
+            @media (max-width: 768px) {
+              .content {
+                padding: var(--spacing-unit);
+              }
+              
+              .post-title h1 {
+                font-size: 2rem;
+              }
+              
+              .blog-content {
+                font-size: 1rem;
+              }
+              
+              .blog-content h1 {
+                font-size: 1.75rem;
+              }
+              
+              .blog-content h2 {
+                font-size: 1.5rem;
+              }
+              
+              .blog-content summary {
+                padding: calc(var(--spacing-unit) * 0.75);
+                font-size: 0.9rem;
+              }
+            }
+            
+            @media print {
+              .blog-content {
+                font-size: 12pt;
+                line-height: 1.6;
+              }
+              
+              .post-title h1 {
+                font-size: 18pt;
+              }
+              
+              .blog-content details {
+                border: none;
+              }
+              
+              .blog-content summary {
+                background-color: transparent;
+                border-bottom: 1px solid var(--border-color);
+              }
+            }
+          10:Tdbc,
+            // Replace "7Sisters" with styled version
+            function replace7Sisters() {
+              const content = document.querySelector('.blog-content');
+              if (content) {
+                // Walk through all text nodes and replace 7Sisters
+                const walker = document.createTreeWalker(
+                  content,
+                  NodeFilter.SHOW_TEXT,
+                  null,
+                  false
+                );
+                
+                const textNodes = [];
+                let node;
+                while (node = walker.nextNode()) {
+                  textNodes.push(node);
+                }
+                
+                textNodes.forEach(textNode => {
+                  const text = textNode.textContent;
+                  if (text.includes('7Sisters')) {
+                    const span = document.createElement('span');
+                    span.innerHTML = text.replace(
+                      /7Sisters/g,
+                      '<span style="color: #bf141c; font-weight: 600;">7</span>Sisters'
+                    );
+                    textNode.parentNode.replaceChild(span, textNode);
+                  }
+                });
+                
+                console.log('7Sisters replacement completed');
+              }
+            }
+            
+            // Try multiple times to ensure content is loaded
+            document.addEventListener('DOMContentLoaded', function() {
+              replace7Sisters();
+              
+              // Also try after a short delay to ensure Markdown is processed
+              setTimeout(replace7Sisters, 100);
+              setTimeout(replace7Sisters, 500);
+              setTimeout(replace7Sisters, 1000);
+            });
+            
+            // Also try when the page is fully loaded
+            window.addEventListener('load', function() {
+              replace7Sisters();
+              setTimeout(replace7Sisters, 100);
+            });
+            
+            // Use MutationObserver to catch any dynamic content changes
+            const observer = new MutationObserver(function(mutations) {
+              mutations.forEach(function(mutation) {
+                if (mutation.type === 'childList') {
+                  replace7Sisters();
+                }
+              });
+            });
+            
+            // Start observing once the content is available
+            setTimeout(function() {
+              const content = document.querySelector('.blog-content');
+              if (content) {
+                observer.observe(content, { childList: true, subtree: true });
+              }
+            }, 1000);
+              
+            // Add accordion functionality
+            const details = document.querySelectorAll('.blog-content details');
+            details.forEach(detail => {
+              const summary = detail.querySelector('summary');
+              if (summary) {
+                summary.addEventListener('click', function(e) {
+                  // Prevent default behavior to handle manually
+                  e.preventDefault();
+                  
+                  // Close other open details
+                  details.forEach(otherDetail => {
+                    if (otherDetail !== detail && otherDetail.open) {
+                      otherDetail.open = false;
+                    }
+                  });
+                  
+                  // Toggle current detail
+                  detail.open = !detail.open;
+                });
+              }
+            });
+          7:[["$","script",null,{"type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\"@context\":\"https://schema.org\",\"@type\":\"Article\",\"headline\":\"More Than Show and Go: Our Journey into the Illini Great Dane Club\",\"description\":\"← Back to Blog Archivehttps://mayfieldjones.com/archive    When Pat Lawrence gathered friends around her kitchen table in 1982, she may have had no idea her vis...\",\"image\":\"https://mayfieldjones.com/img/logo.png\",\"author\":{\"@type\":\"Person\",\"name\":\"Dustin Mayfield-Jones\",\"url\":\"https://mayfieldjones.com/about\"},\"publisher\":{\"@type\":\"Organization\",\"name\":\"7Sisters Farm\",\"logo\":{\"@type\":\"ImageObject\",\"url\":\"https://mayfieldjones.com/img/logo.png\"}},\"datePublished\":\"2025-06-23T00:00:00.000Z\",\"dateModified\":\"2025-06-23T00:00:00.000Z\",\"mainEntityOfPage\":{\"@type\":\"WebPage\",\"@id\":\"https://mayfieldjones.com/posts/2025-06-23-more-than-show-and-go\"},\"articleSection\":\"Community & Show Experience\",\"keywords\":[\"Great Dane\",\"dog breeding\",\"dog care\",\"community & show experience\"],\"wordCount\":1359,\"timeRequired\":\"7 min read\",\"inLanguage\":\"en-US\"}"}}],["$","div",null,{"className":"content","children":[["$","div",null,{"className":"post-title","children":[["$","h1",null,{"children":"More Than Show and Go: Our Journey into the Illini Great Dane Club"}],["$","div",null,{"className":"post-meta","children":[["$","span",null,{"className":"post-date","children":"June 22, 2025"}],["$","span",null,{"className":"post-category","children":"Community & Show Experience"}],["$","span",null,{"className":"post-reading-time","children":"7 min read"}]]}]]}],["$","main",null,{"className":"content-wrapper","children":[["$","article",null,{"className":"blog-content","children":[["$","p","p-0",{"children":["$","a","a-0",{"href":"https://mayfieldjones.com/archive","children":"← Back to Blog Archive"}]}],"\n",["$","p","p-1",{"children":"When Pat Lawrence gathered friends around her kitchen table in 1982, she may have had no idea her vision would still be shaping Great Dane breeders four decades later. She dreamed of a \"different kind of club\"—one that offered education, community, and genuine relationships rather than just competition.\nThree years ago in 2022, my spouse Karen and I walked into our first Illini Great Dane Club meeting as curious newcomers. Today, we're deeply involved in a community that's taught us what responsible breeding and genuine mentorship look like. Here's our story of discovering what \"more than show and go\" really means, and why it matters for every family considering a Great Dane."}],"\n",["$","details","details-0",{"node":{"type":"element","tagName":"details","properties":{},"children":[{"type":"text","value":"\n","position":{"start":{"line":9,"column":10,"offset":759},"end":{"line":10,"column":1,"offset":760}}},{"type":"element","tagName":"summary","properties":{},"children":[{"type":"element","tagName":"strong","properties":{},"children":[{"type":"text","value":"Key Takeaways","position":{"start":{"line":10,"column":18,"offset":777},"end":{"line":10,"column":31,"offset":790}}}],"position":{"start":{"line":10,"column":10,"offset":769},"end":{"line":10,"column":40,"offset":799}}}],"position":{"start":{"line":10,"column":1,"offset":760},"end":{"line":10,"column":50,"offset":809}}},{"type":"text","value":"\n"},{"type":"element","tagName":"ul","properties":{},"children":[{"type":"text","value":"\n"},{"type":"element","tagName":"li","properties":{},"children":[{"type":"text","value":"The Illini Great Dane Club is built on education, mentorship, and community—not just competition.","position":{"start":{"line":12,"column":3,"offset":813},"end":{"line":12,"column":100,"offset":910}}}],"position":{"start":{"line":12,"column":1,"offset":811},"end":{"line":12,"column":100,"offset":910}}},{"type":"text","value":"\n"},{"type":"element","tagName":"li","properties":{},"children":[{"type":"text","value":"Responsible breeders are deeply involved in ongoing learning and service, not just producing puppies.","position":{"start":{"line":13,"column":3,"offset":913},"end":{"line":13,"column":104,"offset":1014}}}],"position":{"start":{"line":13,"column":1,"offset":911},"end":{"line":13,"column":104,"offset":1014}}},{"type":"text","value":"\n"},{"type":"element","tagName":"li","properties":{},"children":[{"type":"text","value":"Choosing a Great Dane from a breeder with this philosophy means joining a supportive, knowledgeable community.","position":{"start":{"line":14,"column":3,"offset":1017},"end":{"line":14,"column":113,"offset":1127}}}],"position":{"start":{"line":14,"column":1,"offset":1015},"end":{"line":14,"column":113,"offset":1127}}},{"type":"text","value":"\n"},{"type":"element","tagName":"li","properties":{},"children":[{"type":"text","value":"The club's founders and members prioritize breed preservation, ethical breeding, and lifelong support for families.","position":{"start":{"line":15,"column":3,"offset":1130},"end":{"line":15,"column":118,"offset":1245}}}],"position":{"start":{"line":15,"column":1,"offset":1128},"end":{"line":15,"column":118,"offset":1245}}},{"type":"text","value":"\n"},{"type":"element","tagName":"li","properties":{},"children":[{"type":"text","value":"Community events, educational programs, and mentorship are central to the club's mission.","position":{"start":{"line":16,"column":3,"offset":1248},"end":{"line":16,"column":92,"offset":1337}}}],"position":{"start":{"line":16,"column":1,"offset":1246},"end":{"line":16,"column":92,"offset":1337}}},{"type":"text","value":"\n"}],"position":{"start":{"line":12,"column":1,"offset":811},"end":{"line":16,"column":92,"offset":1337}}},{"type":"text","value":"\n"}],"position":{"start":{"line":9,"column":1,"offset":750},"end":{"line":18,"column":11,"offset":1349}}},"children":["\n",["$","summary","summary-0",{"node":"$7:1:props:children:1:props:children:0:props:children:4:props:node:children:1","children":["$","strong","strong-0",{"children":"Key Takeaways"}]}],"\n",["$","ul","ul-0",{"children":["\n",["$","li","li-0",{"children":"The Illini Great Dane Club is built on education, mentorship, and community—not just competition."}],"\n",["$","li","li-1",{"children":"Responsible breeders are deeply involved in ongoing learning and service, not just producing puppies."}],"\n",["$","li","li-2",{"children":"Choosing a Great Dane from a breeder with this philosophy means joining a supportive, knowledgeable community."}],"\n",["$","li","li-3",{"children":"The club's founders and members prioritize breed preservation, ethical breeding, and lifelong support for families."}],"\n",["$","li","li-4",{"children":"Community events, educational programs, and mentorship are central to the club's mission."}],"\n"]}],"\n"]}],"\n",["$","h2","h2-0",{"id":"from-newcomers-to-community-members","children":"From Newcomers to Community Members"}],"\n",["$","p","p-2",{"children":"In just three years, my spouse Karen and I have gone from Outstanding New Members to leaders alongside many other dedicated volunteers in the Illini Great Dane Club—a journey that reflects the club's remarkable ability to nurture dedication and honor the enduring vision of its founders."}],"\n",["$","details","details-1",{"node":{"type":"element","tagName":"details","properties":{},"children":[{"type":"text","value":"\n","position":{"start":{"line":24,"column":10,"offset":1689},"end":{"line":25,"column":1,"offset":1690}}},{"type":"element","tagName":"summary","properties":{},"children":[{"type":"element","tagName":"strong","properties":{},"children":[{"type":"text","value":"Our Recognition & Service Roles","position":{"start":{"line":25,"column":18,"offset":1707},"end":{"line":25,"column":49,"offset":1738}}}],"position":{"start":{"line":25,"column":10,"offset":1699},"end":{"line":25,"column":58,"offset":1747}}}],"position":{"start":{"line":25,"column":1,"offset":1690},"end":{"line":25,"column":68,"offset":1757}}},{"type":"text","value":"\n"},{"type":"element","tagName":"p","properties":{},"children":[{"type":"text","value":"The club has honored us with recognition that we see as opportunities to serve: the ","position":{"start":{"line":27,"column":1,"offset":1759},"end":{"line":27,"column":85,"offset":1843}}},{"type":"element","tagName":"strong","properties":{},"children":[{"type":"text","value":"2022 Outstanding New Member Award","position":{"start":{"line":27,"column":87,"offset":1845},"end":{"line":27,"column":120,"offset":1878}}}],"position":{"start":{"line":27,"column":85,"offset":1843},"end":{"line":27,"column":122,"offset":1880}}},{"type":"text","value":" along with the ","position":{"start":{"line":27,"column":122,"offset":1880},"end":{"line":27,"column":138,"offset":1896}}},{"type":"element","tagName":"strong","properties":{},"children":[{"type":"text","value":"AKC Title Award","position":{"start":{"line":27,"column":140,"offset":1898},"end":{"line":27,"column":155,"offset":1913}}}],"position":{"start":{"line":27,"column":138,"offset":1896},"end":{"line":27,"column":157,"offset":1915}}},{"type":"text","value":" for our first champion Piper, Karen's ","position":{"start":{"line":27,"column":157,"offset":1915},"end":{"line":27,"column":196,"offset":1954}}},{"type":"element","tagName":"strong","properties":{},"children":[{"type":"text","value":"2023 Outstanding Service Award","position":{"start":{"line":27,"column":198,"offset":1956},"end":{"line":27,"column":228,"offset":1986}}}],"position":{"start":{"line":27,"column":196,"offset":1954},"end":{"line":27,"column":230,"offset":1988}}},{"type":"text","value":", and our ","position":{"start":{"line":27,"column":230,"offset":1988},"end":{"line":27,"column":240,"offset":1998}}},{"type":"element","tagName":"strong","properties":{},"children":[{"type":"text","value":"2024 Top Breeder","position":{"start":{"line":27,"column":242,"offset":2000},"end":{"line":27,"column":258,"offset":2016}}}],"position":{"start":{"line":27,"column":240,"offset":1998},"end":{"line":27,"column":260,"offset":2018}}},{"type":"text","value":", ","position":{"start":{"line":27,"column":260,"offset":2018},"end":{"line":27,"column":262,"offset":2020}}},{"type":"element","tagName":"strong","properties":{},"children":[{"type":"text","value":"Breeder of AKC Title","position":{"start":{"line":27,"column":264,"offset":2022},"end":{"line":27,"column":284,"offset":2042}}}],"position":{"start":{"line":27,"column":262,"offset":2020},"end":{"line":27,"column":286,"offset":2044}}},{"type":"text","value":", and ","position":{"start":{"line":27,"column":286,"offset":2044},"end":{"line":27,"column":292,"offset":2050}}},{"type":"element","tagName":"strong","properties":{},"children":[{"type":"text","value":"Puppy Class Blues - Bitch","position":{"start":{"line":27,"column":294,"offset":2052},"end":{"line":27,"column":319,"offset":2077}}}],"position":{"start":{"line":27,"column":292,"offset":2050},"end":{"line":27,"column":321,"offset":2079}}},{"type":"text","value":" awards. More importantly, the club has trusted us with leadership roles that let us give back to the community that welcomed us.","position":{"start":{"line":27,"column":321,"offset":2079},"end":{"line":27,"column":450,"offset":2208}}}],"position":{"start":{"line":27,"column":1,"offset":1759},"end":{"line":27,"column":450,"offset":2208}}},{"type":"text","value":"\n"},{"type":"element","tagName":"p","properties":{},"children":[{"type":"element","tagName":"strong","properties":{},"children":[{"type":"text","value":"Our Service Journey:","position":{"start":{"line":29,"column":3,"offset":2212},"end":{"line":29,"column":23,"offset":2232}}}],"position":{"start":{"line":29,"column":1,"offset":2210},"end":{"line":29,"column":25,"offset":2234}}}],"position":{"start":{"line":29,"column":1,"offset":2210},"end":{"line":29,"column":25,"offset":2234}}},{"type":"text","value":"\n"},{"type":"element","tagName":"ul","properties":{},"children":[{"type":"text","value":"\n"},{"type":"element","tagName":"li","properties":{},"children":[{"type":"text","value":"2022-2025: Ways and Means Chairs (multiple years)","position":{"start":{"line":30,"column":3,"offset":2237},"end":{"line":30,"column":52,"offset":2286}}}],"position":{"start":{"line":30,"column":1,"offset":2235},"end":{"line":30,"column":52,"offset":2286}}},{"type":"text","value":"\n"},{"type":"element","tagName":"li","properties":{},"children":[{"type":"text","value":"2023-2024: Karen as Show Chair and Membership Chair, Dustin as co-chair (2024 show)","position":{"start":{"line":31,"column":3,"offset":2289},"end":{"line":31,"column":86,"offset":2372}}}],"position":{"start":{"line":31,"column":1,"offset":2287},"end":{"line":31,"column":86,"offset":2372}}},{"type":"text","value":"\n"},{"type":"element","tagName":"li","properties":{},"children":[{"type":"text","value":"2024: Dustin becomes Director + Public & Club Education Chair","position":{"start":{"line":32,"column":3,"offset":2375},"end":{"line":32,"column":64,"offset":2436}}}],"position":{"start":{"line":32,"column":1,"offset":2373},"end":{"line":32,"column":64,"offset":2436}}},{"type":"text","value":"\n"},{"type":"element","tagName":"li","properties":{},"children":[{"type":"text","value":"2024-2025: Dustin as Show Chair, Karen as co-chair (2025 show)","position":{"start":{"line":33,"column":3,"offset":2439},"end":{"line":33,"column":65,"offset":2501}}}],"position":{"start":{"line":33,"column":1,"offset":2437},"end":{"line":33,"column":65,"offset":2501}}},{"type":"text","value":"\n"}],"position":{"start":{"line":30,"column":1,"offset":2235},"end":{"line":33,"column":65,"offset":2501}}},{"type":"text","value":"\n"}],"position":{"start":{"line":24,"column":1,"offset":1680},"end":{"line":35,"column":11,"offset":2513}}},"children":["\n",["$","summary","summary-0",{"node":"$7:1:props:children:1:props:children:0:props:children:10:props:node:children:1","children":["$","strong","strong-0",{"children":"Our Recognition & Service Roles"}]}],"\n",["$","p","p-0",{"children":["The club has honored us with recognition that we see as opportunities to serve: the ",["$","strong","strong-0",{"children":"2022 Outstanding New Member Award"}]," along with the ",["$","strong","strong-1",{"children":"AKC Title Award"}]," for our first champion Piper, Karen's ",["$","strong","strong-2",{"children":"2023 Outstanding Service Award"}],", and our ",["$","strong","strong-3",{"children":"2024 Top Breeder"}],", ",["$","strong","strong-4",{"children":"Breeder of AKC Title"}],", and ",["$","strong","strong-5",{"children":"Puppy Class Blues - Bitch"}]," awards. More importantly, the club has trusted us with leadership roles that let us give back to the community that welcomed us."]}],"\n",["$","p","p-1",{"children":["$","strong","strong-0",{"children":"Our Service Journey:"}]}],"\n",["$","ul","ul-0",{"children":["\n",["$","li","li-0",{"children":"2022-2025: Ways and Means Chairs (multiple years)"}],"\n",["$","li","li-1",{"children":"2023-2024: Karen as Show Chair and Membership Chair, Dustin as co-chair (2024 show)"}],"\n",["$","li","li-2",{"children":"2024: Dustin becomes Director + Public & Club Education Chair"}],"\n",["$","li","li-3",{"children":"2024-2025: Dustin as Show Chair, Karen as co-chair (2025 show)"}],"\n"]}],"\n"]}],"\n",["$","h2","h2-1",{"id":"what-weve-learned-about-community","children":"What We've Learned About Community"}],"\n",["$","p","p-3",{"children":"The Illini Great Dane Club isn't just about showing dogs—it's about building relationships and learning together. When we first joined, we were amazed by how much education and mentorship happens here. The club's founder, Pat Lawrence, wanted something different from the typical \"show and go\" mentality, and that spirit is still alive today."}],"\n",["$","p","p-4",{"children":"As charter member Jeff Lawrence recalled, \"Mom wanted them to have fun and to learn something also.\" That's exactly what we've experienced. From flea markets in borrowed buildings to entertaining skits that poked fun at different types of handlers and judges, the founding members understood that preserving the breed required more than passion—it needed community, education, and real commitment."}],"\n",["$","h2","h2-2",{"id":"education-in-action","children":"Education in Action"}],"\n",["$","p","p-5",{"children":"As Public & Club Education Chair, I've made it part of my mission to host programs that actually help people. We're not just talking theory—we're tackling real challenges that Great Dane breeders and owners face today."}],"\n",["$","details","details-2",{"node":{"type":"element","tagName":"details","properties":{},"children":[{"type":"text","value":"\n","position":{"start":{"line":47,"column":10,"offset":3550},"end":{"line":48,"column":1,"offset":3551}}},{"type":"element","tagName":"summary","properties":{},"children":[{"type":"element","tagName":"strong","properties":{},"children":[{"type":"text","value":"Educational Programs","position":{"start":{"line":48,"column":18,"offset":3568},"end":{"line":48,"column":38,"offset":3588}}}],"position":{"start":{"line":48,"column":10,"offset":3560},"end":{"line":48,"column":47,"offset":3597}}}],"position":{"start":{"line":48,"column":1,"offset":3551},"end":{"line":48,"column":57,"offset":3607}}},{"type":"text","value":"\n"},{"type":"element","tagName":"h3","properties":{"id":"completed-educational-programs"},"children":[{"type":"text","value":"Completed Educational Programs","position":{"start":{"line":50,"column":5,"offset":3613},"end":{"line":50,"column":35,"offset":3643}}}],"position":{"start":{"line":50,"column":1,"offset":3609},"end":{"line":50,"column":35,"offset":3643}}},{"type":"text","value":"\n"},{"type":"element","tagName":"ul","properties":{},"children":[{"type":"text","value":"\n"},{"type":"element","tagName":"li","properties":{},"children":[{"type":"element","tagName":"strong","properties":{},"children":[{"type":"text","value":"Genetic diversity and inherited disease risk","position":{"start":{"line":51,"column":5,"offset":3648},"end":{"line":51,"column":49,"offset":3692}}}],"position":{"start":{"line":51,"column":3,"offset":3646},"end":{"line":51,"column":51,"offset":3694}}},{"type":"text","value":" - addressing cutting-edge breeding science","position":{"start":{"line":51,"column":51,"offset":3694},"end":{"line":51,"column":94,"offset":3737}}}],"position":{"start":{"line":51,"column":1,"offset":3644},"end":{"line":51,"column":94,"offset":3737}}},{"type":"text","value":"\n"},{"type":"element","tagName":"li","properties":{},"children":[{"type":"element","tagName":"strong","properties":{},"children":[{"type":"text","value":"\"Berner University\" breed education program","position":{"start":{"line":52,"column":5,"offset":3742},"end":{"line":52,"column":48,"offset":3785}}}],"position":{"start":{"line":52,"column":3,"offset":3740},"end":{"line":52,"column":50,"offset":3787}}},{"type":"text","value":" - building fundamental knowledge","position":{"start":{"line":52,"column":50,"offset":3787},"end":{"line":52,"column":83,"offset":3820}}}],"position":{"start":{"line":52,"column":1,"offset":3738},"end":{"line":52,"column":83,"offset":3820}}},{"type":"text","value":"\n"},{"type":"element","tagName":"li","properties":{},"children":[{"type":"element","tagName":"strong","properties":{},"children":[{"type":"text","value":"Contracts as tools to avoid conflict and build trust","position":{"start":{"line":53,"column":5,"offset":3825},"end":{"line":53,"column":57,"offset":3877}}}],"position":{"start":{"line":53,"column":3,"offset":3823},"end":{"line":53,"column":59,"offset":3879}}},{"type":"text","value":" - practical ethics for breeders","position":{"start":{"line":53,"column":59,"offset":3879},"end":{"line":53,"column":91,"offset":3911}}}],"position":{"start":{"line":53,"column":1,"offset":3821},"end":{"line":53,"column":91,"offset":3911}}},{"type":"text","value":"\n"},{"type":"element","tagName":"li","properties":{},"children":[{"type":"element","tagName":"strong","properties":{},"children":[{"type":"text","value":"Great Dane Club of America's post-operative bleeding study","position":{"start":{"line":54,"column":5,"offset":3916},"end":{"line":54,"column":63,"offset":3974}}}],"position":{"start":{"line":54,"column":3,"offset":3914},"end":{"line":54,"column":65,"offset":3976}}},{"type":"text","value":" - sharing vital health research","position":{"start":{"line":54,"column":65,"offset":3976},"end":{"line":54,"column":97,"offset":4008}}}],"position":{"start":{"line":54,"column":1,"offset":3912},"end":{"line":54,"column":97,"offset":4008}}},{"type":"text","value":"\n"},{"type":"element","tagName":"li","properties":{},"children":[{"type":"element","tagName":"strong","properties":{},"children":[{"type":"text","value":"Interview with Bev Klingensmith","position":{"start":{"line":55,"column":5,"offset":4013},"end":{"line":55,"column":36,"offset":4044}}}],"position":{"start":{"line":55,"column":3,"offset":4011},"end":{"line":55,"column":38,"offset":4046}}},{"type":"text","value":" about her dog Bing, who starred in \"The Friend\" with Bill Murray and Naomi Watts","position":{"start":{"line":55,"column":38,"offset":4046},"end":{"line":55,"column":119,"offset":4127}}}],"position":{"start":{"line":55,"column":1,"offset":4009},"end":{"line":55,"column":119,"offset":4127}}},{"type":"text","value":"\n"}],"position":{"start":{"line":51,"column":1,"offset":3644},"end":{"line":55,"column":119,"offset":4127}}},{"type":"text","value":"\n"},{"type":"element","tagName":"h3","properties":{"id":"upcoming-programs"},"children":[{"type":"text","value":"Upcoming Programs","position":{"start":{"line":57,"column":5,"offset":4133},"end":{"line":57,"column":22,"offset":4150}}}],"position":{"start":{"line":57,"column":1,"offset":4129},"end":{"line":57,"column":22,"offset":4150}}},{"type":"text","value":"\n"},{"type":"element","tagName":"ul","properties":{},"children":[{"type":"text","value":"\n"},{"type":"element","tagName":"li","properties":{},"children":[{"type":"element","tagName":"strong","properties":{},"children":[{"type":"text","value":"Fast CAT Introduction (July 15th)","position":{"start":{"line":58,"column":5,"offset":4155},"end":{"line":58,"column":38,"offset":4188}}}],"position":{"start":{"line":58,"column":3,"offset":4153},"end":{"line":58,"column":40,"offset":4190}}},{"type":"text","value":" - expanding opportunities beyond traditional conformation showing for Great Dane owners","position":{"start":{"line":58,"column":40,"offset":4190},"end":{"line":58,"column":128,"offset":4278}}}],"position":{"start":{"line":58,"column":1,"offset":4151},"end":{"line":58,"column":128,"offset":4278}}},{"type":"text","value":"\n"}],"position":{"start":{"line":58,"column":1,"offset":4151},"end":{"line":58,"column":128,"offset":4278}}},{"type":"text","value":"\n"}],"position":{"start":{"line":47,"column":1,"offset":3541},"end":{"line":60,"column":11,"offset":4290}}},"children":["\n",["$","summary","summary-0",{"node":"$7:1:props:children:1:props:children:0:props:children:22:props:node:children:1","children":["$","strong","strong-0",{"children":"Educational Programs"}]}],"\n",["$","h3","h3-0",{"id":"completed-educational-programs","children":"Completed Educational Programs"}],"\n",["$","ul","ul-0",{"children":["\n",["$","li","li-0",{"children":[["$","strong","strong-0",{"children":"Genetic diversity and inherited disease risk"}]," - addressing cutting-edge breeding science"]}],"\n",["$","li","li-1",{"children":[["$","strong","strong-0",{"children":"\"Berner University\" breed education program"}]," - building fundamental knowledge"]}],"\n",["$","li","li-2",{"children":[["$","strong","strong-0",{"children":"Contracts as tools to avoid conflict and build trust"}]," - practical ethics for breeders"]}],"\n",["$","li","li-3",{"children":[["$","strong","strong-0",{"children":"Great Dane Club of America's post-operative bleeding study"}]," - sharing vital health research"]}],"\n",["$","li","li-4",{"children":[["$","strong","strong-0",{"children":"Interview with Bev Klingensmith"}]," about her dog Bing, who starred in \"The Friend\" with Bill Murray and Naomi Watts"]}],"\n"]}],"\n",["$","h3","h3-1",{"id":"upcoming-programs","children":"Upcoming Programs"}],"\n",["$","ul","ul-1",{"children":["\n",["$","li","li-0",{"children":[["$","strong","strong-0",{"children":"Fast CAT Introduction (July 15th)"}]," - expanding opportunities beyond traditional conformation showing for Great Dane owners"]}],"\n"]}],"\n"]}],"\n",["$","h2","h2-3",{"id":"learning-by-doing","children":"Learning by Doing"}],"\n",["$","p","p-6",{"children":"Karen served as Show Chair for the 2023-2024 year, I served as her co-chair, and we learned a ton about what it takes to put on a successful event. As Karen told The Vedette newspaper, \"The best part of the event is the satisfaction of working with others that care deeply about the interests of Great Danes in a way that promotes the breed.\""}],"\n",["$","p","p-7",{"children":"The following year, I served as Show Chair, while Karen served as co-chair. Our club dedicated the 2025 show to Jim Novotny's memory—a longtime member who exemplified the \"Spirit of Illini\" through mentorship and selfless service. Jim, a longtime Will County resident and 16-year member, served as board member, vice president, and president. He and his wife Pam received both the People's Choice Award and the prestigious Spirit of Illini Award. Through the years, Jim mentored many members and gave tremendous time and energy to the club's success. That spirit of mentorship and selfless service is what makes this community special."}],"\n",["$","p","p-8",{"children":"What we love about these shows is how they bring the community together. Local choirs perform the national anthem, high school students volunteer, and everyone gets to see what responsible dog ownership and breed preservation look like in action. These aren't just dog shows—they're celebrations of community."}],"\n",["$","h2","h2-4",{"id":"what-this-means-for-your-family","children":"What This Means for Your Family"}],"\n",["$","p","p-9",{"children":"For families considering a Great Dane, this story matters because it shows what you're really choosing when you select a responsible breeder. You're not just getting a puppy—you're joining a community with deep roots, ongoing education, and genuine care for every dog's future."}],"\n",["$","p","p-10",{"children":"When you choose a Great Dane from breeders who embrace this philosophy, you're not just getting excellent bloodlines. You're joining a network of mentorship, education, and support that spans generations. Our commitment to the Illini Great Dane Club's educational mission means we're always learning, always improving, and always available to help your Great Dane thrive throughout their life."}],"\n",["$","p","p-11",{"children":"This is what \"more than show and go\" looks like in practice: breeders who view their role as lifelong stewards rather than simply producing puppies, and who are actively involved in advancing Great Dane health, education, and welfare through meaningful community service."}],"\n",["$","h2","h2-5",{"id":"understanding-the-great-dane-heart","children":"Understanding the Great Dane Heart"}],"\n",["$","p","p-12",{"children":"As Karen beautifully expressed, \"Great Danes are honest and true. Unlike other breeds, they can't hide behind a long coat or flashy attitude.\" This honesty in the show ring reflects a deeper truth about the breed's character."}],"\n",["$","p","p-13",{"children":"What truly makes Great Danes remarkable companions is their temperament despite their giant size, their unwavering loyalty to their families, and their nature that has earned them the title \"gentle giants.\" The relationship between humans and dogs spans 20,000-40,000 years, and Great Danes exemplify the qualities that have made this partnership endure: genuine devotion, protective instincts, and an intuitive understanding of their human families' needs."}],"\n",["$","p","p-14",{"children":"The Illini Great Dane Club represents the modern expression of this bond: a community understanding that preserving our breed requires education, mentorship, and unwavering commitment to every Great Dane's welfare."}],"\n",["$","h2","h2-6",{"id":"honored-to-be-stewards","children":"Honored to Be Stewards"}],"\n",["$","p","p-15",{"children":"When families choose a Great Dane from breeders who embrace this philosophy, they become part of something larger than a breeding program—they join a legacy that has valued education and relationships for over four decades, all within a community guided by mentors who represent the pinnacle of American Great Dane breeding excellence."}],"\n",["$","p","p-16",{"children":"The Illini Great Dane Club is exceptional. The progression from new members in 2022 to our current leadership roles represents the club's remarkable ability to nurture growth while staying true to its founding values: promoting the quality of the purebred Great Dane, protecting and advancing the breed's interests, and encouraging good sportsmanship in competition."}],"\n",["$","p","p-17",{"children":"Our service roles—from show leadership to education programming—aren't achievements but opportunities to honor those who came before us while building bridges for those who will follow. We're committed to ensuring that the vision of being \"more than show and go\" continues to thrive for future generations of Great Dane enthusiasts and responsible breeders."}],"\n",["$","p","p-18",{"children":["To learn more about our Great Danes and philosophy, visit ",["$","a","a-0",{"href":"/7Sisters","children":"7Sisters Farm"}],". For Illini Great Dane Club information, contact Membership Chairman Sue Larkin at susanl3610@aol.com."]}],"\n",["$","details","details-3",{"node":{"type":"element","tagName":"details","properties":{},"children":[{"type":"text","value":"\n","position":{"start":{"line":97,"column":10,"offset":8820},"end":{"line":98,"column":1,"offset":8821}}},{"type":"element","tagName":"summary","properties":{},"children":[{"type":"element","tagName":"strong","properties":{},"children":[{"type":"text","value":"Sources & References","position":{"start":{"line":98,"column":18,"offset":8838},"end":{"line":98,"column":38,"offset":8858}}}],"position":{"start":{"line":98,"column":10,"offset":8830},"end":{"line":98,"column":47,"offset":8867}}}],"position":{"start":{"line":98,"column":1,"offset":8821},"end":{"line":98,"column":57,"offset":8877}}},{"type":"text","value":"\n"},{"type":"element","tagName":"h3","properties":{"id":"sources"},"children":[{"type":"text","value":"Sources","position":{"start":{"line":100,"column":5,"offset":8883},"end":{"line":100,"column":12,"offset":8890}}}],"position":{"start":{"line":100,"column":1,"offset":8879},"end":{"line":100,"column":12,"offset":8890}}},{"type":"text","value":"\n"},{"type":"element","tagName":"p","properties":{},"children":[{"type":"text","value":"• ","position":{"start":{"line":102,"column":1,"offset":8892},"end":{"line":102,"column":3,"offset":8894}}},{"type":"element","tagName":"strong","properties":{},"children":[{"type":"text","value":"Ontl, Margaret.","position":{"start":{"line":102,"column":5,"offset":8896},"end":{"line":102,"column":20,"offset":8911}}}],"position":{"start":{"line":102,"column":3,"offset":8894},"end":{"line":102,"column":22,"offset":8913}}},{"type":"text","value":" \"Illini Great Dane Club: The Result of One Breeder's Passion And Her Close Friends.\" ","position":{"start":{"line":102,"column":22,"offset":8913},"end":{"line":102,"column":108,"offset":8999}}},{"type":"element","tagName":"a","properties":{"href":"https://www.illinigreatdaneclub.com/files/GDR_Illini_Article_reprint-1.pdf","target":"_blank"},"children":[{"type":"text","value":"Illini Great Dane Club","position":{"start":{"line":102,"column":209,"offset":9100},"end":{"line":102,"column":231,"offset":9122}}}],"position":{"start":{"line":102,"column":108,"offset":8999},"end":{"line":102,"column":235,"offset":9126}}}],"position":{"start":{"line":102,"column":1,"offset":8892},"end":{"line":102,"column":235,"offset":9126}}},{"type":"text","value":"\n"},{"type":"element","tagName":"p","properties":{},"children":[{"type":"text","value":"• ","position":{"start":{"line":104,"column":1,"offset":9128},"end":{"line":104,"column":3,"offset":9130}}},{"type":"element","tagName":"strong","properties":{},"children":[{"type":"text","value":"Haave, Karen.","position":{"start":{"line":104,"column":5,"offset":9132},"end":{"line":104,"column":18,"offset":9145}}}],"position":{"start":{"line":104,"column":3,"offset":9130},"end":{"line":104,"column":20,"offset":9147}}},{"type":"text","value":" \"Dane Show One for the Dogs.\" ","position":{"start":{"line":104,"column":20,"offset":9147},"end":{"line":104,"column":51,"offset":9178}}},{"type":"element","tagName":"em","properties":{},"children":[{"type":"text","value":"The Vedette","position":{"start":{"line":104,"column":52,"offset":9179},"end":{"line":104,"column":63,"offset":9190}}}],"position":{"start":{"line":104,"column":51,"offset":9178},"end":{"line":104,"column":64,"offset":9191}}},{"type":"text","value":", April 30, 2024. ","position":{"start":{"line":104,"column":64,"offset":9191},"end":{"line":104,"column":82,"offset":9209}}},{"type":"element","tagName":"a","properties":{"href":"https://southwestregionalpublishing.com/2024/04/30/dane-show-one-for-the-dogs/","target":"_blank"},"children":[{"type":"text","value":"southwestregionalpublishing.com","position":{"start":{"line":104,"column":187,"offset":9314},"end":{"line":104,"column":218,"offset":9345}}}],"position":{"start":{"line":104,"column":82,"offset":9209},"end":{"line":104,"column":222,"offset":9349}}}],"position":{"start":{"line":104,"column":1,"offset":9128},"end":{"line":104,"column":222,"offset":9349}}},{"type":"text","value":"\n"},{"type":"element","tagName":"p","properties":{},"children":[{"type":"text","value":"• ","position":{"start":{"line":106,"column":1,"offset":9351},"end":{"line":106,"column":3,"offset":9353}}},{"type":"element","tagName":"strong","properties":{},"children":[{"type":"text","value":"Haave, Karen.","position":{"start":{"line":106,"column":5,"offset":9355},"end":{"line":106,"column":18,"offset":9368}}}],"position":{"start":{"line":106,"column":3,"offset":9353},"end":{"line":106,"column":20,"offset":9370}}},{"type":"text","value":" \"There's Nothing Like a Dane 'Gentle Giants' Touch Souls with Love.\" ","position":{"start":{"line":106,"column":20,"offset":9370},"end":{"line":106,"column":90,"offset":9440}}},{"type":"element","tagName":"em","properties":{},"children":[{"type":"text","value":"Farmers Weekly Review","position":{"start":{"line":106,"column":91,"offset":9441},"end":{"line":106,"column":112,"offset":9462}}}],"position":{"start":{"line":106,"column":90,"offset":9440},"end":{"line":106,"column":113,"offset":9463}}},{"type":"text","value":", April 3, 2025. ","position":{"start":{"line":106,"column":113,"offset":9463},"end":{"line":106,"column":130,"offset":9480}}},{"type":"element","tagName":"a","properties":{"href":"https://fwrnews.com/2025/04/03/theres-nothing-like-a-dane-gentle-giants-touch-souls-with-love/","target":"_blank"},"children":[{"type":"text","value":"fwrnews.com","position":{"start":{"line":106,"column":251,"offset":9601},"end":{"line":106,"column":262,"offset":9612}}}],"position":{"start":{"line":106,"column":130,"offset":9480},"end":{"line":106,"column":266,"offset":9616}}}],"position":{"start":{"line":106,"column":1,"offset":9351},"end":{"line":106,"column":266,"offset":9616}}},{"type":"text","value":"\n"},{"type":"element","tagName":"p","properties":{},"children":[{"type":"text","value":"• ","position":{"start":{"line":108,"column":1,"offset":9618},"end":{"line":108,"column":3,"offset":9620}}},{"type":"element","tagName":"strong","properties":{},"children":[{"type":"text","value":"Worth, Cooper.","position":{"start":{"line":108,"column":5,"offset":9622},"end":{"line":108,"column":19,"offset":9636}}}],"position":{"start":{"line":108,"column":3,"offset":9620},"end":{"line":108,"column":21,"offset":9638}}},{"type":"text","value":" \"Iowa dog Bing, Great Dane in 'The Friend' movie with Bill Murray.\" ","position":{"start":{"line":108,"column":21,"offset":9638},"end":{"line":108,"column":90,"offset":9707}}},{"type":"element","tagName":"em","properties":{},"children":[{"type":"text","value":"Des Moines Register","position":{"start":{"line":108,"column":91,"offset":9708},"end":{"line":108,"column":110,"offset":9727}}}],"position":{"start":{"line":108,"column":90,"offset":9707},"end":{"line":108,"column":111,"offset":9728}}},{"type":"text","value":", April 8, 2025. ","position":{"start":{"line":108,"column":111,"offset":9728},"end":{"line":108,"column":128,"offset":9745}}},{"type":"element","tagName":"a","properties":{"href":"https://www.desmoinesregister.com/story/entertainment/movies/2025/04/08/iowa-dog-bing-great-dane-the-friend-movie-bill-murray/82872298007/","target":"_blank"},"children":[{"type":"text","value":"desmoinesregister.com","position":{"start":{"line":108,"column":293,"offset":9910},"end":{"line":108,"column":314,"offset":9931}}}],"position":{"start":{"line":108,"column":128,"offset":9745},"end":{"line":108,"column":318,"offset":9935}}}],"position":{"start":{"line":108,"column":1,"offset":9618},"end":{"line":108,"column":318,"offset":9935}}},{"type":"text","value":"\n"}],"position":{"start":{"line":97,"column":1,"offset":8811},"end":{"line":110,"column":11,"offset":9947}}},"children":["\n",["$","summary","summary-0",{"node":"$7:1:props:children:1:props:children:0:props:children:58:props:node:children:1","children":["$","strong","strong-0",{"children":"Sources & References"}]}],"\n",["$","h3","h3-0",{"id":"sources","children":"Sources"}],"\n",["$","p","p-0",{"children":["• ",["$","strong","strong-0",{"children":"Ontl, Margaret."}]," \"Illini Great Dane Club: The Result of One Breeder's Passion And Her Close Friends.\" ",["$","a","a-0",{"href":"https://www.illinigreatdaneclub.com/files/GDR_Illini_Article_reprint-1.pdf","target":"_blank","children":"Illini Great Dane Club"}]]}],"\n",["$","p","p-1",{"children":["• ",["$","strong","strong-0",{"children":"Haave, Karen."}]," \"Dane Show One for the Dogs.\" ",["$","em","em-0",{"children":"The Vedette"}],", April 30, 2024. ",["$","a","a-0",{"href":"https://southwestregionalpublishing.com/2024/04/30/dane-show-one-for-the-dogs/","target":"_blank","children":"southwestregionalpublishing.com"}]]}],"\n",["$","p","p-2",{"children":["• ",["$","strong","strong-0",{"children":"Haave, Karen."}]," \"There's Nothing Like a Dane 'Gentle Giants' Touch Souls with Love.\" ",["$","em","em-0",{"children":"Farmers Weekly Review"}],", April 3, 2025. ",["$","a","a-0",{"href":"https://fwrnews.com/2025/04/03/theres-nothing-like-a-dane-gentle-giants-touch-souls-with-love/","target":"_blank","children":"fwrnews.com"}]]}],"\n",["$","p","p-3",{"children":["• ",["$","strong","strong-0",{"children":"Worth, Cooper."}]," \"Iowa dog Bing, Great Dane in 'The Friend' movie with Bill Murray.\" ",["$","em","em-0",{"children":"Des Moines Register"}],", April 8, 2025. ",["$","a","a-0",{"href":"https://www.desmoinesregister.com/story/entertainment/movies/2025/04/08/iowa-dog-bing-great-dane-the-friend-movie-bill-murray/82872298007/","target":"_blank","children":"desmoinesregister.com"}]]}],"\n"]}]," "]}],["$","div",null,{"style":{"marginTop":"2rem","textAlign":"center"},"children":["$","a",null,{"href":"/BreedingPhilosophy","children":["Curious about our breeding philosophy and how we select our dogs? Visit our ",["$","strong",null,{"children":"Breeding Philosophy"}]," page."]}]}],false,["$","div",null,{"className":"related-articles","style":{"marginTop":"3rem","padding":"2rem","backgroundColor":"#f8f8f8","borderRadius":"8px"},"children":[["$","h3",null,{"style":{"color":"#bf141c","marginBottom":"1rem"},"children":"Related Articles"}],["$","div",null,{"style":{"display":"flex","flexDirection":"column","gap":"0.5rem"},"children":[["$","a",null,{"href":"/posts/2025-06-25-choosing-a-great-dane-breeder","style":{"color":"#bf141c","textDecoration":"none"},"children":"→ The Family's Guide to Choosing a Great Dane Breeder"}],["$","a",null,{"href":"/posts/2025-07-03-the-first-year","style":{"color":"#bf141c","textDecoration":"none"},"children":"→ The First Year: A Comprehensive Guide to Great Dane Puppy Development"}],["$","a",null,{"href":"/posts/2025-06-24-laying-the-foundation","style":{"color":"#bf141c","textDecoration":"none"},"children":"→ Laying the Foundation: Our Breeding Philosophy"}]]}],false]}]]}],["$","style",null,{"dangerouslySetInnerHTML":{"__html":"$f"}}],["$","script",null,{"dangerouslySetInnerHTML":{"__html":"$10"}}]]}]]
+b:[["$","meta","0",{"charSet":"utf-8"}],["$","title","1",{"children":"More Than Show and Go: Our Journey into the Illini Great Dane Club | 7Sisters Farm"}],["$","meta","2",{"name":"description","content":"← Back to Blog Archivehttps://mayfieldjones.com/archive    When Pat Lawrence gathered friends around her kitchen table in 1982, she may have had no idea her vis..."}],["$","meta","3",{"name":"author","content":"Dustin Mayfield-Jones"}],["$","meta","4",{"name":"keywords","content":"Great Dane, dog breeding, dog care, community & show experience, more, than, show, journey, into, illini, great, dane, club"}],["$","meta","5",{"name":"robots","content":"index, follow"}],["$","meta","6",{"name":"googlebot","content":"index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1"}],["$","link","7",{"rel":"canonical","href":"https://mayfieldjones.com/posts/2025-06-23-more-than-show-and-go"}],["$","meta","8",{"property":"og:title","content":"More Than Show and Go: Our Journey into the Illini Great Dane Club | 7Sisters Farm"}],["$","meta","9",{"property":"og:description","content":"← Back to Blog Archivehttps://mayfieldjones.com/archive    When Pat Lawrence gathered friends around her kitchen table in 1982, she may have had no idea her vis..."}],["$","meta","10",{"property":"og:image","content":"https://mayfieldjones.com/img/logo.png"}],["$","meta","11",{"property":"og:image:width","content":"200"}],["$","meta","12",{"property":"og:image:height","content":"200"}],["$","meta","13",{"property":"og:image:alt","content":"7Sisters Farm Logo"}],["$","meta","14",{"property":"og:type","content":"article"}],["$","meta","15",{"property":"article:published_time","content":"2025-06-23T00:00:00.000Z"}],["$","meta","16",{"property":"article:author","content":"Dustin Mayfield-Jones"}],["$","meta","17",{"property":"article:tag","content":"Community & Show Experience"}],["$","meta","18",{"property":"article:tag","content":"Great Dane"}],["$","meta","19",{"property":"article:tag","content":"dog breeding"}],["$","meta","20",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","21",{"name":"twitter:title","content":"More Than Show and Go: Our Journey into the Illini Great Dane Club | 7Sisters Farm"}],["$","meta","22",{"name":"twitter:description","content":"← Back to Blog Archivehttps://mayfieldjones.com/archive    When Pat Lawrence gathered friends around her kitchen table in 1982, she may have had no idea her vis..."}],["$","meta","23",{"name":"twitter:image","content":"https://mayfieldjones.com/img/logo.png"}]]
+9:null
