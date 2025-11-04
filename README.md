@@ -1,1 +1,3 @@
-# 7SistersGreatDanes.github.io
+# Dustin's website
+
+Based on Colins website
