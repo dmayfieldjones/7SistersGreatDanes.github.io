@@ -59,6 +59,4 @@ As we continue to expand HAB.education programs, we're committed to making atmos
 
 ---
 
-**Ready to get started?** Explore our [lessons](/hab/lessons), [projects](/hab/projects), and [resources](/hab/resources) to begin your HAB.education journey.
-
 **Questions?** Contact us at [dustin@mayfieldjones.com](mailto:dustin@mayfieldjones.com) for more information about bringing HAB.education to your school or organization.

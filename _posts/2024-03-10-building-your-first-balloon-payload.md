@@ -236,6 +236,4 @@ By following systematic design principles and thorough testing procedures, stude
 
 ---
 
-**Ready to start building?** Check out our [project guides](/hab/projects) and [technical resources](/hab/resources) for detailed construction plans and tutorials.
-
 **Need help with your design?** Contact us at [dustin@mayfieldjones.com](mailto:dustin@mayfieldjones.com) for guidance on payload design and construction techniques.

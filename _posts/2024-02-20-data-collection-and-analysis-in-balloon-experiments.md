@@ -161,6 +161,4 @@ The combination of hands-on experimentation and rigorous data analysis makes hig
 
 ---
 
-**Ready to start analyzing balloon data?** Check out our [data visualization tools](/hab/data) and [educational resources](/hab/resources) to begin your data analysis journey.
-
 **Need help with your analysis?** Contact us at [dustin@mayfieldjones.com](mailto:dustin@mayfieldjones.com) for guidance on data processing and visualization techniques.
