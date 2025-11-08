@@ -87,6 +87,31 @@ const MayfieldJonesProfile = () => {
               Our Farm
             </a>
           </h3>
+          <h3>
+            <a href="/Litters" className="btn btn-zoom hover:text-red-600">
+              Puppies & Litters
+            </a>
+          </h3>
+          <h3>
+            <a href="/BreedingPhilosophy" className="btn btn-zoom hover:text-red-600">
+              Breeding Philosophy
+            </a>
+          </h3>
+          <h3>
+            <a href="/archive" className="btn btn-zoom hover:text-red-600">
+              7Sisters Articles
+            </a>
+          </h3>
+          <h3>
+            <a href="/CommonQuestions" className="btn btn-zoom hover:text-red-600">
+              Common Questions
+            </a>
+          </h3>
+          <h3>
+            <a href="/Resources" className="btn btn-zoom hover:text-red-600">
+              Canine Genome Explorer
+            </a>
+          </h3>
         </div>
 
         <div className="flex justify-center space-x-4 mb-4">

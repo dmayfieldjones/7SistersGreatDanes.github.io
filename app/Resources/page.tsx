@@ -1,13 +1,12 @@
 import { Metadata } from 'next'
-import Link from 'next/link'
 import { Accordion } from './accordion'
 
 import './index.css'
 
 export const metadata: Metadata = {
-  title: 'Great Dane Resources',
+  title: 'Canine Genome Explorer | Great Dane Resources',
   description:
-    'Research tools and resources for Great Dane breeding and genetics at 7Sisters Farm',
+    'Explore the Great Dane genome with our interactive Canine Genome Browser. Research tools for Great Dane breeding and genetics at 7Sisters Farm',
 }
 
 export default async function ClientComponent() {
@@ -53,38 +52,6 @@ export default async function ClientComponent() {
               Dog karyotype: 39 chromosomes, 2n = 78.
             </p>
             <Accordion />
-          </div>
-        </section>
-
-        {/* C-BARQ Section */}
-        <section className="resource-section" aria-labelledby="cbarq-title">
-          <h2 id="cbarq-title" className="section-title">
-            Canine Behavioral Assessment and Research Questionnaire
-          </h2>
-          <div className="resource-content">
-            <p className="resource-description">
-              Click on image to access the C-BARQ portal:
-            </p>
-            <a
-              href="https://vetapps.vet.upenn.edu/cbarq/login-page.cfm/"
-              className="resource-link"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Access C-BARQ Assessment Portal"
-            >
-              <img
-                src="/img/piper.jpg"
-                alt="Baby Great Dane puppy"
-                className="resource-image"
-                loading="lazy"
-              />
-            </a>
-            <p className="cbarq-info">
-              The C-BARQ is designed to provide dog owners and professionals
-              with standardized evaluations of canine temperament and behavior.{' '}
-              <span className="accent-color">7</span>Sisters is a registered
-              group. Contact Karen and Dustin for our group's access code.
-            </p>
           </div>
         </section>
       </main>
