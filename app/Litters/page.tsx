@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import ImagePreloader from './ImagePreloader'
 
 export const metadata: Metadata = {
   title: 'Great Dane Puppies & Litters | Available & Previous Litters | 7Sisters Farm',
@@ -55,8 +56,32 @@ export const metadata: Metadata = {
 }
 
 export default function () {
+  // Define all puppy and litter images for preloading
+  const puppyImages = [
+    '/img/piper-second-litter-3-fawn-1-brindle-puppies-with-breeding-female-cora.jpg',
+    '/img/piper-first-litter-5-fawn-puppies-4-boys-1-girl-breeding-female-mia.jpg',
+    '/img/dustin-pulling-cart-piper-first-litter-5-fawn-puppies.jpg',
+    '/img/close-up-puppy-faces-cart-illinois-corn-field-sunset.jpg',
+    '/img/two-fawn-puppies-tall-grass-clover-sunset.jpg',
+    '/img/future-champion-pumpkin-giant-stick-piper-first-litter.jpg',
+    '/img/four-fawn-puppies-nursery-soft-mat-stuffed-toy.jpg',
+    '/img/piper-captain-mother-son-tiktok-star-sweetest-dog.jpg',
+  ]
+  
+  const litterImages = [
+    '/img/SeanXPiper.jpg',
+    '/img/RolexPiper.jpg',
+  ]
+
+  const allImages = [...puppyImages, ...litterImages]
+
   return (
     <div className="content">
+      {/* Preload puppy images - prioritize first 4 visible images */}
+      <ImagePreloader
+        images={allImages}
+        priorityCount={4}
+      />
       <div className="post-title ">
         <h1>
           Great Dane Litters
@@ -103,7 +128,8 @@ export default function () {
                 src="/img/piper-second-litter-3-fawn-1-brindle-puppies-with-breeding-female-cora.jpg"
                 alt="Fawn Great Dane Piper with her four puppies from second litter at 7Sisters Farm Illinois - 3 fawn and 1 brindle including breeding female Cora"
                 className="puppy-image"
-                loading="lazy"
+                loading="eager"
+                fetchPriority="high"
               />
               <div className="puppy-overlay">
                 <h3>Piper with Her Second Litter</h3>
@@ -115,7 +141,8 @@ export default function () {
                 src="/img/piper-first-litter-5-fawn-puppies-4-boys-1-girl-breeding-female-mia.jpg"
                 alt="Fawn Great Dane Piper with her first litter of 5 all fawn puppies at 7Sisters Farm Illinois - 4 boys and 1 girl breeding female Mia in pink collar"
                 className="puppy-image"
-                loading="lazy"
+                loading="eager"
+                fetchPriority="high"
               />
               <div className="puppy-overlay">
                 <h3>Piper with Her First Litter</h3>
@@ -127,7 +154,8 @@ export default function () {
                 src="/img/dustin-pulling-cart-piper-first-litter-5-fawn-puppies.jpg"
                 alt="Dustin pulling cart of Great Dane puppies from Piper's first litter at 7Sisters Farm Illinois - 5 all fawn puppies including breeding female Mia"
                 className="puppy-image"
-                loading="lazy"
+                loading="eager"
+                fetchPriority="auto"
               />
               <div className="puppy-overlay">
                 <h3>Puppy Transport at 7Sisters</h3>
@@ -139,7 +167,8 @@ export default function () {
                 src="/img/close-up-puppy-faces-cart-illinois-corn-field-sunset.jpg"
                 alt="Close-up of Great Dane puppies faces in cart at 7Sisters Farm Illinois with corn field background at sunset"
                 className="puppy-image"
-                loading="lazy"
+                loading="eager"
+                fetchPriority="auto"
               />
               <div className="puppy-overlay">
                 <h3>Puppies Visit the Neighbors</h3>
@@ -235,6 +264,7 @@ export default function () {
                 alt="Sean X Piper litter advertisement"
                 className="litter-image"
                 loading="lazy"
+                fetchPriority="auto"
               />
             </a>
             <a
@@ -247,6 +277,7 @@ export default function () {
                 alt="Rolex X Piper litter advertisement"
                 className="litter-image"
                 loading="lazy"
+                fetchPriority="auto"
               />
             </a>
           </div>
