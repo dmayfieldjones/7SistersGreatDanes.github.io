@@ -2,12 +2,11 @@ export default function LocalBusinessSchema() {
   const schema = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "@id": "https://dmayfieldjones.github.io/#business",
+    "@id": "https://7sistersgreatdanes.com/#business",
     "name": "7Sisters Farm",
     "alternateName": "7Sisters Great Danes",
     "description": "Premier Illinois Great Dane breeders at 7Sisters Farm in Central Illinois. AKC registered Great Danes, health tested, family raised.",
-    "url": "https://dmayfieldjones.github.io",
-    "telephone": "dustin@mayfieldjones.com",
+    "url": "https://7sistersgreatdanes.com",
     "email": "dustin@mayfieldjones.com",
     "address": {
       "@type": "PostalAddress",
@@ -48,11 +47,11 @@ export default function LocalBusinessSchema() {
     "currenciesAccepted": "USD",
     "openingHours": "Mo-Su 09:00-18:00",
     "image": [
-      "https://dmayfieldjones.github.io/img/wedding.png",
-      "https://dmayfieldjones.github.io/img/2021_5pt_BOW_BOBOH_Waukesha_Mimi_Kim.jpg",
-      "https://dmayfieldjones.github.io/img/Colorlogo_nobackground.png"
+      "https://7sistersgreatdanes.com/img/wedding.png",
+      "https://7sistersgreatdanes.com/img/2021_5pt_BOW_BOBOH_Waukesha_Mimi_Kim.jpg",
+      "https://7sistersgreatdanes.com/img/Colorlogo_nobackground.png"
     ],
-    "logo": "https://dmayfieldjones.github.io/img/Colorlogo_nobackground.png",
+    "logo": "https://7sistersgreatdanes.com/img/Colorlogo_nobackground.png",
     "sameAs": [
       "https://www.tiktok.com/@7sistersgreatdanes"
     ],

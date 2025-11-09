@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     images: ['https://dmayfieldjones.github.io/img/wedding.png'],
   },
   alternates: {
-    canonical: 'https://dmayfieldjones.github.io/about',
+    canonical: 'https://7sistersgreatdanes.com/about',
   },
 }
 

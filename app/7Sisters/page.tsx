@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     images: ['https://dmayfieldjones.github.io/img/2021_5pt_BOW_BOBOH_Waukesha_Mimi_Kim.jpg'],
   },
   alternates: {
-    canonical: 'https://dmayfieldjones.github.io/7Sisters',
+    canonical: 'https://7sistersgreatdanes.com/7Sisters',
   },
 }
 

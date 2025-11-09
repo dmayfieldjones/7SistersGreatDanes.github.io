@@ -46,9 +46,9 @@ export async function generateMetadata({
       tags: [category, 'Great Dane', 'dog breeding'],
       images: [
         {
-          url: 'https://mayfieldjones.com/img/logo.png',
-          width: 200,
-          height: 200,
+          url: 'https://7sistersgreatdanes.com/img/Colorlogo_nobackground.png',
+          width: 300,
+          height: 300,
           alt: '7Sisters Farm Logo',
         },
       ],
@@ -57,10 +57,10 @@ export async function generateMetadata({
       card: 'summary_large_image',
       title: `${title} | 7Sisters Farm`,
       description,
-      images: ['https://mayfieldjones.com/img/logo.png'],
+      images: ['https://7sistersgreatdanes.com/img/Colorlogo_nobackground.png'],
     },
     alternates: {
-      canonical: `https://mayfieldjones.com/posts/${id}`,
+      canonical: `https://7sistersgreatdanes.com/posts/${id}`,
     },
     robots: {
       index: true,
@@ -94,25 +94,25 @@ export default async function Post({
     "@type": "Article",
     "headline": title,
     "description": content.replace(/[#*`\[\]()]/g, '').replace(/\n/g, ' ').trim().substring(0, 160) + '...',
-    "image": "https://mayfieldjones.com/img/logo.png",
+    "image": "https://7sistersgreatdanes.com/img/Colorlogo_nobackground.png",
     "author": {
       "@type": "Person",
       "name": "Dustin Mayfield-Jones",
-      "url": "https://mayfieldjones.com/about"
+      "url": "https://7sistersgreatdanes.com/about"
     },
     "publisher": {
       "@type": "Organization",
       "name": "7Sisters Farm",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://mayfieldjones.com/img/logo.png"
+        "url": "https://7sistersgreatdanes.com/img/Colorlogo_nobackground.png"
       }
     },
     "datePublished": new Date(date).toISOString(),
     "dateModified": new Date(date).toISOString(),
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": `https://mayfieldjones.com/posts/${id}`
+      "@id": `https://7sistersgreatdanes.com/posts/${id}`
     },
     "articleSection": category,
     "keywords": ["Great Dane", "dog breeding", "dog care", category.toLowerCase()],

@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     siteName: '7Sisters Farm',
   },
   alternates: {
-    canonical: 'https://dmayfieldjones.github.io/BreedingPhilosophy',
+    canonical: 'https://7sistersgreatdanes.com/BreedingPhilosophy',
   },
 }
 

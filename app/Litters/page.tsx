@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     images: ['https://mayfieldjones.com/img/SeanXPiper.jpg'],
   },
   alternates: {
-    canonical: 'https://mayfieldjones.com/Litters',
+    canonical: 'https://7sistersgreatdanes.com/Litters',
   },
   robots: {
     index: true,
@@ -56,24 +56,22 @@ export const metadata: Metadata = {
 }
 
 export default function () {
-  // Define all puppy and litter images for preloading
-  const puppyImages = [
-    '/img/piper-second-litter-3-fawn-1-brindle-puppies-with-breeding-female-cora.jpg',
-    '/img/piper-first-litter-5-fawn-puppies-4-boys-1-girl-breeding-female-mia.jpg',
-    '/img/dustin-pulling-cart-piper-first-litter-5-fawn-puppies.jpg',
-    '/img/close-up-puppy-faces-cart-illinois-corn-field-sunset.jpg',
-    '/img/two-fawn-puppies-tall-grass-clover-sunset.jpg',
-    '/img/future-champion-pumpkin-giant-stick-piper-first-litter.jpg',
-    '/img/four-fawn-puppies-nursery-soft-mat-stuffed-toy.jpg',
-    '/img/piper-captain-mother-son-tiktok-star-sweetest-dog.jpg',
-  ]
-  
-  const litterImages = [
+  // Define all images in the exact order they appear on the page for preloading
+  // First 4 are prioritized (visible above the fold)
+  const allImages = [
+    // Puppy gallery images (in order of appearance)
+    '/img/piper-second-litter-3-fawn-1-brindle-puppies-with-breeding-female-cora.jpg', // 1st visible
+    '/img/piper-first-litter-5-fawn-puppies-4-boys-1-girl-breeding-female-mia.jpg',    // 2nd visible
+    '/img/dustin-pulling-cart-piper-first-litter-5-fawn-puppies.jpg',                  // 3rd visible
+    '/img/close-up-puppy-faces-cart-illinois-corn-field-sunset.jpg',                   // 4th visible
+    '/img/two-fawn-puppies-tall-grass-clover-sunset.jpg',                              // 5th
+    '/img/future-champion-pumpkin-giant-stick-piper-first-litter.jpg',                 // 6th
+    '/img/four-fawn-puppies-nursery-soft-mat-stuffed-toy.jpg',                         // 7th
+    '/img/piper-captain-mother-son-tiktok-star-sweetest-dog.jpg',                      // 8th
+    // Litter images (at bottom of page)
     '/img/SeanXPiper.jpg',
     '/img/RolexPiper.jpg',
   ]
-
-  const allImages = [...puppyImages, ...litterImages]
 
   return (
     <div className="content">

@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/private/', '/admin/'],
     },
-    sitemap: 'https://mayfieldjones.com/sitemap.xml',
+    sitemap: 'https://7sistersgreatdanes.com/sitemap.xml',
   }
 }
