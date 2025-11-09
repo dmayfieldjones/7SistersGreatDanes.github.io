@@ -38,7 +38,7 @@ export default function Browser({
     ...new Set<string>(geneCategories.map(f => f.type)),
   ]
   const currentCategory = (
-    type === 'all'
+    type === 'all' || type === ''
       ? geneCategories
       : geneCategories.filter(f => f.type === type)
   ).filter(f => !!f.location)
@@ -126,7 +126,7 @@ export default function Browser({
         </div>
       </div>
       <div>
-        {type ? (
+        {currentCategory.length > 0 ? (
           <MyIdeogram
             selectedGene={gene}
             setGene={setGene}
