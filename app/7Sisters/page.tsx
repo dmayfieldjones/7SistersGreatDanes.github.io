@@ -83,12 +83,6 @@ export default function () {
                   '2025 - 2 Points Best of Winners at Hoosier Great Dane Club - Karen\'s First Time in the Ring - Butch Schulman',
               },
               {
-                src: '/img/2025_2pt_WB_SpringfieldIL_NancySmithHafner.jpg',
-                alt: '2025 2pt Winner\'s Bitch - Springfield IL',
-                caption:
-                  '2025 - 2 Points Winner\'s Bitch at Springfield IL - Nancy Smith Hafner',
-              },
-              {
                 src: '/img/2025_2pt_WB_MidTNGDC_Terry_DePietro.jpg',
                 alt: '2025 2pt Winner\'s Bitch - MidTN GDC',
                 caption:

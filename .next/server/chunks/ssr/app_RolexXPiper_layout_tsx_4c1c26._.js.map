@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 7, "column": 0}, "map": {"version":3,"sources":["file:///Users/dustinmayfield/Documents/0_Clubs_hobbies/0_Great%20Danes/7SistersGreatDanes.github.io/app/RolexXPiper/layout.tsx"],"sourcesContent":["import { Metadata } from 'next'\n\nexport const metadata: Metadata = {\n  title: '7Sisters - Rolex X Piper',\n  description:\n    'Our mission and approach to breeding exceptional Great Danes at 7Sisters Farm',\n}\n\nexport default function Layout({ children }: { children: React.ReactNode }) {\n  return children\n}\n"],"names":[],"mappings":";;;;AAEO,MAAM,WAAqB;IAChC,OAAO;IACP,aACE;AACJ;AAEe,SAAS,OAAO,EAAE,QAAQ,EAAiC;IACxE,OAAO;AACT"}},
-    {"offset": {"line": 18, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"A"}}]
-}
