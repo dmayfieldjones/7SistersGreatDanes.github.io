@@ -32,7 +32,7 @@ export default function ClientComponent() {
         microchip registration (
         <a href="https://avmajournals.avma.org/view/journals/javma/235/2/javma.235.2.160.xml">
           greater than 40%
-        </a>{' '}
+        </a> 
         of microchipped dogs have been found to not be registered), AKC
         registration (to ensure it is done correctly and timely), introduction
         to crate-leash-potty training, and ear cropping if desired.`

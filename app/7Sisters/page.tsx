@@ -180,7 +180,7 @@ export default function () {
             about ourselves. Dogs are by far the oldest and most widespread
             species domesticated by humans. Darwin used dogs, among pigeons and
             Brassicas, to bridge the gap between artificial selection and
-            natural selection in his 1859 publication
+            natural selection in his 1859 publication{' '}
             <cite>The Origin of Species</cite>.
           </p>
           <p>
