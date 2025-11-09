@@ -104,7 +104,7 @@ const MayfieldJonesProfile = () => {
           </h3>
           <h3>
             <a href="/archive" className="btn btn-zoom hover:text-red-600">
-              7Sisters Articles
+              <span className="text-red-600">7</span>Sisters Articles
             </a>
           </h3>
           <h3>
