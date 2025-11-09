@@ -30,17 +30,19 @@ export default function Browser({
     location: string
   }[]
 }) {
-  const [type, setType] = useState('')
+  const [type, setType] = useState('all')
   const [gene, setGene] = useState('')
 
   const categories = [
     'all',
     ...new Set<string>(geneCategories.map(f => f.type)),
   ]
+  // Treat 'all' and empty string the same - show all genes
+  const effectiveType = type === '' ? 'all' : type
   const currentCategory = (
-    type === 'all' || type === ''
+    effectiveType === 'all'
       ? geneCategories
-      : geneCategories.filter(f => f.type === type)
+      : geneCategories.filter(f => f.type === effectiveType)
   ).filter(f => !!f.location)
   const geneEntry = currentCategory?.find(f => f.name === gene)
   return (
@@ -70,8 +72,8 @@ export default function Browser({
             <br />
             <div id="geneSelector">
               <select
-                value={type}
-                onChange={event => setType(event.target.value)}
+                value={type === 'all' ? '' : type}
+                onChange={event => setType(event.target.value || 'all')}
                 id="categorySelect"
               >
                 <option value="">Select a category</option>
@@ -89,7 +91,7 @@ export default function Browser({
                 }}
               >
                 <option value="">
-                  Select a gene {type ? `(${type} related)` : ''}
+                  Select a gene {effectiveType !== 'all' ? `(${effectiveType} related)` : ''}
                 </option>
                 {currentCategory
                   .toSorted((a, b) => a.name.localeCompare(b.name))
