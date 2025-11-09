@@ -128,13 +128,12 @@ export default function Browser({
         </div>
       </div>
       <div>
-        {currentCategory.length > 0 ? (
-          <MyIdeogram
-            selectedGene={gene}
-            setGene={setGene}
-            geneCategories={currentCategory}
-          />
-        ) : null}
+        <MyIdeogram
+          key={`ideogram-${effectiveType}-${currentCategory.length}`}
+          selectedGene={gene}
+          setGene={setGene}
+          geneCategories={currentCategory}
+        />
       </div>
     </div>
   )
