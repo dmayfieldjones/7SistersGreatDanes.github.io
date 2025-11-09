@@ -70,19 +70,19 @@ function __TURBOPACK__default__export__() {
                             children: "7"
                         }, void 0, false, {
                             fileName: "[project]/app/7Sisters/page.tsx",
-                            lineNumber: 50,
+                            lineNumber: 51,
                             columnNumber: 28
                         }, this),
                         "Sisters Farm"
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/7Sisters/page.tsx",
-                    lineNumber: 50,
+                    lineNumber: 51,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/7Sisters/page.tsx",
-                lineNumber: 49,
+                lineNumber: 50,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
@@ -99,12 +99,12 @@ function __TURBOPACK__default__export__() {
                             loading: "lazy"
                         }, void 0, false, {
                             fileName: "[project]/app/7Sisters/page.tsx",
-                            lineNumber: 55,
+                            lineNumber: 56,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/7Sisters/page.tsx",
-                        lineNumber: 54,
+                        lineNumber: 55,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -116,12 +116,12 @@ function __TURBOPACK__default__export__() {
                             loading: "lazy"
                         }, void 0, false, {
                             fileName: "[project]/app/7Sisters/page.tsx",
-                            lineNumber: 67,
+                            lineNumber: 68,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/7Sisters/page.tsx",
-                        lineNumber: 66,
+                        lineNumber: 67,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -132,7 +132,7 @@ function __TURBOPACK__default__export__() {
                                 children: "Our Great Danes are family members. They are sacred. Great Danes are not for everyone. Choosing a breeder you can trust is critical."
                             }, void 0, false, {
                                 fileName: "[project]/app/7Sisters/page.tsx",
-                                lineNumber: 76,
+                                lineNumber: 77,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -150,18 +150,18 @@ function __TURBOPACK__default__export__() {
                                     children: "Read our Complete Guide to Choosing a Great Dane Breeder →"
                                 }, void 0, false, {
                                     fileName: "[project]/app/7Sisters/page.tsx",
-                                    lineNumber: 81,
+                                    lineNumber: 82,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/7Sisters/page.tsx",
-                                lineNumber: 80,
+                                lineNumber: 81,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/7Sisters/page.tsx",
-                        lineNumber: 75,
+                        lineNumber: 76,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -174,12 +174,12 @@ function __TURBOPACK__default__export__() {
                                     children: "Family"
                                 }, void 0, false, {
                                     fileName: "[project]/app/7Sisters/page.tsx",
-                                    lineNumber: 93,
+                                    lineNumber: 94,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/7Sisters/page.tsx",
-                                lineNumber: 92,
+                                lineNumber: 93,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -190,7 +190,7 @@ function __TURBOPACK__default__export__() {
                                         children: "7"
                                     }, void 0, false, {
                                         fileName: "[project]/app/7Sisters/page.tsx",
-                                        lineNumber: 96,
+                                        lineNumber: 97,
                                         columnNumber: 36
                                     }, this),
                                     "Sisters in your family, you are invited to be part of ours. We expect to hear from you long after you bring your dog home. We love updates and look forward to seeing our family grow: birthdays, anniversaries, achievements, and losses. We hope you consider a Great Dane from ",
@@ -199,27 +199,27 @@ function __TURBOPACK__default__export__() {
                                         children: "7"
                                     }, void 0, false, {
                                         fileName: "[project]/app/7Sisters/page.tsx",
-                                        lineNumber: 101,
+                                        lineNumber: 102,
                                         columnNumber: 29
                                     }, this),
                                     "Sisters as your family member."
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/7Sisters/page.tsx",
-                                lineNumber: 95,
+                                lineNumber: 96,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                 children: "Feel free to contact either of us, Karen or Dustin, if you are interested in our dogs. Living with your new family member helps continue a line of Great Danes that can be traced over 35 generations to the 1870s. Thank you for your interest in preserving our breed."
                             }, void 0, false, {
                                 fileName: "[project]/app/7Sisters/page.tsx",
-                                lineNumber: 104,
+                                lineNumber: 105,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/7Sisters/page.tsx",
-                        lineNumber: 91,
+                        lineNumber: 92,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -232,12 +232,12 @@ function __TURBOPACK__default__export__() {
                                     children: "Our Ancient Bond"
                                 }, void 0, false, {
                                     fileName: "[project]/app/7Sisters/page.tsx",
-                                    lineNumber: 115,
+                                    lineNumber: 116,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/7Sisters/page.tsx",
-                                lineNumber: 114,
+                                lineNumber: 115,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -247,14 +247,14 @@ function __TURBOPACK__default__export__() {
                                         children: "The Origin of Species"
                                     }, void 0, false, {
                                         fileName: "[project]/app/7Sisters/page.tsx",
-                                        lineNumber: 123,
+                                        lineNumber: 124,
                                         columnNumber: 13
                                     }, this),
                                     "."
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/7Sisters/page.tsx",
-                                lineNumber: 117,
+                                lineNumber: 118,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -270,27 +270,27 @@ function __TURBOPACK__default__export__() {
                                         children: " domesticated millennia before any other known species"
                                     }, void 0, false, {
                                         fileName: "[project]/app/7Sisters/page.tsx",
-                                        lineNumber: 128,
+                                        lineNumber: 129,
                                         columnNumber: 13
                                     }, this),
                                     ". Unlike these others, dogs reside in our homes and live up to the name domesticate, coming from the Latin domicile, meaning home. Also, unlike other domesticates, dogs chose us. The bond between dogs and humans is unique."
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/7Sisters/page.tsx",
-                                lineNumber: 125,
+                                lineNumber: 126,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                 children: "Both highly social species, humans and dogs began to co-evolve during the Last Glacial Maximum around 23,000 years ago, when both species were pushed into isolated refugia by extreme climate conditions. While there are no anatomical markers to differentiate dogs from wolves, dogs' definitive trait is behavioral: loyalty. Wolves and dogs descended from a wolf-like common ancestor, with dogs emerging as a distinct lineage that spread across the world with human agricultural expansion. The earliest archaeological evidence suggests dogs had a special place in our hearts by ~14,000 years ago when a Nautifian woman was buried alongside a dog. Our relationship is ancient and deep."
                             }, void 0, false, {
                                 fileName: "[project]/app/7Sisters/page.tsx",
-                                lineNumber: 138,
+                                lineNumber: 139,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/7Sisters/page.tsx",
-                        lineNumber: 113,
+                        lineNumber: 114,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -305,14 +305,14 @@ function __TURBOPACK__default__export__() {
                                             children: "7"
                                         }, void 0, false, {
                                             fileName: "[project]/app/7Sisters/page.tsx",
-                                            lineNumber: 155,
+                                            lineNumber: 156,
                                             columnNumber: 15
                                         }, this),
                                         "Sisters Social Media"
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/7Sisters/page.tsx",
-                                    lineNumber: 154,
+                                    lineNumber: 155,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("iframe", {
@@ -322,30 +322,30 @@ function __TURBOPACK__default__export__() {
                                     title: "7 Sisters Great Danes TikTok"
                                 }, void 0, false, {
                                     fileName: "[project]/app/7Sisters/page.tsx",
-                                    lineNumber: 157,
+                                    lineNumber: 158,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/7Sisters/page.tsx",
-                            lineNumber: 153,
+                            lineNumber: 154,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/7Sisters/page.tsx",
-                        lineNumber: 152,
+                        lineNumber: 153,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/7Sisters/page.tsx",
-                lineNumber: 52,
+                lineNumber: 53,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/7Sisters/page.tsx",
-        lineNumber: 48,
+        lineNumber: 49,
         columnNumber: 5
     }, this);
 }

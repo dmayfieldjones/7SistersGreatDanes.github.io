@@ -6,7 +6,7 @@
   "path": "static/chunks/app_7Sisters_page_tsx_f8eda3._.js",
   "chunks": [
     "static/chunks/app_7Sisters_index_aafbbd.css",
-    "static/chunks/app_7Sisters_page_tsx_ccee3c._.js"
+    "static/chunks/app_7Sisters_ad7af9._.js"
   ],
   "source": "dynamic"
 });

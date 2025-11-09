@@ -1,13 +1,7 @@
 {
   "/page": "app/page.js",
-  "/Litters/page": "app/Litters/page.js",
-  "/about/page": "app/about/page.js",
   "/7Sisters/page": "app/7Sisters/page.js",
-  "/contact/page": "app/contact/page.js",
-  "/BreedingPhilosophy/page": "app/BreedingPhilosophy/page.js",
-  "/Resources/page": "app/Resources/page.js",
-  "/Farm/page": "app/Farm/page.js",
-  "/_not-found/page": "app/_not-found/page.js",
-  "/archive/page": "app/archive/page.js",
-  "/CommonQuestions/page": "app/CommonQuestions/page.js"
+  "/Litters/page": "app/Litters/page.js",
+  "/SeanXPiper/page": "app/SeanXPiper/page.js",
+  "/RolexXPiper/page": "app/RolexXPiper/page.js"
 }
