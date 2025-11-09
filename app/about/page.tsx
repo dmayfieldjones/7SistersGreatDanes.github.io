@@ -17,6 +17,17 @@ export default function Contents() {
         <h1>About Us</h1>
       </div>
       <main className="content-wrapper">
+        {/* Hero Section */}
+        <section className="hero-section">
+          <img
+            src="/img/Colorlogo_nobackground.png"
+            alt="7Sisters Farm Logo"
+            width={300}
+            height="auto"
+            className="hero-logo"
+            loading="lazy"
+          />
+        </section>
         {/* About Us Section */}
         <section className="about-section">
           {/* Hook with Photo */}

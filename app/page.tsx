@@ -52,15 +52,15 @@ const MayfieldJonesProfile = () => {
     <div>
       <div className="w-full max-w-sm mx-auto text-center">
         <div className="mb-4">
-          <a href="http://mayfieldjones.com">
-            <img
-              src="/img/logo.png"
-              alt="Mayfield Jones Logo"
-              width={200}
-              height="auto"
-              loading="lazy"
-            />
-          </a>
+          <img
+            src="/img/Colorlogo_nobackground.png"
+            alt="7Sisters Farm Logo"
+            width={300}
+            height="auto"
+            className="hero-logo"
+            loading="lazy"
+            style={{ margin: '0 auto' }}
+          />
         </div>
 
         <div className="mb-4">

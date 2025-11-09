@@ -19,6 +19,15 @@ export default function Contents() {
         {/* Hero Section */}
         <section className="hero-section">
           <img
+            src="/img/Colorlogo_nobackground.png"
+            alt="7Sisters Farm Logo"
+            width={300}
+            height="auto"
+            className="hero-logo"
+            loading="lazy"
+            style={{ marginBottom: '20px' }}
+          />
+          <img
             src="/img/7sistersgirls.jpeg"
             alt="Historic photo of the seven sisters who lived in the brick house"
             className="hero-image"

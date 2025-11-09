@@ -98,6 +98,18 @@ export default function ClientComponent() {
         </h1>
       </div>
       <main className="content-wrapper">
+        {/* Hero Section */}
+        <section className="hero-section">
+          <img
+            src="/img/Colorlogo_nobackground.png"
+            alt="7Sisters Farm Logo"
+            width={300}
+            height="auto"
+            className="hero-logo"
+            loading="lazy"
+            style={{ margin: '0 auto' }}
+          />
+        </section>
         <div className="accordion-container">
         {questions.map((item, index) => (
           <div key={item.id} className="accordion-item">

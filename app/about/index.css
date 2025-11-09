@@ -207,7 +207,13 @@
 
 /* Legacy styles for backward compatibility */
 .hero-section {
+  text-align: center;
   margin-bottom: calc(var(--spacing-unit) * 3);
+}
+
+.hero-logo {
+  max-width: 100%;
+  height: auto;
 }
 
 .hero-image {

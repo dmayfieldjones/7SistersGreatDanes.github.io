@@ -19,8 +19,36 @@ export default async function Page() {
           Comprehensive guides and practical knowledge on Great Dane breeding, care, development, and ownership.
         </p>
       </div>
-      
-      <ArchiveClient posts={dogPosts} />
+      <main className="content-wrapper">
+        {/* Hero Section */}
+        <section className="hero-section">
+          <img
+            src="/img/Colorlogo_nobackground.png"
+            alt="7Sisters Farm Logo"
+            width={300}
+            height="auto"
+            className="hero-logo"
+            loading="lazy"
+          />
+        </section>
+        <ArchiveClient posts={dogPosts} />
+      </main>
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+            .hero-section {
+              text-align: center;
+              margin-bottom: 2rem;
+            }
+            .hero-logo {
+              max-width: 100%;
+              height: auto;
+              display: block;
+              margin: 0 auto;
+            }
+          `,
+        }}
+      />
     </div>
   )
 }

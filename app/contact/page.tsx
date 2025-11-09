@@ -28,14 +28,50 @@ export const metadata: Metadata = {
 
 export default function Contact() {
   return (
-    <div>
-      <div className="contact-page">
+    <div className="content">
+      <div className="post-title ">
         <h1>Contact Us</h1>
-        <p>
-          You can reach us at:{' '}
-          <a href="mailto:dustin@mayfieldjones.com">dustin@mayfieldjones.com</a>
-        </p>
       </div>
+      <main className="content-wrapper">
+        {/* Hero Section */}
+        <section className="hero-section">
+          <img
+            src="/img/Colorlogo_nobackground.png"
+            alt="7Sisters Farm Logo"
+            width={300}
+            height="auto"
+            className="hero-logo"
+            loading="lazy"
+          />
+        </section>
+        <section style={{ textAlign: 'center' }}>
+          <p>
+            You can reach us at:{' '}
+            <a href="mailto:dustin@mayfieldjones.com">dustin@mayfieldjones.com</a>
+          </p>
+        </section>
+      </main>
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+            .hero-section {
+              text-align: center;
+              margin-bottom: 2rem;
+            }
+            .hero-logo {
+              max-width: 100%;
+              height: auto;
+              display: block;
+              margin: 0 auto;
+            }
+            .content-wrapper {
+              max-width: 800px;
+              margin: 0 auto;
+              padding: 2rem;
+            }
+          `,
+        }}
+      />
     </div>
   )
 }
