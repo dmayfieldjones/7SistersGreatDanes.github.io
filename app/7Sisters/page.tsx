@@ -110,7 +110,7 @@ export default function () {
                 src: '/img/2021_5pt_BOW_BOBOH_Waukesha_Mimi_Kim.jpg',
                 alt: '2021 5pt Best of Winners and Best of Breed Owner Handled - Waukesha',
                 caption:
-                  '2021 - 5 Points Best of Winners and Best of Breed Owner Handled at Lake Shore GDC Waukesha - Mimi & Kim',
+                  '2021 - 5 Points Best of Winners & Best of Breed Owner Handled at Lake Shore GDC Waukesha - Mimi Kim',
               },
               {
                 src: '/img/2021_Sweepstakes_Ohio_Corrine_Witt.jpg',
