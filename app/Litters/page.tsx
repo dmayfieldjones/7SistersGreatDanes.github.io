@@ -142,8 +142,8 @@ export default function () {
                 loading="lazy"
               />
               <div className="puppy-overlay">
-                <h3>Puppy Faces Close-up</h3>
-                <p>Piper's first litter - Illinois farm sunset - 7Sisters Farm</p>
+                <h3>Puppies Visit the Neighbors</h3>
+                <p>Adorable puppy faces in cart - Illinois farm sunset - 7Sisters Farm</p>
               </div>
             </div>
             <div className="puppy-card">
@@ -154,7 +154,7 @@ export default function () {
                 loading="lazy"
               />
               <div className="puppy-overlay">
-                <h3>Puppies in Natural Setting</h3>
+                <h3>Puppies Playing on the Farm</h3>
                 <p>Two fawn puppies - Illinois farm grass - 7Sisters Farm</p>
               </div>
             </div>
@@ -178,7 +178,7 @@ export default function () {
                 loading="lazy"
               />
               <div className="puppy-overlay">
-                <h3>Puppy Nursery Setup</h3>
+                <h3>Puppies in the Nursery</h3>
                 <p>Four fawn puppies - Piper's first litter - 7Sisters Farm</p>
               </div>
             </div>

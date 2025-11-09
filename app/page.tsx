@@ -73,8 +73,8 @@ const MayfieldJonesProfile = () => {
 
         <div className="space-y-2 mb-4">
           <h3>
-            <a href="/7Sisters" className="btn btn-zoom hover:text-red-600">
-              Great Danes
+            <a href="/Litters" className="btn btn-zoom hover:text-red-600">
+              Puppies & Litters
             </a>
           </h3>
           <h3>
@@ -88,8 +88,13 @@ const MayfieldJonesProfile = () => {
             </a>
           </h3>
           <h3>
-            <a href="/Litters" className="btn btn-zoom hover:text-red-600">
-              Puppies & Litters
+            <a href="/7Sisters" className="btn btn-zoom hover:text-red-600">
+              Great Danes
+            </a>
+          </h3>
+          <h3>
+            <a href="/CommonQuestions" className="btn btn-zoom hover:text-red-600">
+              Common Questions
             </a>
           </h3>
           <h3>
@@ -100,11 +105,6 @@ const MayfieldJonesProfile = () => {
           <h3>
             <a href="/archive" className="btn btn-zoom hover:text-red-600">
               7Sisters Articles
-            </a>
-          </h3>
-          <h3>
-            <a href="/CommonQuestions" className="btn btn-zoom hover:text-red-600">
-              Common Questions
             </a>
           </h3>
           <h3>
