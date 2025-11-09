@@ -65,9 +65,6 @@ export default function () {
 
         {/* Win Photos Carousel */}
         <section className="win-photos-section">
-          <h2 className="section-title" style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
-            <span className="accent-color">7</span>Sisters Show Wins
-          </h2>
           <WinPhotosCarousel
             photos={[
               {
