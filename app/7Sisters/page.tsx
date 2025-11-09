@@ -1,6 +1,7 @@
 import './index.css'
 import { Metadata } from 'next'
 import WinPhotosCarousel from './WinPhotosCarousel'
+import ImagePreloader from './ImagePreloader'
 
 export const metadata: Metadata = {
   title: 'Illinois Great Danes | 7Sisters Farm - AKC Registered Great Danes',
@@ -45,8 +46,76 @@ export const metadata: Metadata = {
 }
 
 export default function () {
+  const carouselPhotos = [
+    {
+      src: '/img/2025_4pt_WB_IlliniGDC_Mimi_Kim.jpg',
+      alt: '2025 4pt Winner\'s Bitch - Illini GDC',
+      caption:
+        '2025 - 4 Points Winner\'s Bitch at Illini Great Dane Club - Mimi Kim',
+    },
+    {
+      src: '/img/2025_2pt_BOW_HoosierGDC_Butch_Schulman.jpg',
+      alt: '2025 2pt Best of Winners - Hoosier GDC - Karen\'s First Time in the Ring',
+      caption:
+        '2025 - 2 Points Best of Winners at Hoosier Great Dane Club - Karen\'s First Time in the Ring - Butch Schulman',
+    },
+    {
+      src: '/img/2025_2pt_WB_MidTNGDC_Terry_DePietro.jpg',
+      alt: '2025 2pt Winner\'s Bitch - MidTN GDC',
+      caption:
+        '2025 - 2 Points Winner\'s Bitch at Middle Tennessee Great Dane Club - Terry DePietro',
+    },
+    {
+      src: '/img/2025_2pt_WB_MidTNGDC_Nancy_SmithHafner.jpg',
+      alt: '2025 2pt Winner\'s Bitch - MidTN GDC',
+      caption:
+        '2025 - 2 Points Winner\'s Bitch at Middle Tennessee Great Dane Club - Nancy Smith Hafner',
+    },
+    {
+      src: '/img/2025_2pt_WB_MidTNGDC_Robert_Hutton.jpg',
+      alt: '2025 2pt Best of Opposite Sex, Best of Winners, Winner\'s Bitch - MidTN GDC',
+      caption:
+        '2025 - 2 Points Best of Opposite Sex, Best of Winners, and Winner\'s Bitch at Middle Tennessee Great Dane Club - Robert Hutton',
+    },
+    {
+      src: '/img/2024_2pt_BOS_EdwardsvilleILKC_Butch_Schulman.JPG',
+      alt: '2024 2pt Best of Opposite Sex - Edwardsville IL KC',
+      caption:
+        '2024 - 2 Points Best of Opposite Sex at Edwardsville IL Kennel Club - Butch Schulman',
+    },
+    {
+      src: '/img/2021_5pt_BOW_BOBOH_Waukesha_Mimi_Kim.jpg',
+      alt: '2021 5pt Best of Winners and Best of Breed Owner Handled - Waukesha',
+      caption:
+        '2021 - 5 Points Best of Winners & Best of Breed Owner Handled at Lake Shore GDC Waukesha - Mimi Kim',
+    },
+    {
+      src: '/img/2021_Sweepstakes_Ohio_Corrine_Witt.jpg',
+      alt: '2021 Sweepstakes Winner - Ohio',
+      caption:
+        '2021 - Sweepstakes Winner at Ohio - Corrine Witt',
+    },
+    {
+      src: '/img/2021_RB_Hoosier_Lance_Deloria.jpg',
+      alt: '2021 Reserve Best - Hoosier - First Show',
+      caption:
+        '2021 - Our First Show: Piper earned Best in Sweeps and two major Reserve wins at Hoosier - Lance Deloria',
+    },
+    {
+      src: '/img/2021_1pt_BOW_PurinaSTL.JPG',
+      alt: '2021 1pt Best of Winners - Purina St. Louis - First BOW',
+      caption:
+        '2021 - 1 Point Best of Winners at Purina St. Louis - Our First BOW Award - David Haddock',
+    },
+  ]
+
   return (
     <div className="content">
+      {/* Preload carousel images - prioritize first 3, then preload rest */}
+      <ImagePreloader
+        images={carouselPhotos.map((photo) => photo.src)}
+        priorityCount={3}
+      />
       <div className="post-title ">
         <h1>Great Danes at <span style={{ color: '#bf141c' }}>7</span>Sisters Farm</h1>
       </div>
@@ -66,68 +135,7 @@ export default function () {
         {/* Win Photos Carousel */}
         <section className="win-photos-section">
           <WinPhotosCarousel
-            photos={[
-              {
-                src: '/img/2025_4pt_WB_IlliniGDC_Mimi_Kim.jpg',
-                alt: '2025 4pt Winner\'s Bitch - Illini GDC',
-                caption:
-                  '2025 - 4 Points Winner\'s Bitch at Illini Great Dane Club - Mimi Kim',
-              },
-              {
-                src: '/img/2025_2pt_BOW_HoosierGDC_Butch_Schulman.jpg',
-                alt: '2025 2pt Best of Winners - Hoosier GDC - Karen\'s First Time in the Ring',
-                caption:
-                  '2025 - 2 Points Best of Winners at Hoosier Great Dane Club - Karen\'s First Time in the Ring - Butch Schulman',
-              },
-              {
-                src: '/img/2025_2pt_WB_MidTNGDC_Terry_DePietro.jpg',
-                alt: '2025 2pt Winner\'s Bitch - MidTN GDC',
-                caption:
-                  '2025 - 2 Points Winner\'s Bitch at Middle Tennessee Great Dane Club - Terry DePietro',
-              },
-              {
-                src: '/img/2025_2pt_WB_MidTNGDC_Nancy_SmithHafner.jpg',
-                alt: '2025 2pt Winner\'s Bitch - MidTN GDC',
-                caption:
-                  '2025 - 2 Points Winner\'s Bitch at Middle Tennessee Great Dane Club - Nancy Smith Hafner',
-              },
-              {
-                src: '/img/2025_2pt_WB_MidTNGDC_Robert_Hutton.jpg',
-                alt: '2025 2pt Best of Opposite Sex, Best of Winners, Winner\'s Bitch - MidTN GDC',
-                caption:
-                  '2025 - 2 Points Best of Opposite Sex, Best of Winners, and Winner\'s Bitch at Middle Tennessee Great Dane Club - Robert Hutton',
-              },
-              {
-                src: '/img/2024_2pt_BOS_EdwardsvilleILKC_Butch_Schulman.JPG',
-                alt: '2024 2pt Best of Opposite Sex - Edwardsville IL KC',
-                caption:
-                  '2024 - 2 Points Best of Opposite Sex at Edwardsville IL Kennel Club - Butch Schulman',
-              },
-              {
-                src: '/img/2021_5pt_BOW_BOBOH_Waukesha_Mimi_Kim.jpg',
-                alt: '2021 5pt Best of Winners and Best of Breed Owner Handled - Waukesha',
-                caption:
-                  '2021 - 5 Points Best of Winners & Best of Breed Owner Handled at Lake Shore GDC Waukesha - Mimi Kim',
-              },
-              {
-                src: '/img/2021_Sweepstakes_Ohio_Corrine_Witt.jpg',
-                alt: '2021 Sweepstakes Winner - Ohio',
-                caption:
-                  '2021 - Sweepstakes Winner at Ohio - Corrine Witt',
-              },
-              {
-                src: '/img/2021_RB_Hoosier_Lance_Deloria.jpg',
-                alt: '2021 Reserve Best - Hoosier - First Show',
-                caption:
-                  '2021 - Our First Show: Piper earned Best in Sweeps and two major Reserve wins at Hoosier - Lance Deloria',
-              },
-              {
-                src: '/img/2021_1pt_BOW_PurinaSTL.JPG',
-                alt: '2021 1pt Best of Winners - Purina St. Louis - First BOW',
-                caption:
-                  '2021 - 1 Point Best of Winners at Purina St. Louis - Our First BOW Award - David Haddock',
-              },
-            ]}
+            photos={carouselPhotos}
             autoPlay={true}
             interval={5000}
           />

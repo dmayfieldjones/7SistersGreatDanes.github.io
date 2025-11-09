@@ -23,6 +23,14 @@ export default function WinPhotosCarousel({
   const [isTransitioning, setIsTransitioning] = useState(false)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
+  // Preload all images when component mounts
+  useEffect(() => {
+    photos.forEach((photo) => {
+      const img = new Image()
+      img.src = photo.src
+    })
+  }, [photos])
+
   useEffect(() => {
     // Clear any existing timer
     if (timerRef.current) {
@@ -111,7 +119,8 @@ export default function WinPhotosCarousel({
                   src={photo.src}
                   alt={photo.alt}
                   className="carousel-image"
-                  loading={index === currentIndex ? 'eager' : 'lazy'}
+                  loading={index < 3 ? 'eager' : 'lazy'}
+                  fetchPriority={index === 0 ? 'high' : index === 1 ? 'high' : 'auto'}
                 />
               </div>
             ))}
