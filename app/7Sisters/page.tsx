@@ -23,11 +23,11 @@ export const metadata: Metadata = {
     title: 'Illinois Great Danes | 7Sisters Farm',
     description: 'Illinois Great Danes at 7Sisters Farm. AKC registered, health tested Great Danes in Central Illinois.',
     type: 'website',
-    url: 'https://dmayfieldjones.github.io/7Sisters',
+    url: 'https://7sistersgreatdanes.com/7Sisters',
     siteName: '7Sisters Farm',
     images: [
       {
-        url: 'https://dmayfieldjones.github.io/img/2021_5pt_BOW_BOBOH_Waukesha_Mimi_Kim.jpg',
+        url: 'https://7sistersgreatdanes.com/img/2021_5pt_BOW_BOBOH_Waukesha_Mimi_Kim.jpg',
         width: 800,
         height: 600,
         alt: 'Illinois Great Dane - 7Sisters Farm',
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Illinois Great Danes | 7Sisters Farm',
     description: 'Illinois Great Danes at 7Sisters Farm. AKC registered, health tested Great Danes in Central Illinois.',
-    images: ['https://dmayfieldjones.github.io/img/2021_5pt_BOW_BOBOH_Waukesha_Mimi_Kim.jpg'],
+    images: ['https://7sistersgreatdanes.com/img/2021_5pt_BOW_BOBOH_Waukesha_Mimi_Kim.jpg'],
   },
   alternates: {
     canonical: 'https://7sistersgreatdanes.com/7Sisters',

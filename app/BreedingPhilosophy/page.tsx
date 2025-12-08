@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     title: 'Ethical Great Dane Breeding Philosophy | 7Sisters Farm',
     description: 'Our ethical Great Dane breeding philosophy at 7Sisters Farm. Responsible breeding practices and commitment to breed betterment.',
     type: 'website',
-    url: 'https://dmayfieldjones.github.io/BreedingPhilosophy',
+    url: 'https://7sistersgreatdanes.com/BreedingPhilosophy',
     siteName: '7Sisters Farm',
   },
   alternates: {

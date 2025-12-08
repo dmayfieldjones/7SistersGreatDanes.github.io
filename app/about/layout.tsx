@@ -18,11 +18,11 @@ export const metadata: Metadata = {
     title: 'About Illinois Great Dane Breeders | 7Sisters Farm',
     description: 'Meet Dustin and Karen, experienced Illinois Great Dane breeders at 7Sisters Farm in Central Illinois.',
     type: 'website',
-    url: 'https://dmayfieldjones.github.io/about',
+    url: 'https://7sistersgreatdanes.com/about',
     siteName: '7Sisters Farm',
     images: [
       {
-        url: 'https://dmayfieldjones.github.io/img/wedding.png',
+        url: 'https://7sistersgreatdanes.com/img/wedding.png',
         width: 300,
         height: 300,
         alt: 'Dustin and Karen - Illinois Great Dane Breeders',
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'About Illinois Great Dane Breeders | 7Sisters Farm',
     description: 'Meet Dustin and Karen, experienced Illinois Great Dane breeders at 7Sisters Farm in Central Illinois.',
-    images: ['https://dmayfieldjones.github.io/img/wedding.png'],
+    images: ['https://7sistersgreatdanes.com/img/wedding.png'],
   },
   alternates: {
     canonical: 'https://7sistersgreatdanes.com/about',

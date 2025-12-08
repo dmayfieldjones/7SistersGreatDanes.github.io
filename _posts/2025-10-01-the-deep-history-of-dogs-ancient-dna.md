@@ -60,7 +60,7 @@ However, the genetic landscape has become much more variable. Inbreeding levels 
 
 This represents a significant shift from ancient patterns. Rather than the relatively uniform, moderate inbreeding levels seen in ancient dogs, modern breeding has created extreme variation—some breeds maintaining moderate diversity, others with much lower diversity that may have been selected against historically.
 
-*For those interested in exploring this genetic data firsthand, we've built a [Canine Genome Browser](https://dmayfieldjones.github.io/GreatDaneGenomeBrowser) that provides access to Dog10K project data, including SNPs (single nucleotide polymorphisms), structural variants, and inversions across over 300 dog breeds and thousands of dogs and canine relatives.*
+*For those interested in exploring this genetic data firsthand, we've built a [Canine Genome Browser](https://7sistersgreatdanes.com/GreatDaneGenomeBrowser) that provides access to Dog10K project data, including SNPs (single nucleotide polymorphisms), structural variants, and inversions across over 300 dog breeds and thousands of dogs and canine relatives.*
 
 ## Convergent Evolution: How Dogs and Humans Adapted Together
 

@@ -1,6 +1,8 @@
 import React from 'react'
 import { Mail, Github } from 'lucide-react'
 import { Metadata } from 'next'
+import AnimatedContent from './components/AnimatedContent'
+import ScrollIndicator from './components/ScrollIndicator'
 // Force rebuild - September 6, 2025 - Attempt 2
 
 export const metadata: Metadata = {
@@ -25,11 +27,11 @@ export const metadata: Metadata = {
     title: 'Illinois Great Dane Breeders | 7Sisters Farm',
     description: 'Premier Illinois Great Dane breeders in Central Illinois. AKC registered, health tested, family raised Great Danes.',
     type: 'website',
-    url: 'https://dmayfieldjones.github.io',
+    url: 'https://7sistersgreatdanes.com',
     siteName: '7Sisters Farm',
     images: [
       {
-        url: 'https://dmayfieldjones.github.io/img/wedding.png',
+        url: 'https://7sistersgreatdanes.com/img/wedding.png',
         width: 300,
         height: 300,
         alt: 'Dustin and Karen - Illinois Great Dane Breeders',
@@ -40,7 +42,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Illinois Great Dane Breeders | 7Sisters Farm',
     description: 'Premier Illinois Great Dane breeders in Central Illinois. AKC registered, health tested, family raised.',
-    images: ['https://dmayfieldjones.github.io/img/wedding.png'],
+    images: ['https://7sistersgreatdanes.com/img/wedding.png'],
   },
   alternates: {
     canonical: 'https://7sistersgreatdanes.com',
@@ -49,8 +51,26 @@ export const metadata: Metadata = {
 
 const MayfieldJonesProfile = () => {
   return (
-    <div>
-      <div className="w-full max-w-sm mx-auto text-center">
+    <div className="homepage-container">
+      {/* Full-screen video section */}
+      <section className="video-hero-section">
+        <div className="video-background">
+          <iframe
+            src="https://www.youtube.com/embed/M14l3BrfXhA?autoplay=1&mute=1&loop=1&playlist=M14l3BrfXhA&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&fs=0&cc_load_policy=0&disablekb=1&enablejsapi=0&origin=https://7sistersgreatdanes.com"
+            className="video-iframe"
+            allow="autoplay; encrypted-media"
+            allowFullScreen
+            title="Background Video"
+          />
+          <div className="video-overlay"></div>
+        </div>
+        {/* Scroll indicator */}
+        <ScrollIndicator />
+      </section>
+      
+      {/* Content section - appears after scrolling with animation */}
+      <AnimatedContent>
+        <div className="content-overlay text-center">
         <div className="mb-4">
           <img
             src="/img/Colorlogo_nobackground.png"
@@ -147,6 +167,7 @@ const MayfieldJonesProfile = () => {
           />
         </div>
       </div>
+      </AnimatedContent>
     </div>
   )
 }
