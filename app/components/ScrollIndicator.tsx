@@ -23,6 +23,7 @@ export default function ScrollIndicator() {
       }}
     >
       <div className="scroll-arrow"></div>
+      <span className="scroll-text">Scroll</span>
     </div>
   )
 }

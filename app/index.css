@@ -154,6 +154,23 @@ hr.hr-line {
   pointer-events: none;
 }
 
+/* On mobile, adjust video to fill better and reduce black space */
+@media (max-width: 768px) {
+  .video-iframe {
+    /* Scale video larger to fill mobile viewport better */
+    width: 120vw !important;
+    height: 120vh !important;
+    /* Ensure it covers the full height */
+    min-width: 100vw !important;
+    min-height: 100vh !important;
+  }
+  
+  .content-section {
+    padding-top: 1rem !important;
+    padding-bottom: 1.5rem !important;
+  }
+}
+
 /* On desktop, make the video wider so it extends beyond content container */
 @media (min-width: 1024px) {
   .video-iframe {
@@ -203,6 +220,23 @@ hr.hr-line {
   backdrop-filter: blur(5px);
 }
 
+/* On mobile, make scroll indicator more prominent and ensure it's centered */
+@media (max-width: 768px) {
+  .scroll-indicator {
+    bottom: 50px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    padding: 18px !important;
+    background: rgba(0, 0, 0, 0.6) !important;
+    /* Make it more visible on mobile */
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.7) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+}
+
 /* On desktop, position it higher for better visibility */
 @media (min-width: 1024px) {
   .scroll-indicator {
@@ -218,6 +252,35 @@ hr.hr-line {
   transform: rotate(45deg);
   /* Add shadow for better visibility */
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  margin: 0 auto;
+}
+
+.scroll-text {
+  display: none;
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 12px;
+  font-weight: 500;
+  margin-top: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Show text on mobile for better UX */
+@media (max-width: 768px) {
+  .scroll-text {
+    display: block !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    margin-top: 10px !important;
+  }
+  
+  .scroll-arrow {
+    width: 35px !important;
+    height: 35px !important;
+    border-right: 4px solid rgba(255, 255, 255, 1) !important;
+    border-bottom: 4px solid rgba(255, 255, 255, 1) !important;
+  }
 }
 
 @keyframes bounce {
@@ -231,6 +294,7 @@ hr.hr-line {
     transform: translateX(-50%) translateY(-5px);
   }
 }
+
 
 /* Content section - appears after scrolling */
 .content-section {
@@ -290,7 +354,8 @@ hr.hr-line {
 /* Mobile */
 @media (max-width: 768px) {
   .content-section {
-    padding: 2rem 1rem;
+    padding: 1rem 1rem 1.5rem 1rem !important;
+    /* Reduce top padding to bring content closer to video */
   }
   
   .content-overlay {
@@ -299,8 +364,9 @@ hr.hr-line {
     border-radius: 8px;
   }
   
-  .scroll-arrow {
-    width: 25px;
-    height: 25px;
+  /* Reduce video hero section height slightly on mobile to reduce black space */
+  .video-hero-section {
+    height: 100vh;
+    min-height: 100vh;
   }
 }
