@@ -160,6 +160,12 @@ hr.hr-line {
 }
 
 /* Homepage Video Background Styles */
+/* Override body background for homepage to avoid loading unnecessary image */
+body:has(.homepage-container) {
+  background: none !important;
+  background-color: #000 !important; /* Black background for video */
+}
+
 .homepage-container {
   position: relative;
   overflow-x: hidden; /* Prevent horizontal scroll */
