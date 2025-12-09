@@ -7,6 +7,18 @@ a {
   color: #bf141c;
 }
 
+html {
+  /* Ensure html is the scroll container */
+  height: auto;
+  min-height: 100%;
+  overflow-y: scroll; /* Use scroll to ensure scrollbar is always available */
+  -webkit-overflow-scrolling: touch;
+  /* Ensure page is immediately scrollable */
+  scroll-behavior: smooth;
+  /* Ensure scroll events are handled at document level */
+  overscroll-behavior-y: auto;
+}
+
 body {
   font-family:
     Fira Sans,
@@ -20,10 +32,15 @@ body {
   color: CanvasText;
   color-scheme: light dark;
   overflow-x: auto;
-  overflow-y: auto;
+  overflow-y: visible; /* Let html handle scrolling */
   /* Ensure smooth scrolling on mobile */
   -webkit-overflow-scrolling: touch;
   touch-action: pan-y;
+  /* Prevent scroll chaining issues */
+  overscroll-behavior-y: auto;
+  /* Ensure body doesn't create a scroll context */
+  height: auto;
+  min-height: 100%;
 }
 
 .container {
@@ -90,6 +107,34 @@ hr.hr-line {
   -o-transition: 0.5s;
   transition: 0.5s;
   overflow: visible;
+  /* Ensure wrapper doesn't create scroll context */
+  position: relative;
+}
+
+/* Override wrapper for homepage to allow full-width video */
+.wrapper:has(.homepage-container) {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  /* Ensure no scroll context is created */
+  overflow: visible !important;
+  height: auto !important;
+  /* Don't block scroll events */
+  position: relative !important;
+  z-index: auto !important;
+}
+
+/* Alternative selector for browsers that don't support :has() */
+.homepage-container {
+  /* Ensure parent wrapper doesn't interfere */
+}
+
+.homepage-container ~ * {
+  /* This won't match, but ensures specificity */
 }
 
 .resource-image {
@@ -112,9 +157,21 @@ hr.hr-line {
 .homepage-container {
   position: relative;
   overflow-x: hidden; /* Prevent horizontal scroll */
-  /* Ensure smooth scrolling on mobile */
+  /* Don't create a scroll container - let html handle scrolling */
+  overflow-y: visible !important;
+  /* Ensure scroll events pass through */
+  touch-action: pan-y !important;
   -webkit-overflow-scrolling: touch;
-  overflow-y: auto;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  /* Ensure it doesn't create a scroll context */
+  height: auto !important;
+  min-height: auto !important;
 }
 
 /* Make video background extend behind content section */
@@ -127,6 +184,8 @@ hr.hr-line {
   height: 100%;
   z-index: 1;
   pointer-events: none;
+  /* Ensure it doesn't block scrolling */
+  touch-action: none;
 }
 
 /* Full-screen video hero section */
@@ -136,9 +195,15 @@ hr.hr-line {
   height: 100vh;
   overflow: hidden;
   z-index: 0;
-  /* Ensure scrolling works on mobile */
+  /* Ensure scrolling works - allow scroll events to pass through */
+  pointer-events: auto;
+  /* Enable smooth scrolling */
   -webkit-overflow-scrolling: touch;
-  touch-action: pan-y;
+  touch-action: pan-y !important;
+  /* Ensure scroll events are not blocked */
+  overscroll-behavior: none;
+  /* Change overflow to visible to allow scroll-through */
+  overflow: visible !important;
 }
 
 .video-background {
@@ -149,12 +214,17 @@ hr.hr-line {
   height: 100%;
   overflow: hidden;
   z-index: -1;
-  /* Allow scrolling through video area on mobile */
+  /* Allow scrolling through video area - don't block scroll events */
   pointer-events: none;
+  /* Ensure it doesn't interfere with scrolling */
+  touch-action: none;
+  /* Prevent it from creating a scroll context */
+  will-change: transform;
 }
 
 .video-background iframe {
   pointer-events: none;
+  touch-action: none;
 }
 
 .video-iframe {
@@ -167,8 +237,10 @@ hr.hr-line {
   min-height: 100%;
   transform: translate(-50%, -50%);
   pointer-events: none;
-  /* Ensure it doesn't block touch scrolling */
+  /* Ensure it doesn't block scrolling - allow scroll to pass through */
   touch-action: none;
+  /* Prevent iframe from capturing scroll events */
+  will-change: transform;
 }
 
 /* On mobile, adjust video to fill better and reduce black space */
@@ -384,6 +456,8 @@ hr.hr-line {
   display: flex;
   align-items: center;
   justify-content: center;
+  /* Add tiny bit of extra height to ensure immediate scrollability */
+  padding-bottom: calc(4rem + 1px);
   /* Initial state - hidden and below */
   opacity: 0;
   transform: translateY(30px);

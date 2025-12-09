@@ -3,6 +3,7 @@ import { Mail, Github } from 'lucide-react'
 import { Metadata } from 'next'
 import AnimatedContent from './components/AnimatedContent'
 import ScrollIndicator from './components/ScrollIndicator'
+import ScrollActivator from './components/ScrollActivator'
 // Force rebuild - September 6, 2025 - Attempt 2
 
 export const metadata: Metadata = {
@@ -51,7 +52,9 @@ export const metadata: Metadata = {
 
 const MayfieldJonesProfile = () => {
   return (
-    <div className="homepage-container">
+    <>
+      <ScrollActivator />
+      <div className="homepage-container" style={{ overflowY: 'visible', touchAction: 'pan-y' }}>
       {/* Full-screen video section */}
       <section className="video-hero-section">
         <div className="video-background">
@@ -169,6 +172,7 @@ const MayfieldJonesProfile = () => {
       </div>
       </AnimatedContent>
     </div>
+    </>
   )
 }
 
