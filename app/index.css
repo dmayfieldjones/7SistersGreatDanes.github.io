@@ -174,12 +174,14 @@ hr.hr-line {
 /* On mobile, adjust video to fill better and reduce black space */
 @media (max-width: 768px) {
   .video-iframe {
-    /* Scale video larger to fill mobile viewport better */
-    width: 120vw !important;
-    height: 120vh !important;
-    /* Ensure it covers the full height */
+    /* For portrait mobile: scale video to fill height (will crop sides) */
+    /* Calculate width based on viewport height to maintain 16:9 and fill vertically */
+    width: calc(100vh * 16 / 9) !important; /* 16:9 aspect ratio based on viewport height */
+    height: 100vh !important;
+    /* Ensure it covers the full viewport */
     min-width: 100vw !important;
     min-height: 100vh !important;
+    /* This will make video wider than viewport, cropping sides but filling top/bottom */
   }
   
   .content-section {
