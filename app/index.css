@@ -245,16 +245,16 @@ hr.hr-line {
 /* On mobile, make scroll indicator more prominent and ensure it's centered */
 @media (max-width: 768px) {
   .scroll-indicator {
-    bottom: 50px !important;
+    bottom: 80px !important; /* Higher up so it's more visible */
     left: 0 !important;
     right: 0 !important;
     margin-left: auto !important;
     margin-right: auto !important;
     transform: none !important;
-    padding: 18px !important;
-    background: rgba(0, 0, 0, 0.6) !important;
+    padding: 20px 24px !important; /* Larger padding */
+    background: rgba(0, 0, 0, 0.75) !important; /* Darker background */
     /* Make it more visible on mobile */
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.7) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 255, 255, 0.3) !important;
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
@@ -262,6 +262,8 @@ hr.hr-line {
     width: fit-content !important;
     /* Ensure proper centering */
     text-align: center !important;
+    /* Add a subtle glow/pulse effect */
+    animation: bounce-mobile 2s infinite, pulse-glow 2s infinite !important;
   }
   
   /* Override bounce animation on mobile to maintain centering */
@@ -270,15 +272,34 @@ hr.hr-line {
       transform: translateY(0);
     }
     40% {
-      transform: translateY(-12px);
+      transform: translateY(-15px);
     }
     60% {
-      transform: translateY(-6px);
+      transform: translateY(-8px);
     }
   }
   
-  .scroll-indicator {
-    animation-name: bounce-mobile !important;
+  /* Add a pulsing glow effect */
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 255, 255, 0.3);
+    }
+    50% {
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.9), 0 0 30px rgba(255, 255, 255, 0.5);
+    }
+  }
+  
+  /* Add a gradient fade at bottom to hint at scrolling */
+  .video-hero-section::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 150px;
+    background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.4) 100%);
+    pointer-events: none;
+    z-index: 50;
   }
 }
 
@@ -315,16 +336,19 @@ hr.hr-line {
 @media (max-width: 768px) {
   .scroll-text {
     display: block !important;
-    font-size: 14px !important;
-    font-weight: 600 !important;
-    margin-top: 10px !important;
+    font-size: 16px !important; /* Larger text */
+    font-weight: 700 !important; /* Bolder */
+    margin-top: 12px !important;
+    letter-spacing: 2px !important; /* More spacing for readability */
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8) !important; /* Stronger shadow */
   }
   
   .scroll-arrow {
-    width: 35px !important;
-    height: 35px !important;
-    border-right: 4px solid rgba(255, 255, 255, 1) !important;
-    border-bottom: 4px solid rgba(255, 255, 255, 1) !important;
+    width: 40px !important; /* Larger arrow */
+    height: 40px !important;
+    border-right: 5px solid rgba(255, 255, 255, 1) !important; /* Thicker border */
+    border-bottom: 5px solid rgba(255, 255, 255, 1) !important;
+    filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.5)) !important; /* Stronger shadow */
   }
 }
 
