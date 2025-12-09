@@ -21,6 +21,9 @@ body {
   color-scheme: light dark;
   overflow-x: auto;
   overflow-y: auto;
+  /* Ensure smooth scrolling on mobile */
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
 }
 
 .container {
@@ -109,6 +112,9 @@ hr.hr-line {
 .homepage-container {
   position: relative;
   overflow-x: hidden; /* Prevent horizontal scroll */
+  /* Ensure smooth scrolling on mobile */
+  -webkit-overflow-scrolling: touch;
+  overflow-y: auto;
 }
 
 /* Make video background extend behind content section */
@@ -130,6 +136,9 @@ hr.hr-line {
   height: 100vh;
   overflow: hidden;
   z-index: 0;
+  /* Ensure scrolling works on mobile */
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
 }
 
 .video-background {
@@ -140,6 +149,12 @@ hr.hr-line {
   height: 100%;
   overflow: hidden;
   z-index: -1;
+  /* Allow scrolling through video area on mobile */
+  pointer-events: none;
+}
+
+.video-background iframe {
+  pointer-events: none;
 }
 
 .video-iframe {
@@ -152,6 +167,8 @@ hr.hr-line {
   min-height: 100%;
   transform: translate(-50%, -50%);
   pointer-events: none;
+  /* Ensure it doesn't block touch scrolling */
+  touch-action: none;
 }
 
 /* On mobile, adjust video to fill better and reduce black space */
@@ -209,6 +226,7 @@ hr.hr-line {
   position: absolute;
   bottom: 60px;
   left: 50%;
+  margin-left: 0;
   transform: translateX(-50%);
   z-index: 100; /* High z-index to ensure it's always visible */
   animation: bounce 2s infinite;
@@ -218,14 +236,19 @@ hr.hr-line {
   background: rgba(0, 0, 0, 0.2);
   border-radius: 50%;
   backdrop-filter: blur(5px);
+  /* Ensure it doesn't block scrolling */
+  touch-action: manipulation;
 }
 
 /* On mobile, make scroll indicator more prominent and ensure it's centered */
 @media (max-width: 768px) {
   .scroll-indicator {
     bottom: 50px !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
+    left: 0 !important;
+    right: 0 !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    transform: none !important;
     padding: 18px !important;
     background: rgba(0, 0, 0, 0.6) !important;
     /* Make it more visible on mobile */
@@ -234,6 +257,26 @@ hr.hr-line {
     flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;
+    width: fit-content !important;
+    /* Ensure proper centering */
+    text-align: center !important;
+  }
+  
+  /* Override bounce animation on mobile to maintain centering */
+  @keyframes bounce-mobile {
+    0%, 20%, 50%, 80%, 100% {
+      transform: translateY(0);
+    }
+    40% {
+      transform: translateY(-12px);
+    }
+    60% {
+      transform: translateY(-6px);
+    }
+  }
+  
+  .scroll-indicator {
+    animation-name: bounce-mobile !important;
   }
 }
 
@@ -293,6 +336,14 @@ hr.hr-line {
   60% {
     transform: translateX(-50%) translateY(-5px);
   }
+}
+
+/* Ensure bounce animation maintains centering */
+.scroll-indicator {
+  animation-name: bounce;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
 }
 
 
