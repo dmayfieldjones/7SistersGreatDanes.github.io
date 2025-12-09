@@ -24,18 +24,22 @@ export const metadata: Metadata = {
     'Urbana Illinois dogs',
     'Illinois Great Dane kennel'
   ],
+  authors: [{ name: 'Dustin and Karen Mayfield-Jones' }],
+  creator: '7Sisters Farm',
+  publisher: '7Sisters Farm',
   openGraph: {
     title: 'Illinois Great Dane Breeders | 7Sisters Farm',
     description: 'Premier Illinois Great Dane breeders in Central Illinois. AKC registered, health tested, family raised Great Danes.',
     type: 'website',
     url: 'https://7sistersgreatdanes.com',
     siteName: '7Sisters Farm',
+    locale: 'en_US',
     images: [
       {
         url: 'https://7sistersgreatdanes.com/img/wedding.png',
-        width: 300,
-        height: 300,
-        alt: 'Dustin and Karen - Illinois Great Dane Breeders',
+        width: 1200,
+        height: 630,
+        alt: 'Dustin and Karen - Illinois Great Dane Breeders at 7Sisters Farm',
       },
     ],
   },
@@ -44,10 +48,23 @@ export const metadata: Metadata = {
     title: 'Illinois Great Dane Breeders | 7Sisters Farm',
     description: 'Premier Illinois Great Dane breeders in Central Illinois. AKC registered, health tested, family raised.',
     images: ['https://7sistersgreatdanes.com/img/wedding.png'],
+    creator: '@7sistersgreatdanes',
   },
   alternates: {
     canonical: 'https://7sistersgreatdanes.com',
   },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  metadataBase: new URL('https://7sistersgreatdanes.com'),
 }
 
 const MayfieldJonesProfile = () => {
