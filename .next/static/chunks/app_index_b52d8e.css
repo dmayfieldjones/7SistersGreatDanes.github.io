@@ -850,6 +850,7 @@ html {
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
   overscroll-behavior-y: auto;
+  position: relative;
 }
 
 body {
@@ -943,9 +944,12 @@ hr.hr-line {
   box-shadow: none !important;
   border-radius: 0 !important;
   overflow: visible !important;
+  overflow-x: visible !important;
+  overflow-y: visible !important;
   height: auto !important;
   position: relative !important;
   z-index: auto !important;
+  max-height: none !important;
 }
 
 .resource-image {
@@ -979,6 +983,7 @@ hr.hr-line {
   border-radius: 0 !important;
   height: auto !important;
   min-height: auto !important;
+  max-height: none !important;
 }
 
 .homepage-container:before {
@@ -1234,6 +1239,7 @@ hr.hr-line {
   opacity: 0;
   transform: translateY(30px);
   transition: opacity .8s ease-out, transform .8s ease-out;
+  overflow: visible !important;
 }
 
 .content-section.content-visible {
@@ -1251,6 +1257,7 @@ hr.hr-line {
   box-shadow: 0 8px 16px #00000026;
   width: 100%;
   max-width: 600px;
+  overflow: visible !important;
 }
 
 @media (width >= 1024px) {

@@ -17,6 +17,8 @@ html {
   scroll-behavior: smooth;
   /* Ensure scroll events are handled at document level */
   overscroll-behavior-y: auto;
+  /* Ensure scrollbar is always on the html element, not nested containers */
+  position: relative;
 }
 
 body {
@@ -122,10 +124,14 @@ hr.hr-line {
   border-radius: 0 !important;
   /* Ensure no scroll context is created */
   overflow: visible !important;
+  overflow-x: visible !important;
+  overflow-y: visible !important;
   height: auto !important;
   /* Don't block scroll events */
   position: relative !important;
   z-index: auto !important;
+  /* Ensure scrollbar is on html, not here */
+  max-height: none !important;
 }
 
 /* Alternative selector for browsers that don't support :has() */
@@ -172,6 +178,7 @@ hr.hr-line {
   /* Ensure it doesn't create a scroll context */
   height: auto !important;
   min-height: auto !important;
+  max-height: none !important;
 }
 
 /* Make video background extend behind content section */
@@ -458,6 +465,8 @@ hr.hr-line {
   justify-content: center;
   /* Add tiny bit of extra height to ensure immediate scrollability */
   padding-bottom: calc(4rem + 1px);
+  /* Ensure it doesn't create a scroll context */
+  overflow: visible !important;
   /* Initial state - hidden and below */
   opacity: 0;
   transform: translateY(30px);
@@ -480,6 +489,8 @@ hr.hr-line {
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
   width: 100%;
   max-width: 600px;
+  /* Ensure it doesn't create a scroll context */
+  overflow: visible !important;
 }
 
 /* Desktop - larger container for better proportions */
