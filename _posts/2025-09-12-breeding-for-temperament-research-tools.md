@@ -7,7 +7,7 @@ tags: ["Breeding Science"]
 featured: true
 ---
 
-[← Back to Blog Archive](https://mayfieldjones.com/archive)
+[← Back to Blog Archive](/archive)
 
 
 

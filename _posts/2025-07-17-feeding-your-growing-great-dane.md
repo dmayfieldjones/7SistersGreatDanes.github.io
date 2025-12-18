@@ -4,7 +4,7 @@ date: 2025-07-17
 description: "Comprehensive guide to Great Dane nutrition, feeding strategies, and growth management for every life stage, from puppy to adult."
 ---
 
-[← Back to Blog Archive](https://mayfieldjones.com/archive)
+[← Back to Blog Archive](/archive)
 
 
 When Cora hit her adolescent growth spurt at eight months, she was consuming nearly nine cups of food daily and still acting hungry. New Great Dane families often panic at this point—is something wrong? Are they starving their dog? How much is too much?
@@ -593,7 +593,7 @@ To learn more about our approach to Great Dane breeding and our current litters,
 - Curious about Great Dane puppy development? Read our [month-by-month guide](/posts/2025-07-03-the-first-year).
 - Want to understand our breeding philosophy? See [Our Breeding Philosophy](https://mayfieldjones.com/BreedingPhilosophy).
 
-[← Back to Blog Archive](https://mayfieldjones.com/archive)
+[← Back to Blog Archive](/archive)
 
 ### Sources & References
 

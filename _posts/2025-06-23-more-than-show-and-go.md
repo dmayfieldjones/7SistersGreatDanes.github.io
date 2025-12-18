@@ -4,7 +4,7 @@ date: 2025-06-23
 description: "Our journey into the Illini Great Dane Club: community, responsible breeding, and show experiences for Great Dane enthusiasts."
 ---
 
-[← Back to Blog Archive](https://mayfieldjones.com/archive)
+[← Back to Blog Archive](/archive)
 
 
 

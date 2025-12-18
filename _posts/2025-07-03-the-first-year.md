@@ -4,7 +4,7 @@ date: 2025-07-03
 description: "Comprehensive guide to Great Dane puppy development, socialization, feeding, and training tips for new owners from birth to one year."
 ---
 
-[← Back to Blog Archive](https://mayfieldjones.com/archive)
+[← Back to Blog Archive](/archive)
 
 
 

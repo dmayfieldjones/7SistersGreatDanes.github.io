@@ -7,7 +7,7 @@ tags: ["Domestication", "Evolution"]
 featured: true
 ---
 
-[← Back to Blog Archive](https://mayfieldjones.com/archive)
+[← Back to Blog Archive](/archive)
 
 ## Why Your Dog's Genetics Matter More Than You Think
 

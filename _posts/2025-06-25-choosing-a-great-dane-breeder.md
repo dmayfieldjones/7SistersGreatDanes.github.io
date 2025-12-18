@@ -4,7 +4,7 @@ date: 2025-06-25
 description: "Complete guide to finding ethical Great Dane breeders. Learn what questions to ask, health testing requirements, and how to identify responsible breeders vs puppy mills."
 ---
 
-[← Back to Blog Archive](https://mayfieldjones.com/archive)
+[← Back to Blog Archive](/archive)
 
 
 

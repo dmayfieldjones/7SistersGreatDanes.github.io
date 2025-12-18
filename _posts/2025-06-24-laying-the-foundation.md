@@ -4,7 +4,7 @@ date: 2025-06-24
 description: "Great Dane breeding philosophy: science, mentorship, and early puppy development for healthy, well-adjusted dogs and families."
 ---
 
-[← Back to Blog Archive](https://mayfieldjones.com/archive)
+[← Back to Blog Archive](/archive)
 
 
 
