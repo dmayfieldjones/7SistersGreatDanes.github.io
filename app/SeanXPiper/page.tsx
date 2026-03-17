@@ -163,7 +163,7 @@ export default function () {
                   rel="noopener noreferrer"
                   className="ofa-link"
                 >
-                  WS80095602
+                  WS80095602 OFA Results
                 </a>
               </p>
             </div>
@@ -180,7 +180,7 @@ export default function () {
                   rel="noopener noreferrer"
                   className="ofa-link"
                 >
-                  WS69691106
+                  WS69691106 OFA Results
                 </a>
               </p>
             </div>

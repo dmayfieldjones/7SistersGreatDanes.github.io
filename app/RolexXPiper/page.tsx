@@ -157,8 +157,20 @@ export default function () {
                   rel="noopener noreferrer"
                   className="ofa-link"
                 >
-                  WS66273805
+                  WS66273805 OFA Results
                 </a>
+              </p>
+              <p className="registration">Additional Mexican Test Results</p>
+              <p className="registration">
+                <a href="/img/rolexfulldentition.png" target="_blank" rel="noopener noreferrer" className="ofa-link">Dentition</a>
+                {' · '}
+                <a href="/img/rolexGeneticTest.png" target="_blank" rel="noopener noreferrer" className="ofa-link">Genetic Testing 1</a>
+                {' · '}
+                <a href="/img/rolexgenetictestpart2.png" target="_blank" rel="noopener noreferrer" className="ofa-link">Genetic Testing 2</a>
+                {' · '}
+                <a href="/img/RolexHips.png" target="_blank" rel="noopener noreferrer" className="ofa-link">Hip Dysplasia</a>
+                {' · '}
+                <a href="/img/rolexpatella.png" target="_blank" rel="noopener noreferrer" className="ofa-link">Patella</a>
               </p>
             </div>
             <div className="parent-card">
@@ -174,7 +186,7 @@ export default function () {
                   rel="noopener noreferrer"
                   className="ofa-link"
                 >
-                  WS69691106
+                  WS69691106 OFA Results
                 </a>
               </p>
             </div>

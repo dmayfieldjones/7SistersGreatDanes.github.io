@@ -3,7 +3,7 @@
   "type": "module",
   "scripts": {
     "format": "prettier --write .",
-    "dev": "next --turbo",
+    "dev": "BROWSER=none next --turbo -p 3007",
     "build": "next build",
     "start": "next dev",
     "lint": "eslint --report-unused-disable-directives --max-warnings 0",

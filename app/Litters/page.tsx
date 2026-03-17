@@ -22,11 +22,11 @@ export const metadata: Metadata = {
     title: 'Great Dane Puppies & Litters | Available & Previous Litters | 7Sisters Farm',
     description: 'View our Great Dane puppies and litters. Health-tested parents, ethical breeding practices, and lifetime support.',
     type: 'website',
-    url: 'https://mayfieldjones.com/Litters',
+    url: 'https://7sistersgreatdanes.com/Litters',
     siteName: '7Sisters Farm',
     images: [
       {
-        url: 'https://mayfieldjones.com/img/SeanXPiper.jpg',
+        url: 'https://7sistersgreatdanes.com/img/SeanXPiper.jpg',
         width: 400,
         height: 300,
         alt: '7Sisters Farm Great Dane Puppies',
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Great Dane Puppies & Litters | Available & Previous Litters | 7Sisters Farm',
     description: 'View our Great Dane puppies and litters. Health-tested parents, ethical breeding practices, and lifetime support.',
-    images: ['https://mayfieldjones.com/img/SeanXPiper.jpg'],
+    images: ['https://7sistersgreatdanes.com/img/SeanXPiper.jpg'],
   },
   alternates: {
     canonical: 'https://7sistersgreatdanes.com/Litters',
@@ -59,18 +59,19 @@ export default function () {
   // Define all images in the exact order they appear on the page for preloading
   // First 4 are prioritized (visible above the fold)
   const allImages = [
+    // Litter images (at top of page)
+    '/img/EzraxPiper.jpg',                                                             // 1st visible
+    '/img/SeanXPiper.jpg',                                                             // 2nd visible
+    '/img/RolexPiper.jpg',                                                             // 3rd visible
     // Puppy gallery images (in order of appearance)
-    '/img/piper-second-litter-3-fawn-1-brindle-puppies-with-breeding-female-cora.jpg', // 1st visible
-    '/img/piper-first-litter-5-fawn-puppies-4-boys-1-girl-breeding-female-mia.jpg',    // 2nd visible
-    '/img/dustin-pulling-cart-piper-first-litter-5-fawn-puppies.jpg',                  // 3rd visible
-    '/img/close-up-puppy-faces-cart-illinois-corn-field-sunset.jpg',                   // 4th visible
-    '/img/two-fawn-puppies-tall-grass-clover-sunset.jpg',                              // 5th
-    '/img/future-champion-pumpkin-giant-stick-piper-first-litter.jpg',                 // 6th
-    '/img/four-fawn-puppies-nursery-soft-mat-stuffed-toy.jpg',                         // 7th
-    '/img/piper-captain-mother-son-tiktok-star-sweetest-dog.jpg',                      // 8th
-    // Litter images (at bottom of page)
-    '/img/SeanXPiper.jpg',
-    '/img/RolexPiper.jpg',
+    '/img/piper-second-litter-3-fawn-1-brindle-puppies-with-breeding-female-cora.jpg',  // 4th visible
+    '/img/piper-first-litter-5-fawn-puppies-4-boys-1-girl-breeding-female-mia.jpg',
+    '/img/dustin-pulling-cart-piper-first-litter-5-fawn-puppies.jpg',
+    '/img/close-up-puppy-faces-cart-illinois-corn-field-sunset.jpg',
+    '/img/two-fawn-puppies-tall-grass-clover-sunset.jpg',
+    '/img/future-champion-pumpkin-giant-stick-piper-first-litter.jpg',
+    '/img/four-fawn-puppies-nursery-soft-mat-stuffed-toy.jpg',
+    '/img/piper-captain-mother-son-tiktok-star-sweetest-dog.jpg',
   ]
 
   return (
@@ -110,6 +111,65 @@ export default function () {
             </a>
             .
           </p>
+        </section>
+        
+        {/* Current Litters Section */}
+        <section className="litters-section">
+          <h2 className="section-title">
+            <span className="accent-color">7</span>Sisters Current Litters
+          </h2>
+          <p className="section-description">Click on images for details</p>
+          <div className="litter-gallery">
+            <a
+              href="/EzraxPiper"
+              className="litter-link"
+              aria-label="View Ezra X Piper litter details"
+            >
+              <img
+                src="/img/EzraxPiper.jpg"
+                alt="Ezra X Piper litter advertisement"
+                className="litter-image"
+                loading="lazy"
+                fetchPriority="auto"
+              />
+            </a>
+          </div>
+        </section>
+        
+        {/* Previous Litters Section */}
+        <section className="litters-section">
+          <h2 className="section-title">
+            <span className="accent-color">7</span>Sisters Previous Litters
+          </h2>
+          <p className="section-description">Click on images for details</p>
+          <div className="litter-gallery">
+            <a
+              href="/SeanXPiper"
+              className="litter-link"
+              aria-label="View Sean X Piper litter details"
+            >
+              <img
+                src="/img/SeanXPiper.jpg"
+                alt="Sean X Piper litter advertisement"
+                className="litter-image"
+                loading="lazy"
+                fetchPriority="auto"
+              />
+            </a>
+            <a
+              href="/RolexXPiper"
+              className="litter-link"
+              aria-label="View Rolex X Piper litter details"
+            >
+              <img
+                src="/img/RolexPiper.jpg"
+                alt="Rolex X Piper litter advertisement"
+                className="litter-image"
+                loading="lazy"
+                fetchPriority="auto"
+              />
+            </a>
+          </div>
         </section>
         
         {/* Puppy Gallery Section */}
@@ -242,42 +302,6 @@ export default function () {
               </a>{' '}
               - see how our puppies like Captain are thriving in their forever homes!
             </p>
-          </div>
-        </section>
-        
-        {/* Litters Section */}
-        <section className="litters-section">
-          <h2 className="section-title">
-            <span className="accent-color">7</span>Sisters Previous Litters
-          </h2>
-          <p className="section-description">Click on images for details</p>
-          <div className="litter-gallery">
-            <a
-              href="/SeanXPiper"
-              className="litter-link"
-              aria-label="View Sean X Piper litter details"
-            >
-              <img
-                src="/img/SeanXPiper.jpg"
-                alt="Sean X Piper litter advertisement"
-                className="litter-image"
-                loading="lazy"
-                fetchPriority="auto"
-              />
-            </a>
-            <a
-              href="/RolexXPiper"
-              className="litter-link"
-              aria-label="View Rolex X Piper litter details"
-            >
-              <img
-                src="/img/RolexPiper.jpg"
-                alt="Rolex X Piper litter advertisement"
-                className="litter-image"
-                loading="lazy"
-                fetchPriority="auto"
-              />
-            </a>
           </div>
         </section>
       </main>
