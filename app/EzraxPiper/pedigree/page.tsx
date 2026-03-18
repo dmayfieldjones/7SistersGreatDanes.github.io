@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function PedigreePage() {
   return (
-    <div className="content">
+    <div className="content pedigree-page-content">
       <div className="pedigree-top-bar">
         <Link href="/EzraxPiper">← Back to Litter</Link>
       </div>
@@ -22,11 +22,16 @@ export default function PedigreePage() {
       </section>
       <style dangerouslySetInnerHTML={{ __html: `
         :root { --primary-color: #bf141c; --spacing-unit: 1rem; }
+        .pedigree-page-content { overflow: visible; -webkit-overflow-scrolling: touch; touch-action: pan-y; }
         .pedigree-top-bar { padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2); }
         .pedigree-top-bar a { color: var(--primary-color); font-weight: 600; text-decoration: none; font-size: 0.95rem; }
         .pedigree-top-bar a:hover { text-decoration: underline; }
-        .pedigree-viz-section { width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; overflow: hidden; padding: 0 calc(var(--spacing-unit) * 2); box-sizing: border-box; }
-        .pedigree-iframe { width: 100%; min-height: 1400px; border: 1px solid #e0e0e0; border-radius: 8px; display: block; background: #fff; }
+        .pedigree-viz-section { width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; overflow: visible; padding: 0 calc(var(--spacing-unit) * 2); box-sizing: border-box; -webkit-overflow-scrolling: touch; touch-action: pan-y; }
+        .pedigree-iframe { width: 100%; min-height: 1400px; border: 1px solid #e0e0e0; border-radius: 8px; display: block; background: #fff; -webkit-overflow-scrolling: touch; }
+        @media (max-width: 768px) {
+          .pedigree-viz-section { padding: 0 var(--spacing-unit); }
+          .pedigree-iframe { min-height: 1200px; }
+        }
       ` }} />
     </div>
   )
