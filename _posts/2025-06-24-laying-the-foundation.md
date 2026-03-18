@@ -112,7 +112,7 @@ This is evidence of our breeding decisions: following a specific linebreeding st
 
 </details>
 
-<details>
+<details id="how-coi-is-calculated">
 <summary><strong>How COI is Calculated: A Real Example Using Sean</strong></summary>
 
 **Understanding Coefficient of Inbreeding Through Sean's Pedigree**

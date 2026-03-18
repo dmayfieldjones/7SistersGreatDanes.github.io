@@ -199,7 +199,7 @@ export default function () {
             <div className="puppy-card">
               <p className="puppy-reg">WS81418801</p>
               <p className="puppy-name">
-                <span className="brand-number">7</span>Sisters N Legado's I
+                CH <span className="brand-number">7</span>Sisters N Legado's I
                 Wanna Dance, I Wanna Win
                 <span className="call-name">"Mia"</span>
               </p>
@@ -214,7 +214,7 @@ export default function () {
             <div className="puppy-card">
               <p className="puppy-reg">WS81418803</p>
               <p className="puppy-name">
-                <span className="brand-number">7</span>Sisters N Legado's I Know
+                CH <span className="brand-number">7</span>Sisters N Legado's I Know
                 A Guy At Cherryhill <span className="call-name">"Pumpkin"</span>
               </p>
             </div>

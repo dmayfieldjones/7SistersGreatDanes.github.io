@@ -26,10 +26,10 @@ export const metadata: Metadata = {
     siteName: '7Sisters Farm',
     images: [
       {
-        url: 'https://7sistersgreatdanes.com/img/SeanXPiper.jpg',
+        url: 'https://7sistersgreatdanes.com/img/EzraxPiper.jpg',
         width: 400,
         height: 300,
-        alt: '7Sisters Farm Great Dane Puppies',
+        alt: 'Ezra X Piper - 7Sisters Farm Current Litter',
       },
     ],
   },
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Great Dane Puppies & Litters | Available & Previous Litters | 7Sisters Farm',
     description: 'View our Great Dane puppies and litters. Health-tested parents, ethical breeding practices, and lifetime support.',
-    images: ['https://7sistersgreatdanes.com/img/SeanXPiper.jpg'],
+    images: ['https://7sistersgreatdanes.com/img/EzraxPiper.jpg'],
   },
   alternates: {
     canonical: 'https://7sistersgreatdanes.com/Litters',
