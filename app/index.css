@@ -485,6 +485,82 @@ body:has(.homepage-container) {
   transform: translateY(0);
 }
 
+/* Litter spotlight - prominent CTA for upcoming litter */
+.litter-spotlight-hero-wrap {
+  position: absolute;
+  top: 38%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 50;
+  pointer-events: auto;
+  width: 100%;
+  max-width: 420px;
+  padding: 0 1rem;
+}
+
+.litter-spotlight {
+  display: block;
+  margin: 0 auto 2rem;
+  max-width: 500px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  border: 2px solid #bf141c;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.litter-spotlight-hero {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+  margin: 0;
+}
+
+.litter-spotlight-hero .litter-spotlight-content {
+  background: rgba(255, 255, 255, 0.98);
+}
+.litter-spotlight:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 24px rgba(191, 20, 28, 0.25);
+}
+.litter-spotlight-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.litter-spotlight-content {
+  padding: 1rem 1.25rem;
+  background: linear-gradient(to bottom, #fff 0%, #f8f8f8 100%);
+  text-align: center;
+}
+.litter-spotlight-badge {
+  display: inline-block;
+  background: #bf141c;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+}
+.litter-spotlight-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #bf141c;
+  margin: 0 0 0.25rem;
+}
+.litter-spotlight-date {
+  font-size: 1rem;
+  color: #666;
+  margin: 0 0 0.5rem;
+}
+.litter-spotlight-cta {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #bf141c;
+}
+
 .content-overlay {
   position: relative;
   background: rgba(255, 255, 255, 0.95);

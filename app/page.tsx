@@ -84,6 +84,17 @@ const MayfieldJonesProfile = () => {
           />
           <div className="video-overlay"></div>
         </div>
+        <div className="litter-spotlight-hero-wrap">
+          <a href="/EzraxPiper" className="litter-spotlight litter-spotlight-hero">
+            <img src="/img/EzraxPiper.jpg" alt="Ezra × Piper litter" className="litter-spotlight-img" />
+            <div className="litter-spotlight-content">
+              <span className="litter-spotlight-badge">Upcoming Litter</span>
+              <h2 className="litter-spotlight-title">Ezra × Piper</h2>
+              <p className="litter-spotlight-date">Expected March 22nd</p>
+              <span className="litter-spotlight-cta">Click to View Litter Details</span>
+            </div>
+          </a>
+        </div>
         {/* Scroll indicator */}
         <ScrollIndicator />
       </section>
