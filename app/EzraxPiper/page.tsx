@@ -58,7 +58,7 @@ export default function () {
                 <span className="label">Countdown to expected arrival:</span>
                 <div className="countdown-display">
                   {countdown.isPast ? (
-                    <p className="countdown-message">The puppies have arrived! Check back soon for updates.</p>
+                    <p className="countdown-message">Puppies expected very soon. Check back for updates.</p>
                   ) : (
                     <div className="countdown-grid">
                       <div className="countdown-block">
@@ -108,7 +108,7 @@ export default function () {
           <p className="pedigree-intro">
             Explore the full 10-generation pedigree analysis for Ezra × Piper, including Wright&apos;s COI (4.04%), common ancestor paths, and structural findings.
           </p>
-          <a href="/EzraxPiper/pedigree" className="pedigree-link">Open Pedigree Explorer →</a>
+          <a href="/ezra-piper-pedigree.html" className="pedigree-link">Open Pedigree Explorer →</a>
         </section>
         <section className="offspring-section">
           <h2 className="section-title">Offspring</h2>
