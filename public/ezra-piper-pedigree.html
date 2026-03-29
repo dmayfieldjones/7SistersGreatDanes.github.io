@@ -83,6 +83,9 @@ h1 span{font-style:italic;color:var(--accent);}
 .hl-badge{position:absolute;background:var(--ca-bd);color:#fff;font-size:10px;font-weight:700;
   border-radius:10px;padding:1px 7px;pointer-events:none;z-index:10;white-space:nowrap;
   box-shadow:0 2px 8px rgba(0,0,0,.25);font-family:Arial,sans-serif;}
+@media (max-width:768px){
+  .hl-badge{display:none !important;}
+}
 /* Zoom controls */
 .zoom-bar{display:flex;align-items:center;gap:4px;margin-bottom:6px;flex-wrap:wrap;}
 .zbtn{font-family:Arial,sans-serif;font-size:13px;font-weight:600;
@@ -162,14 +165,14 @@ h1 span{font-style:italic;color:var(--accent);}
 </div>
 
 <div class="accordion">
-<div class="accordion-item" data-accordion>
+<div class="accordion-item open" data-accordion>
   <button type="button" class="accordion-header" onclick="toggleAccordion(this)">
     <span>Visual Pedigree Tree</span>
     <span class="accordion-icon">▼</span>
   </button>
   <div class="accordion-content">
 <h2 class="section-title">Visual Pedigree Tree</h2>
-<p class="section-desc">Best viewed on tablet or desktop. Ezra × Piper (the breeding pair) are on the left; scroll right to see parents, grandparents, and earlier generations. Gens 1–7 show full names; gens 8–9 show abbreviated names or colored bars. Use Fit All for a bird's-eye view, then click any dog to highlight all its occurrences.</p>
+<p class="section-desc">The tree loads fit to your screen width. Ezra × Piper (the breeding pair) are on the left; scroll right for deeper generations. Gens 1–7 show full names; gens 8–9 show abbreviated names or colored bars. On a phone, pinch with two fingers to zoom; tap a dog to highlight every place it appears (the bar below shows which box you tapped). Use Fit all for a bird&apos;s-eye view.</p>
 
 <div class="legend">
   <div class="li"><div class="ls e"></div>Ezra's lines</div>
@@ -177,7 +180,7 @@ h1 span{font-style:italic;color:var(--accent);}
   <div class="li"><div class="ls ca"></div>Common ancestor — appears in both Ezra&apos;s and Piper&apos;s pedigrees; contributes to the 4.04% cross COI</div>
   <div class="li"><div class="ls int"></div>Internal repeat — same dog appears multiple times within one parent&apos;s pedigree</div>
 </div>
-<p class="cv-hint">← Scroll right for deeper generations · Scroll down for more dogs · Click any dog to lock highlights · Ctrl+scroll to zoom →</p>
+<p class="cv-hint">← Scroll right for deeper generations · Scroll down for more dogs · Click any dog to lock highlights · Pinch with two fingers to zoom (phone/tablet) · Ctrl+scroll to zoom (desktop) →</p>
 
 <div class="zoom-bar">
   <button class="zbtn" onclick="zoomTo(zoomLevel/1.4)" title="Zoom out">−</button>
@@ -1486,6 +1489,8 @@ let hlDbId = null;      // hover highlight
 let lockedDbId = null;  // click-locked highlight
 let lockedPos = null;   // which position was clicked
 let zoomLevel = 1;
+let pinchStartDist = 0;
+let pinchStartZoom = 1;
 const zoomInner = document.getElementById('zoominner');
 const cvWrap = document.getElementById('cvwrap');
 const zlbl = document.getElementById('zlbl');
@@ -1552,6 +1557,27 @@ function zoomFitHighlights() {
   });
 }
 
+function scrollLockedCellIntoView(pos) {
+  if (pos == null || !cvWrap) return;
+  requestAnimationFrame(function() {
+    const r = getBoxRect(pos);
+    const z = zoomLevel;
+    const availW = cvWrap.clientWidth;
+    const availH = cvWrap.clientHeight;
+    const cx = (r.x + r.w / 2) * z;
+    const cy = (r.y + r.h / 2) * z;
+    const maxL = Math.max(0, cvWrap.scrollWidth - availW);
+    const maxT = Math.max(0, cvWrap.scrollHeight - availH);
+    cvWrap.scrollLeft = Math.min(maxL, Math.max(0, cx - availW / 2));
+    cvWrap.scrollTop = Math.min(maxT, Math.max(0, cy - availH / 2));
+  });
+}
+
+function touchPinchDist(t) {
+  const dx = t[0].clientX - t[1].clientX, dy = t[0].clientY - t[1].clientY;
+  return Math.sqrt(dx * dx + dy * dy);
+}
+
 // Mouse wheel zoom (on the scroll wrapper)
 cvWrap.addEventListener('wheel', function(e) {
   if (e.ctrlKey || e.metaKey) {
@@ -1560,6 +1586,24 @@ cvWrap.addEventListener('wheel', function(e) {
     zoomTo(zoomLevel * factor);
   }
 }, { passive: false });
+
+// Pinch-to-zoom inside pedigree viewport (mobile/tablet)
+cvWrap.addEventListener('touchstart', function(e) {
+  if (e.touches.length === 2) {
+    pinchStartDist = touchPinchDist(e.touches);
+    pinchStartZoom = zoomLevel;
+  }
+}, { passive: true, capture: true });
+cvWrap.addEventListener('touchmove', function(e) {
+  if (e.touches.length === 2 && pinchStartDist > 1) {
+    e.preventDefault();
+    const d = touchPinchDist(e.touches);
+    zoomTo(pinchStartZoom * (d / pinchStartDist));
+  }
+}, { passive: false, capture: true });
+cvWrap.addEventListener('touchend', function(e) {
+  if (e.touches.length < 2) pinchStartDist = 0;
+});
 
 // ─── BOX GEOMETRY ───────────────────────────────────────────────────────────
 function getBoxRect(pos) {
@@ -1631,8 +1675,8 @@ function drawHighlights(dbId, hoveredPos, isLocked) {
     octx.stroke();
     octx.restore();
 
-    // Number badge
-    if (total > 1 && r.h * zoomLevel >= 6) {
+    // Number badge (hidden on narrow screens via CSS; skip DOM on phones)
+    if (total > 1 && r.h * zoomLevel >= 6 && !window.matchMedia('(max-width:768px)').matches) {
       const badge = document.createElement('div');
       badge.className = 'hl-badge';
       badge.textContent = (idx + 1) + '/' + total;
@@ -1663,6 +1707,10 @@ function updateLockBar() {
   if (eCt && pCt) meta += ' (' + eCt + '× Ezra, ' + pCt + '× Piper)';
   else if (eCt) meta += ' (' + eCt + '× Ezra side)';
   else meta += ' (' + pCt + '× Piper side)';
+  if (positions.length > 1 && lockedPos != null) {
+    var si = positions.indexOf(lockedPos);
+    if (si >= 0) meta += ' · Highlighted box ' + (si + 1) + ' of ' + positions.length;
+  }
   lockmeta.textContent = meta;
 
   lockbar.classList.add('active');
@@ -1726,6 +1774,7 @@ cv.addEventListener('click', function(e) {
     lockedPos = nodeIdx;
     drawHighlights(dbId, nodeIdx, true);
     updateLockBar();
+    scrollLockedCellIntoView(nodeIdx);
   }
 });
 
@@ -1942,7 +1991,16 @@ function toggleAccordion(btn) {
 // ─── INIT ───────────────────────────────────────────────────────────────────
 const mq=matchMedia('(prefers-color-scheme:dark)');
 mq.addEventListener('change',()=>drawCanvas());
-window.addEventListener('load',()=>drawCanvas());
+window.addEventListener('load', function() {
+  drawCanvas();
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      zoomFitWidth();
+      cvWrap.scrollLeft = 0;
+      cvWrap.scrollTop = 0;
+    });
+  });
+});
 // Set cursor on canvas
 cv.style.cursor = 'pointer';
 drawCanvas();

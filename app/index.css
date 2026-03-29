@@ -561,6 +561,24 @@ body:has(.homepage-container) {
   color: #bf141c;
 }
 
+.litter-spotlight-tiktok {
+  text-align: center;
+  margin: 0.75rem 0 0;
+  font-size: 0.9rem;
+}
+
+.litter-spotlight-tiktok-link {
+  color: #fff;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+.litter-spotlight-tiktok-link:hover {
+  color: #fce8e9;
+}
+
 .content-overlay {
   position: relative;
   background: rgba(255, 255, 255, 0.95);

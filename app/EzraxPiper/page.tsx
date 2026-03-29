@@ -1,34 +1,83 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
-// March 22 at noon - use local date (month is 0-indexed: 2 = March). Update year as needed.
-const EXPECTED_DATE = new Date(2026, 2, 22, 12, 0, 0)
+const TIKTOK_URL = 'https://www.tiktok.com/@7sistersgreatdanes'
 
-function getCountdown(targetDate: Date) {
-  const now = new Date()
-  const diff = targetDate.getTime() - now.getTime()
-  if (diff <= 0) {
-    return { days: 0, hours: 0, minutes: 0, seconds: 0, isPast: true }
+function timeSincePastDate(pastDateString: string | Date, endDate: Date = new Date()) {
+  const pastDate = new Date(pastDateString)
+  pastDate.setUTCHours(0, 0, 0, 0)
+
+  const now = new Date(endDate)
+  now.setUTCHours(0, 0, 0, 0)
+
+  const differenceInMilliseconds = now.getTime() - pastDate.getTime()
+
+  if (differenceInMilliseconds < 0) {
+    return 'Please select a date after the birth date.'
   }
-  return {
-    days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-    hours: Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-    minutes: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
-    seconds: Math.floor((diff % (1000 * 60)) / 1000),
-    isPast: false,
+
+  let years = 0
+  let tempDate = new Date(pastDate)
+  while (tempDate < now) {
+    tempDate.setUTCFullYear(tempDate.getUTCFullYear() + 1)
+    if (tempDate <= now) {
+      years++
+    } else {
+      tempDate.setUTCFullYear(tempDate.getUTCFullYear() - 1)
+      break
+    }
   }
+
+  let tempDateMonths = new Date(tempDate)
+  let months = 0
+  while (tempDateMonths < now) {
+    tempDateMonths.setUTCMonth(tempDateMonths.getUTCMonth() + 1)
+    if (tempDateMonths <= now) {
+      months++
+    } else {
+      tempDateMonths.setUTCMonth(tempDateMonths.getUTCMonth() - 1)
+      break
+    }
+  }
+
+  let remainingMilliseconds = now.getTime() - tempDateMonths.getTime()
+  const days = Math.floor(remainingMilliseconds / (1000 * 60 * 60 * 24))
+
+  let resultString = ''
+
+  if (years > 0) {
+    resultString += `${years} year${years > 1 ? 's' : ''}, `
+  }
+  if (months > 0) {
+    resultString += `${months} month${months > 1 ? 's' : ''}, `
+  }
+  if (days >= 0) {
+    resultString += `${days} day${days !== 1 ? 's' : ''}`
+  }
+
+  if (resultString.endsWith(', ')) {
+    resultString = resultString.slice(0, -2)
+  }
+
+  return resultString || '0 days'
 }
 
 export default function () {
-  const [countdown, setCountdown] = useState(() => getCountdown(EXPECTED_DATE))
+  const birthDate = new Date(Date.UTC(2026, 2, 23))
 
-  useEffect(() => {
-    const t = setInterval(() => setCountdown(getCountdown(EXPECTED_DATE)), 1000)
-    return () => clearInterval(t)
-  }, [])
+  const [futureDate, setFutureDate] = useState<string>('')
+  const [calculatedAge, setCalculatedAge] = useState<string>('')
 
-  const fmt = (n: number) => n.toString().padStart(2, '0')
+  const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedDateStr = event.target.value
+    setFutureDate(selectedDateStr)
+
+    const [year, month, day] = selectedDateStr.split('-').map(Number)
+    const selectedDate = new Date(Date.UTC(year, month - 1, day))
+
+    setCalculatedAge(timeSincePastDate(birthDate, selectedDate))
+  }
 
   return (
     <div className="content">
@@ -42,43 +91,52 @@ export default function () {
           <img src="/img/Colorlogo_nobackground.png" alt="7Sisters Farm Logo" width={300} height="auto" className="hero-logo" loading="lazy" />
         </section>
         <section className="advertisement-section">
-          <a href="/EzraxPiper" className="ad-link" aria-label="View full Ezra X Piper litter details">
-            <img src="/img/EzraxPiper.jpg" alt="Ezra X Piper litter advertisement" className="ad-image" loading="eager" />
+          <a
+            href={TIKTOK_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="ad-link"
+            aria-label="Watch Ezra x Piper puppy videos on TikTok"
+          >
+            <img src="/img/EzraxPiper.jpg" alt="Ezra x Piper litter" className="ad-image" loading="eager" />
           </a>
+          <p className="ad-caption">
+            We&apos;re sharing clips of this litter on{' '}
+            <a href={TIKTOK_URL} target="_blank" rel="noopener noreferrer" className="cta-link">
+              TikTok
+            </a>
+            . Scroll down for litter details, parents, and the pedigree explorer.
+          </p>
         </section>
         <section className="litter-info-section">
           <div className="litter-details">
             <h2 className="section-title">Litter Information</h2>
             <div className="info-grid">
               <div className="info-item">
-                <span className="label">Expected Arrival:</span>
-                <span className="value">March 22nd</span>
+                <span className="label">Puppies:</span>
+                <span className="value">Six total — two girls, four boys</span>
               </div>
               <div className="info-item">
-                <span className="label">Countdown to expected arrival:</span>
-                <div className="countdown-display">
-                  {countdown.isPast ? (
-                    <p className="countdown-message">Puppies expected very soon. Check back for updates.</p>
-                  ) : (
-                    <div className="countdown-grid">
-                      <div className="countdown-block">
-                        <span className="countdown-number">{fmt(countdown.days)}</span>
-                        <span className="countdown-label">Days</span>
-                      </div>
-                      <div className="countdown-block">
-                        <span className="countdown-number">{fmt(countdown.hours)}</span>
-                        <span className="countdown-label">Hours</span>
-                      </div>
-                      <div className="countdown-block">
-                        <span className="countdown-number">{fmt(countdown.minutes)}</span>
-                        <span className="countdown-label">Minutes</span>
-                      </div>
-                      <div className="countdown-block">
-                        <span className="countdown-number">{fmt(countdown.seconds)}</span>
-                        <span className="countdown-label">Seconds</span>
-                      </div>
-                    </div>
-                  )}
+                <span className="label">Whelped:</span>
+                <span className="value">March 23, 2026</span>
+              </div>
+              <div className="info-item">
+                <span className="label">Litter&apos;s age today:</span>
+                <span className="value" id="timeSinceWhelp">
+                  {timeSincePastDate(birthDate)}
+                </span>
+              </div>
+              <div className="info-item">
+                <span className="label">Litter&apos;s age on selected (show) date:</span>
+                <div className="age-calculator">
+                  <input
+                    type="date"
+                    id="future-date"
+                    value={futureDate}
+                    onChange={handleDateChange}
+                    className="date-input"
+                  />
+                  {calculatedAge ? <span className="value">{calculatedAge}</span> : null}
                 </div>
               </div>
             </div>
@@ -88,17 +146,23 @@ export default function () {
               <h3 className="parent-title">Sire</h3>
               <p className="parent-name">BISS GCH Sonya Danes N Krisda Our Peace And Harmony Fontana <span className="call-name">&quot;Ezra&quot;</span></p>
               <p className="registration">
-                <a href="https://ofa.org/advanced-search/?regnum=WS81479201" target="_blank" rel="noopener noreferrer" className="ofa-link">WS81479201 OFA Results</a>
+                <a href="https://ofa.org/advanced-search/?regnum=WS81479201" target="_blank" rel="noopener noreferrer" className="ofa-link">
+                  WS81479201 OFA Results
+                </a>
               </p>
               <p className="registration">
-                <a href="/img/EzraPrelimOFA.png" target="_blank" rel="noopener noreferrer" className="ofa-link">Additional Test Results</a>
+                <a href="/img/EzraPrelimOFA.png" target="_blank" rel="noopener noreferrer" className="ofa-link">
+                  Additional Test Results
+                </a>
               </p>
             </div>
             <div className="parent-card">
               <h3 className="parent-title">Dam</h3>
               <p className="parent-name">CH Legado N Danekraaft&apos;s How Can I Tell You? <span className="call-name">&quot;Piper&quot;</span></p>
               <p className="registration">
-                <a href="https://ofa.org/advanced-search/?regnum=WS69691106" target="_blank" rel="noopener noreferrer" className="ofa-link">WS69691106 OFA Results</a>
+                <a href="https://ofa.org/advanced-search/?regnum=WS69691106" target="_blank" rel="noopener noreferrer" className="ofa-link">
+                  WS69691106 OFA Results
+                </a>
               </p>
             </div>
           </div>
@@ -108,16 +172,31 @@ export default function () {
           <p className="pedigree-intro">
             Explore the full 10-generation pedigree analysis for Ezra × Piper, including Wright&apos;s COI (4.04%), common ancestor paths, and structural findings.
           </p>
-          <a href="/ezra-piper-pedigree.html" className="pedigree-link">Open Pedigree Explorer →</a>
+          <a href="/ezra-piper-pedigree.html" className="pedigree-link">
+            Open Pedigree Explorer →
+          </a>
         </section>
         <section className="offspring-section">
           <h2 className="section-title">Offspring</h2>
           <p className="coming-soon-message">
-            Puppies expected March 22nd. Check back after the litter arrives for individual puppy information, or <a href="/contact" className="cta-link">contact us</a> to express your interest.
+            Individual puppy pages and registrations will be added when we catch our breath. For now, follow along on{' '}
+            <a href={TIKTOK_URL} target="_blank" rel="noopener noreferrer" className="cta-link">
+              TikTok
+            </a>{' '}
+            for photos and video. Interested in this litter or a future one?{' '}
+            <a href="/contact" className="cta-link">
+              Contact us
+            </a>
+            .
           </p>
         </section>
       </main>
-      <style dangerouslySetInnerHTML={{ __html: ' :root { --primary-color: #bf141c; --text-color: #000000; --background-color: #ffffff; --card-bg-color: #f8f8f8; --border-color: #e0e0e0; --spacing-unit: 1rem; --font-family: Arial, sans-serif; --transition-speed: 0.3s; } .content-wrapper { max-width: 800px; margin: 0 auto; padding: calc(var(--spacing-unit) * 2); font-family: var(--font-family); line-height: 1.6; color: var(--text-color); background-color: var(--background-color); } .hero-section { text-align: center; margin-bottom: calc(var(--spacing-unit) * 3); } .hero-logo { max-width: 100%; height: auto; } .section-title { font-size: 1.75rem; color: var(--primary-color); margin-bottom: calc(var(--spacing-unit) * 1.5); } .info-grid { display: grid; gap: var(--spacing-unit); margin-bottom: calc(var(--spacing-unit) * 2); } .info-item { display: flex; flex-direction: column; gap: calc(var(--spacing-unit) * 0.5); } .label { font-weight: bold; color: #666; } .countdown-display { margin: calc(var(--spacing-unit) * 1) 0; } .countdown-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-unit); max-width: 400px; } .countdown-block { background: var(--primary-color); color: white; padding: calc(var(--spacing-unit) * 1.5); border-radius: 8px; text-align: center; } .countdown-number { display: block; font-size: 1.75rem; font-weight: bold; } .countdown-label { font-size: 0.85rem; opacity: 0.9; } .countdown-message { font-size: 1.1rem; color: var(--primary-color); font-weight: bold; } .parents-info { display: grid; gap: calc(var(--spacing-unit) * 2); margin-bottom: calc(var(--spacing-unit) * 3); } .parent-card { background-color: var(--card-bg-color); padding: calc(var(--spacing-unit) * 1.5); border-radius: 8px; } .parent-title { color: var(--primary-color); margin-bottom: var(--spacing-unit); } .parent-name { font-size: 1.1rem; margin-bottom: calc(var(--spacing-unit) * 0.5); } .registration { color: #666; font-family: monospace; } .pedigree-section { margin-bottom: calc(var(--spacing-unit) * 3); } .pedigree-intro { margin-bottom: calc(var(--spacing-unit) * 1); font-size: 1rem; } .pedigree-link { display: inline-block; color: var(--primary-color); font-weight: bold; text-decoration: none; padding: 8px 16px; border: 2px solid var(--primary-color); border-radius: 8px; transition: all 0.2s ease; } .pedigree-link:hover { background-color: var(--primary-color); color: white; } .coming-soon-message { background-color: var(--card-bg-color); padding: calc(var(--spacing-unit) * 1.5); border-radius: 8px; font-size: 1.1rem; } .cta-link { color: var(--primary-color); font-weight: bold; text-decoration: none; } .cta-link:hover { text-decoration: underline; } .advertisement-section { margin-bottom: calc(var(--spacing-unit) * 3); text-align: center; } .ad-image { max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); transition: transform var(--transition-speed) ease; } .ad-link:hover .ad-image { transform: scale(1.02); } .value { font-size: 1.1rem; color: var(--text-color); } @media (min-width: 768px) { .info-grid { grid-template-columns: repeat(1, 1fr); } .parents-info { grid-template-columns: repeat(2, 1fr); } } @media (max-width: 768px) { .content-wrapper { padding: var(--spacing-unit); } .section-title { font-size: 1.5rem; } .countdown-grid { grid-template-columns: repeat(2, 1fr); } } @media print { .parent-card { background-color: transparent; border: 1px solid var(--border-color); } .ad-image { max-width: 400px; } } .ofa-link { color: inherit; text-decoration: underline; transition: color 0.2s ease; } .ofa-link:hover { color: var(--primary-color); } ' }} />
+      <style
+        dangerouslySetInnerHTML={{
+          __html:
+            ' :root { --primary-color: #bf141c; --text-color: #000000; --background-color: #ffffff; --card-bg-color: #f8f8f8; --border-color: #e0e0e0; --spacing-unit: 1rem; --font-family: Arial, sans-serif; --transition-speed: 0.3s; } .content-wrapper { max-width: 800px; margin: 0 auto; padding: calc(var(--spacing-unit) * 2); font-family: var(--font-family); line-height: 1.6; color: var(--text-color); background-color: var(--background-color); } .hero-section { text-align: center; margin-bottom: calc(var(--spacing-unit) * 3); } .hero-logo { max-width: 100%; height: auto; } .section-title { font-size: 1.75rem; color: var(--primary-color); margin-bottom: calc(var(--spacing-unit) * 1.5); } .info-grid { display: grid; gap: var(--spacing-unit); margin-bottom: calc(var(--spacing-unit) * 2); } .info-item { display: flex; flex-direction: column; gap: calc(var(--spacing-unit) * 0.5); } .label { font-weight: bold; color: #666; } .parents-info { display: grid; gap: calc(var(--spacing-unit) * 2); margin-bottom: calc(var(--spacing-unit) * 3); } .parent-card { background-color: var(--card-bg-color); padding: calc(var(--spacing-unit) * 1.5); border-radius: 8px; } .parent-title { color: var(--primary-color); margin-bottom: var(--spacing-unit); } .parent-name { font-size: 1.1rem; margin-bottom: calc(var(--spacing-unit) * 0.5); } .registration { color: #666; font-family: monospace; } .pedigree-section { margin-bottom: calc(var(--spacing-unit) * 3); } .pedigree-intro { margin-bottom: calc(var(--spacing-unit) * 1); font-size: 1rem; } .pedigree-link { display: inline-block; color: var(--primary-color); font-weight: bold; text-decoration: none; padding: 8px 16px; border: 2px solid var(--primary-color); border-radius: 8px; transition: all 0.2s ease; } .pedigree-link:hover { background-color: var(--primary-color); color: white; } .coming-soon-message { background-color: var(--card-bg-color); padding: calc(var(--spacing-unit) * 1.5); border-radius: 8px; font-size: 1.1rem; } .cta-link { color: var(--primary-color); font-weight: bold; text-decoration: none; } .cta-link:hover { text-decoration: underline; } .advertisement-section { margin-bottom: calc(var(--spacing-unit) * 3); text-align: center; } .ad-image { max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); transition: transform var(--transition-speed) ease; } .ad-link:hover .ad-image { transform: scale(1.02); } .ad-caption { font-size: 0.95rem; color: #555; max-width: 36rem; margin: var(--spacing-unit) auto 0; line-height: 1.5; } .age-calculator { display: flex; flex-direction: column; gap: 0.5rem; } .date-input { padding: 0.5rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px; width: fit-content; } .value { font-size: 1.1rem; color: var(--text-color); } @media (min-width: 768px) { .info-grid { grid-template-columns: repeat(1, 1fr); } .parents-info { grid-template-columns: repeat(2, 1fr); } } @media (max-width: 768px) { .content-wrapper { padding: var(--spacing-unit); } .section-title { font-size: 1.5rem; } } @media print { .parent-card { background-color: transparent; border: 1px solid var(--border-color); } .ad-image { max-width: 400px; } } .ofa-link { color: inherit; text-decoration: underline; transition: color 0.2s ease; } .ofa-link:hover { color: var(--primary-color); } ',
+        }}
+      />
     </div>
   )
 }

@@ -127,7 +127,7 @@ export default function () {
             >
               <img
                 src="/img/EzraxPiper.jpg"
-                alt="Ezra X Piper litter advertisement"
+                alt="Ezra X Piper litter — six puppies, two girls and four boys"
                 className="litter-image"
                 loading="lazy"
                 fetchPriority="auto"
