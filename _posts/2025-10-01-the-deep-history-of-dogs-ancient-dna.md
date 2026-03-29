@@ -46,7 +46,7 @@ The evidence supports a single origin, though the story remains complex. The gen
 
 ## What Ancient DNA Tells Us About Genetic Diversity
 
-The ancient DNA evidence reveals something crucial about what genetic diversity looked like in ancient dogs. [A 2024 study analyzing 90 ancient dog and wolf genomes](https://pubmed.ncbi.nlm.nih.gov/38903121/) found that ancient dog populations generally exhibited lower inbreeding levels than present-day individuals, with relatively stable patterns maintained across different regions and time periods. Even more importantly, certain genomic regions consistently avoided inbreeding across both ancient and modern samples—these "inbreeding deserts" (genomic regions that consistently maintain genetic diversity even under population pressure) were significantly enriched for genes related to smell and immune function, critical survival functions for dogs. This suggests natural selection was actively maintaining diversity in these regions.
+The ancient DNA evidence reveals something crucial about what genetic diversity looked like in ancient dogs. [A study analyzing 90 ancient dog and wolf genomes](https://doi.org/10.1073/pnas.2416980122) found that ancient dog populations generally exhibited lower inbreeding levels than present-day individuals, with relatively stable patterns maintained across different regions and time periods. Even more importantly, certain genomic regions consistently avoided inbreeding across both ancient and modern samples—these "inbreeding deserts" (genomic regions that consistently maintain genetic diversity even under population pressure) were significantly enriched for genes related to smell and immune function, critical survival functions for dogs. This suggests natural selection was actively maintaining diversity in these regions.
 
 This historical baseline provides a crucial reference point for understanding modern breeding. When we understand what genetic diversity looked like for most of dog history, we can better reflect on our current breeding practices.
 
@@ -122,7 +122,7 @@ Meadows, J. R. S., Kidd, A. G., Wang, G. D., Parker, H. G., Schall, E. I., Bianc
 
 Perri, A. R., Feuerborn, T. R., Frantz, L. A. F., Larson, G., Malhi, R. S., Meltzer, D. J., & Witt, K. E. (2021). Dog domestication and the dual dispersal of people and dogs into the Americas. *Proceedings of the National Academy of Sciences*, 118(6), e2010083118. [DOI: 10.1073/pnas.2010083118](https://doi.org/10.1073/pnas.2010083118)
 
-Bougiouri, K., Aninta, S. G., Charlton, S., Harris, A., Carmagnini, A., Piličiauskienė, G., ... & Racimo, F. (2024). Imputation of ancient canid genomes reveals inbreeding history over the past 10,000 years. *Proceedings of the Royal Society B*, 291(2024), 20242443. [DOI: 10.1098/rspb.2024.2443](https://doi.org/10.1098/rspb.2024.2443)
+Bougiouri, K., Aninta, S. G., Charlton, S., Harris, A., Carmagnini, A., Piličiauskienė, G., ... & Racimo, F. (2025). Imputation of ancient canid genomes reveals inbreeding history over the past 10,000 years. *Proceedings of the National Academy of Sciences*, 122(48), e2416980122. [DOI: 10.1073/pnas.2416980122](https://doi.org/10.1073/pnas.2416980122)
 
 Sinding, M. H. S., Gopalakrishan, S., Vieira, F. G., Samaniego Castruita, J. A., Raundrup, K., Jørgensen, M. P. H., ... & Gilbert, M. T. P. (2020). Arctic-adapted dogs emerged at the Pleistocene–Holocene transition. *Science*, 368(6498), 1495-1499. [DOI: 10.1126/science.aaz8599](https://doi.org/10.1126/science.aaz8599)
 

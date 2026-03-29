@@ -1,15 +1,13 @@
 import { MetadataRoute } from 'next'
 import { getAllPosts } from '@/lib/api'
+import { parsePostDateLocal } from '@/lib/postDate'
 
 export const dynamic = 'force-static'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://7sistersgreatdanes.com'
   
-  // Get all blog posts
   const posts = await getAllPosts()
-  // Filter out HAB.education posts for main sitemap
-  const dogPosts = posts.filter(p => !p.categories?.includes('HAB.education'))
   
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
@@ -94,9 +92,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ]
   
   // Blog posts
-  const blogPosts: MetadataRoute.Sitemap = dogPosts.map((post) => ({
+  const blogPosts: MetadataRoute.Sitemap = posts.map((post) => ({
     url: `${baseUrl}/posts/${post.id}`,
-    lastModified: new Date(post.date),
+    lastModified: parsePostDateLocal(post.date),
     changeFrequency: 'monthly',
     priority: 0.6,
   }))

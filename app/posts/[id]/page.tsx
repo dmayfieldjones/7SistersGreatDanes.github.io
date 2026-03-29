@@ -4,6 +4,10 @@ import Markdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 import rehypeSlug from 'rehype-slug';
 import { getArticleCategory, getReadingTime } from '@/app/archive/utils'
+import {
+  formatPostDateEnUS,
+  postDateToPublishedInstant,
+} from '@/lib/postDate'
 
 export async function generateMetadata({
   params,
@@ -41,7 +45,7 @@ export async function generateMetadata({
       title: `${title} | 7Sisters Farm`,
       description,
       type: 'article',
-      publishedTime: new Date(date).toISOString(),
+      publishedTime: postDateToPublishedInstant(date),
       authors: ['Dustin Mayfield-Jones'],
       tags: [category, 'Great Dane', 'dog breeding'],
       images: [
@@ -82,10 +86,9 @@ export default async function Post({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
-  const { content, title, date, tags, categories } = await getPostById(id)
+  const { content, title, date, tags } = await getPostById(id)
   
   const category = getArticleCategory(id, title)
-  const isHab = (categories || []).includes('HAB.education')
   const readingTime = getReadingTime(id)
   
   // Generate structured data for SEO
@@ -108,8 +111,8 @@ export default async function Post({
         "url": "https://7sistersgreatdanes.com/img/Colorlogo_nobackground.png"
       }
     },
-    "datePublished": new Date(date).toISOString(),
-    "dateModified": new Date(date).toISOString(),
+    "datePublished": postDateToPublishedInstant(date),
+    "dateModified": postDateToPublishedInstant(date),
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": `https://7sistersgreatdanes.com/posts/${id}`
@@ -155,11 +158,7 @@ export default async function Post({
             {title}
           </h1>
           <div className="post-meta">
-            <span className="post-date">{new Date(date).toLocaleDateString('en-US', { 
-              year: 'numeric', 
-              month: 'long', 
-              day: 'numeric' 
-            })}</span>
+            <span className="post-date">{formatPostDateEnUS(date)}</span>
             {tags && tags.length > 0 ? (
               <div className="post-tags">
                 {tags.map((tag: string, index: number) => (
@@ -186,50 +185,29 @@ export default async function Post({
             {processedContent}
           </Markdown>
         </article>
-        {!isHab && (
-          <div style={{ marginTop: '2rem', textAlign: 'center' }}>
-            <a href="/BreedingPhilosophy">
-              Curious about our breeding philosophy and how we select our dogs? Visit our <strong>Breeding Philosophy</strong> page.
-            </a>
-          </div>
-        )}
-        {isHab && (
-          <div style={{ marginTop: '2rem', textAlign: 'center' }}>
-            <a href="/hab/archive">
-              Looking for more HAB.education content? Browse the <strong>HAB Articles & Interviews</strong>.
-            </a>
-          </div>
-        )}
+        <div style={{ marginTop: '2rem', textAlign: 'center' }}>
+          <a href="/BreedingPhilosophy">
+            Curious about our breeding philosophy and how we select our dogs? Visit our <strong>Breeding Philosophy</strong> page.
+          </a>
+        </div>
         
         {/* Related Articles Section */}
         <div className="related-articles" style={{ marginTop: '3rem', padding: '2rem', backgroundColor: '#f8f8f8', borderRadius: '8px' }}>
           <h3 style={{ color: '#bf141c', marginBottom: '1rem' }}>Related Articles</h3>
-          {!isHab && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              <a href="/posts/2025-06-25-choosing-a-great-dane-breeder" style={{ color: '#bf141c', textDecoration: 'none' }}>
-                → The Family's Guide to Choosing a Great Dane Breeder
-              </a>
-              <a href="/posts/2025-07-03-the-first-year" style={{ color: '#bf141c', textDecoration: 'none' }}>
-                → The First Year: A Comprehensive Guide to Great Dane Puppy Development
-              </a>
-              <a href="/posts/2025-06-24-laying-the-foundation" style={{ color: '#bf141c', textDecoration: 'none' }}>
-                → Laying the Foundation: Our Breeding Philosophy
-              </a>
-            </div>
-          )}
-          {isHab && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              <a href="/hab/interviews" style={{ color: '#bf141c', textDecoration: 'none' }}>
-                → HAB.education Interviews
-              </a>
-              <a href="/hab/data" style={{ color: '#bf141c', textDecoration: 'none' }}>
-                → Balloon Data Visualization
-              </a>
-              <a href="/hab/lessons" style={{ color: '#bf141c', textDecoration: 'none' }}>
-                → Educational Programs & Lessons
-              </a>
-            </div>
-          )}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            <a href="/posts/2025-10-01-the-deep-history-of-dogs-ancient-dna" style={{ color: '#bf141c', textDecoration: 'none' }}>
+              → The Deep History of Dogs: A Story Written in Ancient DNA (Part 1)
+            </a>
+            <a href="/posts/2025-06-25-choosing-a-great-dane-breeder" style={{ color: '#bf141c', textDecoration: 'none' }}>
+              → The Family's Guide to Choosing a Great Dane Breeder
+            </a>
+            <a href="/posts/2025-07-03-the-first-year" style={{ color: '#bf141c', textDecoration: 'none' }}>
+              → The First Year: A Comprehensive Guide to Great Dane Puppy Development
+            </a>
+            <a href="/posts/2025-06-24-laying-the-foundation" style={{ color: '#bf141c', textDecoration: 'none' }}>
+              → Laying the Foundation: Our Breeding Philosophy
+            </a>
+          </div>
         </div>
       </main>
       

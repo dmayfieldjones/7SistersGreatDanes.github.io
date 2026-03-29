@@ -1,1 +1,1 @@
-self.__REACT_LOADABLE_MANIFEST='{"app/GreatDaneGenomeBrowser/Browser.tsx -> ./MyIdeogram":{"id":2942,"files":["static/chunks/2180-998aa80e10f7d8f9.js","static/chunks/3943.62bf6a70a734c9ba.js","static/chunks/2942.1a9fadd4ff2455fe.js"]}}';
+self.__REACT_LOADABLE_MANIFEST='{"app/GreatDaneGenomeBrowser/Browser.tsx -> ./MyIdeogram":{"id":2942,"files":["static/chunks/817.849da8a2ee6dcc5f.js","static/chunks/942.4b79af688cde84b9.js"]}}';

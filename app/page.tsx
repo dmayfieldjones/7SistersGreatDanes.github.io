@@ -104,6 +104,15 @@ const MayfieldJonesProfile = () => {
               Watch updates on TikTok →
             </a>
           </p>
+          <a
+            href="/posts/2026-03-28-the-deep-history-of-dogs-palaeolithic-partners"
+            className="litter-spotlight-article-bar"
+          >
+            <span className="litter-spotlight-article-badge">New article</span>
+            <span className="litter-spotlight-article-text">
+              The Deep History of Dogs, New Science! →
+            </span>
+          </a>
         </div>
         {/* Scroll indicator */}
         <ScrollIndicator />

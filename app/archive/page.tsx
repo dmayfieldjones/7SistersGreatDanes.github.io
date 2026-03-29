@@ -8,8 +8,6 @@ export const metadata = {
 
 export default async function Page() {
   const allPosts = await getAllPosts()
-  // Exclude HAB.education posts from the main Great Dane archive
-  const dogPosts = allPosts.filter(p => !p.categories?.includes('HAB.education'))
 
   return (
     <div className="content">
@@ -31,7 +29,7 @@ export default async function Page() {
             loading="lazy"
           />
         </section>
-        <ArchiveClient posts={dogPosts} />
+        <ArchiveClient posts={allPosts} />
       </main>
       <style
         dangerouslySetInnerHTML={{

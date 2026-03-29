@@ -579,6 +579,50 @@ body:has(.homepage-container) {
   color: #fce8e9;
 }
 
+/* Thin blog CTA under TikTok — matches litter spotlight accent */
+.litter-spotlight-article-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem 0.75rem;
+  margin: 0.85rem auto 0;
+  padding: 0.5rem 1rem;
+  max-width: 100%;
+  border-radius: 10px;
+  border: 2px solid #bf141c;
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+  text-decoration: none;
+  color: #1a1a1a;
+  font-size: 0.88rem;
+  line-height: 1.35;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.litter-spotlight-article-bar:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(191, 20, 28, 0.2);
+}
+
+.litter-spotlight-article-badge {
+  flex-shrink: 0;
+  background: #bf141c;
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+}
+
+.litter-spotlight-article-text {
+  font-weight: 600;
+  color: #bf141c;
+  text-align: center;
+}
+
 .content-overlay {
   position: relative;
   background: rgba(255, 255, 255, 0.95);

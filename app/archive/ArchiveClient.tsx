@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useState, useMemo } from 'react'
+import { formatPostDateEnUS } from '@/lib/postDate'
 import { getArticleCategory, getReadingTime } from './utils'
 
 interface Post {
@@ -39,10 +40,9 @@ export default function ArchiveClient({ posts }: ArchiveClientProps) {
     // Sort by date
     const sorted = [...filtered].sort((a, b) => {
       if (sortOrder === 'newest') {
-        return new Date(b.date).getTime() - new Date(a.date).getTime()
-      } else {
-        return new Date(a.date).getTime() - new Date(b.date).getTime()
+        return b.date.localeCompare(a.date)
       }
+      return a.date.localeCompare(b.date)
     })
     
     return sorted
@@ -161,11 +161,7 @@ export default function ArchiveClient({ posts }: ArchiveClientProps) {
                   {/* Meta Information */}
                   <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
                     <span className="flex items-center">
-                      📅 {new Date(date).toLocaleDateString('en-US', { 
-                        year: 'numeric', 
-                        month: 'long', 
-                        day: 'numeric' 
-                      })}
+                      📅 {formatPostDateEnUS(date)}
                     </span>
                     <span className="flex items-center">
                       ⏱️ {readingTime}
