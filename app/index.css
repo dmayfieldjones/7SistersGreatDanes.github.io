@@ -486,9 +486,10 @@ body:has(.homepage-container) {
 }
 
 /* Litter spotlight - prominent CTA for upcoming litter */
+/* Anchor lowered so translate(-50%, -50%) doesn’t pull the card under the sticky navbar (z-index 1000). */
 .litter-spotlight-hero-wrap {
   position: absolute;
-  top: 38%;
+  top: calc(38% + 3.75rem + env(safe-area-inset-top, 0px));
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 50;
@@ -496,6 +497,12 @@ body:has(.homepage-container) {
   width: 100%;
   max-width: 420px;
   padding: 0 1rem;
+}
+
+@media (max-width: 768px) {
+  .litter-spotlight-hero-wrap {
+    top: calc(42% + 4rem + env(safe-area-inset-top, 0px));
+  }
 }
 
 .litter-spotlight {
