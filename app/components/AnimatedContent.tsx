@@ -4,8 +4,10 @@ import { useEffect, useRef, useState } from 'react'
 
 export default function AnimatedContent({
   children,
+  sectionClassName = '',
 }: {
   children: React.ReactNode
+  sectionClassName?: string
 }) {
   const [isVisible, setIsVisible] = useState(false)
   const sectionRef = useRef<HTMLElement>(null)
@@ -41,7 +43,9 @@ export default function AnimatedContent({
   return (
     <section
       ref={sectionRef}
-      className={`content-section ${isVisible ? 'content-visible' : ''}`}
+      className={['content-section', sectionClassName, isVisible ? 'content-visible' : '']
+        .filter(Boolean)
+        .join(' ')}
     >
       {children}
     </section>

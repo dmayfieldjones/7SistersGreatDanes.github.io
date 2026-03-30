@@ -1,5 +1,4 @@
 import React from 'react'
-import { Mail, Github } from 'lucide-react'
 import { Metadata } from 'next'
 import AnimatedContent from './components/AnimatedContent'
 import ScrollIndicator from './components/ScrollIndicator'
@@ -104,119 +103,43 @@ const MayfieldJonesProfile = () => {
               Watch updates on TikTok →
             </a>
           </p>
-          <a
-            href="/posts/2026-03-28-the-deep-history-of-dogs-palaeolithic-partners"
-            className="litter-spotlight-article-bar"
-          >
-            <span className="litter-spotlight-article-badge">New article</span>
-            <span className="litter-spotlight-article-text">
-              The Deep History of Dogs, New Science! →
-            </span>
-          </a>
         </div>
         {/* Scroll indicator */}
         <ScrollIndicator />
       </section>
       
       {/* Content section - appears after scrolling with animation */}
-      <AnimatedContent>
-        <div className="content-overlay text-center">
-        <div className="mb-4">
+      <AnimatedContent sectionClassName="home-below-hero">
+        <div className="content-overlay text-center home-intro-wrap">
           <img
             src="/img/Colorlogo_nobackground.png"
-            alt="7Sisters Farm Logo"
-            width={300}
+            alt="7Sisters Farm"
+            width={220}
             height="auto"
-            className="hero-logo"
+            className="hero-logo home-intro-logo"
             loading="lazy"
-            style={{ margin: '0 auto' }}
           />
-        </div>
 
-        <div className="mb-4">
-          <p className="text-lg">Dustin and Karen Mayfield-Jones</p>
-          <hr className="my-2 border-gray-100" />
-          <p className="text-base">Great Dane Breeders at <span className="text-red-600">7</span>Sisters</p>
-          <p className="text-sm text-gray-600">Central Illinois • Champaign-Urbana Area</p>
-          <hr className="my-2 border-gray-100" />
-        </div>
-
-        <div className="space-y-2 mb-4">
-          <h3>
-            <a href="/Litters" className="btn btn-zoom hover:text-red-600">
-              Puppies & Litters
-            </a>
-          </h3>
-          <h3>
-            <a href="/about" className="btn btn-zoom hover:text-red-600">
-              About Us
-            </a>
-          </h3>
-          <h3>
-            <a href="/Farm" className="btn btn-zoom hover:text-red-600">
-              Our Farm
-            </a>
-          </h3>
-          <h3>
-            <a href="/7Sisters" className="btn btn-zoom hover:text-red-600">
-              Great Danes
-            </a>
-          </h3>
-          <h3>
-            <a href="/CommonQuestions" className="btn btn-zoom hover:text-red-600">
-              Common Questions
-            </a>
-          </h3>
-          <h3>
-            <a href="/BreedingPhilosophy" className="btn btn-zoom hover:text-red-600">
-              Breeding Philosophy
-            </a>
-          </h3>
-          <h3>
-            <a href="/archive" className="btn btn-zoom hover:text-red-600">
-              <span className="text-red-600">7</span>Sisters Articles
-            </a>
-          </h3>
-          <h3>
-            <a href="/Resources" className="btn btn-zoom hover:text-red-600">
-              Canine Genome Explorer
-            </a>
-          </h3>
-        </div>
-
-        <div className="flex justify-center space-x-4 mb-4">
-          <a
-            href="mailto:dustin@mayfieldjones.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="social-btn"
-          >
-            <Mail className="w-6 h-6" />
-          </a>
-          <a
-            href="http://github.com/dmayfieldjones"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="social-btn"
-          >
-            <Github className="w-6 h-6" />
-          </a>
-        </div>
-
-        <hr className="my-2 border-gray-300" />
-
-        <div className="text-center">
-          <p>
-            <span className="text-red-600">7</span>Sisters Social Media
+          <p className="home-intro-text">
+            We&apos;re <strong>Dustin and Karen Mayfield-Jones</strong>, breeders of Champion Great
+            Danes at <span className="text-red-600 font-semibold">7</span>Sisters Farm in Central
+            Illinois (Champaign–Urbana area). Our dogs are AKC-registered, live with us, receive health
+            testing, and are raised with a focus on sound structure and temperament. Exploring a litter
+            or a breeder? Start below; everything else—our farm, articles, genome tools—is in the menu.
           </p>
-          <iframe
-            src="https://www.tiktok.com/embed/@7sistersgreatdanes"
-            className="w-full max-w-md mx-auto"
-            height="458"
-            title="7 Sisters Great Danes TikTok"
-          />
+
+          <div className="home-cta-list" role="navigation" aria-label="Primary actions">
+            <a href="/7Sisters" className="home-cta home-cta-primary">
+              Meet our dogs
+            </a>
+            <a href="/BreedingPhilosophy" className="home-cta">
+              Our breeding philosophy
+            </a>
+            <a href="/contact" className="home-cta">
+              Contact us
+            </a>
+          </div>
         </div>
-      </div>
       </AnimatedContent>
     </div>
     </>

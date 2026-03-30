@@ -623,6 +623,90 @@ body:has(.homepage-container) {
   text-align: center;
 }
 
+/* Homepage below hero: don’t force full viewport height */
+.content-section.home-below-hero {
+  min-height: auto;
+  align-items: flex-start;
+  padding-top: 3rem;
+  padding-bottom: 4rem;
+}
+
+.home-intro-logo {
+  margin: 0 auto 1.25rem;
+  display: block;
+}
+
+.home-intro-text {
+  text-align: left;
+  margin: 0 auto 1.75rem;
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: #383838;
+}
+
+@media (min-width: 640px) {
+  .home-intro-text {
+    text-align: center;
+  }
+}
+
+.home-cta-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 22rem;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .home-cta-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 44rem;
+    gap: 1rem;
+  }
+
+  .home-cta {
+    flex: 1 1 12rem;
+    min-width: 10rem;
+  }
+}
+
+.home-cta {
+  display: block;
+  padding: 0.875rem 1.25rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  text-align: center;
+  text-decoration: none;
+  border: 2px solid #bf141c;
+  background: #fff;
+  color: #bf141c;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.home-cta:hover {
+  background: #bf141c;
+  color: #fff;
+}
+
+.home-cta-primary {
+  background: #bf141c;
+  color: #fff;
+}
+
+.home-cta-primary:hover {
+  background: #9e1018;
+  border-color: #9e1018;
+  color: #fff;
+}
+
 .content-overlay {
   position: relative;
   background: rgba(255, 255, 255, 0.95);
@@ -637,6 +721,11 @@ body:has(.homepage-container) {
   overflow: visible !important;
 }
 
+/* Homepage card: wider than default 600px for intro + CTA row */
+.content-overlay.home-intro-wrap {
+  max-width: 44rem;
+}
+
 /* Desktop - larger container for better proportions */
 @media (min-width: 1024px) {
   .content-section {
@@ -646,6 +735,11 @@ body:has(.homepage-container) {
   .content-overlay {
     max-width: 700px;
     padding: 4rem;
+  }
+
+  .content-overlay.home-intro-wrap {
+    max-width: 46rem;
+    padding: 3.5rem 4rem;
   }
 }
 

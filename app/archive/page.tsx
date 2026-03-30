@@ -13,8 +13,8 @@ export default async function Page() {
     <div className="content">
       <div className="post-title">
         <h1>Great Dane Articles and Insights</h1>
-        <p className="text-center text-gray-600 mt-2 text-sm">
-          Comprehensive guides and practical knowledge on Great Dane breeding, care, development, and ownership.
+        <p className="text-center text-gray-600 mt-2 text-sm max-w-2xl mx-auto">
+          Practical guides for puppy buyers sit up front; longer science- and kennel-focused pieces follow.
         </p>
       </div>
       <main className="content-wrapper">

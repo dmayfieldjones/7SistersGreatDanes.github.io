@@ -1,3 +1,46 @@
+/** Puppy-buyer essentials: feeding, development, choosing a breeder. */
+const START_HERE_IDS = new Set([
+  '2025-07-17-feeding-your-growing-great-dane',
+  '2025-07-03-the-first-year',
+  '2025-06-25-choosing-a-great-dane-breeder',
+])
+
+export function isStartHerePost(id: string): boolean {
+  return START_HERE_IDS.has(id)
+}
+
+export function partitionArchivePosts<T extends { id: string }>(posts: T[]): {
+  startHere: T[]
+  deepDives: T[]
+} {
+  const startHere: T[] = []
+  const deepDives: T[] = []
+  for (const post of posts) {
+    if (isStartHerePost(post.id)) startHere.push(post)
+    else deepDives.push(post)
+  }
+  return { startHere, deepDives }
+}
+
+function sortPostsByDate<T extends { date: string }>(posts: T[], order: 'newest' | 'oldest'): T[] {
+  const sorted = [...posts]
+  sorted.sort((a, b) =>
+    order === 'newest' ? b.date.localeCompare(a.date) : a.date.localeCompare(b.date),
+  )
+  return sorted
+}
+
+export function sortArchiveSections<T extends { id: string; date: string }>(
+  posts: T[],
+  order: 'newest' | 'oldest',
+): { startHere: T[]; deepDives: T[] } {
+  const { startHere, deepDives } = partitionArchivePosts(posts)
+  return {
+    startHere: sortPostsByDate(startHere, order),
+    deepDives: sortPostsByDate(deepDives, order),
+  }
+}
+
 // Define categories based on actual article content
 export const getArticleCategory = (id: string, title: string) => {
   // Specific article mappings based on actual content
