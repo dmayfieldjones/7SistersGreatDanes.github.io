@@ -1,8 +1,12 @@
 import React from 'react'
 import { Metadata } from 'next'
 import AnimatedContent from './components/AnimatedContent'
+import HeroYoutubeBackground from './components/HeroYoutubeBackground'
 import ScrollIndicator from './components/ScrollIndicator'
 import ScrollActivator from './components/ScrollActivator'
+
+const HERO_VIDEO_EMBED_SRC =
+  'https://www.youtube.com/embed/M14l3BrfXhA?autoplay=1&mute=1&loop=1&playlist=M14l3BrfXhA&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&fs=0&cc_load_policy=0&disablekb=1&enablejsapi=0&origin=https://7sistersgreatdanes.com'
 // Force rebuild - September 6, 2025 - Attempt 2
 
 export const metadata: Metadata = {
@@ -74,13 +78,7 @@ const MayfieldJonesProfile = () => {
       {/* Full-screen video section */}
       <section className="video-hero-section">
         <div className="video-background">
-          <iframe
-            src="https://www.youtube.com/embed/M14l3BrfXhA?autoplay=1&mute=1&loop=1&playlist=M14l3BrfXhA&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&fs=0&cc_load_policy=0&disablekb=1&enablejsapi=0&origin=https://7sistersgreatdanes.com"
-            className="video-iframe"
-            allow="autoplay; encrypted-media"
-            allowFullScreen
-            title="Background Video"
-          />
+          <HeroYoutubeBackground embedSrc={HERO_VIDEO_EMBED_SRC} title="Background video" />
           <div className="video-overlay"></div>
         </div>
         <div className="litter-spotlight-hero-wrap">

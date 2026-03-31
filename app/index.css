@@ -256,6 +256,12 @@ body:has(.homepage-container) {
   will-change: transform;
 }
 
+/* Fills the same box as the iframe before the embed mounts (deferred load). */
+.video-iframe.video-iframe-placeholder {
+  background: #0a0a0a;
+  pointer-events: none;
+}
+
 /* On mobile, adjust video to fill better and reduce black space */
 @media (max-width: 768px) {
   .video-iframe {
@@ -330,13 +336,15 @@ body:has(.homepage-container) {
 /* On mobile, make scroll indicator more prominent and ensure it's centered */
 @media (max-width: 768px) {
   .scroll-indicator {
-    bottom: 80px !important; /* Higher up so it's more visible */
+    /* Sit at the bottom edge; litter CTA is bottom-anchored above this */
+    bottom: calc(0.65rem + env(safe-area-inset-bottom, 0px)) !important;
+    z-index: 120 !important;
     left: 0 !important;
     right: 0 !important;
     margin-left: auto !important;
     margin-right: auto !important;
     transform: none !important;
-    padding: 20px 24px !important; /* Larger padding */
+    padding: 16px 20px !important;
     background: rgba(0, 0, 0, 0.75) !important; /* Darker background */
     /* Make it more visible on mobile */
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 255, 255, 0.3) !important;
@@ -500,8 +508,54 @@ body:has(.homepage-container) {
 }
 
 @media (max-width: 768px) {
+  /* Bottom-anchored stack so the card + TikTok don’t sit on top of the scroll control */
   .litter-spotlight-hero-wrap {
-    top: calc(42% + 4rem + env(safe-area-inset-top, 0px));
+    top: auto;
+    bottom: calc(5.75rem + env(safe-area-inset-bottom, 0px));
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    max-height: calc(
+      100vh - 6.5rem - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)
+    );
+    max-height: calc(
+      100dvh - 6.5rem - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)
+    );
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .litter-spotlight-hero .litter-spotlight-img {
+    max-height: min(220px, 36vh);
+    width: 100%;
+    object-fit: cover;
+    object-position: center top;
+  }
+
+  .litter-spotlight-hero {
+    margin-bottom: 0.35rem;
+  }
+
+  .litter-spotlight-tiktok {
+    margin-top: 0.4rem;
+    padding: 0.5rem 0.75rem;
+    background: rgba(0, 0, 0, 0.72);
+    border-radius: 8px;
+    backdrop-filter: blur(6px);
+  }
+
+  .litter-spotlight-tiktok-link {
+    text-shadow:
+      0 0 12px rgba(0, 0, 0, 0.95),
+      0 1px 2px rgba(0, 0, 0, 0.8);
+  }
+
+  .litter-spotlight-hero .litter-spotlight-content {
+    padding: 0.75rem 1rem;
+  }
+
+  .litter-spotlight-hero .litter-spotlight-title {
+    font-size: 1.35rem;
   }
 }
 
