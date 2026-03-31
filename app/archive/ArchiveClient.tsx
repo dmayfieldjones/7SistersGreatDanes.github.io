@@ -126,13 +126,18 @@ export default function ArchiveClient({ posts }: ArchiveClientProps) {
       </div>
 
       <section className="mb-12" aria-labelledby="archive-start-here">
-        <h2 id="archive-start-here" className="text-2xl font-bold text-gray-900 mb-1">
-          Start here
-        </h2>
-        <p className="text-gray-600 text-sm sm:text-base mb-6 max-w-3xl">
-          New to Great Danes or still choosing a breeder? These walk through nutrition, the first year,
-          and how to evaluate breeders—including a downloadable checklist.
-        </p>
+        <div className="mb-6 rounded-r-lg border-l-4 border-[#bf141c] bg-[rgba(191,20,28,0.07)] px-4 py-4 shadow-sm sm:px-5 sm:py-5">
+          <h2
+            id="archive-start-here"
+            className="mb-2 text-xl font-semibold tracking-wide text-[#bf141c] sm:text-[1.75rem] sm:leading-snug"
+          >
+            Start here
+          </h2>
+          <p className="max-w-3xl text-sm leading-relaxed text-gray-700 sm:text-base">
+            New to Great Danes or still choosing a breeder? Three guides covering nutrition, the first
+            year, and how to evaluate breeders—including a downloadable checklist.
+          </p>
+        </div>
         <div className="space-y-6">
           {startHere.map((post) => (
             <ArticleCard key={post.id} post={post} />
@@ -141,13 +146,18 @@ export default function ArchiveClient({ posts }: ArchiveClientProps) {
       </section>
 
       <section className="mb-8" aria-labelledby="archive-deep-dives">
-        <h2 id="archive-deep-dives" className="text-2xl font-bold text-gray-900 mb-1">
-          Deep dives &amp; more
-        </h2>
-        <p className="text-gray-600 text-sm sm:text-base mb-6 max-w-3xl">
-          Ancient DNA and domestication, temperament research, how we think about breeding and early
-          litters—and a club story for readers who want the longer pieces.
-        </p>
+        <div className="mb-6 rounded-r-lg border-l-4 border-[#bf141c] bg-[rgba(191,20,28,0.07)] px-4 py-4 shadow-sm sm:px-5 sm:py-5">
+          <h2
+            id="archive-deep-dives"
+            className="mb-2 text-xl font-semibold tracking-wide text-[#bf141c] sm:text-[1.75rem] sm:leading-snug"
+          >
+            Deep dives &amp; more
+          </h2>
+          <p className="max-w-3xl text-sm leading-relaxed text-gray-700 sm:text-base">
+            Ancient DNA and domestication, temperament research, how we think about breeding and early
+            litters—and a club story for readers who want the longer pieces.
+          </p>
+        </div>
         <div className="space-y-6">
           {deepDives.map((post) => (
             <ArticleCard key={post.id} post={post} />
