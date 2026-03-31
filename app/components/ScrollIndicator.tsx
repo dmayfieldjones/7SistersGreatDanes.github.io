@@ -13,7 +13,7 @@ export default function ScrollIndicator() {
       className="scroll-indicator"
       onClick={handleScroll}
       role="button"
-      aria-label="Scroll down to see more"
+      aria-label="Scroll down for more about 7Sisters"
       tabIndex={0}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
@@ -23,7 +23,7 @@ export default function ScrollIndicator() {
       }}
     >
       <div className="scroll-arrow"></div>
-      <span className="scroll-text">Scroll</span>
+      <span className="scroll-text">More below</span>
     </div>
   )
 }
