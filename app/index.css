@@ -264,15 +264,26 @@ body:has(.homepage-container) {
 
 /* On mobile, adjust video to fill better and reduce black space */
 @media (max-width: 768px) {
+  /*
+   * 100vh is often taller than the *visible* viewport (browser chrome), so the hero
+   * extends below the fold and bottom-aligned controls are clipped. svh = small viewport.
+   */
+  .video-hero-section {
+    height: 100vh;
+    height: 100svh;
+    min-height: 100vh;
+    min-height: 100svh;
+  }
+
   .video-iframe {
-    /* For portrait mobile: scale video to fill height (will crop sides) */
-    /* Calculate width based on viewport height to maintain 16:9 and fill vertically */
-    width: calc(100vh * 16 / 9) !important; /* 16:9 aspect ratio based on viewport height */
+    /* Portrait: fill visible height; svh keeps ratio in sync with hero */
+    width: calc(100svh * 16 / 9) !important;
+    width: calc(100vh * 16 / 9) !important;
+    height: 100svh !important;
     height: 100vh !important;
-    /* Ensure it covers the full viewport */
     min-width: 100vw !important;
+    min-height: 100svh !important;
     min-height: 100vh !important;
-    /* This will make video wider than viewport, cropping sides but filling top/bottom */
   }
   
   .content-section {
@@ -340,7 +351,8 @@ body:has(.homepage-container) {
    * (Desktop keeps semi-transparent dark circle + white chevron.)
    */
   .video-hero-section .scroll-indicator {
-    bottom: calc(0.85rem + env(safe-area-inset-bottom, 0px)) !important;
+    /* Larger bottom offset = higher on screen; clears home indicator + fat fingers */
+    bottom: calc(3.25rem + env(safe-area-inset-bottom, 0px)) !important;
     z-index: 120 !important;
     left: 0 !important;
     right: 0 !important;
