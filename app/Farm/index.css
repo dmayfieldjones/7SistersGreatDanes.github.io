@@ -52,6 +52,20 @@
   margin-right: auto;
 }
 
+.puppies-begin-section {
+  margin-bottom: calc(var(--spacing-unit) * 4);
+}
+
+.puppies-begin-section .section-title {
+  margin-bottom: calc(var(--spacing-unit) * 1.5);
+}
+
+.puppies-begin-content p {
+  margin-bottom: calc(var(--spacing-unit) * 1.5);
+  font-size: 1.05rem;
+  line-height: 1.75;
+}
+
 .section-title {
   font-size: 1.75rem;
   color: var(--primary-color);

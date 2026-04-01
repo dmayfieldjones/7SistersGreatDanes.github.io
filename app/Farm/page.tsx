@@ -43,6 +43,40 @@ export default function Contents() {
             stewards of the property.
           </p>
         </section>
+        <section className="puppies-begin-section" aria-labelledby="puppies-begin-heading">
+          <h2 id="puppies-begin-heading" className="section-title">
+            Where Our Puppies Begin
+          </h2>
+          <div className="puppies-begin-content">
+            <p>
+              When Karen and I found this property, it was the setting that stopped
+              us — open fields, mature trees, outbuildings, and the kind of quiet
+              that lets you hear weather coming before it arrives. We knew this was
+              where we wanted to raise dogs. The land has been farmed since 1833,
+              when President Andrew Jackson granted it to George Akers, and the
+              brick house that sits on it has its own story — you can read it below.
+            </p>
+            <p>
+              Our puppies are whelped in a dedicated nursery where one of us is
+              always present — I sleep with the litters at night, and Karen works
+              from home alongside them during the day. The adult dogs get supervised
+              visits at home, but the nursery stays calm and controlled in those early
+              weeks. We introduce new experiences gradually and deliberately,
+              building on what the farm already provides.
+            </p>
+            <p>
+              And the farm provides a lot. As puppies grow and build tolerance to
+              new experiences, their world expands outward — nursery to yard, yard
+              to pasture, pasture to the wider property. By the time they leave us
+              they&apos;ve walked on grass, gravel, dirt, and concrete. They&apos;ve
+              heard tractors, wind through open fields, and thunderstorms rolling
+              across the prairie. They&apos;ve seen pigs and piglets, poultry,
+              whatever wildlife wanders through, and occasionally the mayor of the
+              neighborhood rolling by with his mules and friends. It&apos;s just life
+              here.
+            </p>
+          </div>
+        </section>
         {/* History Section */}
         <section className="history-section">
           <h2 className="section-title">A Brief History of the Brick House</h2>

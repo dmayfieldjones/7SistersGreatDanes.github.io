@@ -190,21 +190,21 @@ export default function () {
                 fetchPriority="high"
               />
               <div className="puppy-overlay">
-                <h3>Piper with Her Second Litter</h3>
-                <p>3 fawn & 1 brindle puppies - 7Sisters Farm</p>
+                <h3>Piper with her second litter</h3>
+                <p>Three fawn, one brindle</p>
               </div>
             </div>
             <div className="puppy-card">
               <img
                 src="/img/piper-first-litter-5-fawn-puppies-4-boys-1-girl-breeding-female-mia.jpg"
-                alt="Fawn Great Dane Piper with her first litter of 5 all fawn puppies at 7Sisters Farm Illinois - 4 boys and 1 girl breeding female Mia in pink collar"
+                alt="Fawn Great Dane Piper with her first litter of 5 all fawn puppies at 7Sisters Farm Illinois - 4 boys and 1 girl Mia in pink collar"
                 className="puppy-image"
                 loading="eager"
                 fetchPriority="high"
               />
               <div className="puppy-overlay">
-                <h3>Piper with Her First Litter</h3>
-                <p>5 fawn puppies - 4 boys & 1 girl - 7Sisters Farm</p>
+                <h3>Piper&apos;s first litter</h3>
+                <p>Five fawn puppies, Mia in the pink collar</p>
               </div>
             </div>
             <div className="puppy-card">
@@ -216,21 +216,19 @@ export default function () {
                 fetchPriority="auto"
               />
               <div className="puppy-overlay">
-                <h3>Puppy Transport at 7Sisters</h3>
-                <p>Piper's first litter - 5 fawn puppies - 7Sisters Farm</p>
+                <h3>Evening rounds</h3>
               </div>
             </div>
             <div className="puppy-card">
               <img
                 src="/img/close-up-puppy-faces-cart-illinois-corn-field-sunset.jpg"
-                alt="Close-up of Great Dane puppies faces in cart at 7Sisters Farm Illinois with corn field background at sunset"
+                alt="Close-up of Great Dane puppy faces in cart at 7Sisters Farm Illinois with corn field background at sunset"
                 className="puppy-image"
                 loading="eager"
                 fetchPriority="auto"
               />
               <div className="puppy-overlay">
-                <h3>Puppies Visit the Neighbors</h3>
-                <p>Adorable puppy faces in cart - Illinois farm sunset - 7Sisters Farm</p>
+                <h3>The passengers</h3>
               </div>
             </div>
             <div className="puppy-card">
@@ -241,20 +239,19 @@ export default function () {
                 loading="lazy"
               />
               <div className="puppy-overlay">
-                <h3>Puppies Playing on the Farm</h3>
-                <p>Two fawn puppies - Illinois farm grass - 7Sisters Farm</p>
+                <h3>Getting into the clover</h3>
               </div>
             </div>
             <div className="puppy-card">
               <img
                 src="/img/future-champion-pumpkin-giant-stick-piper-first-litter.jpg"
-                alt="Two fawn Great Dane puppy boys from Piper's first litter at 7Sisters Farm Illinois - one holding giant stick, future champion Pumpkin"
+                alt="Two fawn Great Dane puppy boys from Piper's first litter at 7Sisters Farm Illinois - one holding giant stick future champion Pumpkin"
                 className="puppy-image"
                 loading="lazy"
               />
               <div className="puppy-overlay">
-                <h3>Future Champion Pumpkin</h3>
-                <p>Two fawn boys - Piper's first litter - 7Sisters Farm</p>
+                <h3>Pumpkin found a stick.</h3>
+                <p>Pumpkin is not sharing the stick.</p>
               </div>
             </div>
             <div className="puppy-card">
@@ -265,20 +262,18 @@ export default function () {
                 loading="lazy"
               />
               <div className="puppy-overlay">
-                <h3>Puppies in the Nursery</h3>
-                <p>Four fawn puppies - Piper's first litter - 7Sisters Farm</p>
+                <h3>Four of five, pretending to be patient</h3>
               </div>
             </div>
             <div className="puppy-card">
               <img
                 src="/img/piper-captain-mother-son-tiktok-star-sweetest-dog.jpg"
-                alt="Fawn Great Dane Piper looking into eyes of her fawn puppy Captain in nursery at 7Sisters Farm Illinois - sweetest dog with TikTok family"
+                alt="Fawn Great Dane Piper looking into eyes of her fawn puppy Captain in nursery at 7Sisters Farm Illinois"
                 className="puppy-image"
                 loading="lazy"
               />
               <div className="puppy-overlay">
-                <h3>Piper & Captain</h3>
-                <p>Mother and son - perfect family match - 7Sisters Farm</p>
+                <h3>Piper and her boy Captain</h3>
               </div>
             </div>
           </div>
