@@ -17,8 +17,8 @@ export default function RootLayout({
       <body>
         <Navigation />
         <div className="wrapper">{children}</div>
+        <GoogleAnalytics gaId="G-SDSX26JETX" />
       </body>
-      <GoogleAnalytics gaId="G-SDSX26JETX" />
     </html>
   )
 }

@@ -22,7 +22,6 @@ export default async function ClientComponent() {
             src="/img/Colorlogo_nobackground.png"
             alt="7Sisters Farm Logo"
             width={300}
-            height="auto"
             className="hero-logo"
             loading="lazy"
           />
