@@ -22,26 +22,10 @@ export default function Contents() {
             src="/img/Colorlogo_nobackground.png"
             alt="7Sisters Farm Logo"
             width={300}
-            height="auto"
             className="hero-logo"
             loading="lazy"
             style={{ marginBottom: '20px' }}
           />
-          <img
-            src="/img/7sistersgirls.jpeg"
-            alt="Historic photo of the seven sisters who lived in the brick house"
-            className="hero-image"
-            loading="lazy"
-          />
-          <p className="intro-text">
-            Pictured are the seven sisters that lived in the brick house. The
-            farm had stayed in the same family for more than 100 years until it
-            was acquired in 2007 and further restored by Cathe Capel of Seven
-            Sisters. Dustin and Karen were welcomed into the home in 2023, and
-            the name of the farm was modified to{' '}
-            <span className="accent-color">7</span>Sisters to reflect the new
-            stewards of the property.
-          </p>
         </section>
         <section className="puppies-begin-section" aria-labelledby="puppies-begin-heading">
           <h2 id="puppies-begin-heading" className="section-title">
@@ -76,6 +60,26 @@ export default function Contents() {
               here.
             </p>
           </div>
+        </section>
+        <section
+          className="seven-sisters-section"
+          aria-label="Historic photograph of the seven sisters and farm name"
+        >
+          <img
+            src="/img/7sistersgirls.jpeg"
+            alt="Historic photo of the seven sisters who lived in the brick house"
+            className="hero-image"
+            loading="lazy"
+          />
+          <p className="intro-text">
+            Pictured are the seven sisters that lived in the brick house. The
+            farm had stayed in the same family for more than 100 years until it
+            was acquired in 2007 and further restored by Cathe Capel of Seven
+            Sisters. Dustin and Karen were welcomed into the home in 2023, and
+            the name of the farm was modified to{' '}
+            <span className="accent-color">7</span>Sisters to reflect the new
+            stewards of the property.
+          </p>
         </section>
         {/* History Section */}
         <section className="history-section">
