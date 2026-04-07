@@ -1,7 +1,8 @@
 ---
 title: "Breeding for Temperament: What Current Research Tools Tell Us (And What They Don't)"
-description: "Explore the limitations of current temperament assessment tools for Great Dane breeders and discover what scientific research reveals about selecting for better temperament in large breed dogs."
+description: "Great Dane history, what temperament tools exist and why they fall short for breeding, what research still teaches us, and practical selection priorities backed by the GDCA health survey."
 date: 2025-09-12
+updated: 2026-04-07
 categories: ["Breeding", "Temperament", "Research"]
 tags: ["Breeding Science"]
 featured: true
@@ -9,119 +10,78 @@ featured: true
 
 [← Back to Blog Archive](/archive)
 
+Breed histories trace the Dane to boar hunting in the Germanic states: dogs built for mass and steady nerve, willing to engage an animal that could seriously injure or kill them. The standard narrative is almost certainly neater than the record allows; what holds from generation to generation is that temperament stayed central as the breed’s role narrowed from hunting to guardianship to the companion dog of today. Breeders pursued that goal with observation, judgment, and a long institutional memory for what a sound animal ought to be — not with behavioral questionnaires or standardized tests, because no such instruments existed for them to use.
 
+As AKC judge Carolyn Thomas [has said](https://www.akc.org/expert-advice/dog-breeds/great-dane-history/), "We have very deliberately bred away from dogs with unreliable temperaments." That standard is older than any validated tool on the market. The breed still carries the confidence and presence those programs conserved; what changed is the life we ask these dogs to lead.
 
-As preservationist breeders, we make complex decisions based on three fundamental pillars: conformation, health, and temperament. All three are essential to producing dogs that fulfill their breed's purpose and thrive as modern companions.
+The question I keep coming back to is not whether those breeders were naive — they were skilled observers making serious decisions with the means they had — but how much further the same care could go if temperament were as easy to document, compare, and discuss across programs as conformation or health results are today. What would better shared tools actually add?
 
-When evaluating conformation, we have more established tools and terminology at our disposal. I can put my hands on a potential stud dog and assess his structural fit for my dams. We have detailed breed standards, standardized terminology, and generations of documented pedigree data. We know what constitutes a conformational fault and would never deliberately double down on structural weaknesses that compromise function or soundness.
+I can put my hands on a stud dog and tell you whether his structure fits my dams. We have breed standards for that, standardized terminology, and generations of documented pedigree data. I know what a fault looks like and I would never deliberately double down on one. For temperament, the tools are far less developed. Many working breeds are steeped in structured work tests — protection sport, field trials, herding — where rules and repetition surface trainability, nerve under pressure, and how a dog recovers from stress in ways a casual visit rarely does. Training and handler skill still shape what you see, and each sport rewards a different bundle of traits, but the culture puts comparable proof of function on the table in a way informal breeding chats don't. Great Danes were never built around one equivalent, breed-defining job trial; we don't inherit that same depth of standardized functional tradition.
 
-Yet when it comes to temperament – equally crucial to breeding decisions – we're working with far less precise tools. We lack standardized assessment methods, consistent terminology, and reliable ways to share behavioral information across breeding programs. This disparity creates a significant gap in our ability to make informed decisions about one of the most important aspects of our dogs.
+Puppy buyers ask about temperament constantly — will my dog be good with kids, can I raise one in an apartment, will this dog fit my life — and these are fair questions that deserve honest answers. When I went looking for scientific tools I could actually use in my own program, what I found was illuminating but also frustrating.
 
-Interestingly, many of the same limitations we see in temperament assessment tools also apply to health testing. Most health tests provide snapshots in time rather than definitive genetic predictions, and environmental factors like injuries can affect results without representing heritable traits. This suggests that the challenge of meaningful assessment isn't unique to temperament; it's a broader issue in breeding decision-making.
+## What Exists
 
-As breeders, we're often asked about temperament. Puppy buyers want to know if their future dog will be good with children, how they'll handle apartment living, or whether they'll excel in specific activities. When we turn to scientific research for temperament assessment guidance, we discover that even the most advanced tools serve clinical and research purposes, not breeding selection.
+**[C-BARQ](https://vetapps.vet.upenn.edu/cbarq/)** (see [Hsu & Serpell, 2003](https://doi.org/10.2460/javma.2003.223.1293)) is the closest thing we have to a gold standard, using 100 validated questions to evaluate 14 behavioral factors plus 22 additional measures. A shorter version, **[C-BARQ(S)](https://doi.org/10.1371/journal.pone.0299973)**, uses 42 questions and was developed for shelter environments — [Wilkins et al.](https://doi.org/10.1371/journal.pone.0299973) validated it using [Dog Aging Project](https://dogagingproject.org/) participants. Both are scientifically rigorous, but both focus on behavioral problems rather than personality traits, and neither was designed for breeding decisions.
 
-## The Current Assessment Landscape
+**Other questionnaires** like the [Monash Dog Owner Relationship Scale (MDORS)](https://doi.org/10.2752/089279306785415592) and Dog Personality Questionnaire ask owners to interpret their dogs' behavior without defining the terms they're using. What one owner calls "aggressive," another calls "alert," and the data that produces is close to useless when you need the kind of precision that breeding decisions demand.
 
-Several assessment approaches dominate how we evaluate canine behavior and temperament:
+**Performance titles** demonstrate that a dog can execute specific skills under controlled conditions, but they don't tell you much about how that dog behaves at home or whether its temperament is something you'd want to reproduce.
 
-**C-BARQ** represents the gold standard, using 100 validated questions to evaluate 14 behavioral factors plus 22 additional behavioral measures. A shortened version, C-BARQ(S), with 42 questions, was created to be a more convenient tool for assessing behavioral problems in dogs, especially those in shelter environments. Both versions focus on behavioral problems rather than personality traits, using owner reports of how dogs respond to everyday situations. They're scientifically rigorous but designed for clinical and research purposes, not breeding selection.
+**Hands-on tests** like [UKC SPOT](https://www.ukcdogs.com/spot-participants) and [ATTS](https://atts.org/tt-test-description/) offer standardized evaluations in simulated real-world situations and are probably the most practical tools available to breeders. They're still limited by testing environment and handler influence, though — a dog might pass beautifully on test day and fall apart somewhere unfamiliar with a different person on the lead.
 
-**Other questionnaires** like the Monash Behavioral Questionnaire and Dog Personality Questionnaire rely heavily on owner interpretation without clear definitions, making results highly subjective and inconsistent between owners.
+## Why None of This Works for Breeding
 
-**Performance titles** demonstrate specific skills under controlled conditions but don't predict general temperament or home suitability.
+Most of these tools were built to diagnose problems, and they're good at that. C-BARQ can flag separation anxiety, aggression, and fearfulness with real precision — that's what it was built to measure. That matters in a clinic. But it doesn't help me identify the positive traits I want to breed for — the resilience, the confidence, the willingness to engage with people that makes a dog not just tolerable but genuinely wonderful to live with. A tool built to find what's wrong tells you very little about what's right.
 
-**Hands-on temperament tests** like the UKC SPOT program and ATTS Temperament Test offer practical, standardized evaluations. The SPOT program tests 10 basic exercises to demonstrate community-appropriate behavior, while ATTS evaluates stability, shyness, aggressiveness, and friendliness through simulated real-world situations. These tests provide objective, standardized assessments but are limited by their specific testing environments and the handler's influence on the dog's performance.
+Every tool also measures a snapshot — one day, one environment, one handler. Breeding decisions need something fundamentally different: an understanding of which traits are heritable and how they might express across different contexts and generations. A temperament test tells me how a dog behaves right now. It tells me almost nothing about what that dog will produce.
 
-## Why Existing Tools Fall Short for Breeders
+And none of them account for fit, which is ultimately what determines whether a placement succeeds. A dog that scores high for excitability might be exactly wrong for one family and exactly right for another. The tools measure traits in isolation without helping match a dog to a home, and that matching is half the job.
 
-**The Interpretation Problem**
-Many questionnaire-based tools ask owners to make judgments without providing clear definitions. When the Monash behavioral questionnaire asks about "aggressive" behavior, one owner might consider any barking aggressive while another reserves the term for actual biting. This inconsistency makes data nearly useless for breeding decisions where precision matters.
+It's worth noting that the same limitations apply to health testing. Most health tests are snapshots in time, not definitive genetic predictions, and an injury can affect a result without representing anything heritable. The assessment problem runs through everything we do as breeders, not just temperament.
 
-**They Focus on Problems, Not Potential**
-Research questionnaires like C-BARQ excel at identifying behavioral issues – separation anxiety, aggression, fearfulness. While valuable for clinical purposes, breeders need to understand the full spectrum of temperament, including positive traits that make dogs wonderful companions. Tools designed to diagnose problems tell us little about breeding for desirable characteristics.
+## What I've Learned From the Research Anyway
 
-**Single-Day Snapshots**
-Both questionnaire and hands-on tests (like UKC SPOT and ATTS) provide assessments at one moment in time. A dog might perform well on a temperament test day but struggle in different environments or with different handlers. These snapshots don't capture the consistency and adaptability that breeders need to evaluate.
+Despite these frustrations, the research does offer insights I've found genuinely useful in thinking about my own program.
 
-**They Measure Current Reality, Not Genetic Potential**
-All assessment tools evaluate how individual dogs behave right now, in their current environments, with their current owners or handlers. Breeding decisions require understanding which traits are heritable and how they might express across different contexts and generations.
+C-BARQ's factor analysis shows that behavioral traits cluster in predictable ways — dogs high in stranger-directed fear often show nonsocial fear as well. This means temperament is better understood as interconnected systems rather than a checklist of independent traits, and it has changed how I think about what I'm selecting for.
 
-**They Don't Account for "Fit"**
-A dog that scores high for "excitability" might be problematic for an elderly owner but perfect for an active family. Current tools measure traits in isolation, without helping match genetic potential to appropriate homes or lifestyles.
+MDORS makes a point that experienced breeders already know intuitively but that is worth stating plainly: a "good" temperament is really about fit. A high-energy dog isn't inherently a problem dog. A high-energy dog in a sedentary home is a problem dog. The same trait that makes one placement difficult can make another one exceptional.
 
-**They're Backwards-Looking**
-Most assessment tools evaluate adult dogs who've already developed their behavioral patterns through the complex interaction of genetics, early experience, and training. Breeders need to predict how puppies will develop based on parental traits and breeding program goals.
+What C-BARQ contributes, in my view, is specificity. It asks questions like "How does your dog respond when approached by an unfamiliar child while on-leash?" That is a real question with a real, observable answer. Compare that to "Is your dog good with kids?" which means something entirely different to every person who hears it. If breeders are going to get better at communicating about temperament, we need to learn to talk in concrete situations rather than vague labels.
 
-## What These Tools Can Teach Us
+## What I Think We Should Be Selecting For
 
-Despite their limitations for breeding applications, current research offers valuable insights:
+Most research tools focus on problems to avoid. I'm more interested in what to look for, and here is what I think matters:
 
-**Behavioral Traits Cluster in Predictable Ways**
-The C-BARQ's factor analysis reveals that certain behaviors group together. Dogs high in stranger-directed fear often show nonsocial fear as well. This suggests we should think about temperament as interconnected systems rather than isolated traits – a crucial insight for breeding decisions.
+* Resilience: how quickly a dog bounces back from a bad experience
+* Biddability: genuine interest in working with people, not just compliance under pressure
+* Stable reactivity: proportional responses to stimuli, neither flat nor explosive
+* Social interest that is friendly but controlled
+* Environmental confidence: curiosity rather than fear in new situations
+* Impulse control and the ability to settle when nothing is happening
+* Handling tolerance: accepting grooming, vet visits, and nail trims without a fight
+* Size-appropriate behavior, which for Great Danes is not optional
 
-**Owner Perception Shapes Success**
-The MDORS research demonstrates that a "good" temperament isn't just about what the dog does – it's about whether the owner finds those behaviors acceptable and manageable. A high-energy dog isn't inherently problematic; they're only problematic if they don't match their owner's lifestyle and expectations.
+There is no universal perfect temperament, only temperaments that fit well with their intended roles and families. But I believe the traits listed above give a dog the best chance of succeeding in the widest range of homes.
 
-**Context Shapes Expression**
-All assessment tools demonstrate that behavior is highly situational. The same dog might be confident at home but fearful in new environments. This reinforces the critical importance of early socialization and environmental consistency in expressing genetic potential.
+## The Great Dane Problem
 
-**Specific Scenarios Trump General Labels**
-The C-BARQ's strength lies in asking about concrete situations: "How does your dog respond when approached by an unfamiliar child while on-leash?" This approach proves far more useful than asking whether a dog is "good with kids" or "friendly" – terms that mean different things to different people.
+A fearful 20-pound dog hides under furniture. A fearful 140-pound Great Dane panics and someone gets hurt. Our breed's size turns temperament issues that might be manageable in a smaller dog into genuine safety concerns, and this should shape how seriously we take temperament in our breeding decisions.
 
-**Performance Has Narrow Predictive Value**
-While obedience titles don't predict home suitability, they do indicate specific capacities: focus, stress tolerance in novel environments, and responsiveness to handler cues. These traits matter for some breeding goals, even if they don't guarantee general temperament quality.
+The [2004 GDCA National Health Survey](https://gdca.org/wp-content/uploads/2018/11/surveyfinal.pdf), covering 519 households and 1,564 Great Danes, puts numbers to this gap. Twenty-seven percent of dogs in the survey had at least one reported temperament issue, including 12% with dog-directed aggression, 8% fearfulness, and 5% human-directed aggression. But only 11% of households performed any formal temperament testing. When owners did use screening results to eliminate dogs from breeding, temperament ranked 4th or 5th on the list, well behind hip X-rays, cardiac ultrasound, and thyroid screening ([Slater, 2004](https://gdca.org/wp-content/uploads/2018/11/surveyfinal.pdf)).
 
-## What Are We Actually Selecting For?
+That gap between the prevalence of temperament issues and the frequency of temperament screening is the whole problem captured in one data set. We screen for hips. We screen for hearts. We barely screen for the thing puppy buyers ask about most, and the thing that determines more than anything else whether a placement will succeed or fail.
 
-Current research tools often focus on problems to avoid rather than positive traits to cultivate. Key temperament considerations include:
+Just as we would never breed two dogs with the same conformational weakness, we should not be unknowingly concentrating negative temperament traits. But without better tools and a shared language for discussing what we observe, we risk doing exactly that. Imagine if we could talk about temperament with the same precision we use for OFA results — if we could share standardized behavioral information the way we share hip scores and cardiac clearances. We are not there yet, but that is the direction worth moving in.
 
-- **Resilience and recovery ability** - bouncing back from negative experiences
-- **Biddability and trainability** - genuine interest in working with people  
-- **Stable reactivity** - proportional responses to stimuli
-- **Appropriate social interest** - friendly but controlled interactions
-- **Environmental confidence** - curiosity rather than fear in new situations
-- **Impulse control** - ability to wait and settle appropriately
-- **Handling tolerance** - accepting necessary care with minimal stress
-- **Size-appropriate behavior** - especially crucial for large breeds like Great Danes
+Scientists are collecting data through projects like [Darwin's Ark](https://darwinsark.org/darwins-dogs) and the [Dog Aging Project](https://dogagingproject.org/), and the [Functional Breeding Podcast](https://functionalbreeding.podbean.com/e/hekman-and-stremming-new-paper-on-prevalence-of-behavior-problems-in-dogs-in-the-us/) has discussed how difficult it remains to translate any of this into practical breeding decisions. They're right — it is extremely difficult. The practical takeaway for breeders right now is simpler: ask specific questions about specific situations, observe your dogs across varied contexts, and follow up with your puppy buyers over the long term. What you learn from a two-year-old dog living in a family home is worth more than any test score taken on a single afternoon.
 
-No universal "perfect" temperament exists – only temperaments that fit well with their intended roles and families.
-
-## Practical Applications for Breeders
-
-Current research offers immediate guidance for improving our temperament assessment: ask specific questions about concrete situations rather than general traits, observe breeding dogs across varied contexts, and track long-term outcomes with puppy buyers to understand how your lines develop over time.
-
-The research tools show us that better assessment is possible – with clearer definitions, specific scenarios, and standardized terminology. But we're not using these tools to their greatest power because we as individual breeders don't have teams of scientists at our disposal. The real opportunity lies in better data collection, organization, and changing how we think about temperament assessment rather than waiting for new tools.
-
-Scientists are already collecting this data through projects like Darwin's Ark and the Dog Aging Project, but as the Functional Breeding Podcast recently discussed, applying these clinical research tools to practical breeding decisions remains extremely challenging. Even with large-scale data collection, translating research findings into actionable breeding decisions is far more complex than simply having better assessment tools.
-
-## The Great Dane Breeder's Challenge
-
-As Great Dane breeders, we face unique challenges in temperament assessment. Our dogs' size means temperament problems that might be manageable in smaller breeds can become serious safety concerns. A fearful 20-pound dog might hide under furniture; a fearful 140-pound Great Dane might panic and cause injury.
-
-The [2004 GDCA National Health Survey](https://gdca.org/wp-content/uploads/2018/11/surveyfinal.pdf) — covering 519 households and 1,564 individual Great Danes — illustrates this gap starkly. While 27% of dogs in the survey had at least one reported temperament issue (including 12% showing dog-directed aggression, 8% fearfulness, and 5% human-directed aggression), only 11% of households performed any formal temperament testing. And when owners did use screening results to eliminate dogs from breeding, temperament tied for just 4th–5th on the list of tests used, well behind hip X-rays, cardiac ultrasound, and thyroid screening (Slater, 2004).
-
-We need temperament assessment tools that account for:
-- **Size-appropriate behavior**: How dogs handle their physical presence
-- **Breed-specific social roles**: Guardian instincts vs. companion needs
-- **Modern living requirements**: Adaptability to urban/suburban environments
-- **Safety considerations**: Predictable responses to common situations
-
-The stakes are higher with Great Danes – we're not just breeding for temperament, we're breeding for safe, appropriate behavior in a large, powerful breed that will share homes with families, children, and other pets.
-
-The research discussed in this blog post highlights both the problem and potential solutions. Just as we wouldn't breed two dogs with the same conformational weakness, we shouldn't unknowingly concentrate negative temperament traits that compromise a dog's ability to succeed in their intended role. But without better assessment and communication tools, we risk doing exactly that.
-
-Imagine if we had temperament assessment tools as refined as our conformation evaluation methods. We could systematically identify and select for positive traits while avoiding the concentration of problematic behaviors. We could share detailed, standardized temperament information with the same precision we use for hip scores or genetic test results. Puppy buyers could make informed decisions based on reliable behavioral predictions, not just hopes and general descriptions.
-
-## The Road Forward
-
-The science is catching up to what thoughtful breeders have always known – temperament is complex, heritable, and profoundly important. Current assessment tools offer valuable methodological insights: the importance of specific behavioral description, the need for clear definitions, and the recognition that temperament exists within the context of human-dog relationships.
-
-Responsible breeders have always been geneticists and behaviorists, making complex decisions about temperament with limited tools. We can apply lessons from current research while continuing to develop our own observation skills and breeding judgment.
+We have always done this work with limited tools. The breed's own history proves that temperament selection works — breeders took a boar hunter and produced a gentle giant without a single validated questionnaire. The hope is that better tools are coming. In the meantime, we keep watching, keep asking, and keep learning from the dogs and the families that raise them.
 
 ## Sources
 
-**Primary Research Papers:**
+**Primary Research:**
 
 Hsu, Y., & Serpell, J. A. (2003). Development and validation of a questionnaire for measuring behavior and temperament traits in pet dogs. *Journal of the American Veterinary Medical Association*, 223(9), 1293-1300. [DOI: 10.2460/javma.2003.223.1293](https://doi.org/10.2460/javma.2003.223.1293)
 
@@ -135,14 +95,13 @@ Slater, M. R. (2004). [*Great Dane Club of America National Health Survey*](http
 
 Functional Breeding Podcast. (2025, March 4). "Hekman and Stremming: New paper on prevalence of behavior problems in dogs in the US." [Podcast episode](https://functionalbreeding.podbean.com/e/hekman-and-stremming-new-paper-on-prevalence-of-behavior-problems-in-dogs-in-the-us/)
 
-**Related Resources:**
+Thomas, C. Quoted in ["Great Dane History: The Apollo of Dogs."](https://www.akc.org/expert-advice/dog-breeds/great-dane-history/) American Kennel Club.
 
-C-BARQ questionnaire information and access: Available through the University of Pennsylvania School of Veterinary Medicine at [https://vetapps.vet.upenn.edu/cbarq/](https://vetapps.vet.upenn.edu/cbarq/)
+**Resources:**
 
-Darwin's Ark Project: Large-scale citizen science project collecting behavioral and genetic data from companion dogs at [https://darwinsark.org/darwins-dogs](https://darwinsark.org/darwins-dogs)
+- C-BARQ: [University of Pennsylvania](https://vetapps.vet.upenn.edu/cbarq/)
+- Darwin's Ark: [darwinsark.org](https://darwinsark.org/darwins-dogs)
+- UKC SPOT Program: [ukcdogs.com](https://www.ukcdogs.com/spot-participants)
+- ATTS Temperament Test: [atts.org](https://atts.org/tt-test-description/)
 
-UKC SPOT Program: Practical temperament testing program for community-appropriate behavior at [https://www.ukcdogs.com/spot-participants](https://www.ukcdogs.com/spot-participants)
-
-ATTS Temperament Test: Standardized hands-on evaluation of stability, shyness, aggressiveness, and friendliness at [https://atts.org/tt-test-description/](https://atts.org/tt-test-description/)
-
-**Note:** This article synthesizes information from multiple sources to provide practical guidance for breeders. While the research papers cited provide the scientific foundation for understanding behavioral assessment, the applications and recommendations for breeding programs represent interpretation and practical application of this research rather than direct recommendations from the original studies.
+[Curious about our breeding philosophy and how we select our dogs? Visit our **Breeding Philosophy** page.](/BreedingPhilosophy)

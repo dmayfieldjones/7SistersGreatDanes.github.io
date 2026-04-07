@@ -15,7 +15,7 @@ export async function generateMetadata({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
-  const { title, date, content } = await getPostById(id)
+  const { title, date, content, updated } = await getPostById(id)
   
   // Extract description from content (first 160 characters)
   const description = content
@@ -46,6 +46,7 @@ export async function generateMetadata({
       description,
       type: 'article',
       publishedTime: postDateToPublishedInstant(date),
+      ...(updated && { modifiedTime: postDateToPublishedInstant(updated) }),
       authors: ['Dustin Mayfield-Jones'],
       tags: [category, 'Great Dane', 'dog breeding'],
       images: [
@@ -86,7 +87,7 @@ export default async function Post({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
-  const { content, title, date, tags } = await getPostById(id)
+  const { content, title, date, updated, tags } = await getPostById(id)
   
   const category = getArticleCategory(id, title)
   const readingTime = getReadingTime(id)
@@ -112,7 +113,7 @@ export default async function Post({
       }
     },
     "datePublished": postDateToPublishedInstant(date),
-    "dateModified": postDateToPublishedInstant(date),
+    "dateModified": postDateToPublishedInstant(updated ?? date),
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": `https://7sistersgreatdanes.com/posts/${id}`
@@ -158,7 +159,14 @@ export default async function Post({
             {title}
           </h1>
           <div className="post-meta">
-            <span className="post-date">{formatPostDateEnUS(date)}</span>
+            <div className="post-dates">
+              <span className="post-date">{formatPostDateEnUS(date)}</span>
+              {updated ? (
+                <span className="post-updated">
+                  Updated {formatPostDateEnUS(updated)}
+                </span>
+              ) : null}
+            </div>
             {tags && tags.length > 0 ? (
               <div className="post-tags">
                 {tags.map((tag: string, index: number) => (
@@ -257,11 +265,24 @@ export default async function Post({
               align-items: center;
               margin-top: 0.5rem;
             }
+
+            .post-dates {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              gap: 0.25rem;
+            }
             
             .post-date {
               font-size: 1.1rem;
               color: #666;
               font-style: italic;
+            }
+
+            .post-updated {
+              font-size: 0.95rem;
+              color: #555;
+              font-style: normal;
             }
             
             .post-category {
