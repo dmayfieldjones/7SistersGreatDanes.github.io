@@ -99,6 +99,8 @@ Scientists are already collecting this data through projects like Darwin's Ark a
 
 As Great Dane breeders, we face unique challenges in temperament assessment. Our dogs' size means temperament problems that might be manageable in smaller breeds can become serious safety concerns. A fearful 20-pound dog might hide under furniture; a fearful 140-pound Great Dane might panic and cause injury.
 
+The [2004 GDCA National Health Survey](https://gdca.org/wp-content/uploads/2018/11/surveyfinal.pdf) — covering 519 households and 1,564 individual Great Danes — illustrates this gap starkly. While 27% of dogs in the survey had at least one reported temperament issue (including 12% showing dog-directed aggression, 8% fearfulness, and 5% human-directed aggression), only 11% of households performed any formal temperament testing. And when owners did use screening results to eliminate dogs from breeding, temperament tied for just 4th–5th on the list of tests used, well behind hip X-rays, cardiac ultrasound, and thyroid screening (Slater, 2004).
+
 We need temperament assessment tools that account for:
 - **Size-appropriate behavior**: How dogs handle their physical presence
 - **Breed-specific social roles**: Guardian instincts vs. companion needs
@@ -126,6 +128,8 @@ Hsu, Y., & Serpell, J. A. (2003). Development and validation of a questionnaire 
 Wilkins, V., Evans, J., Park, C., The Dog Aging Project Consortium, Fitzpatrick, A. L., Creevy, K. E., & Ruple, A. (2024). Validation of the shortened version of the Canine Behavioral Assessment and Research Questionnaire (C-BARQ) using participants from the Dog Aging Project. *PLoS ONE*, 19(4), e0299973. [DOI: 10.1371/journal.pone.0299973](https://doi.org/10.1371/journal.pone.0299973)
 
 Dwyer, F., Bennett, P. C., & Coleman, G. J. (2006). Development of the Monash Dog Owner Relationship Scale (MDORS). *Anthrozoös*, 19(3), 243-256. [DOI: 10.2752/089279306785415592](https://doi.org/10.2752/089279306785415592)
+
+Slater, M. R. (2004). [*Great Dane Club of America National Health Survey*](https://gdca.org/wp-content/uploads/2018/11/surveyfinal.pdf). Texas A&M University College of Veterinary Medicine. Conducted for the GDCA Health and Welfare Committee. Survey data collected 2001–2003; final report January 19, 2004.
 
 **Additional Discussion:**
 

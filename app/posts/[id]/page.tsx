@@ -403,6 +403,11 @@ export default async function Post({
               text-decoration: none;
               transition: color var(--transition-speed) ease;
             }
+
+            /* Italic titles inside links (e.g. source lists); plain em stays gray above */
+            .blog-content a em {
+              color: inherit;
+            }
             
             .blog-content a:hover {
               color: #8f0f15;
