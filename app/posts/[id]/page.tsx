@@ -15,14 +15,18 @@ export async function generateMetadata({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
-  const { title, date, content, updated } = await getPostById(id)
-  
-  // Extract description from content (first 160 characters)
-  const description = content
-    .replace(/[#*`\[\]()]/g, '') // Remove markdown formatting
-    .replace(/\n/g, ' ') // Replace newlines with spaces
-    .trim()
-    .substring(0, 160) + '...'
+  const post = await getPostById(id)
+  const { title, date, content, updated } = post
+  const yamlDescription =
+    typeof post.description === 'string' ? post.description.trim() : ''
+
+  const description =
+    yamlDescription ||
+    content
+      .replace(/[#*`\[\]()]/g, '')
+      .replace(/\n/g, ' ')
+      .trim()
+      .substring(0, 160) + '...'
   
   const category = getArticleCategory(id, title)
   const readingTime = getReadingTime(id)
@@ -87,8 +91,15 @@ export default async function Post({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
-  const { content, title, date, updated, tags } = await getPostById(id)
-  
+  const post = await getPostById(id)
+  const { content, title, date, updated, tags } = post
+  const yamlDescription =
+    typeof post.description === 'string' ? post.description.trim() : ''
+  const articleDescription =
+    yamlDescription ||
+    content.replace(/[#*`\[\]()]/g, '').replace(/\n/g, ' ').trim().substring(0, 160) +
+    '...'
+
   const category = getArticleCategory(id, title)
   const readingTime = getReadingTime(id)
   
@@ -97,7 +108,7 @@ export default async function Post({
     "@context": "https://schema.org",
     "@type": "Article",
     "headline": title,
-    "description": content.replace(/[#*`\[\]()]/g, '').replace(/\n/g, ' ').trim().substring(0, 160) + '...',
+    "description": articleDescription,
     "image": "https://7sistersgreatdanes.com/img/Colorlogo_nobackground.png",
     "author": {
       "@type": "Person",

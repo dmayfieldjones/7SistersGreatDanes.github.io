@@ -103,5 +103,3 @@ Thomas, C. Quoted in ["Great Dane History: The Apollo of Dogs."](https://www.akc
 - Darwin's Ark: [darwinsark.org](https://darwinsark.org/darwins-dogs)
 - UKC SPOT Program: [ukcdogs.com](https://www.ukcdogs.com/spot-participants)
 - ATTS Temperament Test: [atts.org](https://atts.org/tt-test-description/)
-
-[Curious about our breeding philosophy and how we select our dogs? Visit our **Breeding Philosophy** page.](/BreedingPhilosophy)

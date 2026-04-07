@@ -32,6 +32,8 @@ export async function getPostById(id: string) {
     id: realId,
     date: date.toISOString().slice(0, 10),
     ...(updated ? { updated } : {}),
+    description:
+      typeof data.description === 'string' ? data.description : undefined,
     content,
     tags: data.tags || [],
     categories: data.categories || [],
