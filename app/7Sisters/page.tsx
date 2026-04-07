@@ -45,67 +45,73 @@ export const metadata: Metadata = {
   },
 }
 
+const postLinkStyle = {
+  color: '#bf141c',
+  textDecoration: 'underline',
+  fontWeight: 'bold' as const,
+}
+
 export default function () {
   const carouselPhotos = [
     {
       src: '/img/2025_4pt_WB_IlliniGDC_Mimi_Kim.jpg',
       alt: '2025 4pt Winner\'s Bitch - Illini GDC',
       caption:
-        '2025 - 4 Points Winner\'s Bitch at Illini Great Dane Club - Mimi Kim',
+        'Mia — 4 points, judge Mimi Kim, Illini Great Dane Club 2025',
     },
     {
       src: '/img/2025_2pt_BOW_HoosierGDC_Butch_Schulman.jpg',
       alt: '2025 2pt Best of Winners - Hoosier GDC - Karen\'s First Time in the Ring',
       caption:
-        '2025 - 2 Points Best of Winners at Hoosier Great Dane Club - Karen\'s First Time in the Ring - Butch Schulman',
+        'Mia — Best of Winners, judge Butch Schulman, Hoosier GDC 2025 — Karen\'s first time showing',
     },
     {
       src: '/img/2025_2pt_WB_MidTNGDC_Terry_DePietro.jpg',
       alt: '2025 2pt Winner\'s Bitch - MidTN GDC',
       caption:
-        '2025 - 2 Points Winner\'s Bitch at Middle Tennessee Great Dane Club - Terry DePietro',
+        'Cora — Winner\'s Bitch, judge Terry DePietro, Mid-Tennessee GDC 2025',
     },
     {
       src: '/img/2025_2pt_WB_MidTNGDC_Nancy_SmithHafner.jpg',
       alt: '2025 2pt Winner\'s Bitch - MidTN GDC',
       caption:
-        '2025 - 2 Points Winner\'s Bitch at Middle Tennessee Great Dane Club - Nancy Smith Hafner',
+        'Mia — Winner\'s Bitch, judge Nancy Smith-Hafner, Mid-Tennessee GDC 2025',
     },
     {
       src: '/img/2025_2pt_WB_MidTNGDC_Robert_Hutton.jpg',
       alt: '2025 2pt Best of Opposite Sex, Best of Winners, Winner\'s Bitch - MidTN GDC',
       caption:
-        '2025 - 2 Points Best of Opposite Sex, Best of Winners, and Winner\'s Bitch at Middle Tennessee Great Dane Club - Robert Hutton',
+        'Mia — Best of Opposite Sex, Best of Winners, Winner\'s Bitch, judge Robert Hutton, Mid-Tennessee GDC 2025',
     },
     {
       src: '/img/2024_2pt_BOS_EdwardsvilleILKC_Butch_Schulman.JPG',
       alt: '2024 2pt Best of Opposite Sex - Edwardsville IL KC',
       caption:
-        '2024 - 2 Points Best of Opposite Sex at Edwardsville IL Kennel Club - Butch Schulman',
+        'Mia — Best of Opposite Sex, judge Butch Schulman, Edwardsville IL KC 2024',
     },
     {
       src: '/img/2021_5pt_BOW_BOBOH_Waukesha_Mimi_Kim.jpg',
       alt: '2021 5pt Best of Winners and Best of Breed Owner Handled - Waukesha',
       caption:
-        '2021 - 5 Points Best of Winners & Best of Breed Owner Handled at Lake Shore GDC Waukesha - Mimi Kim',
+        'Piper — 5 points, Best of Winners, Best of Breed Owner Handled, judge Mimi Kim, Waukesha 2021',
     },
     {
       src: '/img/2021_Sweepstakes_Ohio_Corrine_Witt.jpg',
       alt: '2021 Sweepstakes Winner - Ohio',
       caption:
-        '2021 - Sweepstakes Winner at Ohio - Corrine Witt',
+        'Piper — Sweepstakes Winner, judge Corrine Witt, Ohio 2021',
     },
     {
       src: '/img/2021_RB_Hoosier_Lance_Deloria.jpg',
       alt: '2021 Reserve Best - Hoosier - First Show',
       caption:
-        '2021 - Our First Show: Piper earned Best in Sweeps and two major Reserve wins at Hoosier - Lance Deloria',
+        'Piper — Reserve Best, judge Lance Deloria, Hoosier GDC 2021 — first show',
     },
     {
       src: '/img/2021_1pt_BOW_PurinaSTL.JPG',
       alt: '2021 1pt Best of Winners - Purina St. Louis - First BOW',
       caption:
-        '2021 - 1 Point Best of Winners at Purina St. Louis - Our First BOW Award - David Haddock',
+        'Piper — 1 point, Best of Winners, Purina St. Louis 2021',
     },
   ]
 
@@ -163,19 +169,15 @@ export default function () {
           </h2>
           <p>
             With a Great Dane from <span className="accent-color">7</span>
-            Sisters in your family, you are invited to be part of ours. We
-            expect to hear from you long after you bring your dog home. We love
-            updates and look forward to seeing our family grow: birthdays,
-            anniversaries, achievements, and losses. We hope you consider a
-            Great Dane from <span className="accent-color">7</span>Sisters as
-            your family member.
+            Sisters in your family, you are invited to be part of ours. We want
+            to hear from you long after you bring your dog home — birthdays,
+            milestones, the hard days too. Our dogs carry lines that trace back
+            over 35 generations to the 1870s. Your home becomes part of that
+            story.
           </p>
           <p>
             Feel free to contact either of us, Karen or Dustin, if you are
-            interested in our dogs. Living with your new family member helps
-            continue a line of Great Danes that can be traced over 35
-            generations to the 1870s. Thank you for your interest in preserving
-            our breed.
+            interested in our dogs.
           </p>
         </section>
         {/* History Section */}
@@ -184,37 +186,42 @@ export default function () {
             <span className="accent-color">Our Ancient Bond</span>
           </h2>
           <p>
-            One reason we love dogs is because they tell us something profound
-            about ourselves. Dogs are by far the oldest and most widespread
-            species domesticated by humans. Darwin used dogs, among pigeons and
-            Brassicas, to bridge the gap between artificial selection and
-            natural selection in his 1859 publication{' '}
-            <cite>The Origin of Species</cite>.
+            One reason we love dogs is because they tell us something about
+            ourselves. Dogs are the oldest species humans ever domesticated — by a
+            wide margin. Before cattle, before wheat, before any of it, there
+            were dogs. The bond stretches back at least 15,000 years: the oldest
+            genetically confirmed dog is a female puppy from central Türkiye,
+            roughly 15,800 years old, buried alongside hunter-gatherers who were
+            feeding their dogs fish from the local streams. More than 12,000
+            years ago in what is now northern Israel, a woman was buried with her
+            hand cradling the head of a puppy.
           </p>
           <p>
-            Early scientists focused more on artificial selection of livestock
-            and crops, but it was in fact our beloved dog companions that were
-            <a href="/posts/2025-10-01-the-deep-history-of-dogs-ancient-dna" style={{ 
-              color: '#bf141c', 
-              textDecoration: 'underline',
-              fontWeight: 'bold'
-            }}> domesticated millennia before any other known species</a>. Unlike these
-            others, dogs reside in our homes and live up to the name
-            domesticate, coming from the Latin domicile, meaning home. Also,
-            unlike other domesticates, dogs chose us. The bond between dogs and
-            humans is unique.
+            Dogs and humans didn&apos;t just live together — they shaped each
+            other. As human diets shifted, dogs evolved to digest the same foods.
+            As humans migrated, dogs moved with them. Wolves were drawn to human
+            camps and gradually diverged from their ancestors into something new
+            — a mutual integration rather than a one-sided taming. When farming
+            arrived in Europe roughly 8,000 years ago and replaced the vast
+            majority of the existing human population, the dogs were kept. They
+            crossed cultural boundaries that humans themselves maintained.
           </p>
           <p>
-            Both highly social species, humans and dogs began to co-evolve during
-            the Last Glacial Maximum around 23,000 years ago, when both species
-            were pushed into isolated refugia by extreme climate conditions. While
-            there are no anatomical markers to differentiate dogs from wolves,
-            dogs' definitive trait is behavioral: loyalty. Wolves and dogs
-            descended from a wolf-like common ancestor, with dogs emerging as a
-            distinct lineage that spread across the world with human agricultural
-            expansion. The earliest archaeological evidence suggests dogs had a
-            special place in our hearts by ~14,000 years ago when a Nautifian
-            woman was buried alongside a dog. Our relationship is ancient and deep.
+            Darwin used dogs — along with pigeons and domestic cabbages — to build
+            his argument for natural selection in{' '}
+            <cite>The Origin of Species</cite>. He understood that the variation
+            we see in dogs, shaped by thousands of years of human choices, was a
+            window into how nature works on a much larger scale. That&apos;s the
+            thread that runs from Darwin&apos;s notebooks to our nursery.
+          </p>
+          <p>
+            Read more:{' '}
+            <a
+              href="/posts/2026-03-28-the-deep-history-of-dogs-palaeolithic-partners"
+              style={postLinkStyle}
+            >
+              The Deep History of Dogs, Part 2: Palaeolithic Partners
+            </a>
           </p>
         </section>
         {/* Social Media Section */}
