@@ -49,7 +49,7 @@ Cora and Mia's maternal line through Piper connects to BIS BISS GCHP Longo Mille
 
 ### Baron — Three-Time Stud Dog of the Year
 
-Cora's paternal grandsire, [BISS GCh IZYA's Fight On & Fly On, CHIC](https://izyadanes.com/male-danes/) — "Baron" — was awarded GDCA Top Stud Dog for 2022, 2023, and 2024 and has produced 28 AKC Champions to date. His daughter MBISS GCHP Legado N Danemark A Captive Spirit — "Marina" — won both the 2022 Top 20 Great Dane and People's Choice Award at the National GDCA event.
+Cora's paternal grandsire, BISS GCh IZYA's Fight On & Fly On, CHIC — "[Baron](https://izyadanes.com/male-danes/)" — was awarded GDCA Top Stud Dog for 2022, 2023, and 2024 and has produced 28 AKC Champions to date. His daughter MBISS GCHP Legado N Danemark A Captive Spirit — "Marina" — won both the 2022 Top 20 Great Dane and People's Choice Award at the National GDCA event.
 
 ### Shared Ancestors Across Both Litters
 
