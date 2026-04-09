@@ -207,8 +207,8 @@ export default function () {
             <div className="puppy-card">
               <p className="puppy-reg">WS84850303</p>
               <p className="puppy-name">
-                <span className="brand-number">7</span>Sisters N Legado's
-                <span className="call-name">"Cruz"</span>
+                <span className="brand-number">7</span>Sisters N Legado's Cruising
+                To The Oldies <span className="call-name">"Cruz"</span>
               </p>
             </div>
             <div className="puppy-card">

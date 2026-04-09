@@ -8,11 +8,11 @@ a:I[6213,[],"MetadataBoundary"]
 c:I[6213,[],"ViewportBoundary"]
 e:I[4835,[],""]
 :HL["/_next/static/css/fb0f97623e79c795.css","style"]
-2:T8ec,{"@context":"https://schema.org","@type":"LocalBusiness","@id":"https://7sistersgreatdanes.com/#business","name":"7Sisters Farm","alternateName":"7Sisters Great Danes","description":"Premier Illinois Great Dane breeders at 7Sisters Farm in Central Illinois. AKC registered Great Danes, health tested, family raised.","url":"https://7sistersgreatdanes.com","email":"dustin@mayfieldjones.com","address":{"@type":"PostalAddress","addressLocality":"Champaign","addressRegion":"IL","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":"40.1164","longitude":"-88.2434"},"areaServed":[{"@type":"State","name":"Illinois"},{"@type":"State","name":"Indiana"},{"@type":"State","name":"Iowa"},{"@type":"State","name":"Missouri"},{"@type":"State","name":"Wisconsin"}],"serviceType":"Great Dane Breeding","priceRange":"$$","paymentAccepted":"Cash, Check","currenciesAccepted":"USD","openingHours":"Mo-Su 09:00-18:00","image":["https://7sistersgreatdanes.com/img/wedding.png","https://7sistersgreatdanes.com/img/2021_5pt_BOW_BOBOH_Waukesha_Mimi_Kim.jpg","https://7sistersgreatdanes.com/img/Colorlogo_nobackground.png"],"logo":"https://7sistersgreatdanes.com/img/Colorlogo_nobackground.png","sameAs":["https://www.tiktok.com/@7sistersgreatdanes"],"founder":[{"@type":"Person","name":"Dustin Mayfield-Jones","jobTitle":"Great Dane Breeder"},{"@type":"Person","name":"Karen Mayfield-Jones","jobTitle":"Great Dane Breeder"}],"keywords":["Illinois Great Dane breeders","Illinois dogs","Illinois breeders","Great Dane breeders Illinois","Central Illinois Great Danes","AKC Great Danes Illinois","Illinois dog breeders","Great Dane puppies Illinois","7Sisters Farm","Champaign Illinois breeders","Urbana Illinois dogs","Illinois Great Dane kennel"],"hasOfferCatalog":{"@type":"OfferCatalog","name":"Great Dane Services","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Product","name":"Great Dane Puppies","description":"AKC registered Great Dane puppies, health tested, family raised"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Great Dane Breeding Consultation","description":"Expert advice on Great Dane breeding, health testing, and care"}}]},"aggregateRating":{"@type":"AggregateRating","ratingValue":"5.0","reviewCount":"1","bestRating":"5","worstRating":"1"}}0:{"P":null,"b":"Ptr4Ezl-Egjq_dwDQbJ2v","p":"","c":["","archive"],"i":false,"f":[[["",{"children":["archive",{"children":["__PAGE__",{}]}]},"$undefined","$undefined",true],["",["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/fb0f97623e79c795.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","html",null,{"lang":"en","children":[["$","head",null,{"children":["$","script",null,{"type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"$2"}}]}],["$","body",null,{"children":[["$","$L3",null,{}],["$","div",null,{"className":"wrapper","children":["$","$L4",null,{"parallelRouterKey":"children","segmentPath":["children"],"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L5",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[[],[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":404}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]]],"forbidden":"$undefined","unauthorized":"$undefined"}]}],["$","$L6",null,{"gaId":"G-SDSX26JETX"}]]}]]}]]}],{"children":["archive",["$","$1","c",{"children":[null,["$","$L4",null,{"parallelRouterKey":"children","segmentPath":["children","archive","children"],"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L5",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["__PAGE__",["$","$1","c",{"children":["$L7",null,["$","$L8",null,{"children":"$L9"}]]}],{},null,false]},null,false]},null,false],["$","$1","h",{"children":[null,["$","$1","LsXL1AUYQ74dge-JzxLot",{"children":[["$","$La",null,{"children":"$Lb"}],["$","$Lc",null,{"children":"$Ld"}],null]}]]}],false]],"m":"$undefined","G":["$e","$undefined"],"s":false,"S":true}
+2:T8ec,{"@context":"https://schema.org","@type":"LocalBusiness","@id":"https://7sistersgreatdanes.com/#business","name":"7Sisters Farm","alternateName":"7Sisters Great Danes","description":"Premier Illinois Great Dane breeders at 7Sisters Farm in Central Illinois. AKC registered Great Danes, health tested, family raised.","url":"https://7sistersgreatdanes.com","email":"dustin@mayfieldjones.com","address":{"@type":"PostalAddress","addressLocality":"Champaign","addressRegion":"IL","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":"40.1164","longitude":"-88.2434"},"areaServed":[{"@type":"State","name":"Illinois"},{"@type":"State","name":"Indiana"},{"@type":"State","name":"Iowa"},{"@type":"State","name":"Missouri"},{"@type":"State","name":"Wisconsin"}],"serviceType":"Great Dane Breeding","priceRange":"$$","paymentAccepted":"Cash, Check","currenciesAccepted":"USD","openingHours":"Mo-Su 09:00-18:00","image":["https://7sistersgreatdanes.com/img/wedding.png","https://7sistersgreatdanes.com/img/2021_5pt_BOW_BOBOH_Waukesha_Mimi_Kim.jpg","https://7sistersgreatdanes.com/img/Colorlogo_nobackground.png"],"logo":"https://7sistersgreatdanes.com/img/Colorlogo_nobackground.png","sameAs":["https://www.tiktok.com/@7sistersgreatdanes"],"founder":[{"@type":"Person","name":"Dustin Mayfield-Jones","jobTitle":"Great Dane Breeder"},{"@type":"Person","name":"Karen Mayfield-Jones","jobTitle":"Great Dane Breeder"}],"keywords":["Illinois Great Dane breeders","Illinois dogs","Illinois breeders","Great Dane breeders Illinois","Central Illinois Great Danes","AKC Great Danes Illinois","Illinois dog breeders","Great Dane puppies Illinois","7Sisters Farm","Champaign Illinois breeders","Urbana Illinois dogs","Illinois Great Dane kennel"],"hasOfferCatalog":{"@type":"OfferCatalog","name":"Great Dane Services","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Product","name":"Great Dane Puppies","description":"AKC registered Great Dane puppies, health tested, family raised"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Great Dane Breeding Consultation","description":"Expert advice on Great Dane breeding, health testing, and care"}}]},"aggregateRating":{"@type":"AggregateRating","ratingValue":"5.0","reviewCount":"1","bestRating":"5","worstRating":"1"}}0:{"P":null,"b":"QAv-vXPhIP8y0LE0xoE6v","p":"","c":["","archive"],"i":false,"f":[[["",{"children":["archive",{"children":["__PAGE__",{}]}]},"$undefined","$undefined",true],["",["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/fb0f97623e79c795.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","html",null,{"lang":"en","children":[["$","head",null,{"children":["$","script",null,{"type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"$2"}}]}],["$","body",null,{"children":[["$","$L3",null,{}],["$","div",null,{"className":"wrapper","children":["$","$L4",null,{"parallelRouterKey":"children","segmentPath":["children"],"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L5",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[[],[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":404}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]]],"forbidden":"$undefined","unauthorized":"$undefined"}]}],["$","$L6",null,{"gaId":"G-SDSX26JETX"}]]}]]}]]}],{"children":["archive",["$","$1","c",{"children":[null,["$","$L4",null,{"parallelRouterKey":"children","segmentPath":["children","archive","children"],"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L5",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["__PAGE__",["$","$1","c",{"children":["$L7",null,["$","$L8",null,{"children":"$L9"}]]}],{},null,false]},null,false]},null,false],["$","$1","h",{"children":[null,["$","$1","2U1I-Nc6ZT3F_7ZuqOlvv",{"children":[["$","$La",null,{"children":"$Lb"}],["$","$Lc",null,{"children":"$Ld"}],null]}]]}],false]],"m":"$undefined","G":["$e","$undefined"],"s":false,"S":true}
 d:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
 b:[["$","meta","0",{"charSet":"utf-8"}],["$","title","1",{"children":"Great Dane Articles and Insights"}],["$","meta","2",{"name":"description","content":"Comprehensive guides and practical knowledge on Great Dane breeding, care, development, and ownership."}]]
 9:null
-f:I[7544,["173","static/chunks/173-82b82083689cd174.js","635","static/chunks/app/archive/page-2db5faab0754c6b6.js"],"default"]
+f:I[7544,["173","static/chunks/173-82b82083689cd174.js","635","static/chunks/app/archive/page-15b5cfc87a97e44d.js"],"default"]
 10:T590d,
 [← Back to Blog Archive](/archive)
 
@@ -1825,284 +1825,100 @@ To learn more about our approach to Great Dane breeding and our current litters,
 </details>
 
 Curious about what to expect after bringing your puppy home? Read our [first year with a Great Dane guide](/posts/2025-07-03-the-first-year).
-16:T4334,
+16:T2252,
 [← Back to Blog Archive](/archive)
 
+Our breeding program is built on exceptional mentors, exceptional dogs on both sides of every pedigree, and the research to back it up. This is how we laid that foundation.
 
+## Who Taught Us
 
-When families ask us how we can predict what their puppy will be like as an adult, the answer lies in understanding genetics and pedigrees. Unlike random breeding, our approach uses proven bloodlines and careful analysis to give families the gentle giant of which they're dreaming.
+Our first two litters were co-bred with Francisco Camacho (Frankie) and Jason L. Dubman (Jaye) of Legado Danes. In 2023, Frankie and Jaye won the GDCA Breeder of the Year award with twelve champions — and one of those champions was Piper, who became our foundation bitch.
 
-Our breeding program is the result of mentorship from some of America's most accomplished Great Dane breeders, combined with a scientific approach to genetics that prioritizes predictable temperament, health, and structure for family companions.
+Frankie and Jaye learned from Karen Martin of Danemark Danes. Karen was the 2022 GDCA Breeder of the Year with eleven champions and the first AKC Advanced Recognition Breeder of Merit to reach Platinum status for Great Danes — one of only two breeders, along with Georgia A. Hymmen, to achieve that. Karen was also the first breeder outside our household to personally evaluate both of Piper's litters. That she took the time to personally evaluate our puppies says something about how this community works: experienced breeders invest in the next generation, not just of dogs, but of breeders.
+
+We're also grateful to our stud dog owners — Jessica Lanae Powers and Mara Reyes — for trusting us with their dogs and sharing everything we needed to make good matches.
+
+## Our Dogs
+
+- **CH Legado N Danekraaft's How Can I Tell You? — "Piper"**: Our foundation bitch and first champion, finishing in March 2023. Her registered name comes from a Broadway-themed litter (think *Pied Piper*).
+- **CH 7Sisters N Legado's I Wanna Dance, I Wanna Win — "Mia"**: Piper's daughter from our first litter. Finished her championship in March 2026.
+- **7Sisters N Legado's Heart of Gold — "Cora"**: From our second litter. Debuted at 7 months at the 2025 Illini GDC show.
+
+## Two Litters, Two Sires
+
+Choosing a sire starts with the dogs themselves — their structure, their movement, their temperament, their health. You study what the dam does well, where she could improve, and look for a sire who complements her.
+
+### Rolex × Piper
+
+**Sire:** BISS Am GChS Fendanesylcrest N Diriso's This Is the Right Time — "Rolex." Bred by Gloria Batchelor, Kathleen Fennell, and Elizabeth Barnhart. Owned by Jose M Diaz. Rolex was a Top 20 finalist in 2022 and received an Award of Merit at the 2022 GDCA National Specialty.
+
+From this litter, Mia stayed in our program and finished her championship; her siblings went to show and pet homes.
+
+### Sean × Piper
+
+**Sire:** Ch Legado N IZYA's Oops! I Did It Again — "Sean." He is the son of Baron and finished his championship at just 9 months old with four majors out of the Puppy Bred-By class.
+
+Cora stayed in our program from this litter and debuted successfully at 7 months; her siblings also went to show and pet homes.
+
+## Bloodlines Behind Our Dogs
+
+### Scout — The Winningest Great Dane of All Time
+
+Cora and Mia's maternal line through Piper connects to BIS BISS GCHP Longo Miller N Lore's Diamond Lil HOF — "[Scout](https://loredane.com/bitches/scout/)." Her career numbers: 38 AKC All Breed Best in Shows, 22 Best in Specialty Show wins, 93 Group One placements, 254 Best of Breed wins, and 55,380 dogs defeated including 5,201 Great Danes. She was the #1 Great Dane across all systems in 2013 and the #3 Working Dog that same year. Bred by Tootie Longo, Dave and Jay Miller, and Lorraine Matherly.
+
+### Baron — Three-Time Stud Dog of the Year
+
+Cora's paternal grandsire, [BISS GCh IZYA's Fight On & Fly On, CHIC](https://izyadanes.com/male-danes/) — "Baron" — was awarded GDCA Top Stud Dog for 2022, 2023, and 2024 and has produced 28 AKC Champions to date. His daughter MBISS GCHP Legado N Danemark A Captive Spirit — "Marina" — won both the 2022 Top 20 Great Dane and People's Choice Award at the National GDCA event.
+
+### Shared Ancestors Across Both Litters
+
+Both Rolex and Sean trace back to the same influential dogs — Am Ch Saul's Tequila Mockingbird, Am GCh Fendanesylcrests See You Later Allie-Gator, and Am Ch PRF Fendane Have I Gone Mad (who is also Piper's own father). That consistency across both sires is part of why both litters have produced dogs with predictable temperament and structure.
 
 <details>
-<summary><strong>Key Takeaways</strong></summary>
+<summary><strong>Understanding COI: How We Monitor Genetic Diversity</strong></summary>
 
-- Predictable temperament, health, and structure come from careful genetic planning and mentorship.
-- The 7Sisters breeding program uses both outcrossing and linebreeding, guided by top mentors in the breed.
-- All breeding dogs undergo comprehensive health testing; COI (Coefficient of Inbreeding) is carefully managed.
-- Award-winning bloodlines and multi-generational mentorship ensure quality and predictability.
-- Families benefit from consistent temperament, health advantages, and ongoing breeder support.
+COI doesn't tell you whether a breeding is a good idea — the dogs themselves tell you that. But it tells you how closely related the parents are, which matters for managing genetic health over time.
+
+**What the numbers mean:** Under 6% COI is generally considered an outcross. 6–10% is moderate linebreeding. Above 10% is closer linebreeding. We use COI as a guardrail, not a goal.
+
+**Pedigree depth:** Great Danes are bred in a long-closed registry with a finite pool of ancestors. A deeper pedigree can surface the same dog behind both sire and dam in ways a shallow chart never names—you simply didn't have those generations on paper yet. The breeding isn't suddenly "more inbred" because you typed farther back; the ties were always possible in a closed gene pool. Pedigree COI only adds what the pedigree includes, so **the number you get can go up as you extend the chart**, even though the dogs themselves didn't change.
+
+**How it's calculated:** Odds are you're not someone who breaks out equations for fun. But calculating a COI from a pedigree is a rite of passage for dog nerds, and it's worth understanding at least once — if only so we can rebuild knowledge after civilization ends.
+
+In practice, everyone uses software. But here's the logic, using Sean (22.7% COI) as our example.
+
+**1. Find dogs that appear on both sides of the pedigree.** Am GCh Danemark's Diamond Cartier V Aldawn shows up twice in Sean's pedigree — once as his paternal grandfather (2 generations back) and once as a maternal great-grandfather (3 generations back).
+
+**2. Calculate that ancestor's contribution.** The formula: f = (1/2)^(n1 + n2 + 1) × (1 + F_A). For Cartier: (1/2)^(2+3+1) = 1/64 = **1.56%**.
+
+**3. Add up every shared ancestor.** That 1.56% is just one ancestor through one path. Sean's 22.7% comes from Cartier appearing through additional paths, plus other dogs — NORDCH Diplomatic's Umberto di Visconti, several Danemark dogs — all appearing on both sides. The total is the sum of all contributions.
+
+**4. Understand what it tells you.** When we bred Sean (22.7%) to Piper (very low COI), the resulting 12.5% told us the puppies would have moderate linebreeding. That number didn't make the decision for us. The dogs did. But the number confirmed we were in a range we were comfortable with.
+
+**A caveat:** Pedigree-based COI assumes founder dogs at the edges of the pedigree are unrelated, which they probably aren't. So these numbers are estimates. Actual genetic diversity can only be measured through DNA testing.
 
 </details>
 
-## Our Foundation and Mentorship
+## What This Means for Your Family
 
-<details>
-<summary><strong>Our Mentorship Chain</strong></summary>
+Everything above — the mentorship, the pedigree research, the health testing — exists so that when a family brings home one of our puppies, they know what they're getting. A dog whose adult size, structure, and temperament are predictable. Health-tested parents. And us — Dustin and Karen — available for questions long after your puppy comes home, backed by mentors who've been doing this for decades.
 
-Both of our first litters involved our mentors and co-breeders Francisco Camacho (Frankie) and Jason L. Dubman (Jaye), who earned the 2023 GDCA Breeder of the Year award with twelve champions, including our foundation bitch Piper. This mentorship chain extends to Karen Martin, the first AKC Advanced Recognition Breeder of Merit to reach Platinum status for Great Danes—one of only two breeders, along with Georgia A. Hymmen, to achieve this milestone.
+Both litters validated what we were trying to do. Mia finished her championship in March 2026. Cora debuted successfully at 7 months. Both litters produced the gentle, stable temperaments that families count on.
 
-Karen Martin was the 2022 GDCA Breeder of the Year with eleven champions and continues to provide guidance to all of us. She was the first breeder outside our household to personally evaluate both of Piper's first two litters, showing the collaborative spirit that defines responsible Great Dane breeding.
+To learn more about our dogs or our current plans, visit [7Sisters Farm](/7Sisters).
 
-We're also deeply grateful to our stud dog owners Jessica Lanae Powers and Mara Reyes for allowing us to use their exceptional studs and providing invaluable information about their dogs. This collaborative approach ensures the best possible matches for our breeding program while building lasting relationships within the Great Dane community.
+## Sources & References
 
-</details>
-
-## Our Great Dane Family
-
-<details>
-<summary><strong>Foundation Dogs</strong></summary>
-
-**Our Foundation Dogs**
-
-- **CH Legado N Danekraaft's How Can I Tell You? (Piper):** Our first champion, from a Broadway-themed litter (hence "Pied Piper")
-- **7Sisters N Legado's I Wanna Dance, I Wanna Win (Mia):** Piper's daughter, earned her first Major win in 2025
-- **7Sisters N Legado's Heart of Gold (Cora):** Made her debut at 7 months in the 2025 Illini GDC show
-
-Each dog represents 35+ generations of careful breeding, connecting today's families to bloodlines dating to the 1870s.
-
-</details>
-
-## Progressive Breeding Strategy
-
-<details>
-<summary><strong>Breeding Terms & Our Two-Litter Approach</strong></summary>
-
-**Breeding Terms Simplified**
-
-- **COI (Coefficient of Inbreeding):** 0-6% is considered outcrossing, 6-10% is moderate linebreeding, 10%+ is close linebreeding  
-- **ALC (Ancestor Loss Coefficient):** Higher percentages indicate more genetic diversity  
-- **Linebreeding:** Breeding related dogs to strengthen specific traits  
-- **Outcrossing:** Breeding unrelated dogs to increase genetic diversity  
-
-**First Litter (Rolex x Piper):**  
-- Sire: BISS Am GChS Fendanesylcrest N Diriso's This Is the Right Time "Rolex" (COI: 2.3%), bred by Gloria Batchelor, Kathleen Fennell, and Elizabeth Barnhart, and owned by Jose M Diaz  
-- Dam: Ch Legado N Danekraaft's How Can I Tell You? "Piper" (COI: 0.0%)  
-- Resulting Litter COI: 6.2%  
-- **Strategy:** Moderate linebreeding on proven bloodlines
-
-**Second Litter (Sean x Piper):**  
-- Sire: Ch Legado N IZYA's Oops! I Did It Again "Sean" (COI: 22.7%)  
-- Dam: Ch Legado N Danekraaft's How Can I Tell You? "Piper" (COI: 0.0%)  
-- Resulting Litter COI: 12.5%  
-- **Strategy:** Increasing linebreeding to concentrate exceptional traits
-
-**Why Two Different Strategies?**
-
-- **First Litter - Testing the Waters:**  
-  Our initial breeding with Rolex was a moderate approach, allowing us to see how Piper's excellent outcross genetics (0.0% COI) would blend with proven show bloodlines. The 6.2% resulting COI gave us predictable temperaments and structure while maintaining genetic diversity.
-
-- **Second Litter - Concentrating Excellence:**  
-  For our second litter, we chose a more intensive approach. Sean carries a concentrated dose of the same exceptional bloodlines, particularly:
-  - Am Ch PRF Fendane Have I Gone Mad (Piper's own father)
-  - Am GCh Danemark's Diamond Cartier V Aldawn (appears multiple times)
-  - The same Tequila Mockingbird and Allie-Gator lines
-
-**Note:** COI (Coefficient of Inbreeding) values mentioned in this post are calculated from pedigrees and serve as a proxy for true genetic COI. Actual genetic diversity can only be determined through DNA testing, so pedigree-based COI should be interpreted as an estimate rather than an absolute measure.
-
-</details>
-
-## The Science Behind Our Strategy
-
-<details>
-<summary><strong>Detailed Breeding Analysis</strong></summary>
-
-**Compounding Excellence: Shared Key Ancestors Between Both Litters**
-
-- Am Ch Saul's Tequila Mockingbird
-- Am GCh Fendanesylcrests See You Later Allie-Gator
-- Am Ch PRF Fendane Have I Gone Mad (Piper's father + in both sires)
-
-What this means:
-
-Both litters are getting these same influential dogs from both parents.
-We're essentially linebreeding on the same key ancestors in both litters.
-The second litter intensifies these influences because Sean himself is more linebred on these same lines.
-
-The pattern shows: Heavy reliance on Fendane/Fendanesylcrest bloodlines across our entire breeding program. While this can fix type and create consistency, it also explains why both litters have elevated COI despite our foundation bitch starting with 0.0%.
-This is evidence of our breeding decisions: following a specific linebreeding strategy focused on these particular bloodlines, demonstrating the kind of careful genetic planning that responsible breeding requires.
-
-</details>
-
-<details id="how-coi-is-calculated">
-<summary><strong>How COI is Calculated: A Real Example Using Sean</strong></summary>
-
-**Understanding Coefficient of Inbreeding Through Sean's Pedigree**
-
-The coefficient of inbreeding (COI) quantifies the likelihood that an individual inherits two copies of the same region of DNA from a common ancestor. Odds are you are not one to break out equations to explicilty explain things, but calculating a COI from a pedigree is a right of passage for all dog nerds. In real life, nearly everyone uses software to make these calculations, but in case the power goes out or your internet fails, it is a good idea to at least have went through this exercise so we can rebuild knowledge if civilization ends, ha! Let's use our own Sean (22.7% COI) as a concrete example of how this calculation works.
-
-**Step-by-Step COI Calculation:**
-
-**1. Identify Common Ancestors**
-Sean's COI comes from multiple dogs appearing on both his mother's and father's sides. Let's trace one example:
-
-**Am GCh Danemark's Diamond Cartier V Aldawn** appears twice in Sean's pedigree:
-- **Father's side:** Cartier is Sean's paternal grandfather (2 generations back)
-- **Mother's side:** Cartier appears as a maternal great-grandfather (3 generations back)
-
-**2. Calculate the Probability**
-Using the formula: f = (1/2)^(n1 + n2 + 1) × (1 + F(A))
-
-Where:
-- n1 = 2 (generations from father's side to Cartier)
-- n2 = 3 (generations from mother's side to Cartier)
-- F(A) = 0.0% (Cartier's own COI)
-
-**3. The Math**
-f = (1/2)^(2 + 3 + 1) × (1 + 0.0)
-f = (1/2)^6 × 1
-f = 1/64 = **1.56%**
-
-**4. Why Sean's Total COI is 22.7%**
-This 1.56% represents just **one** common ancestor! Sean's COI comes from **multiple** shared ancestors:
-- Cartier appears through different paths
-- **NORDCH Diplomatic's Umberto di Visconti** appears multiple times
-- Several other Danemark dogs appear repeatedly
-
-The 22.7% total represents the sum of ALL these individual contributions.
-
-**5. What This Means for Breeding**
-When we bred Sean to Piper (0.0% COI), we were using Sean's genetics from proven bloodlines while relying on Piper's outcross genetics to balance the linebreeding. This strategic approach gave us the 12.5% COI in their puppies—concentrated enough to predict type and temperament, but moderated by Piper's (and Sean's) genetic diversity.
-
-**Important Note:** Pedigree-based COI calculations assume founder dogs are unrelated and serve as estimates. Genetic COI through DNA testing provides more accurate assessments by accounting for some of the actual genetic recombination.
-
-</details>
-
-## Champion Bloodlines and Achievements
-
-<details>
-<summary><strong>Understanding AKC Titles and Abbreviations</strong></summary>
-
-**Decoding the Letters: What Those Title Abbreviations Mean**
-
-When reading pedigrees, you'll see many abbreviated titles before and after a dog's name. These represent significant achievements in conformation showing, performance events, and breeding programs. Here's what the most common ones mean:
-
-**Conformation (Dog Show) Titles:**
-- **Ch (Champion):** Won 15 points including 2 majors under 3 different judges
-- **GCh (Grand Champion):** Earned 25 additional points after becoming a Champion
-- **GChS (Grand Champion Silver):** 100 additional Grand Champion points
-- **GChG (Grand Champion Gold):** 200 additional Grand Champion points  
-- **GChP (Grand Champion Platinum):** 400 additional Grand Champion points
-- **BISS (Best in Specialty Show):** Won Best in Show at a breed specialty
-- **MBISS (Multiple Best in Specialty Show):** Won multiple specialty shows
-
-**Breeding Recognition:**
-- **ROM (Register of Merit):** Produced a specified number of Champions
-- **HOF (Hall of Fame):** Exceptional lifetime breeding achievement
-- **AOM (Award of Merit):** Top-placing dog at a specialty show
-
-**Performance and Training Titles:**
-- **CD (Companion Dog):** Basic obedience title
-- **TD (Tracking Dog):** Successfully completed a tracking test
-- **RN (Rally Novice):** Entry-level rally obedience
-- **BN (Beginner Novice):** Pre-novice obedience level
-- **CGCA/CGCU (Canine Good Citizen Advanced/Urban):** Public manners certifications
-
-**International Titles:**
-- **NORDCH (Nordic Champion):** Scandinavian championship
-- **SUCH (Swedish Champion):** Swedish national championship
-- **DKCh (Danish Champion):** Danish national championship
-
-**Placement Indicators:**
-- **Am (American):** Distinguishes from international titles
-- **Can (Canadian):** Canadian Kennel Club title
-- **Int (International):** International championship
-
-**Reading Order:** Titles before the name are typically conformation achievements, while titles after the name are usually performance or specialty recognitions.
-
-These achievements represent years of training, showing, and dedication by owners and handlers, demonstrating excellence in breed type, temperament, and trainability—qualities that benefit families throughout [early puppy development](/posts/2025-07-03-the-first-year).
-
-</details>
-
-<details>
-<summary><strong>Award-Winning Lineage</strong></summary>
-
-**Scout: The Winningest Great Dane of All Time**  
-Cora and Mia's maternal line through Piper connects to Scout, who stands out across multiple categories when examining Great Dane accomplishments. While excellent dogs have achieved remarkable success in various dog sports, Scout will always be remembered primarily for her extraordinary conformation achievements, which include:
-- 93 Group One Placements
-- 38 AKC All Breed Best in Shows
-- Number One Great Dane across all Systems in 2012 and 2013
-- Number 3 Working Dog in 2013
-- 254 Best of Breed Wins
-- 55,380 dogs defeated, including 5,201 Great Danes
-
-**Champion Sire Lines**  
-The paternal lineages are equally impressive. Cora's paternal lineage connects to BISS GCH Izya's Fight On & Fly On "Baron"—an extraordinary dog who earned both the 2022 and 2023 Stud Dog of the Year awards for Great Danes. This exceptional bloodline includes MBISS GCHP Legado N Danemark A Captive Spirit "Marina", winner of both the 2022 Top 20 Great Dane and People's Choice Award at the National GDCA event.
-
-Mia's sire was MBISS GCHS Fendanesylcrest N Diriso's This Is The Right Time "Rolex", bred by Gloria Batchelor, Kathleen Fennell, and Elizabeth Barnhart, and owned by Jose M Diaz and Mara Reyes. A Top 20 finalist in 2022, Rolex received an Award of Merit at the 2022 GDCA National Specialty.
-
-This multi-generational mentorship and award-winning lineage represents 35+ generations of careful breeding, connecting today's families to bloodlines dating to the 1870s.
-
-</details>
-
-## Benefits for Pet Families
-
-<details>
-<summary><strong>Why This Approach Benefits Your Family</strong></summary>
-
-**Progressive Breeding Benefits:**
-- **Predictable Temperament:** When you choose a 7Sisters puppy, you can expect the gentle, loyal nature that Great Danes are famous for, because we've bred for consistent temperament for generations.
-- **Health Advantages:** Our linebreeding on health-tested lines means fewer surprises and more predictable health outcomes.
-- **Size and Structure:** You'll know approximately how your puppy will grow and what to expect in terms of exercise, diet, and space requirements.
-- **Training Success:** Consistent temperaments mean more predictable training outcomes and easier integration into family life.
-
-**Managing the Risks of Linebreeding**
-
-Our Safeguards:
-- Health Testing: All breeding dogs undergo comprehensive, age appropriaate health screening
-- Piper's Outcross Advantage: Her 0.0% COI provides genetic diversity to balance the intensive linebreeding
-- Careful Selection: We only use this approach when breeding to dogs of exceptional quality like Sean (son of Baron, the 2022 & 2023 Stud Dog of the Year)
-
-**The Results:**
-- Mia (from first litter): Earned her first Major win in 2025
-- Cora (from second litter): Healthy, typey puppy who made her successful debut at 7 months
-- Consistent Family Temperaments: Both litters produce the gentle giants families expect
-
-**What This Strategy Demonstrates**
-
-Both completed litters validated our progressive breeding approach and established the foundation for our future breeding program:
-- Predictable adult size
-- Consistent temperament: Gentle, loyal, loving family companions
-- Health advantages: From health-tested parents and proven bloodlines
-- Show potential: Both approaches produced dogs suitable for conformation showing
-
-This progressive strategy demonstrates how decades of careful genetic planning can produce the ideal family Great Dane, and these principles guide our future breeding decisions.
-
-</details>
-
-## Our Commitment to Excellence
-
-When families choose a Great Dane from 7Sisters Farm, they become part of something larger than our breeding program—they join a legacy that connects to historic achievements, guided by mentors who represent the pinnacle of American Great Dane breeding excellence, all within a community that has valued education and relationships for many decades.
-
-Our breeding program isn't just about producing beautiful dogs—it's about creating predictable, healthy, well-tempered family companions through science-based decision making and collaboration with the most accomplished breeders in America.
-
-This level of planning and mentorship ensures that when you bring home a 7Sisters Great Dane, you're getting not just excellent genetics, but the collective wisdom and support of an entire network of dedicated Great Dane enthusiasts.
-
-To learn more about our current litters and meet our dogs, visit [7Sisters Farm](/7Sisters).
-
-<details>
-<summary><strong>Sources & References</strong></summary>
-
-**Sources**
-
-- Grossman, Carol. "Tootie Longo of Great Dane Fame." Dog News. <a href="https://dognews.com/carol-grossman-celebrates-life-breeding-career-of-great-dane-fancier-tootie-longo" target="_blank">dognews.com</a>
-- Great Dane Club of America. "Q1 2024 Bulletin - 2023 GDCA Breeder of the Year." <a href="https://gdca.org/wp-content/uploads/2024b/Q1-2024-bulletin.pdf" target="_blank">gdca.org</a>
-- Great Dane Club of America. "Q1 2023 Bulletin - 2022 GDCA Breeder of the Year." <a href="https://gdca.org/wp-content/uploads/TheGDCA/Bulletin/2023/GDCA-Bulletin-Q1-2023.pdf" target="_blank">gdca.org</a>
-- American Kennel Club. "Advanced Recognition Breeders of Merit." <a href="https://www.akc.org/breeder-programs/akc-breeder-of-merit-program/advanced-recognition-breeders-merit/" target="_blank">akc.org</a>
-- Karen Martin of Danemark Danes. <a href="https://danemarkdanes.com/" target="_blank">danemarkdanes.com</a>
-- Frankie Camacho & Jaye Dubman of Legado Danes. <a href="https://www.legadodanes.com/" target="_blank">legadodanes.com</a>
-- American Kennel Club. "Titles and Abbreviations." <a href="https://www.akc.org/sports/titles-and-abbreviations/" target="_blank">akc.org</a>
-</details> 17:T26e5,
+- Grossman, Carol. "Tootie Longo of Great Dane Fame." *Dog News*. [dognews.com](https://dognews.com/carol-grossman-celebrates-life-breeding-career-of-great-dane-fancier-tootie-longo)
+- Great Dane Club of America. "Q1 2024 Bulletin - 2023 GDCA Breeder of the Year." [gdca.org](https://gdca.org/wp-content/uploads/2024b/Q1-2024-bulletin.pdf)
+- Great Dane Club of America. "Q1 2023 Bulletin - 2022 GDCA Breeder of the Year." [gdca.org](https://gdca.org/wp-content/uploads/TheGDCA/Bulletin/2023/GDCA-Bulletin-Q1-2023.pdf)
+- American Kennel Club. "Advanced Recognition Breeders of Merit." [akc.org](https://www.akc.org/breeder-programs/akc-breeder-of-merit-program/advanced-recognition-breeders-merit/)
+- Karen Martin of Danemark Danes. [danemarkdanes.com](https://danemarkdanes.com/)
+- Frankie Camacho & Jaye Dubman of Legado Danes. [legadodanes.com](https://www.legadodanes.com/)
+- Lorraine Matherly of Great Danes of Lore. [loredane.com](https://loredane.com/bitches/scout/)
+- Jessica Lanae Powers of IZYA Danes. [izyadanes.com](https://izyadanes.com/male-danes/)
+- American Kennel Club. "Titles and Abbreviations." [akc.org](https://www.akc.org/sports/titles-and-abbreviations/)
+17:T26e5,
 [← Back to Blog Archive](/archive)
 
 
@@ -2211,4 +2027,4 @@ To learn more about our Great Danes and philosophy, visit [7Sisters Farm](/7Sist
 
 • **Worth, Cooper.** "Iowa dog Bing, Great Dane in 'The Friend' movie with Bill Murray." *Des Moines Register*, April 8, 2025. <a href="https://www.desmoinesregister.com/story/entertainment/movies/2025/04/08/iowa-dog-bing-great-dane-the-friend-movie-bill-murray/82872298007/" target="_blank">desmoinesregister.com</a>
 
-</details> 7:["$","div",null,{"className":"content","children":[["$","div",null,{"className":"post-title","children":["$","h1",null,{"children":"Great Dane Articles and Insights"}]}],["$","main",null,{"className":"content-wrapper","children":[["$","section",null,{"className":"hero-section","children":["$","img",null,{"src":"/img/Colorlogo_nobackground.png","alt":"7Sisters Farm Logo","width":300,"height":"auto","className":"hero-logo","loading":"lazy"}]}],["$","$Lf",null,{"posts":[{"title":"The Deep History of Dogs, Part 2: Palaeolithic Partners","description":"Two companion studies in Nature push genetically confirmed dogs to roughly 15,800 years ago, mapping Ice Age dogs across cultures, the Neolithic transition, and the deep ancestry that still flows into modern European breeds.","date":"2026-03-28","categories":["Breeding","Research","Genetics"],"tags":["Domestication","Evolution","Ancient DNA"],"featured":true,"id":"2026-03-28-the-deep-history-of-dogs-palaeolithic-partners","content":"$10"},{"title":"The Deep History of Dogs: A Story Written in Ancient DNA","description":"Explore how ancient DNA research has revolutionized our understanding of dog domestication, revealing a complex story of parallel evolution, population replacements, and a partnership that may have been invented twice.","date":"2025-10-01","categories":["Breeding","Research","Genetics"],"tags":["Domestication","Evolution"],"featured":true,"id":"2025-10-01-the-deep-history-of-dogs-ancient-dna","content":"$11"},{"title":"Breeding for Temperament: What Current Research Tools Tell Us (And What They Don't)","description":"Great Dane history, what temperament tools exist and why they fall short for breeding, what research still teaches us, and practical selection priorities backed by the GDCA health survey.","date":"2025-09-12","updated":"2026-04-07","categories":["Breeding","Temperament","Research"],"tags":["Breeding Science"],"featured":true,"id":"2025-09-12-breeding-for-temperament-research-tools","content":"$12"},{"title":"Feeding Your Growing Great Dane: A Nutritional Deep Dive","date":"2025-07-17","description":"Comprehensive guide to Great Dane nutrition, feeding strategies, and growth management for every life stage, from puppy to adult.","id":"2025-07-17-feeding-your-growing-great-dane","content":"$13","tags":[],"categories":[]},{"title":"The First Year: A Month-by-Month Guide to Early Great Dane Development","date":"2025-07-03","description":"Comprehensive guide to Great Dane puppy development, socialization, feeding, and training tips for new owners from birth to one year.","id":"2025-07-03-the-first-year","content":"$14","tags":[],"categories":[]},{"title":"How to Find Ethical Great Dane Breeders: Complete Guide to Responsible Breeder Selection","date":"2025-06-25","description":"Complete guide to finding ethical Great Dane breeders. Learn what questions to ask, health testing requirements, and how to identify responsible breeders vs puppy mills.","id":"2025-06-25-choosing-a-great-dane-breeder","content":"$15","tags":[],"categories":[]},{"title":"Laying the Foundation: Science, Mentorship, and Our First 7Sisters Litters","date":"2025-06-24","description":"Great Dane breeding philosophy: science, mentorship, and early puppy development for healthy, well-adjusted dogs and families.","id":"2025-06-24-laying-the-foundation","content":"$16","tags":[],"categories":[]},{"title":"More Than Show and Go: Our Journey into the Illini Great Dane Club","date":"2025-06-23","description":"Our journey into the Illini Great Dane Club: community, responsible breeding, and show experiences for Great Dane enthusiasts.","id":"2025-06-23-more-than-show-and-go","content":"$17","tags":[],"categories":[]}]}]]}],["$","style",null,{"dangerouslySetInnerHTML":{"__html":"\n            .hero-section {\n              text-align: center;\n              margin-bottom: 2rem;\n            }\n            .hero-logo {\n              max-width: 100%;\n              height: auto;\n              display: block;\n              margin: 0 auto;\n            }\n          "}}]]}]
+</details> 7:["$","div",null,{"className":"content","children":[["$","div",null,{"className":"post-title","children":["$","h1",null,{"children":"Great Dane Articles and Insights"}]}],["$","main",null,{"className":"content-wrapper","children":[["$","section",null,{"className":"hero-section","children":["$","img",null,{"src":"/img/Colorlogo_nobackground.png","alt":"7Sisters Farm Logo","width":300,"height":"auto","className":"hero-logo","loading":"lazy"}]}],["$","$Lf",null,{"posts":[{"title":"The Deep History of Dogs, Part 2: Palaeolithic Partners","description":"Two companion studies in Nature push genetically confirmed dogs to roughly 15,800 years ago, mapping Ice Age dogs across cultures, the Neolithic transition, and the deep ancestry that still flows into modern European breeds.","date":"2026-03-28","categories":["Breeding","Research","Genetics"],"tags":["Domestication","Evolution","Ancient DNA"],"featured":true,"id":"2026-03-28-the-deep-history-of-dogs-palaeolithic-partners","content":"$10"},{"title":"The Deep History of Dogs: A Story Written in Ancient DNA","description":"Explore how ancient DNA research has revolutionized our understanding of dog domestication, revealing a complex story of parallel evolution, population replacements, and a partnership that may have been invented twice.","date":"2025-10-01","categories":["Breeding","Research","Genetics"],"tags":["Domestication","Evolution"],"featured":true,"id":"2025-10-01-the-deep-history-of-dogs-ancient-dna","content":"$11"},{"title":"Breeding for Temperament: What Current Research Tools Tell Us (And What They Don't)","description":"Great Dane history, what temperament tools exist and why they fall short for breeding, what research still teaches us, and practical selection priorities backed by the GDCA health survey.","date":"2025-09-12","updated":"2026-04-07","categories":["Breeding","Temperament","Research"],"tags":["Breeding Science"],"featured":true,"id":"2025-09-12-breeding-for-temperament-research-tools","content":"$12"},{"title":"Feeding Your Growing Great Dane: A Nutritional Deep Dive","date":"2025-07-17","description":"Comprehensive guide to Great Dane nutrition, feeding strategies, and growth management for every life stage, from puppy to adult.","id":"2025-07-17-feeding-your-growing-great-dane","content":"$13","tags":[],"categories":[]},{"title":"The First Year: A Month-by-Month Guide to Early Great Dane Development","date":"2025-07-03","description":"Comprehensive guide to Great Dane puppy development, socialization, feeding, and training tips for new owners from birth to one year.","id":"2025-07-03-the-first-year","content":"$14","tags":[],"categories":[]},{"title":"How to Find Ethical Great Dane Breeders: Complete Guide to Responsible Breeder Selection","date":"2025-06-25","description":"Complete guide to finding ethical Great Dane breeders. Learn what questions to ask, health testing requirements, and how to identify responsible breeders vs puppy mills.","id":"2025-06-25-choosing-a-great-dane-breeder","content":"$15","tags":[],"categories":[]},{"title":"Laying the Foundation: Science, Mentorship, and Our First 7Sisters Litters","date":"2025-06-24","updated":"2026-04-09","description":"Our breeding program is built on exceptional mentors, dogs on both sides of every pedigree, and the research to back it up—how we laid that foundation.","categories":["Breeding","Philosophy"],"tags":["Breeding Philosophy"],"id":"2025-06-24-laying-the-foundation","content":"$16"},{"title":"More Than Show and Go: Our Journey into the Illini Great Dane Club","date":"2025-06-23","description":"Our journey into the Illini Great Dane Club: community, responsible breeding, and show experiences for Great Dane enthusiasts.","id":"2025-06-23-more-than-show-and-go","content":"$17","tags":[],"categories":[]}]}]]}],["$","style",null,{"dangerouslySetInnerHTML":{"__html":"\n            .hero-section {\n              text-align: center;\n              margin-bottom: 2rem;\n            }\n            .hero-logo {\n              max-width: 100%;\n              height: auto;\n              display: block;\n              margin: 0 auto;\n            }\n          "}}]]}]
