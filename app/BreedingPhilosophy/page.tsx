@@ -62,13 +62,13 @@ export default function BreedingPhilosophy() {
             <p>
               We advance our mission by producing the best possible Great Danes
               and placing them in homes that give them the best possible lives.
-              Dogs belong in homes. They deserve enriched lives alongside both
-              humans and other dogs.
+              Dogs thrive in homes where they can live full, enriched lives with
+              their people and canine companions.
             </p>
             <p>
-              There is a vast gap between the demand for dogs and the supply from
-              breeders we consider ethical — and most dog owners have no idea
-              where their dogs come from. We work to close that gap through
+              Demand for dogs far outpaces the supply from breeders most of us
+              would consider responsible, and a lot of dog owners simply
+              aren&apos;t aware of their dog&apos;s origins. We work to close that gap through
               education: reaching dog owners, shelters, and the broader animal
               welfare community with a clearer picture of what honorable breeding
               looks like.
