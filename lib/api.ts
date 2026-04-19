@@ -2,21 +2,28 @@ import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
 
+import { normalizeValidIsoCalendarDay } from './postDate'
+
 const postsDirectory = path.join(process.cwd(), '_posts')
 
 function getPostFiles() {
   return fs.readdirSync(postsDirectory)
 }
 
-/** ISO date string YYYY-MM-DD from YAML frontmatter (Date or string). */
+/** ISO date string YYYY-MM-DD from YAML frontmatter (Date or string). Invalid values → `undefined`. */
 function frontmatterDateToIsoDay(value: unknown): string | undefined {
   if (value == null || value === '') return undefined
-  if (value instanceof Date) return value.toISOString().slice(0, 10)
+  if (value instanceof Date) {
+    if (Number.isNaN(value.getTime())) return undefined
+    return value.toISOString().slice(0, 10)
+  }
   const s = String(value).trim()
   if (!s) return undefined
+  const strict = normalizeValidIsoCalendarDay(s)
+  if (strict !== undefined) return strict
   const d = new Date(s)
-  if (!Number.isNaN(d.getTime())) return d.toISOString().slice(0, 10)
-  return s.slice(0, 10)
+  if (Number.isNaN(d.getTime())) return undefined
+  return d.toISOString().slice(0, 10)
 }
 
 export async function getPostById(id: string) {
@@ -24,14 +31,15 @@ export async function getPostById(id: string) {
   const fullPath = path.join(postsDirectory, `${realId}.md`)
   const { data, content } = matter(await fs.promises.readFile(fullPath, 'utf8'))
   const date = data.date as Date
-  const updated = frontmatterDateToIsoDay(data.updated)
+  const { updated: rawUpdated, ...dataRest } = data
+  const updated = frontmatterDateToIsoDay(rawUpdated)
 
   return {
-    ...data,
+    ...dataRest,
     title: data.title as string,
     id: realId,
     date: date.toISOString().slice(0, 10),
-    ...(updated ? { updated } : {}),
+    ...(updated !== undefined ? { updated } : {}),
     description:
       typeof data.description === 'string' ? data.description : undefined,
     content,
