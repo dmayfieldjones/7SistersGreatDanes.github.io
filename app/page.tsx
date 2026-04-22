@@ -7,7 +7,6 @@ import ScrollActivator from './components/ScrollActivator'
 
 const HERO_VIDEO_EMBED_SRC =
   'https://www.youtube.com/embed/M14l3BrfXhA?autoplay=1&mute=1&loop=1&playlist=M14l3BrfXhA&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&fs=0&cc_load_policy=0&disablekb=1&enablejsapi=0&origin=https://7sistersgreatdanes.com'
-// Force rebuild - September 6, 2025 - Attempt 2
 
 export const metadata: Metadata = {
   title: 'Illinois Great Dane Breeders | 7Sisters Farm - Central Illinois',
@@ -125,6 +124,7 @@ const MayfieldJonesProfile = () => {
             testing, and are raised with a focus on sound structure and temperament. Exploring a litter
             or a breeder? Start below; everything else—our farm, articles, genome tools—is in the menu.
           </p>
+          <p className="home-intro-footnote">Site freshened · April 2026</p>
 
           <div className="home-cta-list" role="navigation" aria-label="Primary actions">
             <a href="/7Sisters" className="home-cta home-cta-primary">

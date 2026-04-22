@@ -743,6 +743,14 @@ body:has(.homepage-container) {
   }
 }
 
+.home-intro-footnote {
+  margin: -0.25rem auto 1.5rem;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: #6b7280;
+  text-align: center;
+}
+
 .home-cta-list {
   display: flex;
   flex-direction: column;
