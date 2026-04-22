@@ -124,7 +124,6 @@ const MayfieldJonesProfile = () => {
             testing, and are raised with a focus on sound structure and temperament. Exploring a litter
             or a breeder? Start below; everything else—our farm, articles, genome tools—is in the menu.
           </p>
-          <p className="home-intro-footnote">Site freshened · April 2026</p>
 
           <div className="home-cta-list" role="navigation" aria-label="Primary actions">
             <a href="/7Sisters" className="home-cta home-cta-primary">
