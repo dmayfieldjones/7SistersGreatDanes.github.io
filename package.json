@@ -5,9 +5,10 @@
     "format": "prettier --write .",
     "dev": "BROWSER=none next --turbo -p 3007",
     "build": "next build",
+    "preview": "npx --yes serve out --listen 8765",
     "start": "next dev",
     "lint": "eslint --report-unused-disable-directives --max-warnings 0",
-    "predeploy": "npm run build",
+    "predeploy": "next build",
     "deploy": "gh-pages -d out --nojekyll",
     "postdeploy": "git push --follow-tags"
   },
