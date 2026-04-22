@@ -1,1 +1,0 @@
-self.__REACT_LOADABLE_MANIFEST='{"app/GreatDaneGenomeBrowser/Browser.tsx -> ./MyIdeogram":{"id":2942,"files":["static/chunks/817.849da8a2ee6dcc5f.js","static/chunks/942.4b79af688cde84b9.js"]}}';

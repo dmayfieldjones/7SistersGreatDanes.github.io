@@ -1,1 +1,23 @@
-node_modules
+# Dependencies
+node_modules/
+
+# Next.js build & static export (publish with: yarn build && yarn deploy)
+.next/
+out/
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Logs & debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Local env
+.env
+.env*.local
+
+# IDE (keep optional shared settings if you add them)
+.idea/
