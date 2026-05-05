@@ -21,3 +21,5 @@ yarn-error.log*
 
 # IDE (keep optional shared settings if you add them)
 .idea/
+
+pedigree_db.csv
