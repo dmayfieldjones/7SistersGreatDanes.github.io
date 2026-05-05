@@ -170,7 +170,7 @@ export default function () {
         <section className="pedigree-section">
           <h2 className="section-title">Pedigree Explorer</h2>
           <p className="pedigree-intro">
-            Explore the full 10-generation pedigree analysis for Ezra × Piper, including Wright&apos;s COI (4.04%), common ancestor paths, and structural findings.
+            Explore the full 10-generation pedigree analysis for Ezra × Piper, including Wright&apos;s cross COI, common ancestor paths, and structural findings.
           </p>
           <a href="/ezra-piper-pedigree.html" className="pedigree-link">
             Open Pedigree Explorer →
