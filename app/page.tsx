@@ -82,7 +82,7 @@ const MayfieldJonesProfile = () => {
         </div>
         <div className="litter-spotlight-hero-wrap">
           <a href="/EzraxPiper" className="litter-spotlight litter-spotlight-hero">
-            <img src="/img/EzraxPiper.jpg" alt="Ezra × Piper litter — six puppies" className="litter-spotlight-img" />
+            <img src="/img/EzraxPiper.jpg" alt="Ezra X Piper litter advertisement" className="litter-spotlight-img" />
             <div className="litter-spotlight-content">
               <span className="litter-spotlight-badge">Puppies Here</span>
               <h2 className="litter-spotlight-title">Ezra × Piper</h2>

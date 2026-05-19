@@ -547,10 +547,11 @@ body:has(.homepage-container) {
   }
 
   .litter-spotlight-hero .litter-spotlight-img {
-    max-height: min(190px, 30vh);
+    max-height: min(320px, 48vh);
     width: 100%;
-    object-fit: cover;
+    object-fit: contain;
     object-position: center top;
+    background: #0d0d0d;
   }
 
   .litter-spotlight-hero {

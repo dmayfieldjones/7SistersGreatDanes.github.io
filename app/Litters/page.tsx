@@ -27,8 +27,8 @@ export const metadata: Metadata = {
     images: [
       {
         url: 'https://7sistersgreatdanes.com/img/EzraxPiper.jpg',
-        width: 400,
-        height: 300,
+        width: 1999,
+        height: 1500,
         alt: 'Ezra X Piper - 7Sisters Farm Current Litter',
       },
     ],
@@ -127,7 +127,7 @@ export default function () {
             >
               <img
                 src="/img/EzraxPiper.jpg"
-                alt="Ezra X Piper litter — six puppies, two girls and four boys"
+                alt="Ezra X Piper litter advertisement"
                 className="litter-image"
                 loading="lazy"
                 fetchPriority="auto"

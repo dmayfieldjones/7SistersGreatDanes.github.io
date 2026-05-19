@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-
 const TIKTOK_URL = 'https://www.tiktok.com/@7sistersgreatdanes'
 
 function timeSincePastDate(pastDateString: string | Date, endDate: Date = new Date()) {
@@ -98,7 +97,7 @@ export default function () {
             className="ad-link"
             aria-label="Watch Ezra x Piper puppy videos on TikTok"
           >
-            <img src="/img/EzraxPiper.jpg" alt="Ezra x Piper litter" className="ad-image" loading="eager" />
+            <img src="/img/EzraxPiper.jpg" alt="Ezra X Piper litter advertisement" className="ad-image" loading="eager" />
           </a>
           <p className="ad-caption">
             We&apos;re sharing clips of this litter on{' '}
