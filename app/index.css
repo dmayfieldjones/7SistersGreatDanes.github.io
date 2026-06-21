@@ -227,7 +227,6 @@ body:has(.homepage-container) {
   height: 100%;
   overflow: hidden;
   z-index: -1;
-  background: #0a0a0a;
   /* Allow scrolling through video area - don't block scroll events */
   pointer-events: none;
   /* Ensure it doesn't interfere with scrolling */
@@ -249,12 +248,13 @@ body:has(.homepage-container) {
   height: 100vh;
   min-width: 100%;
   min-height: 100%;
-  transform: translate(-50%, -50%) scale(1.18);
+  transform: translate(-50%, -50%);
   pointer-events: none;
   /* Ensure it doesn't block scrolling - allow scroll to pass through */
   touch-action: none;
   /* Prevent iframe from capturing scroll events */
   will-change: transform;
+  z-index: 0;
 }
 
 /* Fills the same box as the iframe before the embed mounts (deferred load). */
@@ -263,6 +263,7 @@ body:has(.homepage-container) {
   pointer-events: none;
 }
 
+/* On mobile, adjust video to fill better and reduce black space */
 @media (max-width: 768px) {
   /*
    * 100vh is often taller than the *visible* viewport (browser chrome), so the hero
@@ -284,7 +285,6 @@ body:has(.homepage-container) {
     min-width: 100vw !important;
     min-height: 100svh !important;
     min-height: 100vh !important;
-    transform: translate(-50%, -50%) scale(1.24) !important;
   }
   
   .content-section {
@@ -300,7 +300,6 @@ body:has(.homepage-container) {
     height: 67.5vw; /* Maintain 16:9 aspect ratio */
     min-height: 100vh;
     min-width: 177.78vh; /* Ensure it covers height */
-    transform: translate(-50%, -50%) scale(1.16);
   }
 }
 
@@ -311,7 +310,6 @@ body:has(.homepage-container) {
     height: 78.75vw; /* Maintain 16:9 aspect ratio */
     min-height: 100vh;
     min-width: 177.78vh;
-    transform: translate(-50%, -50%) scale(1.1);
   }
 }
 
@@ -322,16 +320,29 @@ body:has(.homepage-container) {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0.12) 0%,
-    rgba(0, 0, 0, 0.06) 78%,
-    rgba(0, 0, 0, 0.45) 94%,
-    rgba(0, 0, 0, 0.72) 100%
-  );
+  background: rgba(0, 0, 0, 0.1);
   z-index: 1;
   /* Don't block scroll indicator */
   pointer-events: none;
+}
+
+/* Full-width bar pinned to the visible viewport bottom — hides YouTube chrome / “More videos”. */
+.video-bottom-mask {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  height: calc(7.5rem + env(safe-area-inset-bottom, 0px));
+  background: #000;
+  z-index: 5;
+  pointer-events: none;
+  transform: translateZ(0);
+}
+
+@media (max-width: 768px) {
+  .video-bottom-mask {
+    height: calc(9rem + env(safe-area-inset-bottom, 0px));
+  }
 }
 
 /* Scroll indicator */
@@ -417,18 +428,6 @@ body:has(.homepage-container) {
     letter-spacing: 0.04em !important;
     text-transform: none !important;
     text-shadow: 0 1px 4px rgba(0, 0, 0, 0.75) !important;
-  }
-
-  .video-hero-section::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 140px;
-    background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.45) 100%);
-    pointer-events: none;
-    z-index: 40;
   }
 
   /* Fixed chip hides once user scrolls past the hero (ScrollIndicator intersection observer) */
@@ -540,7 +539,7 @@ body:has(.homepage-container) {
 @media (max-width: 768px) {
   /*
    * Top-anchored so the CTA sits high, stays clear of the bottom gradient + scroll chip,
-   * and TikTok isn’t clipped off-screen. z-index above .video-hero-section::after (40).
+   * and TikTok isn’t clipped off-screen. z-index above .video-bottom-mask (45).
    */
   .litter-spotlight-hero-wrap {
     top: calc(0.35rem + env(safe-area-inset-top, 0px));
@@ -622,6 +621,49 @@ body:has(.homepage-container) {
 .litter-spotlight-hero .litter-spotlight-content {
   background: rgba(255, 255, 255, 0.98);
 }
+
+.litter-spotlight-hero-wrap--logo {
+  top: calc(0.75rem + env(safe-area-inset-top, 0px));
+  transform: translateX(-50%);
+  max-width: 280px;
+}
+
+.litter-spotlight-logo {
+  padding: 1rem 1.25rem;
+  background: #ffffff;
+  text-align: center;
+  pointer-events: none;
+  cursor: default;
+}
+
+.litter-spotlight-logo:hover {
+  transform: none;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+.litter-spotlight-logo-img {
+  display: block;
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .litter-spotlight-hero-wrap--logo {
+    top: calc(0.5rem + env(safe-area-inset-top, 0px));
+    max-width: min(260px, calc(100% - 2rem));
+  }
+
+  .litter-spotlight-logo {
+    padding: 0.85rem 1rem;
+  }
+
+  .litter-spotlight-logo-img {
+    max-width: 180px;
+  }
+}
+
 .litter-spotlight:hover {
   transform: scale(1.02);
   box-shadow: 0 6px 24px rgba(191, 20, 28, 0.25);
