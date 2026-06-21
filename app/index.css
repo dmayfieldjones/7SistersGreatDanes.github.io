@@ -227,6 +227,7 @@ body:has(.homepage-container) {
   height: 100%;
   overflow: hidden;
   z-index: -1;
+  background: #0a0a0a;
   /* Allow scrolling through video area - don't block scroll events */
   pointer-events: none;
   /* Ensure it doesn't interfere with scrolling */
@@ -248,12 +249,18 @@ body:has(.homepage-container) {
   height: 100vh;
   min-width: 100%;
   min-height: 100%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) scale(1.18);
+  opacity: 0;
+  transition: opacity 1.15s ease-in;
   pointer-events: none;
   /* Ensure it doesn't block scrolling - allow scroll to pass through */
   touch-action: none;
   /* Prevent iframe from capturing scroll events */
-  will-change: transform;
+  will-change: transform, opacity;
+}
+
+.video-iframe.video-iframe--revealed {
+  opacity: 1;
 }
 
 /* Fills the same box as the iframe before the embed mounts (deferred load). */
@@ -262,7 +269,102 @@ body:has(.homepage-container) {
   pointer-events: none;
 }
 
-/* On mobile, adjust video to fill better and reduce black space */
+/* Homepage intro — logo on black, then black curtain, then slow video fade-in */
+.hero-curtain {
+  position: absolute;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: #0a0a0a;
+  opacity: 1;
+  pointer-events: none;
+  animation: heroCurtainIn 0.7s ease both;
+}
+
+.hero-curtain--hiding {
+  animation: none;
+  transition: opacity 1.15s ease;
+  opacity: 0;
+}
+
+.hero-splash-card {
+  width: min(92vw, 420px);
+  padding: 2.25rem 2rem;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+  text-align: center;
+  animation: heroCardIn 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+}
+
+.hero-splash-card--hiding {
+  animation: heroCardOut 0.55s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes heroCurtainIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes heroCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes heroCardOut {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-14px) scale(0.95);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-curtain,
+  .hero-splash-card {
+    animation: none;
+  }
+
+  .hero-curtain--hiding {
+    transition: opacity 0.35s ease;
+  }
+}
+
+.hero-splash-logo {
+  display: block;
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .hero-splash-card {
+    padding: 1.75rem 1.5rem;
+  }
+
+  .hero-splash-logo {
+    max-width: 240px;
+  }
+}
+
+/* Optional: Add a subtle overlay to ensure text readability */
 @media (max-width: 768px) {
   /*
    * 100vh is often taller than the *visible* viewport (browser chrome), so the hero
@@ -284,6 +386,7 @@ body:has(.homepage-container) {
     min-width: 100vw !important;
     min-height: 100svh !important;
     min-height: 100vh !important;
+    transform: translate(-50%, -50%) scale(1.24) !important;
   }
   
   .content-section {
@@ -299,6 +402,7 @@ body:has(.homepage-container) {
     height: 67.5vw; /* Maintain 16:9 aspect ratio */
     min-height: 100vh;
     min-width: 177.78vh; /* Ensure it covers height */
+    transform: translate(-50%, -50%) scale(1.16);
   }
 }
 
@@ -309,6 +413,7 @@ body:has(.homepage-container) {
     height: 78.75vw; /* Maintain 16:9 aspect ratio */
     min-height: 100vh;
     min-width: 177.78vh;
+    transform: translate(-50%, -50%) scale(1.1);
   }
 }
 
@@ -319,7 +424,13 @@ body:has(.homepage-container) {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.1);
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.12) 0%,
+    rgba(0, 0, 0, 0.06) 78%,
+    rgba(0, 0, 0, 0.45) 94%,
+    rgba(0, 0, 0, 0.72) 100%
+  );
   z-index: 1;
   /* Don't block scroll indicator */
   pointer-events: none;

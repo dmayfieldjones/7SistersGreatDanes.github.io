@@ -29,7 +29,7 @@ export const metadata: Metadata = {
         url: 'https://7sistersgreatdanes.com/img/EzraxPiper.jpg',
         width: 1999,
         height: 1500,
-        alt: 'Ezra X Piper - 7Sisters Farm Current Litter',
+        alt: 'Ezra X Piper - 7Sisters Farm Previous Litter',
       },
     ],
   },
@@ -113,10 +113,20 @@ export default function () {
           </p>
         </section>
         
-        {/* Current Litters Section */}
+        {/* Upcoming Litters Section */}
         <section className="litters-section">
           <h2 className="section-title">
-            <span className="accent-color">7</span>Sisters Current Litters
+            <span className="accent-color">7</span>Sisters Upcoming Litters
+          </h2>
+          <p className="section-description">
+            <a href="/contact">Contact us</a> to learn about future litters and placement.
+          </p>
+        </section>
+        
+        {/* Previous Litters Section */}
+        <section className="litters-section">
+          <h2 className="section-title">
+            <span className="accent-color">7</span>Sisters Previous Litters
           </h2>
           <p className="section-description">Click on images for details</p>
           <div className="litter-gallery">
@@ -133,16 +143,6 @@ export default function () {
                 fetchPriority="auto"
               />
             </a>
-          </div>
-        </section>
-        
-        {/* Previous Litters Section */}
-        <section className="litters-section">
-          <h2 className="section-title">
-            <span className="accent-color">7</span>Sisters Previous Litters
-          </h2>
-          <p className="section-description">Click on images for details</p>
-          <div className="litter-gallery">
             <a
               href="/SeanXPiper"
               className="litter-link"
