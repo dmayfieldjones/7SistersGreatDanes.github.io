@@ -250,20 +250,14 @@ body:has(.homepage-container) {
   min-width: 100%;
   min-height: 100%;
   transform: translate(-50%, -50%) scale(1.18);
-  opacity: 0;
-  transition: opacity 1.15s ease-in;
   pointer-events: none;
   /* Ensure it doesn't block scrolling - allow scroll to pass through */
   touch-action: none;
   /* Prevent iframe from capturing scroll events */
-  will-change: transform, opacity;
+  will-change: transform;
 }
 
-.video-iframe.video-iframe--revealed {
-  opacity: 1;
-}
-
-/* Fills the same box as the iframe before the embed mounts (deferred load). */
+/* Black curtain covers the iframe during intro — iframe stays visible to the browser for mobile autoplay. */
 .video-iframe.video-iframe-placeholder {
   background: #0a0a0a;
   pointer-events: none;
@@ -282,6 +276,8 @@ body:has(.homepage-container) {
   opacity: 1;
   pointer-events: none;
   animation: heroCurtainIn 0.7s ease both;
+  /* Fully opaque — video plays underneath without being hidden from the browser. */
+  isolation: isolate;
 }
 
 .hero-curtain--hiding {

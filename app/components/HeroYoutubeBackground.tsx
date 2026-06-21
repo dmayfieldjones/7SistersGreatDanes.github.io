@@ -2,11 +2,21 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-function playYoutubeIframe(iframe: HTMLIFrameElement) {
+export function isMobileDevice() {
+  if (typeof window === 'undefined') return false
+  return window.matchMedia('(max-width: 768px), (pointer: coarse)').matches
+}
+
+function controlYoutubeIframe(iframe: HTMLIFrameElement, func: string, args: string | number = '') {
   iframe.contentWindow?.postMessage(
-    JSON.stringify({ event: 'command', func: 'playVideo', args: '' }),
+    JSON.stringify({ event: 'command', func, args }),
     '*'
   )
+}
+
+function tryPlay(iframe: HTMLIFrameElement) {
+  controlYoutubeIframe(iframe, 'mute')
+  controlYoutubeIframe(iframe, 'playVideo')
 }
 
 function buildEmbedSrc(embedSrc: string) {
@@ -19,59 +29,66 @@ function buildEmbedSrc(embedSrc: string) {
   return url.toString()
 }
 
+function schedulePlayBurst(iframe: HTMLIFrameElement, mobile: boolean) {
+  const play = () => tryPlay(iframe)
+  play()
+
+  const delays = mobile
+    ? [150, 350, 700, 1200, 2000, 3500]
+    : [100, 400, 1000]
+
+  const timers = delays.map((delay) => window.setTimeout(play, delay))
+  const interval = window.setInterval(play, mobile ? 2500 : 5000)
+  const stop = window.setTimeout(() => window.clearInterval(interval), mobile ? 12000 : 8000)
+
+  return () => {
+    timers.forEach((timer) => window.clearTimeout(timer))
+    window.clearInterval(interval)
+    window.clearTimeout(stop)
+  }
+}
+
 export default function HeroYoutubeBackground({
   embedSrc,
   title,
-  revealed = false,
+  shouldLoad = true,
   onPlaying,
 }: {
   embedSrc: string
   title: string
-  revealed?: boolean
+  shouldLoad?: boolean
   onPlaying?: () => void
 }) {
   const [src, setSrc] = useState<string | null>(null)
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const onPlayingRef = useRef(onPlaying)
+  const playerReadyRef = useRef(false)
+  const playingNotifiedRef = useRef(false)
 
   onPlayingRef.current = onPlaying
 
   useEffect(() => {
-    const id = window.setTimeout(() => setSrc(buildEmbedSrc(embedSrc)), 120)
+    if (!shouldLoad) return
+    const id = window.setTimeout(() => setSrc(buildEmbedSrc(embedSrc)), isMobileDevice() ? 0 : 120)
     return () => window.clearTimeout(id)
-  }, [embedSrc])
+  }, [embedSrc, shouldLoad])
+
+  useEffect(() => {
+    if (!shouldLoad) {
+      setSrc(null)
+      playerReadyRef.current = false
+      playingNotifiedRef.current = false
+    }
+  }, [shouldLoad])
 
   useEffect(() => {
     if (!src) return
 
-    const iframe = iframeRef.current
-    if (!iframe) return
-
-    const tryPlay = () => {
-      if (iframeRef.current) playYoutubeIframe(iframeRef.current)
+    const notifyPlaying = () => {
+      if (playingNotifiedRef.current) return
+      playingNotifiedRef.current = true
+      onPlayingRef.current?.()
     }
-
-    const onLoad = () => {
-      tryPlay()
-      window.setTimeout(tryPlay, 300)
-      window.setTimeout(tryPlay, 1200)
-    }
-
-    iframe.addEventListener('load', onLoad)
-
-    const onInteraction = () => tryPlay()
-    document.addEventListener('touchstart', onInteraction, { once: true, passive: true })
-    document.addEventListener('scroll', onInteraction, { once: true, passive: true })
-
-    return () => {
-      iframe.removeEventListener('load', onLoad)
-      document.removeEventListener('touchstart', onInteraction)
-      document.removeEventListener('scroll', onInteraction)
-    }
-  }, [src])
-
-  useEffect(() => {
-    if (!src) return
 
     const onMessage = (event: MessageEvent) => {
       if (
@@ -83,8 +100,13 @@ export default function HeroYoutubeBackground({
 
       try {
         const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data
+        if (data.event === 'onReady') {
+          playerReadyRef.current = true
+          const iframe = iframeRef.current
+          if (iframe) schedulePlayBurst(iframe, isMobileDevice())
+        }
         if (data.event === 'onStateChange' && data.info === 1) {
-          onPlayingRef.current?.()
+          notifyPlaying()
         }
       } catch {
         /* ignore non-JSON postMessages */
@@ -92,7 +114,67 @@ export default function HeroYoutubeBackground({
     }
 
     window.addEventListener('message', onMessage)
-    return () => window.removeEventListener('message', onMessage)
+
+    let cleanupBurst: (() => void) | undefined
+
+    const bindIframe = () => {
+      const iframe = iframeRef.current
+      if (!iframe) return false
+
+      const onLoad = () => {
+        window.setTimeout(() => {
+          if (iframeRef.current) schedulePlayBurst(iframeRef.current, isMobileDevice())
+        }, 100)
+      }
+
+      iframe.addEventListener('load', onLoad)
+
+      const onInteraction = () => {
+        if (iframeRef.current) tryPlay(iframeRef.current)
+      }
+
+      document.addEventListener('touchstart', onInteraction, { passive: true })
+      document.addEventListener('scroll', onInteraction, { passive: true })
+
+      const stopInteraction = window.setTimeout(() => {
+        document.removeEventListener('touchstart', onInteraction)
+        document.removeEventListener('scroll', onInteraction)
+      }, 15000)
+
+      return () => {
+        iframe.removeEventListener('load', onLoad)
+        document.removeEventListener('touchstart', onInteraction)
+        document.removeEventListener('scroll', onInteraction)
+        window.clearTimeout(stopInteraction)
+      }
+    }
+
+    let cleanupIframe: (() => void) | undefined
+    const bound = bindIframe()
+    if (bound) {
+      cleanupIframe = bound
+    } else {
+      const raf = window.requestAnimationFrame(() => {
+        const retry = bindIframe()
+        if (retry) cleanupIframe = retry
+      })
+      cleanupIframe = () => window.cancelAnimationFrame(raf)
+    }
+
+    const readyFallback = window.setTimeout(() => {
+      const iframe = iframeRef.current
+      if (iframe) cleanupBurst = schedulePlayBurst(iframe, isMobileDevice())
+    }, 800)
+
+    const playingFallback = window.setTimeout(notifyPlaying, isMobileDevice() ? 5000 : 3500)
+
+    return () => {
+      window.removeEventListener('message', onMessage)
+      cleanupIframe?.()
+      cleanupBurst?.()
+      window.clearTimeout(readyFallback)
+      window.clearTimeout(playingFallback)
+    }
   }, [src])
 
   if (!src) {
@@ -103,7 +185,7 @@ export default function HeroYoutubeBackground({
     <iframe
       ref={iframeRef}
       src={src}
-      className={`video-iframe${revealed ? ' video-iframe--revealed' : ''}`}
+      className="video-iframe"
       allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
       allowFullScreen
       title={title}

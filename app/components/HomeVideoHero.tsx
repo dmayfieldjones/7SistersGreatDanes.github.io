@@ -1,38 +1,49 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
-import HeroYoutubeBackground from './HeroYoutubeBackground'
+import HeroYoutubeBackground, { isMobileDevice } from './HeroYoutubeBackground'
 import ScrollIndicator from './ScrollIndicator'
 
 const MIN_SPLASH_MS = 2800
 const MAX_SPLASH_MS = 4500
-/** Black hold after logo — video keeps playing hidden so YouTube chrome never flashes. */
 const CURTAIN_MS = 1100
 const LOGO_FADE_MS = 550
+/** After iframe mounts on mobile, wait this long for playback before revealing anyway. */
+const MOBILE_PLAY_WAIT_MS = 4500
 
 type IntroPhase = 'splash' | 'curtain' | 'revealing' | 'done'
 
 export default function HomeVideoHero({ embedSrc }: { embedSrc: string }) {
+  const [mobile] = useState(() => isMobileDevice())
   const [phase, setPhase] = useState<IntroPhase>('splash')
   const [logoVisible, setLogoVisible] = useState(true)
   const [logoHiding, setLogoHiding] = useState(false)
-  const [videoRevealed, setVideoRevealed] = useState(false)
+  const [loadVideo, setLoadVideo] = useState(!mobile)
 
   const splashStartRef = useRef(Date.now())
   const splashTimerRef = useRef<number | null>(null)
-  const curtainTimerRef = useRef<number | null>(null)
+  const revealTimerRef = useRef<number | null>(null)
   const advancedRef = useRef(false)
+  const revealStartedRef = useRef(false)
+  const videoLoadStartRef = useRef<number | null>(null)
 
   const clearTimers = useCallback(() => {
     if (splashTimerRef.current !== null) {
       window.clearTimeout(splashTimerRef.current)
       splashTimerRef.current = null
     }
-    if (curtainTimerRef.current !== null) {
-      window.clearTimeout(curtainTimerRef.current)
-      curtainTimerRef.current = null
+    if (revealTimerRef.current !== null) {
+      window.clearTimeout(revealTimerRef.current)
+      revealTimerRef.current = null
     }
   }, [])
+
+  const beginReveal = useCallback(() => {
+    if (revealStartedRef.current) return
+    revealStartedRef.current = true
+    clearTimers()
+    setPhase('revealing')
+  }, [clearTimers])
 
   const beginCurtain = useCallback(() => {
     if (advancedRef.current) return
@@ -43,29 +54,41 @@ export default function HomeVideoHero({ embedSrc }: { embedSrc: string }) {
     window.setTimeout(() => {
       setLogoVisible(false)
       setPhase('curtain')
+      if (mobile) {
+        setLoadVideo(true)
+        videoLoadStartRef.current = Date.now()
+        revealTimerRef.current = window.setTimeout(beginReveal, MOBILE_PLAY_WAIT_MS)
+      } else {
+        revealTimerRef.current = window.setTimeout(beginReveal, CURTAIN_MS)
+      }
     }, LOGO_FADE_MS)
-
-    curtainTimerRef.current = window.setTimeout(() => {
-      setPhase('revealing')
-      setVideoRevealed(true)
-    }, LOGO_FADE_MS + CURTAIN_MS)
-  }, [clearTimers])
+  }, [beginReveal, clearTimers, mobile])
 
   const handleVideoPlaying = useCallback(() => {
-    if (advancedRef.current) return
+    if (!advancedRef.current) {
+      const elapsed = Date.now() - splashStartRef.current
+      const remaining = MIN_SPLASH_MS - elapsed
 
-    const elapsed = Date.now() - splashStartRef.current
-    const remaining = MIN_SPLASH_MS - elapsed
-
-    if (remaining <= 0) {
-      beginCurtain()
+      if (remaining <= 0) {
+        beginCurtain()
+      } else if (splashTimerRef.current === null) {
+        splashTimerRef.current = window.setTimeout(beginCurtain, remaining)
+      }
       return
     }
 
-    if (splashTimerRef.current === null) {
-      splashTimerRef.current = window.setTimeout(beginCurtain, remaining)
+    if (mobile && phase === 'curtain' && !revealStartedRef.current) {
+      if (revealTimerRef.current !== null) {
+        window.clearTimeout(revealTimerRef.current)
+        revealTimerRef.current = null
+      }
+      const loadedAt = videoLoadStartRef.current ?? Date.now()
+      const sinceLoad = Date.now() - loadedAt
+      const minAfterLoad = 400
+      const wait = Math.max(0, minAfterLoad - sinceLoad)
+      revealTimerRef.current = window.setTimeout(beginReveal, wait)
     }
-  }, [beginCurtain])
+  }, [beginCurtain, mobile, phase])
 
   useEffect(() => {
     const maxTimer = window.setTimeout(beginCurtain, MAX_SPLASH_MS)
@@ -87,7 +110,7 @@ export default function HomeVideoHero({ embedSrc }: { embedSrc: string }) {
         <HeroYoutubeBackground
           embedSrc={embedSrc}
           title="Background video"
-          revealed={videoRevealed}
+          shouldLoad={loadVideo}
           onPlaying={handleVideoPlaying}
         />
         <div className="video-overlay" />
