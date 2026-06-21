@@ -80,27 +80,6 @@ const MayfieldJonesProfile = () => {
           <HeroYoutubeBackground embedSrc={HERO_VIDEO_EMBED_SRC} title="Background video" />
           <div className="video-overlay"></div>
         </div>
-        <div className="litter-spotlight-hero-wrap">
-          <a href="/EzraxPiper" className="litter-spotlight litter-spotlight-hero">
-            <img src="/img/EzraxPiper.jpg" alt="Ezra X Piper litter advertisement" className="litter-spotlight-img" />
-            <div className="litter-spotlight-content">
-              <span className="litter-spotlight-badge">Puppies Here</span>
-              <h2 className="litter-spotlight-title">Ezra × Piper</h2>
-              <p className="litter-spotlight-date">Six puppies · two girls, four boys</p>
-              <span className="litter-spotlight-cta">Litter details &amp; pedigree</span>
-            </div>
-          </a>
-          <p className="litter-spotlight-tiktok">
-            <a
-              href="https://www.tiktok.com/@7sistersgreatdanes"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="litter-spotlight-tiktok-link"
-            >
-              Watch updates on TikTok →
-            </a>
-          </p>
-        </div>
         {/* Scroll indicator */}
         <ScrollIndicator />
       </section>

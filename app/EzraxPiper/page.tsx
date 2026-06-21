@@ -95,22 +95,22 @@ export default function () {
             target="_blank"
             rel="noopener noreferrer"
             className="ad-link"
-            aria-label="Watch Ezra x Piper puppy videos on TikTok"
+            aria-label="Follow 7Sisters Great Danes on TikTok"
           >
             <img src="/img/EzraxPiper.jpg" alt="Ezra X Piper litter advertisement" className="ad-image" loading="eager" />
           </a>
           <p className="ad-caption">
-            We&apos;re sharing clips of this litter on{' '}
-            <a href={TIKTOK_URL} target="_blank" rel="noopener noreferrer" className="cta-link">
-              TikTok
-            </a>
-            . Scroll down for litter details, parents, and the pedigree explorer.
+            Scroll down for litter details, parents, and the pedigree explorer.
           </p>
         </section>
         <section className="litter-info-section">
           <div className="litter-details">
             <h2 className="section-title">Litter Information</h2>
             <div className="info-grid">
+              <div className="info-item">
+                <span className="label">Litter Number:</span>
+                <span className="value">WS889639</span>
+              </div>
               <div className="info-item">
                 <span className="label">Puppies:</span>
                 <span className="value">Six total — two girls, four boys</span>
@@ -177,23 +177,55 @@ export default function () {
         </section>
         <section className="offspring-section">
           <h2 className="section-title">Offspring</h2>
-          <p className="coming-soon-message">
-            Individual puppy pages and registrations will be added when we catch our breath. For now, follow along on{' '}
-            <a href={TIKTOK_URL} target="_blank" rel="noopener noreferrer" className="cta-link">
-              TikTok
-            </a>{' '}
-            for photos and video. Interested in this litter or a future one?{' '}
-            <a href="/contact" className="cta-link">
-              Contact us
-            </a>
-            .
-          </p>
+          <div className="puppies-list">
+            <div className="puppy-card">
+              <p className="puppy-reg">WS88963901</p>
+              <p className="puppy-name">
+                Name pending <span className="call-name">&quot;Glen&quot;</span>
+              </p>
+            </div>
+            <div className="puppy-card">
+              <p className="puppy-reg">WS88963902</p>
+              <p className="puppy-name">
+                <span className="brand-number">7</span>Sisters Come Fly With Bea{' '}
+                <span className="call-name">&quot;Beatrice&quot;</span>
+              </p>
+            </div>
+            <div className="puppy-card">
+              <p className="puppy-reg">WS88963903</p>
+              <p className="puppy-name">
+                <span className="brand-number">7</span>Sisters N Legado&apos;s Judge&apos;s Choice{' '}
+                <span className="call-name">&quot;Elliot&quot;</span>
+              </p>
+            </div>
+            <div className="puppy-card">
+              <p className="puppy-reg">WS88963904</p>
+              <p className="puppy-name">
+                <span className="brand-number">7</span>Sisters N Legado&apos;s Odie Just Wants To Have Fun{' '}
+                <span className="call-name">&quot;Odie&quot;</span>
+              </p>
+            </div>
+            <div className="puppy-card">
+              <p className="puppy-reg">WS88963905</p>
+              <p className="puppy-name">
+                <span className="brand-number">7</span>Sisters N Legado&apos;s Stop Sign What Stop Sign{' '}
+                <span className="call-name">&quot;Buford&quot;</span>
+              </p>
+            </div>
+            <div className="puppy-card">
+              <p className="puppy-reg">WS88963906</p>
+              <p className="puppy-name">
+                <span className="brand-number">7</span>Sisters N Legado&apos;s She&apos;s All That{' '}
+                <span className="call-name">&quot;Vogue&quot;</span>
+              </p>
+            </div>
+          </div>
         </section>
       </main>
       <style
         dangerouslySetInnerHTML={{
           __html:
-            ' :root { --primary-color: #bf141c; --text-color: #000000; --background-color: #ffffff; --card-bg-color: #f8f8f8; --border-color: #e0e0e0; --spacing-unit: 1rem; --font-family: Arial, sans-serif; --transition-speed: 0.3s; } .content-wrapper { max-width: 800px; margin: 0 auto; padding: calc(var(--spacing-unit) * 2); font-family: var(--font-family); line-height: 1.6; color: var(--text-color); background-color: var(--background-color); } .hero-section { text-align: center; margin-bottom: calc(var(--spacing-unit) * 3); } .hero-logo { max-width: 100%; height: auto; } .section-title { font-size: 1.75rem; color: var(--primary-color); margin-bottom: calc(var(--spacing-unit) * 1.5); } .info-grid { display: grid; gap: var(--spacing-unit); margin-bottom: calc(var(--spacing-unit) * 2); } .info-item { display: flex; flex-direction: column; gap: calc(var(--spacing-unit) * 0.5); } .label { font-weight: bold; color: #666; } .parents-info { display: grid; gap: calc(var(--spacing-unit) * 2); margin-bottom: calc(var(--spacing-unit) * 3); } .parent-card { background-color: var(--card-bg-color); padding: calc(var(--spacing-unit) * 1.5); border-radius: 8px; } .parent-title { color: var(--primary-color); margin-bottom: var(--spacing-unit); } .parent-name { font-size: 1.1rem; margin-bottom: calc(var(--spacing-unit) * 0.5); } .registration { color: #666; font-family: monospace; } .pedigree-section { margin-bottom: calc(var(--spacing-unit) * 3); } .pedigree-intro { margin-bottom: calc(var(--spacing-unit) * 1); font-size: 1rem; } .pedigree-link { display: inline-block; color: var(--primary-color); font-weight: bold; text-decoration: none; padding: 8px 16px; border: 2px solid var(--primary-color); border-radius: 8px; transition: all 0.2s ease; } .pedigree-link:hover { background-color: var(--primary-color); color: white; } .coming-soon-message { background-color: var(--card-bg-color); padding: calc(var(--spacing-unit) * 1.5); border-radius: 8px; font-size: 1.1rem; } .cta-link { color: var(--primary-color); font-weight: bold; text-decoration: none; } .cta-link:hover { text-decoration: underline; } .advertisement-section { margin-bottom: calc(var(--spacing-unit) * 3); text-align: center; } .ad-image { max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); transition: transform var(--transition-speed) ease; } .ad-link:hover .ad-image { transform: scale(1.02); } .ad-caption { font-size: 0.95rem; color: #555; max-width: 36rem; margin: var(--spacing-unit) auto 0; line-height: 1.5; } .age-calculator { display: flex; flex-direction: column; gap: 0.5rem; } .date-input { padding: 0.5rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px; width: fit-content; } .value { font-size: 1.1rem; color: var(--text-color); } @media (min-width: 768px) { .info-grid { grid-template-columns: repeat(1, 1fr); } .parents-info { grid-template-columns: repeat(2, 1fr); } } @media (max-width: 768px) { .content-wrapper { padding: var(--spacing-unit); } .section-title { font-size: 1.5rem; } } @media print { .parent-card { background-color: transparent; border: 1px solid var(--border-color); } .ad-image { max-width: 400px; } } .ofa-link { color: inherit; text-decoration: underline; transition: color 0.2s ease; } .ofa-link:hover { color: var(--primary-color); } ',
+            ' :root { --primary-color: #bf141c; --text-color: #000000; --background-color: #ffffff; --card-bg-color: #f8f8f8; --border-color: #e0e0e0; --spacing-unit: 1rem; --font-family: Arial, sans-serif; --transition-speed: 0.3s; } .content-wrapper { max-width: 800px; margin: 0 auto; padding: calc(var(--spacing-unit) * 2); font-family: var(--font-family); line-height: 1.6; color: var(--text-color); background-color: var(--background-color); } .hero-section { text-align: center; margin-bottom: calc(var(--spacing-unit) * 3); } .hero-logo { max-width: 100%; height: auto; } .section-title { font-size: 1.75rem; color: var(--primary-color); margin-bottom: calc(var(--spacing-unit) * 1.5); } .info-grid { display: grid; gap: var(--spacing-unit); margin-bottom: calc(var(--spacing-unit) * 2); } .info-item { display: flex; flex-direction: column; gap: calc(var(--spacing-unit) * 0.5); } .label { font-weight: bold; color: #666; } .parents-info { display: grid; gap: calc(var(--spacing-unit) * 2); margin-bottom: calc(var(--spacing-unit) * 3); } .parent-card { background-color: var(--card-bg-color); padding: calc(var(--spacing-unit) * 1.5); border-radius: 8px; } .parent-title { color: var(--primary-color); margin-bottom: var(--spacing-unit); } .parent-name { font-size: 1.1rem; margin-bottom: calc(var(--spacing-unit) * 0.5); } .registration { color: #666; font-family: monospace; } .pedigree-section { margin-bottom: calc(var(--spacing-unit) * 3); } .pedigree-intro { margin-bottom: calc(var(--spacing-unit) * 1); font-size: 1rem; } .pedigree-link { display: inline-block; color: var(--primary-color); font-weight: bold; text-decoration: none; padding: 8px 16px; border: 2px solid var(--primary-color); border-radius: 8px; transition: all 0.2s ease; } .pedigree-link:hover { background-color: var(--primary-color); color: white; } .puppies-list { display: grid; gap: var(--spacing-unit); } .puppy-card { background-color: var(--card-bg-color); padding: calc(var(--spacing-unit) * 1.25); border-radius: 8px; } .puppy-reg { font-family: monospace; color: #666; margin-bottom: calc(var(--spacing-unit) * 0.5); } .brand-number { color: var(--primary-color); } .call-name { font-style: italic; } .cta-link { color: var(--primary-color); font-weight: bold; text-decoration: none; } .cta-link:hover { text-decoration: underline; } .advertisement-section { margin-bottom: calc(var(--spacing-unit) * 3); text-align: center; } .ad-image { max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); transition: transform var(--transition-speed) ease; } .ad-link:hover .ad-image { transform: scale(1.02); } .ad-caption { font-size: 0.95rem; color: #555; max-width: 36rem; margin: var(--spacing-unit) auto 0; line-height: 1.5; } .age-calculator { display: flex; flex-direction: column; gap: 0.5rem; } .date-input { padding: 0.5rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px; width: fit-content; } .value { font-size: 1.1rem; color: var(--text-color); } @media (min-width: 768px) { .info-grid { grid-template-columns: repeat(1, 1fr); } .parents-info { grid-template-columns: repeat(2, 1fr); } } @media (max-width: 768px) { .content-wrapper { padding: var(--spacing-unit); } .section-title { font-size: 1.5rem; } } @media print { .puppy-card, .parent-card { background-color: transparent; border: 1px solid var(--border-color); } .ad-image { max-width: 400px; } } .ofa-link { color: inherit; text-decoration: underline; transition: color 0.2s ease; } .ofa-link:hover { color: var(--primary-color); } ',
         }}
       />
     </div>
