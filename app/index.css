@@ -268,32 +268,7 @@ body:has(.homepage-container) {
 
 .hero-mobile-photo {
   object-fit: cover;
-  object-position: center;
-}
-
-.hero-mobile-cover {
-  position: absolute;
-  inset: 0;
-  z-index: 10;
-  pointer-events: auto;
-  overflow: hidden;
-}
-
-.hero-mobile-cover .hero-mobile-photo {
-  object-fit: cover;
-  object-position: center;
-}
-
-.hero-tap-to-play {
-  position: absolute;
-  inset: 0;
-  z-index: 11;
-  border: 0;
-  padding: 0;
-  margin: 0;
-  background: transparent;
-  cursor: pointer;
-  touch-action: manipulation;
+  object-position: center 40%;
 }
 
 /* On mobile, adjust video to fill better and reduce black space */
