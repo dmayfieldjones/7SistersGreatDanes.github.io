@@ -5,8 +5,8 @@ import { useEffect, useState } from 'react'
 const MOBILE_MQ = '(max-width: 768px)'
 
 /**
- * Defers mounting the YouTube iframe briefly so the first paint (logo card, layout)
- * isn’t competing with the embed on mobile. Short delay on desktop for the same reason.
+ * Defers mounting the YouTube iframe briefly so the first paint isn’t competing
+ * with the embed on mobile. Same pattern as before today’s homepage experiments.
  */
 export default function HeroYoutubeBackground({
   embedSrc,

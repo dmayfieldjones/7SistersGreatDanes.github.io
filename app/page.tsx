@@ -81,20 +81,6 @@ const MayfieldJonesProfile = () => {
           <div className="video-overlay"></div>
         </div>
         <div className="video-bottom-mask" aria-hidden />
-        <div className="litter-spotlight-hero-wrap litter-spotlight-hero-wrap--logo">
-          <div className="litter-spotlight litter-spotlight-hero litter-spotlight-logo">
-            <img
-              src="/img/Colorlogo_nobackground.png"
-              alt="7Sisters Farm"
-              width={300}
-              height="auto"
-              className="litter-spotlight-logo-img"
-              loading="eager"
-              fetchPriority="high"
-            />
-          </div>
-        </div>
-        {/* Scroll indicator */}
         <ScrollIndicator />
       </section>
       

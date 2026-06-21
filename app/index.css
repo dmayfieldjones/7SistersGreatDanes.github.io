@@ -622,48 +622,6 @@ body:has(.homepage-container) {
   background: rgba(255, 255, 255, 0.98);
 }
 
-.litter-spotlight-hero-wrap--logo {
-  top: calc(0.75rem + env(safe-area-inset-top, 0px));
-  transform: translateX(-50%);
-  max-width: 280px;
-}
-
-.litter-spotlight-logo {
-  padding: 1rem 1.25rem;
-  background: #ffffff;
-  text-align: center;
-  pointer-events: none;
-  cursor: default;
-}
-
-.litter-spotlight-logo:hover {
-  transform: none;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
-}
-
-.litter-spotlight-logo-img {
-  display: block;
-  width: 100%;
-  max-width: 200px;
-  height: auto;
-  margin: 0 auto;
-}
-
-@media (max-width: 768px) {
-  .litter-spotlight-hero-wrap--logo {
-    top: calc(0.5rem + env(safe-area-inset-top, 0px));
-    max-width: min(260px, calc(100% - 2rem));
-  }
-
-  .litter-spotlight-logo {
-    padding: 0.85rem 1rem;
-  }
-
-  .litter-spotlight-logo-img {
-    max-width: 180px;
-  }
-}
-
 .litter-spotlight:hover {
   transform: scale(1.02);
   box-shadow: 0 6px 24px rgba(191, 20, 28, 0.25);
