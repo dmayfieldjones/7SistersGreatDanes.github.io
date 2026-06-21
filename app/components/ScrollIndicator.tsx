@@ -2,17 +2,18 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-export default function ScrollIndicator() {
+export default function ScrollIndicator({ onInteract }: { onInteract?: () => void }) {
   const rootRef = useRef<HTMLDivElement>(null)
   const [heroVisible, setHeroVisible] = useState(true)
 
   const handleScroll = useCallback(() => {
+    onInteract?.()
     const hero = document.querySelector('.video-hero-section')
     const y = hero
       ? hero.getBoundingClientRect().height + window.scrollY
       : window.innerHeight
     window.scrollTo({ top: y, behavior: 'smooth' })
-  }, [])
+  }, [onInteract])
 
   useEffect(() => {
     const el = rootRef.current?.closest('.video-hero-section')
@@ -35,6 +36,7 @@ export default function ScrollIndicator() {
     <div
       ref={rootRef}
       className={`scroll-indicator${heroVisible ? '' : ' scroll-indicator--hero-out'}`}
+      onTouchStart={() => onInteract?.()}
       onClick={handleScroll}
       role="button"
       aria-label="Scroll down for more about 7Sisters"

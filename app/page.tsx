@@ -1,12 +1,11 @@
 import React from 'react'
 import { Metadata } from 'next'
 import AnimatedContent from './components/AnimatedContent'
-import HeroYoutubeBackground from './components/HeroYoutubeBackground'
-import ScrollIndicator from './components/ScrollIndicator'
+import HomeVideoHero from './components/HomeVideoHero'
 import ScrollActivator from './components/ScrollActivator'
 
 const HERO_VIDEO_EMBED_SRC =
-  'https://www.youtube.com/embed/M14l3BrfXhA?autoplay=1&mute=1&loop=1&playlist=M14l3BrfXhA&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&fs=0&cc_load_policy=0&disablekb=1&enablejsapi=0&origin=https://7sistersgreatdanes.com'
+  'https://www.youtube.com/embed/M14l3BrfXhA?autoplay=1&mute=1&playsinline=1&loop=1&playlist=M14l3BrfXhA&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&fs=0&cc_load_policy=0&disablekb=1&enablejsapi=1'
 
 export const metadata: Metadata = {
   title: 'Illinois Great Dane Breeders | 7Sisters Farm - Central Illinois',
@@ -75,14 +74,7 @@ const MayfieldJonesProfile = () => {
       <ScrollActivator />
       <div className="homepage-container" style={{ overflowY: 'visible', touchAction: 'pan-y' }}>
       {/* Full-screen video section */}
-      <section className="video-hero-section">
-        <div className="video-background">
-          <HeroYoutubeBackground embedSrc={HERO_VIDEO_EMBED_SRC} title="Background video" />
-          <div className="video-overlay"></div>
-        </div>
-        <div className="video-bottom-mask" aria-hidden />
-        <ScrollIndicator />
-      </section>
+      <HomeVideoHero embedSrc={HERO_VIDEO_EMBED_SRC} />
       
       {/* Content section - appears after scrolling with animation */}
       <AnimatedContent sectionClassName="home-below-hero">
