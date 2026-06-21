@@ -257,110 +257,12 @@ body:has(.homepage-container) {
   will-change: transform;
 }
 
-/* Black curtain covers the iframe during intro — iframe stays visible to the browser for mobile autoplay. */
+/* Fills the same box as the iframe before the embed mounts (deferred load). */
 .video-iframe.video-iframe-placeholder {
   background: #0a0a0a;
   pointer-events: none;
 }
 
-/* Homepage intro — logo on black, then black curtain, then slow video fade-in */
-.hero-curtain {
-  position: absolute;
-  inset: 0;
-  z-index: 60;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1.5rem;
-  background: #0a0a0a;
-  opacity: 1;
-  pointer-events: none;
-  animation: heroCurtainIn 0.7s ease both;
-  /* Fully opaque — video plays underneath without being hidden from the browser. */
-  isolation: isolate;
-}
-
-.hero-curtain--hiding {
-  animation: none;
-  transition: opacity 1.15s ease;
-  opacity: 0;
-}
-
-.hero-splash-card {
-  width: min(92vw, 420px);
-  padding: 2.25rem 2rem;
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
-  text-align: center;
-  animation: heroCardIn 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
-}
-
-.hero-splash-card--hiding {
-  animation: heroCardOut 0.55s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-
-@keyframes heroCurtainIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes heroCardIn {
-  from {
-    opacity: 0;
-    transform: translateY(18px) scale(0.96);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes heroCardOut {
-  from {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: translateY(-14px) scale(0.95);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero-curtain,
-  .hero-splash-card {
-    animation: none;
-  }
-
-  .hero-curtain--hiding {
-    transition: opacity 0.35s ease;
-  }
-}
-
-.hero-splash-logo {
-  display: block;
-  width: 100%;
-  max-width: 280px;
-  height: auto;
-  margin: 0 auto;
-}
-
-@media (max-width: 768px) {
-  .hero-splash-card {
-    padding: 1.75rem 1.5rem;
-  }
-
-  .hero-splash-logo {
-    max-width: 240px;
-  }
-}
-
-/* Optional: Add a subtle overlay to ensure text readability */
 @media (max-width: 768px) {
   /*
    * 100vh is often taller than the *visible* viewport (browser chrome), so the hero

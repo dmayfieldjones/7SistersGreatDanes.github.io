@@ -13,6 +13,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <LocalBusinessSchema />
+        <link rel="preload" href="/img/Colorlogo_nobackground.png" as="image" type="image/png" />
       </head>
       <body>
         <Navigation />
