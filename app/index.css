@@ -235,12 +235,15 @@ body:has(.homepage-container) {
   will-change: transform;
 }
 
-.video-background iframe {
+.video-background iframe,
+.video-background video,
+.video-background img.hero-mobile-photo {
   pointer-events: none;
   touch-action: none;
 }
 
-.video-iframe {
+.video-iframe,
+.video-native {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -263,6 +266,36 @@ body:has(.homepage-container) {
   pointer-events: none;
 }
 
+.hero-mobile-photo {
+  object-fit: cover;
+  object-position: center;
+}
+
+.hero-mobile-cover {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: auto;
+  overflow: hidden;
+}
+
+.hero-mobile-cover .hero-mobile-photo {
+  object-fit: cover;
+  object-position: center;
+}
+
+.hero-tap-to-play {
+  position: absolute;
+  inset: 0;
+  z-index: 11;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
 /* On mobile, adjust video to fill better and reduce black space */
 @media (max-width: 768px) {
   /*
@@ -276,7 +309,8 @@ body:has(.homepage-container) {
     min-height: 100svh;
   }
 
-  .video-iframe {
+  .video-iframe,
+  .video-native {
     /* Portrait: fill visible height; svh keeps ratio in sync with hero */
     width: calc(100svh * 16 / 9) !important;
     width: calc(100vh * 16 / 9) !important;
@@ -295,7 +329,8 @@ body:has(.homepage-container) {
 
 /* On desktop, make the video wider so it extends beyond content container */
 @media (min-width: 1024px) {
-  .video-iframe {
+  .video-iframe,
+  .video-native {
     width: 120vw; /* 20% wider than viewport */
     height: 67.5vw; /* Maintain 16:9 aspect ratio */
     min-height: 100vh;
@@ -305,7 +340,8 @@ body:has(.homepage-container) {
 
 /* On very wide screens, make it even wider */
 @media (min-width: 1920px) {
-  .video-iframe {
+  .video-iframe,
+  .video-native {
     width: 140vw; /* 40% wider than viewport */
     height: 78.75vw; /* Maintain 16:9 aspect ratio */
     min-height: 100vh;

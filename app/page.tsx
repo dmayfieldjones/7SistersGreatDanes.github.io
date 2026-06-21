@@ -6,6 +6,7 @@ import ScrollActivator from './components/ScrollActivator'
 
 const HERO_VIDEO_EMBED_SRC =
   'https://www.youtube.com/embed/M14l3BrfXhA?autoplay=1&mute=1&playsinline=1&loop=1&playlist=M14l3BrfXhA&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&fs=0&cc_load_policy=0&disablekb=1&enablejsapi=1'
+const HERO_MOBILE_PHOTO = '/img/hero-options/hero-option-40pct.jpg'
 
 export const metadata: Metadata = {
   title: 'Illinois Great Dane Breeders | 7Sisters Farm - Central Illinois',
@@ -74,7 +75,7 @@ const MayfieldJonesProfile = () => {
       <ScrollActivator />
       <div className="homepage-container" style={{ overflowY: 'visible', touchAction: 'pan-y' }}>
       {/* Full-screen video section */}
-      <HomeVideoHero embedSrc={HERO_VIDEO_EMBED_SRC} />
+      <HomeVideoHero embedSrc={HERO_VIDEO_EMBED_SRC} mobilePhotoSrc={HERO_MOBILE_PHOTO} />
       
       {/* Content section - appears after scrolling with animation */}
       <AnimatedContent sectionClassName="home-below-hero">
