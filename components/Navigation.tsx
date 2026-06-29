@@ -17,17 +17,35 @@ export default function Navigation() {
   return (
     <nav className="navbar">
       <div className="navbar-container">
-        <div className="hamburger-icon" onClick={toggleMenu}>
-          <div
+        <button
+          type="button"
+          className="hamburger-icon"
+          onClick={toggleMenu}
+          aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={isMenuOpen}
+        >
+          <span
             className={`hamburger-line ${isMenuOpen ? 'open' : ''}`}
-          ></div>
-          <div
+            aria-hidden="true"
+          />
+          <span
             className={`hamburger-line ${isMenuOpen ? 'open' : ''}`}
-          ></div>
-          <div
+            aria-hidden="true"
+          />
+          <span
             className={`hamburger-line ${isMenuOpen ? 'open' : ''}`}
-          ></div>
-        </div>
+            aria-hidden="true"
+          />
+        </button>
+        <a href="/" className="navbar-logo" aria-label="7Sisters Farm home">
+          <img
+            src="/img/Colorlogo_nobackground.png"
+            alt="7Sisters Farm"
+            className="navbar-logo-img"
+            width={160}
+            height={48}
+          />
+        </a>
       </div>
       <ul className={`navbar-menu ${isMenuOpen ? 'show' : ''}`}>
         <li>

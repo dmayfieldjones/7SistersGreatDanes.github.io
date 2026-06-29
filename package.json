@@ -3,7 +3,7 @@
   "type": "module",
   "scripts": {
     "format": "prettier --write .",
-    "dev": "BROWSER=none next --turbo -p 3007",
+    "dev": "next --turbo -p 3007",
     "build": "next build",
     "preview": "npx --yes serve out --listen 8765",
     "start": "next dev",
