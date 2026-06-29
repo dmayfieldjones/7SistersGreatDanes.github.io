@@ -1,19 +1,19 @@
 1:"$Sreact.fragment"
-3:I[8506,["177","static/chunks/app/layout-1e823b317262caac.js"],"default"]
+3:I[8506,["177","static/chunks/app/layout-5f7ffc9f658c54fd.js"],"default"]
 4:I[5244,[],""]
 5:I[3866,[],""]
-6:I[766,["177","static/chunks/app/layout-1e823b317262caac.js"],"GoogleAnalytics"]
+6:I[766,["177","static/chunks/app/layout-5f7ffc9f658c54fd.js"],"GoogleAnalytics"]
 8:I[6213,[],"OutletBoundary"]
 a:I[6213,[],"MetadataBoundary"]
 c:I[6213,[],"ViewportBoundary"]
 e:I[4835,[],""]
-:HL["/_next/static/css/42084661c0720407.css","style"]
-2:T8ec,{"@context":"https://schema.org","@type":"LocalBusiness","@id":"https://7sistersgreatdanes.com/#business","name":"7Sisters Farm","alternateName":"7Sisters Great Danes","description":"Premier Illinois Great Dane breeders at 7Sisters Farm in Central Illinois. AKC registered Great Danes, health tested, family raised.","url":"https://7sistersgreatdanes.com","email":"dustin@mayfieldjones.com","address":{"@type":"PostalAddress","addressLocality":"Champaign","addressRegion":"IL","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":"40.1164","longitude":"-88.2434"},"areaServed":[{"@type":"State","name":"Illinois"},{"@type":"State","name":"Indiana"},{"@type":"State","name":"Iowa"},{"@type":"State","name":"Missouri"},{"@type":"State","name":"Wisconsin"}],"serviceType":"Great Dane Breeding","priceRange":"$$","paymentAccepted":"Cash, Check","currenciesAccepted":"USD","openingHours":"Mo-Su 09:00-18:00","image":["https://7sistersgreatdanes.com/img/wedding.png","https://7sistersgreatdanes.com/img/2021_5pt_BOW_BOBOH_Waukesha_Mimi_Kim.jpg","https://7sistersgreatdanes.com/img/Colorlogo_nobackground.png"],"logo":"https://7sistersgreatdanes.com/img/Colorlogo_nobackground.png","sameAs":["https://www.tiktok.com/@7sistersgreatdanes"],"founder":[{"@type":"Person","name":"Dustin Mayfield-Jones","jobTitle":"Great Dane Breeder"},{"@type":"Person","name":"Karen Mayfield-Jones","jobTitle":"Great Dane Breeder"}],"keywords":["Illinois Great Dane breeders","Illinois dogs","Illinois breeders","Great Dane breeders Illinois","Central Illinois Great Danes","AKC Great Danes Illinois","Illinois dog breeders","Great Dane puppies Illinois","7Sisters Farm","Champaign Illinois breeders","Urbana Illinois dogs","Illinois Great Dane kennel"],"hasOfferCatalog":{"@type":"OfferCatalog","name":"Great Dane Services","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Product","name":"Great Dane Puppies","description":"AKC registered Great Dane puppies, health tested, family raised"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Great Dane Breeding Consultation","description":"Expert advice on Great Dane breeding, health testing, and care"}}]},"aggregateRating":{"@type":"AggregateRating","ratingValue":"5.0","reviewCount":"1","bestRating":"5","worstRating":"1"}}0:{"P":null,"b":"60AqnPt8TbbUvdJsqRUkO","p":"","c":["","archive"],"i":false,"f":[[["",{"children":["archive",{"children":["__PAGE__",{}]}]},"$undefined","$undefined",true],["",["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/42084661c0720407.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","html",null,{"lang":"en","children":[["$","head",null,{"children":[["$","script",null,{"type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"$2"}}],["$","link",null,{"rel":"preload","href":"/img/Colorlogo_nobackground.png","as":"image","type":"image/png"}]]}],["$","body",null,{"children":[["$","$L3",null,{}],["$","div",null,{"className":"wrapper","children":["$","$L4",null,{"parallelRouterKey":"children","segmentPath":["children"],"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L5",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[[],[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":404}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]]],"forbidden":"$undefined","unauthorized":"$undefined"}]}],["$","$L6",null,{"gaId":"G-SDSX26JETX"}]]}]]}]]}],{"children":["archive",["$","$1","c",{"children":[null,["$","$L4",null,{"parallelRouterKey":"children","segmentPath":["children","archive","children"],"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L5",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["__PAGE__",["$","$1","c",{"children":["$L7",null,["$","$L8",null,{"children":"$L9"}]]}],{},null,false]},null,false]},null,false],["$","$1","h",{"children":[null,["$","$1","lIJfR14rOdL34xoYifLW_",{"children":[["$","$La",null,{"children":"$Lb"}],["$","$Lc",null,{"children":"$Ld"}],null]}]]}],false]],"m":"$undefined","G":["$e","$undefined"],"s":false,"S":true}
+:HL["/_next/static/css/d1405ff71dd3f588.css","style"]
+2:T8ec,{"@context":"https://schema.org","@type":"LocalBusiness","@id":"https://7sistersgreatdanes.com/#business","name":"7Sisters Farm","alternateName":"7Sisters Great Danes","description":"Premier Illinois Great Dane breeders at 7Sisters Farm in Central Illinois. AKC registered Great Danes, health tested, family raised.","url":"https://7sistersgreatdanes.com","email":"dustin@mayfieldjones.com","address":{"@type":"PostalAddress","addressLocality":"Champaign","addressRegion":"IL","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":"40.1164","longitude":"-88.2434"},"areaServed":[{"@type":"State","name":"Illinois"},{"@type":"State","name":"Indiana"},{"@type":"State","name":"Iowa"},{"@type":"State","name":"Missouri"},{"@type":"State","name":"Wisconsin"}],"serviceType":"Great Dane Breeding","priceRange":"$$","paymentAccepted":"Cash, Check","currenciesAccepted":"USD","openingHours":"Mo-Su 09:00-18:00","image":["https://7sistersgreatdanes.com/img/wedding.png","https://7sistersgreatdanes.com/img/2021_5pt_BOW_BOBOH_Waukesha_Mimi_Kim.jpg","https://7sistersgreatdanes.com/img/Colorlogo_nobackground.png"],"logo":"https://7sistersgreatdanes.com/img/Colorlogo_nobackground.png","sameAs":["https://www.tiktok.com/@7sistersgreatdanes"],"founder":[{"@type":"Person","name":"Dustin Mayfield-Jones","jobTitle":"Great Dane Breeder"},{"@type":"Person","name":"Karen Mayfield-Jones","jobTitle":"Great Dane Breeder"}],"keywords":["Illinois Great Dane breeders","Illinois dogs","Illinois breeders","Great Dane breeders Illinois","Central Illinois Great Danes","AKC Great Danes Illinois","Illinois dog breeders","Great Dane puppies Illinois","7Sisters Farm","Champaign Illinois breeders","Urbana Illinois dogs","Illinois Great Dane kennel"],"hasOfferCatalog":{"@type":"OfferCatalog","name":"Great Dane Services","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Product","name":"Great Dane Puppies","description":"AKC registered Great Dane puppies, health tested, family raised"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Great Dane Breeding Consultation","description":"Expert advice on Great Dane breeding, health testing, and care"}}]},"aggregateRating":{"@type":"AggregateRating","ratingValue":"5.0","reviewCount":"1","bestRating":"5","worstRating":"1"}}0:{"P":null,"b":"kmb-Spbw7zT5c3toHTIn7","p":"","c":["","archive"],"i":false,"f":[[["",{"children":["archive",{"children":["__PAGE__",{}]}]},"$undefined","$undefined",true],["",["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/d1405ff71dd3f588.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","html",null,{"lang":"en","children":[["$","head",null,{"children":[["$","script",null,{"type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"$2"}}],["$","link",null,{"rel":"preload","href":"/img/Colorlogo_nobackground.png","as":"image","type":"image/png"}]]}],["$","body",null,{"children":[["$","$L3",null,{}],["$","div",null,{"className":"wrapper","children":["$","$L4",null,{"parallelRouterKey":"children","segmentPath":["children"],"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L5",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[[],[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":404}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]]],"forbidden":"$undefined","unauthorized":"$undefined"}]}],["$","$L6",null,{"gaId":"G-SDSX26JETX"}]]}]]}]]}],{"children":["archive",["$","$1","c",{"children":[null,["$","$L4",null,{"parallelRouterKey":"children","segmentPath":["children","archive","children"],"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L5",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["__PAGE__",["$","$1","c",{"children":["$L7",null,["$","$L8",null,{"children":"$L9"}]]}],{},null,false]},null,false]},null,false],["$","$1","h",{"children":[null,["$","$1","E1kf5EmKiCfYc1FTN80Ii",{"children":[["$","$La",null,{"children":"$Lb"}],["$","$Lc",null,{"children":"$Ld"}],null]}]]}],false]],"m":"$undefined","G":["$e","$undefined"],"s":false,"S":true}
 d:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
 b:[["$","meta","0",{"charSet":"utf-8"}],["$","title","1",{"children":"Great Dane Articles and Insights"}],["$","meta","2",{"name":"description","content":"Comprehensive guides and practical knowledge on Great Dane breeding, care, development, and ownership."}]]
 9:null
-f:I[7544,["173","static/chunks/173-82b82083689cd174.js","635","static/chunks/app/archive/page-1c802f23f4a7e434.js"],"default"]
-10:T590d,
+f:I[7544,["173","static/chunks/173-1e5ee2c9f827b148.js","635","static/chunks/app/archive/page-2d297a07f61db430.js"],"default"]
+10:T59ae,
 [← Back to Blog Archive](/archive)
 
 *A sequel to [The Deep History of Dogs: A Story Written in Ancient DNA](/posts/2025-10-01-the-deep-history-of-dogs-ancient-dna).*
@@ -174,7 +174,7 @@ Bergström, A., et al. (2022). Grey wolf genomic history reveals a dual ancestry
 Posth, C., et al. (2023). Palaeogenomics of upper Palaeolithic to neolithic European hunter-gatherers. *Nature*, 615, 117–126. [DOI: 10.1038/s41586-023-05726-0](https://doi.org/10.1038/s41586-023-05726-0)
 
 Charlton, S., et al. (2022). Dual ancestries and ecologies of the Late Glacial Palaeolithic in Britain. *Nature Ecology & Evolution*, 6, 1658–1668. [DOI: 10.1038/s41559-022-01883-z](https://doi.org/10.1038/s41559-022-01883-z)
-11:T4907,
+11:T498a,
 [← Back to Blog Archive](/archive)
 
 ## Why Your Dog's Genetics Matter More Than You Think
@@ -305,7 +305,7 @@ Callaway, E. (2020). Ancient dog DNA reveals 11,000 years of canine evolution. *
 **Suggested Reading:**
 
 Shipman, P. (2021). *Our Oldest Companions: The Story of the First Dogs*. Harvard University Press.
-12:T34d1,
+12:T3531,
 [← Back to Blog Archive](/archive)
 
 Breed histories trace the Dane to boar hunting in the Germanic states: dogs built for mass and steady nerve, willing to engage an animal that could seriously injure or kill them. The standard narrative is almost certainly neater than the record allows; what holds from generation to generation is that temperament stayed central as the breed’s role narrowed from hunting to guardianship to the companion dog of today. Breeders pursued that goal with observation, judgment, and a long institutional memory for what a sound animal ought to be — not with behavioral questionnaires or standardized tests, because no such instruments existed for them to use.
@@ -401,7 +401,7 @@ Thomas, C. Quoted in ["Great Dane History: The Apollo of Dogs."](https://www.akc
 - Darwin's Ark: [darwinsark.org](https://darwinsark.org/darwins-dogs)
 - UKC SPOT Program: [ukcdogs.com](https://www.ukcdogs.com/spot-participants)
 - ATTS Temperament Test: [atts.org](https://atts.org/tt-test-description/)
-13:T7c79,
+13:T7eea,
 [← Back to Blog Archive](/archive)
 
 
@@ -1026,7 +1026,7 @@ To learn more about our approach to Great Dane breeding and our current litters,
 
 • **The Dog Cancer Survival Guide** by Demian Dressler, DVM & Susan Ettinger, DVM (2011) — Nutrition, supplements, and holistic care for long-term health, not just for cancer.
 
-14:T5402,
+14:T555a,
 [← Back to Blog Archive](/archive)
 
 
@@ -1370,7 +1370,7 @@ The Association of American Feed Control Officials (AAFCO) sets ingredient and s
 Comprehensive educational resources for breeders and puppy owners, including films, courses, and training materials focused on modern puppy rearing and behavioral development.  
 [https://shoppuppyculture.com/](https://shoppuppyculture.com/)
 
-</details> 15:T55c1,
+</details> 15:T5788,
 [← Back to Blog Archive](/archive)
 
 
@@ -1825,7 +1825,7 @@ To learn more about our approach to Great Dane breeding and our current litters,
 </details>
 
 Curious about what to expect after bringing your puppy home? Read our [first year with a Great Dane guide](/posts/2025-07-03-the-first-year).
-16:T2252,
+16:T22af,
 [← Back to Blog Archive](/archive)
 
 Our breeding program is built on exceptional mentors, exceptional dogs on both sides of every pedigree, and the research to back it up. This is how we laid that foundation.
@@ -1918,7 +1918,7 @@ To learn more about our dogs or our current plans, visit [7Sisters Farm](/7Siste
 - Lorraine Matherly of Great Danes of Lore. [loredane.com](https://loredane.com/bitches/scout/)
 - Jessica Lanae Powers of IZYA Danes. [izyadanes.com](https://izyadanes.com/male-danes/)
 - American Kennel Club. "Titles and Abbreviations." [akc.org](https://www.akc.org/sports/titles-and-abbreviations/)
-17:T26e5,
+17:T2752,
 [← Back to Blog Archive](/archive)
 
 
