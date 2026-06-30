@@ -38,19 +38,23 @@ export default function Navigation() {
           />
         </button>
         <a href="/" className="navbar-logo" aria-label="7Sisters Farm home">
-          <img
-            src="/img/Colorlogo_nobackground.png"
-            alt="7Sisters Farm"
-            className="navbar-logo-img"
-            width={160}
-            height={48}
-          />
+          <span className="navbar-logo-flip">
+            <span className="navbar-logo-face navbar-logo-front">
+              <img
+                src="/img/Colorlogo_nobackground.png"
+                alt=""
+                className="navbar-logo-img"
+                width={160}
+                height={48}
+              />
+            </span>
+            <span className="navbar-logo-face navbar-logo-back" aria-hidden="true">
+              Home
+            </span>
+          </span>
         </a>
       </div>
       <ul className={`navbar-menu ${isMenuOpen ? 'show' : ''}`}>
-        <li>
-          <a href="/">Home</a>
-        </li>
         <li className="nav-item-with-submenu">
           <button
             className={`nav-button ${openSubmenu === 'about' ? 'expanded' : ''}`}

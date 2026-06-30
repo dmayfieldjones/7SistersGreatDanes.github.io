@@ -65,15 +65,62 @@ nav ul li a:hover {
   align-items: center;
   flex: 1;
   min-width: 0;
-  padding: 4px 8px;
+  padding: 4px 10px;
   background: rgba(255, 255, 255, 0.96);
   border-radius: 6px;
   text-decoration: none;
   transition: background-color 0.2s ease;
+  perspective: 640px;
 }
 
 .navbar-logo:hover {
   background: #fff;
+}
+
+.navbar-logo-flip {
+  position: relative;
+  display: block;
+  height: 36px;
+  min-width: 128px;
+  transform-style: preserve-3d;
+  transition: transform 0.45s ease;
+}
+
+.navbar-logo-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.navbar-logo-back {
+  transform: rotateY(180deg);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+  color: #bf141c;
+  font-family: Arial, sans-serif;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .navbar-logo:hover .navbar-logo-flip,
+  .navbar-logo:focus-visible .navbar-logo-flip {
+    transform: rotateY(180deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navbar-logo-flip {
+    transition: none;
+  }
+
+  .navbar-logo:hover .navbar-logo-flip,
+  .navbar-logo:focus-visible .navbar-logo-flip {
+    transform: none;
+  }
 }
 
 .navbar-logo-img {
@@ -230,6 +277,11 @@ nav ul li a:hover {
 
   .navbar-logo-img {
     height: 42px;
+  }
+
+  .navbar-logo-flip {
+    height: 42px;
+    min-width: 148px;
   }
 
   .navbar-menu {
