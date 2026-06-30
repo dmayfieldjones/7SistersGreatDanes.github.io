@@ -750,6 +750,17 @@ body:has(.homepage-container) {
   display: block;
 }
 
+.home-tagline {
+  margin: 0 auto 1.25rem;
+  max-width: 28rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  font-style: italic;
+  line-height: 1.45;
+  color: #bf141c;
+  text-align: center;
+}
+
 .home-intro-text {
   text-align: left;
   margin: 0 auto 1.75rem;

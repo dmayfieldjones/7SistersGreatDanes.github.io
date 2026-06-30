@@ -1,3 +1,5 @@
+import { SITE_MOTTO } from '@/lib/site'
+
 export default function LocalBusinessSchema() {
   const schema = {
     "@context": "https://schema.org",
@@ -5,6 +7,7 @@ export default function LocalBusinessSchema() {
     "@id": "https://7sistersgreatdanes.com/#business",
     "name": "7Sisters Farm",
     "alternateName": "7Sisters Great Danes",
+    "slogan": SITE_MOTTO,
     "description": "Premier Illinois Great Dane breeders at 7Sisters Farm in Central Illinois. AKC registered Great Danes, health tested, family raised.",
     "url": "https://7sistersgreatdanes.com",
     "email": "dustin@mayfieldjones.com",

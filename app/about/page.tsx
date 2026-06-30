@@ -131,7 +131,7 @@ export default function Contents() {
                 {karenExpanded && (
                   <>
                     <p className="expertise-text">
-                      Those early experiences with dachshund breeding and veterinary work shaped my understanding of responsible breeding practices. My legal background ensures ethical, transparent practices with comprehensive contracts that protect both families and our dogs—covering health guarantees, breeding rights, and ongoing support.
+                      Those early experiences with dachshund breeding and veterinary work shaped my understanding of responsible breeding practices. My legal background ensures responsible, transparent practices with comprehensive contracts that protect both families and our dogs—covering health guarantees, breeding rights, and ongoing support.
                     </p>
                     <p className="expertise-text">
                       I've dedicated over 20 years to Blood Cancer United, where I learned that meaningful change comes through sustained commitment and attention to detail. This same approach drives my commitment to responsible breeding and lifelong support for the families who choose our Great Danes.

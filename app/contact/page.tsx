@@ -35,6 +35,11 @@ export default function Contact() {
         <h1>Contact Us</h1>
         <p style={{ textAlign: 'center', marginTop: '1rem', color: '#666' }}>
           Interested in one of our Great Danes? Please complete the form below.
+          New here? Read our{' '}
+          <a href="/PlacementProcess" style={{ color: '#bf141c', fontWeight: 500 }}>
+            placement process
+          </a>{' '}
+          first to see how matching works.
         </p>
       </div>
       <main className="content-wrapper">

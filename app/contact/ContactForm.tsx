@@ -288,6 +288,9 @@ export default function ContactForm() {
         <div className="part1-success">
           <h2>Thank you for your interest!</h2>
           <p>We've received your inquiry and will review your information. We'll be in touch soon to discuss next steps.</p>
+          <p>
+            <a href="/PlacementProcess">Read our placement process</a> to see what happens next.
+          </p>
           <p className="skip-note" style={{ marginTop: '1.5rem' }}>
             <a href="/">Return to homepage</a>
           </p>

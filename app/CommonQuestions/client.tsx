@@ -1,6 +1,7 @@
 'use client'
 import './index.css'
 import { useState } from 'react'
+import { SITE_FLAT_PUPPY_PRICING } from '@/lib/site'
 
 export default function ClientComponent() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null)
@@ -10,6 +11,11 @@ export default function ClientComponent() {
   }
   
   const questions = [
+    {
+      id: 'placement-process',
+      question: 'How does your puppy placement process work?',
+      answer: `We match puppies to homes based on fit — not first-come, first-served. Start with our brief <a href="/contact">contact form</a> or an email; if your inquiry looks promising, we follow up with a detailed application. From there come conversation (and ideally a visit), puppy matching around 6–8 weeks, and a customized contract when we agree on a match. See our full <a href="/PlacementProcess">placement process page</a> for each step, what we look for in a home, and what happens after go-home.`
+    },
     {
       id: 'puppy-timing',
       question: 'When can we take our puppy home?',
@@ -36,6 +42,11 @@ export default function ClientComponent() {
         of microchipped dogs have been found to not be registered), AKC
         registration (to ensure it is done correctly and timely), introduction
         to crate-leash-potty training, and ear cropping if desired.`
+    },
+    {
+      id: 'puppy-pricing',
+      question: 'Do show puppies cost more than companions?',
+      answer: SITE_FLAT_PUPPY_PRICING,
     },
     {
       id: 'customized-contracts',

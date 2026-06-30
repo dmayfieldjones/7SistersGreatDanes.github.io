@@ -17,7 +17,7 @@ Three years ago in 2022, my spouse Karen and I walked into our first Illini Grea
 - The Illini Great Dane Club is built on education, mentorship, and community—not just competition.
 - Responsible breeders are deeply involved in ongoing learning and service, not just producing puppies.
 - Choosing a Great Dane from a breeder with this philosophy means joining a supportive, knowledgeable community.
-- The club's founders and members prioritize breed preservation, ethical breeding, and lifelong support for families.
+- The club's founders and members prioritize breed preservation, responsible breeding, and lifelong support for families.
 - Community events, educational programs, and mentorship are central to the club's mission.
 
 </details>

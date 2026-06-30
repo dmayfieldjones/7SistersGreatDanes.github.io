@@ -80,6 +80,7 @@ export default function Navigation() {
           <ul className={`submenu ${openSubmenu === 'great-danes' ? 'show' : ''}`}>
             <li><a href="/7Sisters">Our Great Danes</a></li>
             <li><a href="/Litters">Puppies & Litters</a></li>
+            <li><a href="/PlacementProcess">Placement Process</a></li>
             <li><a href="/BreedingPhilosophy">Breeding Philosophy</a></li>
           </ul>
         </li>

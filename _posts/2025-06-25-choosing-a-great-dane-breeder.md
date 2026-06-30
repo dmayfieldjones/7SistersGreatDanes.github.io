@@ -1,7 +1,7 @@
 ---
-title: "How to Find Ethical Great Dane Breeders: Complete Guide to Responsible Breeder Selection"
+title: "How to Find Responsible Great Dane Breeders: Complete Guide to Breeder Selection"
 date: 2025-06-25
-description: "Complete guide to finding ethical Great Dane breeders. Learn what questions to ask, health testing requirements, and how to identify responsible breeders vs puppy mills."
+description: "Complete guide to finding responsible Great Dane breeders. Learn what questions to ask, health testing requirements, and how to identify quality breeders vs puppy mills."
 ---
 
 [← Back to Blog Archive](/archive)

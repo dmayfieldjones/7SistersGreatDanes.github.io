@@ -4,7 +4,7 @@ import ImagePreloader from './ImagePreloader'
 export const metadata: Metadata = {
   title: 'Great Dane Puppies & Litters | Available & Previous Litters | 7Sisters Farm',
   description:
-    'View our Great Dane puppies and litters. Health-tested parents, ethical breeding practices, and lifetime support. Located in Central Illinois.',
+    'View our Great Dane puppies and litters. Health-tested parents, responsible breeding practices, and lifetime support. Located in Central Illinois.',
   keywords: [
     'Great Dane puppies',
     'Great Dane litters',
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     'Illinois Great Dane puppies',
     'available Great Dane puppies',
     'Great Dane puppies Illinois',
-    'ethical Great Dane breeders',
+    'responsible Great Dane breeders',
     'health tested Great Dane puppies',
     'Central Illinois Great Dane puppies',
     'Champaign Great Dane puppies',
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: 'Great Dane Puppies & Litters | Available & Previous Litters | 7Sisters Farm',
-    description: 'View our Great Dane puppies and litters. Health-tested parents, ethical breeding practices, and lifetime support.',
+    description: 'View our Great Dane puppies and litters. Health-tested parents, responsible breeding practices, and lifetime support.',
     type: 'website',
     url: 'https://7sistersgreatdanes.com/Litters',
     siteName: '7Sisters Farm',
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Great Dane Puppies & Litters | Available & Previous Litters | 7Sisters Farm',
-    description: 'View our Great Dane puppies and litters. Health-tested parents, ethical breeding practices, and lifetime support.',
+    description: 'View our Great Dane puppies and litters. Health-tested parents, responsible breeding practices, and lifetime support.',
     images: ['https://7sistersgreatdanes.com/img/EzraxPiper.jpg'],
   },
   alternates: {
@@ -119,7 +119,7 @@ export default function () {
             <span className="accent-color">7</span>Sisters Upcoming Litters
           </h2>
           <p className="section-description">
-            <a href="/contact">Contact us</a> to learn about future litters and placement.
+            <a href="/contact">Contact us</a> about placement and upcoming litters.
           </p>
         </section>
         
@@ -283,7 +283,11 @@ export default function () {
               <a href="/contact" className="cta-link">
                 Contact us today
               </a>{' '}
-              to learn more about our upcoming litters and placement process.
+              or read our{' '}
+              <a href="/PlacementProcess" className="cta-link">
+                placement process
+              </a>{' '}
+              to learn how matching works at 7Sisters.
             </p>
             <p className="tiktok-note">
               Follow our puppy success stories on{' '}

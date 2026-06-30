@@ -2,6 +2,7 @@ import './index.css'
 
 import { Metadata } from 'next'
 import ClientComponent from './client'
+import { SITE_FLAT_PUPPY_PRICING } from '@/lib/site'
 
 export const metadata: Metadata = {
   title: 'Great Dane Breeder FAQ: Common Questions About Health Testing, Contracts & More',
@@ -38,6 +39,10 @@ const faqData = [
   {
     question: 'What value does our purchase include?',
     answer: 'Lifetime breeder support and education on the litter (i.g. health testing, pedigree, and our reasoning for parental selection), modified Puppy Culture socialization and training, age-appropriate vaccines, deworming, vet exams, health guarantee, microchipping and importantly microchip registration (greater than 40% of microchipped dogs have been found to not be registered), AKC registration (to ensure it is done correctly and timely), introduction to crate-leash-potty training, and ear cropping if desired.'
+  },
+  {
+    question: 'Do show puppies cost more than companions?',
+    answer: SITE_FLAT_PUPPY_PRICING,
   },
   {
     question: 'Why are your contracts customized?',
