@@ -224,20 +224,6 @@ export default function () {
             </a>
           </p>
         </section>
-        {/* Social Media Section */}
-        <section className="social-media-section">
-          <div className="text-center">
-            <p>
-              <span className="text-red-600">7</span>Sisters Social Media
-            </p>
-            <iframe
-              src="https://www.tiktok.com/embed/@7sistersgreatdanes"
-              className="w-full max-w-md mx-auto"
-              height="458"
-              title="7 Sisters Great Danes TikTok"
-            />
-          </div>
-        </section>
       </main>
     </div>
   )

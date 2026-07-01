@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import ImagePreloader from './ImagePreloader'
+import TikTokSection from '../components/TikTokSection'
 
 export const metadata: Metadata = {
   title: 'Great Dane Puppies & Litters | Available & Previous Litters | 7Sisters Farm',
@@ -289,20 +290,10 @@ export default function () {
               </a>{' '}
               to learn how matching works at 7Sisters.
             </p>
-            <p className="tiktok-note">
-              Follow our puppy success stories on{' '}
-              <a 
-                href="https://www.tiktok.com/@7sistersgreatdanes" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="tiktok-link"
-              >
-                TikTok
-              </a>{' '}
-              - see how our puppies like Captain are thriving in their forever homes!
-            </p>
           </div>
         </section>
+
+        <TikTokSection />
       </main>
       <style
         dangerouslySetInnerHTML={{

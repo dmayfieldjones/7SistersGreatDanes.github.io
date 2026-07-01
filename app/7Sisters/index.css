@@ -61,9 +61,6 @@
 .history-section {
   margin-bottom: calc(var(--spacing-unit) * 3);
 }
-.social-media-section {
-  margin-top: calc(var(--spacing-unit) * 3);
-}
 .hr-line {
   border: 0;
   height: 1px;

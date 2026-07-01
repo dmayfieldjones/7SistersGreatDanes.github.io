@@ -3,7 +3,7 @@ import { Metadata } from 'next'
 import AnimatedContent from './components/AnimatedContent'
 import HomeVideoHero from './components/HomeVideoHero'
 import ScrollActivator from './components/ScrollActivator'
-import { SITE_MOTTO } from '@/lib/site'
+import TikTokSection from './components/TikTokSection'
 
 const HERO_VIDEO_EMBED_SRC =
   'https://www.youtube.com/embed/M14l3BrfXhA?autoplay=1&mute=1&playsinline=1&loop=1&playlist=M14l3BrfXhA&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&fs=0&cc_load_policy=0&disablekb=1&enablejsapi=1'
@@ -90,8 +90,6 @@ const MayfieldJonesProfile = () => {
             loading="lazy"
           />
 
-          <p className="home-tagline">{SITE_MOTTO}</p>
-
           <p className="home-intro-text">
             We&apos;re <strong>Dustin and Karen Mayfield-Jones</strong>, breeders of Champion Great
             Danes at <span className="text-red-600 font-semibold">7</span>Sisters Farm in Central
@@ -112,6 +110,8 @@ const MayfieldJonesProfile = () => {
             </a>
           </div>
         </div>
+
+        <TikTokSection />
       </AnimatedContent>
     </div>
     </>

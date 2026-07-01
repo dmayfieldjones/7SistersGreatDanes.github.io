@@ -740,25 +740,73 @@ body:has(.homepage-container) {
 /* Homepage below hero: don’t force full viewport height */
 .content-section.home-below-hero {
   min-height: auto;
-  align-items: flex-start;
+  align-items: center;
+  flex-direction: column;
   padding-top: 3rem;
   padding-bottom: 4rem;
 }
 
-.home-intro-logo {
-  margin: 0 auto 1.25rem;
-  display: block;
+.home-below-hero > .site-tiktok-section {
+  margin-top: 1.25rem;
+  padding-top: 0;
+  border-top: none;
+  width: 100%;
+  max-width: 44rem;
 }
 
-.home-tagline {
-  margin: 0 auto 1.25rem;
+.home-below-hero > .site-tiktok-section .site-tiktok-embed-wrap {
+  max-width: none;
+}
+
+@media (min-width: 768px) {
+  .home-below-hero > .site-tiktok-section .site-tiktok-embed {
+    height: 520px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .home-below-hero > .site-tiktok-section {
+    max-width: 46rem;
+  }
+
+  .home-below-hero > .site-tiktok-section .site-tiktok-embed {
+    height: 540px;
+  }
+}
+
+.site-tiktok-section {
+  margin-top: 2rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.site-tiktok-embed-wrap {
+  width: 100%;
   max-width: 28rem;
-  font-size: 1.125rem;
-  font-weight: 600;
-  font-style: italic;
-  line-height: 1.45;
-  color: #bf141c;
-  text-align: center;
+  line-height: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.site-tiktok-embed {
+  display: block;
+  width: 100%;
+  height: 458px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: #000;
+  vertical-align: top;
+}
+
+.home-intro-logo {
+  margin: 0 auto 1.5rem;
+  display: block;
 }
 
 .home-intro-text {
