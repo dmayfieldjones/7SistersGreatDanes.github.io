@@ -64,7 +64,9 @@ COI doesn't tell you whether a breeding is a good idea — the dogs themselves t
 
 **Pedigree depth:** Great Danes are bred in a long-closed registry with a finite pool of ancestors. A deeper pedigree can surface the same dog behind both sire and dam in ways a shallow chart never names—you simply didn't have those generations on paper yet. The breeding isn't suddenly "more inbred" because you typed farther back; the ties were always possible in a closed gene pool. Pedigree COI only adds what the pedigree includes, so **the number you get can go up as you extend the chart**, even though the dogs themselves didn't change.
 
-**How it's calculated:** Odds are you're not someone who breaks out equations for fun. But calculating a COI from a pedigree is a rite of passage for dog nerds, and it's worth understanding at least once — if only so we can rebuild knowledge after civilization ends.
+### How COI is calculated
+
+Odds are you're not someone who breaks out equations for fun. But calculating a COI from a pedigree is a rite of passage for dog nerds, and it's worth understanding at least once — if only so we can rebuild knowledge after civilization ends.
 
 In practice, everyone uses software. But here's the logic, using Sean (22.7% COI) as our example.
 

@@ -20,6 +20,23 @@ export const metadata: Metadata = {
     type: 'website',
     url: 'https://7sistersgreatdanes.com/PlacementProcess',
     siteName: '7Sisters Farm',
+    locale: 'en_US',
+    images: [
+      {
+        url: 'https://7sistersgreatdanes.com/img/2025_4pt_WB_IlliniGDC_Mimi_Kim.jpg',
+        width: 1200,
+        height: 900,
+        alt: '7Sisters Farm Great Dane at Illini Great Dane Club — puppy placement',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Great Dane Puppy Placement Process | 7Sisters Farm',
+    description:
+      'How puppy placement works at 7Sisters Farm — thoughtful matching and lifetime support.',
+    images: ['https://7sistersgreatdanes.com/img/2025_4pt_WB_IlliniGDC_Mimi_Kim.jpg'],
+    creator: '@7sistersgreatdanes',
   },
   alternates: {
     canonical: 'https://7sistersgreatdanes.com/PlacementProcess',

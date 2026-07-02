@@ -85,7 +85,7 @@ These questions will quickly separate serious breeders from puppy mills or backy
 
 **"Why did you choose this specific pairing?"**
 
-✅ **Good Answer:** They should discuss how the sire and dam complement each other's strengths and offset weaknesses. Quality breeders can explain concepts like coefficient of inbreeding (COI), discuss pedigree analysis, and explain expected outcomes. For deeper insight into this process, see our post ["Laying the Foundation: Science, Mentorship, and Our First 7Sisters Litters"](/posts/2025-06-23-laying-the-foundation) where we detail our progressive breeding strategy.
+✅ **Good Answer:** They should discuss how the sire and dam complement each other's strengths and offset weaknesses. Quality breeders can explain concepts like coefficient of inbreeding (COI), discuss pedigree analysis, and explain expected outcomes. For deeper insight into this process, see our post ["Laying the Foundation: Science, Mentorship, and Our First 7Sisters Litters"](/posts/2025-06-24-laying-the-foundation) where we detail our progressive breeding strategy.
 
 ❌ **Red Flag:** "She was in season" or "We liked both dogs" without deeper genetic planning.
 
@@ -428,7 +428,7 @@ Finding the right Great Dane breeder takes time, research, and often some patien
 
 Remember that the best breeders are often looking for the right families just as carefully as you're looking for the right breeder. By asking thoughtful questions and demonstrating your commitment to providing an excellent home, you'll stand out as the kind of family that quality breeders want to work with.
 
-**Continue Your Education:** Understanding what drives exceptional breeders will help you recognize them when you find them. Read about our community involvement in ["More Than Show and Go"](/posts/2025-06-23-more-than-show-and-go) and explore the science behind responsible breeding decisions in ["Laying the Foundation."](/posts/2025-06-23-laying-the-foundation) Armed with this knowledge, you'll be prepared to find a breeder who shares your commitment to Great Dane excellence.
+**Continue Your Education:** Understanding what drives exceptional breeders will help you recognize them when you find them. Read about our community involvement in ["More Than Show and Go"](/posts/2025-06-23-more-than-show-and-go) and explore the science behind responsible breeding decisions in ["Laying the Foundation."](/posts/2025-06-24-laying-the-foundation) Armed with this knowledge, you'll be prepared to find a breeder who shares your commitment to Great Dane excellence.
 
 The Great Dane community is filled with people who are passionate about this incredible breed. Take time to find your place in that community, and you'll discover that choosing the right breeder is just the beginning of a wonderful journey.
 

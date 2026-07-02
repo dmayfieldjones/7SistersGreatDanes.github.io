@@ -591,7 +591,7 @@ To learn more about our approach to Great Dane breeding and our current litters,
 
 **Related Reading:**
 - Curious about Great Dane puppy development? Read our [month-by-month guide](/posts/2025-07-03-the-first-year).
-- Want to understand our breeding philosophy? See [Our Breeding Philosophy](https://mayfieldjones.com/BreedingPhilosophy).
+- Want to understand our breeding philosophy? See [Our Breeding Philosophy](/BreedingPhilosophy).
 
 [← Back to Blog Archive](/archive)
 

@@ -41,7 +41,9 @@ export default function ClientComponent() {
         </a> 
         of microchipped dogs have been found to not be registered), AKC
         registration (to ensure it is done correctly and timely), introduction
-        to crate-leash-potty training, and ear cropping if desired.`
+        to crate-leash-potty training, and ear cropping if desired. We link
+        available screening on each litter page; ask us if you want to walk
+        through what was known for that pairing.`
     },
     {
       id: 'puppy-pricing',

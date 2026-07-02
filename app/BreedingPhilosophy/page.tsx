@@ -19,6 +19,23 @@ export const metadata: Metadata = {
     type: 'website',
     url: 'https://7sistersgreatdanes.com/BreedingPhilosophy',
     siteName: '7Sisters Farm',
+    locale: 'en_US',
+    images: [
+      {
+        url: 'https://7sistersgreatdanes.com/img/2021_5pt_BOW_BOBOH_Waukesha_Mimi_Kim.jpg',
+        width: 800,
+        height: 600,
+        alt: '7Sisters Farm Great Dane — responsible breeding philosophy',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Responsible Great Dane Breeding Philosophy | 7Sisters Farm',
+    description:
+      'Our responsible Great Dane breeding philosophy at 7Sisters Farm. Health testing, thoughtful placement, and commitment to breed betterment.',
+    images: ['https://7sistersgreatdanes.com/img/2021_5pt_BOW_BOBOH_Waukesha_Mimi_Kim.jpg'],
+    creator: '@7sistersgreatdanes',
   },
   alternates: {
     canonical: 'https://7sistersgreatdanes.com/BreedingPhilosophy',
