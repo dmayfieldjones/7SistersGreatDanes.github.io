@@ -1,6 +1,7 @@
 ---
 title: "Feeding Your Growing Great Dane: A Nutritional Deep Dive"
 date: 2025-07-17
+updated: 2026-07-09
 description: "Comprehensive guide to Great Dane nutrition, feeding strategies, and growth management for every life stage, from puppy to adult."
 ---
 
@@ -114,6 +115,10 @@ This period requires the most precise nutrition management. Growth is rapid but 
 - **Moderate protein levels** (24-26%) to support growth without excess
 - **Premium brands** with consistent quality and nutritional analysis
 - **Avoid "puppy"** formulas that often contain excessive nutrients
+
+You may hear a different recommendation from your vet: a large-breed-specific puppy formula rather than an adult food. That's a reasonable position, especially since [AAFCO's revised nutrient profiles](https://www.petfoodindustry.com/nutrition/article/15460647/the-revised-aafco-dog-and-cat-food-nutrient-profiles) (2016 Official Publication) cap calcium at **1.8%** on a dry-matter basis for growth and all-life-stages foods fed to large-breed puppies (70+ lb adult weight)—lower than the **2.5%** maximum that still applies to many general puppy formulas. Our reasoning for recommending adult or all-life-stage food instead comes down to consistency: "use an adult formula that hits these numbers" is a simpler rule for owners to follow correctly every time they buy food, compared to "use a large-breed puppy formula, but check the label on every bag," since not every food labeled large-breed puppy actually lands where it should on calcium. Either way, a generic puppy food not formulated for large breeds is what we want to avoid.
+
+This isn't just our take. [Foto Danes](https://www.fotodanes.com/kibble.htm) and other longtime Dane breeders land in the same place.
 
 **Feeding Schedule:**
 - **8-12 weeks:** 4 meals daily, measured portions
@@ -345,6 +350,9 @@ Great Dane growth plates don't close until 18-24 months. Nutrition during this p
 
 **Key Nutritional Factors:**
 - **Controlled calcium** - excess accelerates closure and causes problems
+
+AAFCO's [revised dog food nutrient profiles](https://www.petfoodindustry.com/nutrition/article/15460647/the-revised-aafco-dog-and-cat-food-nutrient-profiles), adopted into the **2016 Official Publication**, formalized this: growth and all-life-stages formulas that may be fed to large-breed puppies (70+ lb adult weight) are capped at **1.8% calcium** on a dry-matter basis—lower than the **2.5%** maximum that still applies to many other puppy formulas.
+
 - **Appropriate protein** - too little stunts growth, too much accelerates it
 - **Balanced minerals** - zinc, copper, manganese for proper development
 - **Caloric control** - overfeeding is the biggest risk factor
@@ -603,7 +611,10 @@ To learn more about our approach to Great Dane breeding and our current litters,
 • **American Kennel Club.** "How Much Should I Feed My Dog?" [AKC Nutrition](https://www.akc.org/expert-advice/nutrition/how-much-should-i-feed-my-dog/)  
 • **Veterinary Clinics of North America: Small Animal Practice.** "Nutrition of Large and Giant Breed Puppies." [Journal homepage](https://www.vetsmall.theclinics.com/) (Search for articles in this journal or consult your veterinarian for access.)  
 • **World Small Animal Veterinary Association.** "Global Nutrition Guidelines." [WSAVA Guidelines](https://wsava.org/Global-Guidelines/Global-Nutrition-Guidelines/) ([PDF](https://wsava.org/wp-content/uploads/2020/01/WSAVA-Nutrition-Assessment-Guidelines-2011-JSAP.pdf))  
-• **Great Dane Club of America.** "Health and Nutrition Information." [GDCA Resources](https://gdca.org/)
+• **Great Dane Club of America.** "Health and Nutrition Information." [GDCA Resources](https://gdca.org/)  
+• **Dzanis, David A., DVM, PhD, DACVN.** "The revised AAFCO dog and cat food nutrient profiles." *PetfoodIndustry*, March 11, 2015. [Article](https://www.petfoodindustry.com/nutrition/article/15460647/the-revised-aafco-dog-and-cat-food-nutrient-profiles) — Summary of the revised profiles adopted into the 2016 Official Publication, including the 1.8% DM calcium maximum for large-breed growth.  
+• **Association of American Feed Control Officials (AAFCO).** *Pet Food Report* (2015 Annual). [PDF](https://www.aafco.org/wp-content/uploads/2023/01/Pet_Food_Report_2015_Annual-1.pdf) — Primary nutrient profile documentation; footnote on 1.8% maximum calcium for large-size growth formulas.  
+• **Foto Danes (Bev Klingensmith).** "Feeding Great Danes — Kibble." [fotodanes.com](https://www.fotodanes.com/kibble.htm) — Longtime Dane breeder perspective on kibble and giant-breed puppy feeding.
 
 #### Research References
 

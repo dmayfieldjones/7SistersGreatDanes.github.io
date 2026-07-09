@@ -181,7 +181,8 @@ export default function () {
             <div className="puppy-card">
               <p className="puppy-reg">WS88963901</p>
               <p className="puppy-name">
-                Name pending <span className="call-name">&quot;Glen&quot;</span>
+                <span className="brand-number">7</span>Sisters N Legado&apos;s With This Ring{' '}
+                <span className="call-name">&quot;Glen&quot;</span>
               </p>
             </div>
             <div className="puppy-card">
