@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import '../styles/archive.css'
+import { getAllPosts } from '../lib/api'
+import ArchiveClient from '../islands/ArchiveClient'
+
+const allPosts = getAllPosts()
+---
+
+<BaseLayout
+  title="Great Dane Articles and Insights"
+  description="Comprehensive guides and practical knowledge on Great Dane breeding, care, development, and ownership."
+  canonical="https://7sistersgreatdanes.com/archive"
+>
+  <div class="content">
+    <div class="post-title">
+      <h1>Great Dane Articles and Insights</h1>
+    </div>
+    <main class="content-wrapper">
+      <section class="hero-section">
+        <img
+          src="/img/Colorlogo_nobackground.png"
+          alt="7Sisters Farm Logo"
+          width="300"
+          height="auto"
+          class="hero-logo"
+          loading="lazy"
+        />
+      </section>
+      <ArchiveClient posts={allPosts} client:load />
+    </main>
+  </div>
+</BaseLayout>

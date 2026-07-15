@@ -1,15 +1,11 @@
-'use client'
-
-import Link from 'next/link'
 import { useMemo, useState } from 'react'
 import { formatPostDateEnUS } from '@/lib/postDate'
-import { getArticleCategory, getReadingTime, sortArchiveSections } from './utils'
+import { getArticleCategory, getReadingTime, sortArchiveSections } from '@/lib/archiveUtils'
 
 interface Post {
   id: string
   date: string
   title: string
-  content: string
   tags?: string[]
   categories?: string[]
 }
@@ -64,12 +60,12 @@ function ArticleCard({ post }: { post: Post }) {
             )}
           </div>
 
-          <Link href={`/posts/${id}`} className="block group">
+          <a href={`/posts/${id}`} className="block group">
             <h3 className="text-xl sm:text-2xl font-bold text-gray-900 group-hover:text-red-600 transition-colors mb-2">
               {mainTitle}
             </h3>
             {subtitle && <p className="text-base sm:text-lg text-gray-600 mb-3">{subtitle}</p>}
-          </Link>
+          </a>
 
           <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
             <span className="flex items-center">📅 {formatPostDateEnUS(date)}</span>
@@ -106,8 +102,8 @@ export default function ArchiveClient({ posts }: ArchiveClientProps) {
     <div className="archive-client">
       <div className="mb-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
         <p className="text-sm text-gray-600 max-w-2xl">
-          Articles are grouped so you can jump to what matches why you&apos;re here—practical puppy and
-          breeder guidance first, then longer science- and kennel-focused pieces.
+          Articles are grouped so you can jump to what matches why you&apos;re here—practical
+          puppy and breeder guidance first, then longer science- and kennel-focused pieces.
         </p>
         <div className="shrink-0">
           <label htmlFor="archive-sort" className="block text-sm font-medium text-gray-700 mb-1">
@@ -116,7 +112,7 @@ export default function ArchiveClient({ posts }: ArchiveClientProps) {
           <select
             id="archive-sort"
             value={sortOrder}
-            onChange={(e) => setSortOrder(e.target.value as 'newest' | 'oldest')}
+            onChange={e => setSortOrder(e.target.value as 'newest' | 'oldest')}
             className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm"
           >
             <option value="newest">Newest first</option>
@@ -134,12 +130,12 @@ export default function ArchiveClient({ posts }: ArchiveClientProps) {
             Start here
           </h2>
           <p className="max-w-3xl text-sm leading-relaxed text-gray-700 sm:text-base">
-            New to Great Danes or still choosing a breeder? Three guides covering nutrition, the first
-            year, and how to evaluate breeders—including a downloadable checklist.
+            New to Great Danes or still choosing a breeder? Three guides covering nutrition, the
+            first year, and how to evaluate breeders—including a downloadable checklist.
           </p>
         </div>
         <div className="space-y-6">
-          {startHere.map((post) => (
+          {startHere.map(post => (
             <ArticleCard key={post.id} post={post} />
           ))}
         </div>
@@ -154,12 +150,12 @@ export default function ArchiveClient({ posts }: ArchiveClientProps) {
             Deep dives &amp; more
           </h2>
           <p className="max-w-3xl text-sm leading-relaxed text-gray-700 sm:text-base">
-            Ancient DNA and domestication, temperament research, how we think about breeding and early
-            litters—and a club story for readers who want the longer pieces.
+            Ancient DNA and domestication, temperament research, how we think about breeding and
+            early litters—and a club story for readers who want the longer pieces.
           </p>
         </div>
         <div className="space-y-6">
-          {deepDives.map((post) => (
+          {deepDives.map(post => (
             <ArticleCard key={post.id} post={post} />
           ))}
         </div>

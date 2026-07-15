@@ -1,0 +1,63 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import '../styles/form.css'
+import ContactForm from '../islands/ContactForm'
+
+const keywords = [
+  'contact Illinois Great Dane breeders',
+  'Illinois Great Dane breeders contact',
+  '7Sisters Farm contact',
+  'Central Illinois Great Dane breeders',
+  'Illinois dog breeders contact',
+  'Great Dane breeders Illinois contact',
+  'Champaign Illinois breeders contact',
+  'Urbana Illinois breeders contact',
+]
+---
+
+<BaseLayout
+  title="Contact Illinois Great Dane Breeders | 7Sisters Farm - Central Illinois"
+  description="Contact 7Sisters Farm, premier Illinois Great Dane breeders in Central Illinois. Get in touch about AKC Great Danes, health testing, and available puppies."
+  keywords={keywords}
+  canonical="https://7sistersgreatdanes.com/contact"
+>
+  <div class="content">
+    <div class="post-title">
+      <h1>Contact Us</h1>
+      <p style="text-align: center; margin-top: 1rem; color: #666">
+        Interested in one of our Great Danes? Please complete the form below.
+        New here? Read our
+        <a href="/PlacementProcess" style="color: #bf141c; font-weight: 500"
+          >placement process</a
+        > first to see how matching works.
+      </p>
+    </div>
+    <main class="content-wrapper">
+      <section class="hero-section">
+        <img
+          src="/img/Colorlogo_nobackground.png"
+          alt="7Sisters Farm Logo"
+          width="300"
+          height="auto"
+          class="hero-logo"
+          loading="lazy"
+        />
+      </section>
+
+      <section
+        style="text-align: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid #e5e5e5"
+      >
+        <p style="margin: 0; font-size: 0.95rem; color: #666">
+          Prefer to email directly?
+          <a
+            href="mailto:dustin@mayfieldjones.com"
+            style="color: #bf141c; text-decoration: underline; font-weight: 500"
+            >dustin@mayfieldjones.com</a
+          >
+        </p>
+      </section>
+
+      <ContactForm client:load />
+    </main>
+  </div>
+</BaseLayout>

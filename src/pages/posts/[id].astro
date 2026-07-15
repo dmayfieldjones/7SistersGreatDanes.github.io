@@ -2,7 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import '../../styles/post.css'
 import { getAllPosts, getPostById } from '../../lib/api'
-import { getArticleCategory, getReadingTime } from '../../utils/archive'
+import { getArticleCategory, getReadingTime } from '@/lib/archiveUtils'
 import {
   formatPostDateEnUS,
   postDateToPublishedInstant,
