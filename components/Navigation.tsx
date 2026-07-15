@@ -94,6 +94,7 @@ export default function Navigation() {
           <ul className={`submenu ${openSubmenu === 'resources' ? 'show' : ''}`}>
             <li><a href="/archive">7Sisters Articles</a></li>
             <li><a href="/CommonQuestions">Common Questions</a></li>
+            <li><a href="/GreatDaneGenomeBrowser">Genome Explorer</a></li>
           </ul>
         </li>
       </ul>

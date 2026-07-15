@@ -195,7 +195,7 @@ export default function BreedingPhilosophy() {
                   from multiple projects, and download what you find.
                 </p>
                 <p className="practice-card-link-row">
-                  <a href="/Resources">Open Canine Genome Explorer →</a>
+                  <a href="/GreatDaneGenomeBrowser">Open Canine Genome Explorer →</a>
                 </p>
               </div>
             </li>
