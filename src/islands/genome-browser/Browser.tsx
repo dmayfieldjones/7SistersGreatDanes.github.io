@@ -2,11 +2,36 @@ import { useState } from 'react'
 
 import GenomeIdeogram, { type ChromosomeInfo } from './GenomeIdeogram'
 
-interface DescriptionComponentProps {
-  geneEntry: Record<string, string>
+export interface Dog10kGeneSummary {
+  variantCount: number
+  passVariantCount: number
+  commonVariantCount: number
+  maxAlleleFrequency: number
+  cohortAlleleNumberMax: number
 }
 
-function DescriptionComponent({ geneEntry }: DescriptionComponentProps) {
+export interface Dog10kMeta {
+  source: string
+  sourceUrl: string
+  doi: string
+  citation: string
+  license: string
+  caveat: string
+}
+
+interface DescriptionComponentProps {
+  geneEntry: Record<string, string>
+  dog10kVariants: Record<string, Dog10kGeneSummary>
+  dog10kMeta: Dog10kMeta
+}
+
+function DescriptionComponent({
+  geneEntry,
+  dog10kVariants,
+  dog10kMeta,
+}: DescriptionComponentProps) {
+  const dog10k = dog10kVariants[geneEntry.name2]
+
   return (
     <div className="genome-description">
       <strong>{geneEntry.name}</strong> - {geneEntry.summary}{' '}
@@ -29,6 +54,31 @@ function DescriptionComponent({ geneEntry }: DescriptionComponentProps) {
           </li>
         </ul>
       ) : null}
+      {dog10k ? (
+        <div className="genome-population-data">
+          <div className="genome-population-title">
+            Population variant data (Dog10K Genomes Project)
+          </div>
+          <div className="genome-population-stats">
+            <span>{dog10k.variantCount.toLocaleString()} variant sites observed</span>
+            <span>{dog10k.commonVariantCount.toLocaleString()} common (&ge;1% frequency)</span>
+            <span>
+              highest allele frequency:{' '}
+              {(dog10k.maxAlleleFrequency * 100).toLocaleString(undefined, {
+                maximumFractionDigits: 1,
+              })}
+              %
+            </span>
+          </div>
+          <div className="genome-population-caveat">
+            {dog10kMeta.caveat} Source:{' '}
+            <a href={dog10kMeta.sourceUrl} target="_blank">
+              {dog10kMeta.source}
+            </a>
+            , licensed {dog10kMeta.license}.
+          </div>
+        </div>
+      ) : null}
     </div>
   )
 }
@@ -36,9 +86,16 @@ function DescriptionComponent({ geneEntry }: DescriptionComponentProps) {
 interface BrowserProps {
   geneCategories: Record<string, string>[]
   chromosomes: ChromosomeInfo[]
+  dog10kVariants: Record<string, Dog10kGeneSummary>
+  dog10kMeta: Dog10kMeta
 }
 
-export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
+export default function Browser({
+  geneCategories,
+  chromosomes,
+  dog10kVariants,
+  dog10kMeta,
+}: BrowserProps) {
   const [type, setType] = useState('all')
   const [gene, setGene] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
@@ -172,7 +229,11 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
             </div>
           </div>
           {geneEntry ? (
-            <DescriptionComponent geneEntry={geneEntry} />
+            <DescriptionComponent
+              geneEntry={geneEntry}
+              dog10kVariants={dog10kVariants}
+              dog10kMeta={dog10kMeta}
+            />
           ) : null}
         </main>
       </div>

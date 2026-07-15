@@ -1,0 +1,1199 @@
+{
+  "_meta": {
+    "source": "Dog10K Genomes Project (Kidd Lab, University of Michigan)",
+    "sourceUrl": "https://kiddlabshare.med.umich.edu/dog10K/",
+    "doi": "https://doi.org/10.5281/zenodo.8084059",
+    "citation": "Meadows et al. 2023, Genome Biology, \"Genome sequencing of 2,000 dogs...\"",
+    "license": "CC-BY-4.0",
+    "generatedAt": "2026-07-15T23:13:36.337Z",
+    "caveat": "Cohort of 1,987 dogs across 370 breeds/populations. Great Dane is NOT among the sampled breeds as of this cohort — figures reflect general canine (cross-breed) population variation, not Great Dane-specific allele frequencies.",
+    "fields": {
+      "variantCount": "Total variant sites (SNVs) called in this gene region, any filter status",
+      "passVariantCount": "Subset of variantCount that passed VQSR filtering (FILTER=PASS)",
+      "commonVariantCount": "Subset of variantCount with allele frequency >= 1% in the cohort",
+      "maxAlleleFrequency": "Highest allele frequency observed among variants in this region",
+      "cohortAlleleNumberMax": "Max AN (allele number) observed, ~2x number of dogs genotyped at that site"
+    }
+  },
+  "genes": {
+    "ASIP": {
+      "location": "chr24:23865404-23906575",
+      "variantCount": 1105,
+      "passVariantCount": 447,
+      "commonVariantCount": 312,
+      "maxAlleleFrequency": 0.866,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "MC1R": {
+      "location": "chr5:64186690-64187643",
+      "variantCount": 81,
+      "passVariantCount": 22,
+      "commonVariantCount": 6,
+      "maxAlleleFrequency": 0.717,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "CBD103": {
+      "location": "chr16:55467668-55469226",
+      "variantCount": 66,
+      "passVariantCount": 33,
+      "commonVariantCount": 30,
+      "maxAlleleFrequency": 0.494,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "MLPH": {
+      "location": "chr25:48403018-48448746",
+      "variantCount": 2383,
+      "passVariantCount": 1693,
+      "commonVariantCount": 902,
+      "maxAlleleFrequency": 0.996,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "PSMB7": {
+      "location": "chr9:58614281-58677679",
+      "variantCount": 1240,
+      "passVariantCount": 688,
+      "commonVariantCount": 303,
+      "maxAlleleFrequency": 0.92,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "TYRP1": {
+      "location": "chr11:33376152-33394014",
+      "variantCount": 308,
+      "passVariantCount": 66,
+      "commonVariantCount": 83,
+      "maxAlleleFrequency": 0.554,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "MITF": {
+      "location": "chr20:21991588-22022704",
+      "variantCount": 707,
+      "passVariantCount": 348,
+      "commonVariantCount": 95,
+      "maxAlleleFrequency": 0.813,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "MFSD12": {
+      "location": "chr20:56252252-56260682",
+      "variantCount": 422,
+      "passVariantCount": 257,
+      "commonVariantCount": 98,
+      "maxAlleleFrequency": 0.846,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "SERPINF2": {
+      "location": "chr9:45822215-45829811",
+      "variantCount": 180,
+      "passVariantCount": 108,
+      "commonVariantCount": 53,
+      "maxAlleleFrequency": 0.251,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "PKLR": {
+      "location": "chr7:42250696-42258642",
+      "variantCount": 155,
+      "passVariantCount": 88,
+      "commonVariantCount": 21,
+      "maxAlleleFrequency": 0.298,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "VWF": {
+      "location": "chr27:7119622-7257688",
+      "variantCount": 3275,
+      "passVariantCount": 2304,
+      "commonVariantCount": 901,
+      "maxAlleleFrequency": 0.993,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "ADAMTS13": {
+      "location": "chr9:49895000-49923185",
+      "variantCount": 727,
+      "passVariantCount": 568,
+      "commonVariantCount": 301,
+      "maxAlleleFrequency": 0.975,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "SOD1": {
+      "location": "chr31:27118829-27126937",
+      "variantCount": 233,
+      "passVariantCount": 104,
+      "commonVariantCount": 45,
+      "maxAlleleFrequency": 0.822,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "ATP7A": {
+      "location": "chrX:60346304-60499464",
+      "variantCount": 1722,
+      "passVariantCount": 1188,
+      "commonVariantCount": 368,
+      "maxAlleleFrequency": 0.949,
+      "cohortAlleleNumberMax": 3018,
+      "vcfSource": "chrX.NONPAR"
+    },
+    "NDUFS4": {
+      "location": "chr4:62529496-62643162",
+      "variantCount": 1542,
+      "passVariantCount": 913,
+      "commonVariantCount": 263,
+      "maxAlleleFrequency": 0.952,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "SEZ6L": {
+      "location": "chr26:20295389-20485072",
+      "variantCount": 4487,
+      "passVariantCount": 3050,
+      "commonVariantCount": 1452,
+      "maxAlleleFrequency": 1,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "ADAM23": {
+      "location": "chr37:14835710-15023250",
+      "variantCount": 3208,
+      "passVariantCount": 2327,
+      "commonVariantCount": 802,
+      "maxAlleleFrequency": 0.705,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "NF1": {
+      "location": "chr9:41442649-41716759",
+      "variantCount": 5219,
+      "passVariantCount": 2626,
+      "commonVariantCount": 1102,
+      "maxAlleleFrequency": 0.971,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "APP": {
+      "location": "chr31:21899466-22164885",
+      "variantCount": 6260,
+      "passVariantCount": 4333,
+      "commonVariantCount": 1984,
+      "maxAlleleFrequency": 0.998,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "ATP1B2": {
+      "location": "chr5:32756419-32762956",
+      "variantCount": 110,
+      "passVariantCount": 63,
+      "commonVariantCount": 12,
+      "maxAlleleFrequency": 0.682,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "CSTB": {
+      "location": "chr31:37607453-37610501",
+      "variantCount": 155,
+      "passVariantCount": 84,
+      "commonVariantCount": 53,
+      "maxAlleleFrequency": 0.602,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "NAGLU": {
+      "location": "chr9:20281366-20288130",
+      "variantCount": 327,
+      "passVariantCount": 115,
+      "commonVariantCount": 23,
+      "maxAlleleFrequency": 0.271,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "ARSA": {
+      "location": "chr10:17597813-17600232",
+      "variantCount": 44,
+      "passVariantCount": 24,
+      "commonVariantCount": 3,
+      "maxAlleleFrequency": 0.915,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "TPP1": {
+      "location": "chr21:30429691-30434901",
+      "variantCount": 167,
+      "passVariantCount": 84,
+      "commonVariantCount": 31,
+      "maxAlleleFrequency": 0.828,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "PLA2G6": {
+      "location": "chr10:27499582-27559773",
+      "variantCount": 1310,
+      "passVariantCount": 867,
+      "commonVariantCount": 296,
+      "maxAlleleFrequency": 1,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "CLN8": {
+      "location": "chr37:30752705-30770116",
+      "variantCount": 621,
+      "passVariantCount": 386,
+      "commonVariantCount": 220,
+      "maxAlleleFrequency": 0.818,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "NEU1": {
+      "location": "chr12:1455970-1460945",
+      "variantCount": 161,
+      "passVariantCount": 73,
+      "commonVariantCount": 48,
+      "maxAlleleFrequency": 0.961,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "GBA": {
+      "location": "chr7:42304204-42308788",
+      "variantCount": 230,
+      "passVariantCount": 44,
+      "commonVariantCount": 17,
+      "maxAlleleFrequency": 0.987,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "PRCD": {
+      "location": "chr9:5087716-5091027",
+      "variantCount": 75,
+      "passVariantCount": 54,
+      "commonVariantCount": 20,
+      "maxAlleleFrequency": 0.991,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "RPGRIP1": {
+      "location": "chr15:18442510-18513618",
+      "variantCount": 1765,
+      "passVariantCount": 965,
+      "commonVariantCount": 431,
+      "maxAlleleFrequency": 0.987,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "BEST1": {
+      "location": "chr18:55071126-55082395",
+      "variantCount": 265,
+      "passVariantCount": 102,
+      "commonVariantCount": 98,
+      "maxAlleleFrequency": 0.9,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "RHO": {
+      "location": "chr20:5706443-5711705",
+      "variantCount": 108,
+      "passVariantCount": 80,
+      "commonVariantCount": 29,
+      "maxAlleleFrequency": 0.749,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "CNGB3": {
+      "location": "chr29:33393790-33536962",
+      "variantCount": 2533,
+      "passVariantCount": 1386,
+      "commonVariantCount": 561,
+      "maxAlleleFrequency": 1,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "ABCA4": {
+      "location": "chr6:55552093-55679433",
+      "variantCount": 2526,
+      "passVariantCount": 1778,
+      "commonVariantCount": 659,
+      "maxAlleleFrequency": 0.972,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "FAM161A": {
+      "location": "chr10:63066672-63131867",
+      "variantCount": 1709,
+      "passVariantCount": 1037,
+      "commonVariantCount": 528,
+      "maxAlleleFrequency": 0.83,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "BIN1": {
+      "location": "chr19:24831980-24884833",
+      "variantCount": 1267,
+      "passVariantCount": 923,
+      "commonVariantCount": 405,
+      "maxAlleleFrequency": 0.946,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "COL9A3": {
+      "location": "chr24:47503126-47518786",
+      "variantCount": 938,
+      "passVariantCount": 689,
+      "commonVariantCount": 292,
+      "maxAlleleFrequency": 0.96,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "DMD": {
+      "location": "chrX:26455978-28540050",
+      "variantCount": 26650,
+      "passVariantCount": 20578,
+      "commonVariantCount": 6267,
+      "maxAlleleFrequency": 1,
+      "cohortAlleleNumberMax": 3018,
+      "vcfSource": "chrX.NONPAR"
+    },
+    "SGCA": {
+      "location": "chr9:26115697-26129096",
+      "variantCount": 352,
+      "passVariantCount": 217,
+      "commonVariantCount": 99,
+      "maxAlleleFrequency": 0.957,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "COL1A1": {
+      "location": "chr9:26134702-26150789",
+      "variantCount": 494,
+      "passVariantCount": 228,
+      "commonVariantCount": 56,
+      "maxAlleleFrequency": 0.938,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "CLCN1": {
+      "location": "chr16:6071349-6101933",
+      "variantCount": 564,
+      "passVariantCount": 363,
+      "commonVariantCount": 114,
+      "maxAlleleFrequency": 1,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "SGCD": {
+      "location": "chr4:54146275-55057219",
+      "variantCount": 20768,
+      "passVariantCount": 14304,
+      "commonVariantCount": 5709,
+      "maxAlleleFrequency": 0.995,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "COL6A3": {
+      "location": "chr25:48253810-48333969",
+      "variantCount": 2998,
+      "passVariantCount": 2005,
+      "commonVariantCount": 769,
+      "maxAlleleFrequency": 0.995,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "LAMA2": {
+      "location": "chr1:68070825-68654877",
+      "variantCount": 12985,
+      "passVariantCount": 8312,
+      "commonVariantCount": 2764,
+      "maxAlleleFrequency": 0.997,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "LARGE1": {
+      "location": "chr10:30887220-31413494",
+      "variantCount": 11055,
+      "passVariantCount": 7833,
+      "commonVariantCount": 3144,
+      "maxAlleleFrequency": 1,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "FGF4": {
+      "location": "chr18:48869443-48873311",
+      "variantCount": 125,
+      "passVariantCount": 61,
+      "commonVariantCount": 18,
+      "maxAlleleFrequency": 0.963,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "NOG": {
+      "location": "chr9:31415982-31416833",
+      "variantCount": 33,
+      "passVariantCount": 14,
+      "commonVariantCount": 1,
+      "maxAlleleFrequency": 0.015,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "DVL2": {
+      "location": "chr5:32401214-32408791",
+      "variantCount": 188,
+      "passVariantCount": 101,
+      "commonVariantCount": 25,
+      "maxAlleleFrequency": 0.959,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "NAPEPLD": {
+      "location": "chr18:17219297-17269945",
+      "variantCount": 1337,
+      "passVariantCount": 779,
+      "commonVariantCount": 446,
+      "maxAlleleFrequency": 0.979,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "FOXI3": {
+      "location": "chr17:38315971-38319969",
+      "variantCount": 100,
+      "passVariantCount": 63,
+      "commonVariantCount": 31,
+      "maxAlleleFrequency": 0.86,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "FGF5": {
+      "location": "chr32:35474935-35494799",
+      "variantCount": 445,
+      "passVariantCount": 300,
+      "commonVariantCount": 101,
+      "maxAlleleFrequency": 0.617,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "RSPO2": {
+      "location": "chr13:8823008-8971462",
+      "variantCount": 2815,
+      "passVariantCount": 1674,
+      "commonVariantCount": 664,
+      "maxAlleleFrequency": 0.996,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "PNPLA1": {
+      "location": "chr12:5559044-5605194",
+      "variantCount": 1043,
+      "passVariantCount": 777,
+      "commonVariantCount": 348,
+      "maxAlleleFrequency": 0.984,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "IKBKG": {
+      "location": "chrX:123419351-123440993",
+      "variantCount": 378,
+      "passVariantCount": 320,
+      "commonVariantCount": 44,
+      "maxAlleleFrequency": 0.564,
+      "cohortAlleleNumberMax": 3018,
+      "vcfSource": "chrX.NONPAR"
+    },
+    "MYO7A": {
+      "location": "chr21:21654692-21739052",
+      "variantCount": 2157,
+      "passVariantCount": 1334,
+      "commonVariantCount": 418,
+      "maxAlleleFrequency": 0.971,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "TMC1": {
+      "location": "chr1:85722917-85817907",
+      "variantCount": 2226,
+      "passVariantCount": 1655,
+      "commonVariantCount": 697,
+      "maxAlleleFrequency": 0.99,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "PCDH15": {
+      "location": "chr26:34074758-34812730",
+      "variantCount": 25737,
+      "passVariantCount": 17733,
+      "commonVariantCount": 9277,
+      "maxAlleleFrequency": 1,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "USH2A": {
+      "location": "chr38:11739438-12442329",
+      "variantCount": 17512,
+      "passVariantCount": 11987,
+      "commonVariantCount": 6070,
+      "maxAlleleFrequency": 1,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "ATP7B": {
+      "location": "chr22:163429-197022",
+      "variantCount": 1041,
+      "passVariantCount": 498,
+      "commonVariantCount": 106,
+      "maxAlleleFrequency": 0.807,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "CLCN5": {
+      "location": "chrX:42912678-43067849",
+      "variantCount": 1495,
+      "passVariantCount": 1105,
+      "commonVariantCount": 140,
+      "maxAlleleFrequency": 0.938,
+      "cohortAlleleNumberMax": 3018,
+      "vcfSource": "chrX.NONPAR"
+    },
+    "PKD1": {
+      "location": "chr6:39267946-39309679",
+      "variantCount": 1162,
+      "passVariantCount": 612,
+      "commonVariantCount": 79,
+      "maxAlleleFrequency": 0.908,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "CUBN": {
+      "location": "chr2:18734135-18999935",
+      "variantCount": 4825,
+      "passVariantCount": 3256,
+      "commonVariantCount": 1434,
+      "maxAlleleFrequency": 1,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "POMC": {
+      "location": "chr17:19496844-19503629",
+      "variantCount": 183,
+      "passVariantCount": 102,
+      "commonVariantCount": 30,
+      "maxAlleleFrequency": 0.996,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "LEP": {
+      "location": "chr14:7975126-7979538",
+      "variantCount": 94,
+      "passVariantCount": 62,
+      "commonVariantCount": 3,
+      "maxAlleleFrequency": 0.931,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "LEPR": {
+      "location": "chr5:45029763-45094688",
+      "variantCount": 1022,
+      "passVariantCount": 622,
+      "commonVariantCount": 174,
+      "maxAlleleFrequency": 0.889,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "MC4R": {
+      "location": "chr1:16214421-16215419",
+      "variantCount": 25,
+      "passVariantCount": 12,
+      "commonVariantCount": 2,
+      "maxAlleleFrequency": 0.755,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "GALNS": {
+      "location": "chr5:65018205-65046122",
+      "variantCount": 664,
+      "passVariantCount": 445,
+      "commonVariantCount": 227,
+      "maxAlleleFrequency": 0.957,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "IDUA": {
+      "location": "chr3:92130626-92143201",
+      "variantCount": 769,
+      "passVariantCount": 439,
+      "commonVariantCount": 181,
+      "maxAlleleFrequency": 0.958,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "GUSB": {
+      "location": "chr6:644508-657770",
+      "variantCount": 368,
+      "passVariantCount": 155,
+      "commonVariantCount": 83,
+      "maxAlleleFrequency": 0.829,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "PAH": {
+      "location": "chr15:41882259-41962824",
+      "variantCount": 1846,
+      "passVariantCount": 1162,
+      "commonVariantCount": 431,
+      "maxAlleleFrequency": 0.917,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "SGSH": {
+      "location": "chr9:2403348-2409505",
+      "variantCount": 312,
+      "passVariantCount": 159,
+      "commonVariantCount": 61,
+      "maxAlleleFrequency": 0.915,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "HEXB": {
+      "location": "chr2:56470393-56499556",
+      "variantCount": 748,
+      "passVariantCount": 468,
+      "commonVariantCount": 168,
+      "maxAlleleFrequency": 0.958,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "FUCA1": {
+      "location": "chr2:75059639-75071248",
+      "variantCount": 239,
+      "passVariantCount": 142,
+      "commonVariantCount": 55,
+      "maxAlleleFrequency": 0.876,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "GNPTAB": {
+      "location": "chr15:40950892-41016624",
+      "variantCount": 1240,
+      "passVariantCount": 875,
+      "commonVariantCount": 467,
+      "maxAlleleFrequency": 1,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "SLC3A1": {
+      "location": "chr10:47760850-47796315",
+      "variantCount": 683,
+      "passVariantCount": 441,
+      "commonVariantCount": 186,
+      "maxAlleleFrequency": 0.953,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "SLC7A9": {
+      "location": "chr1:120050385-120073608",
+      "variantCount": 883,
+      "passVariantCount": 619,
+      "commonVariantCount": 302,
+      "maxAlleleFrequency": 0.965,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "IGF1": {
+      "location": "chr15:41495479-41567874",
+      "variantCount": 1076,
+      "passVariantCount": 685,
+      "commonVariantCount": 198,
+      "maxAlleleFrequency": 0.924,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "CFTR": {
+      "location": "chr14:56421094-56583513",
+      "variantCount": 3982,
+      "passVariantCount": 2629,
+      "commonVariantCount": 1117,
+      "maxAlleleFrequency": 0.988,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "MYBPC3": {
+      "location": "chr18:42697140-42713582",
+      "variantCount": 718,
+      "passVariantCount": 426,
+      "commonVariantCount": 138,
+      "maxAlleleFrequency": 0.807,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "MYH7": {
+      "location": "chr8:3782913-3802783",
+      "variantCount": 488,
+      "passVariantCount": 142,
+      "commonVariantCount": 49,
+      "maxAlleleFrequency": 0.469,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "PKP2": {
+      "location": "chr27:30463876-30551090",
+      "variantCount": 1942,
+      "passVariantCount": 1328,
+      "commonVariantCount": 741,
+      "maxAlleleFrequency": 0.95,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "LMNA": {
+      "location": "chr7:41687512-41704901",
+      "variantCount": 533,
+      "passVariantCount": 229,
+      "commonVariantCount": 56,
+      "maxAlleleFrequency": 0.979,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "DSG2": {
+      "location": "chr7:57958817-58007069",
+      "variantCount": 1196,
+      "passVariantCount": 693,
+      "commonVariantCount": 209,
+      "maxAlleleFrequency": 0.963,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "KCNQ1": {
+      "location": "chr18:46962029-47285048",
+      "variantCount": 9438,
+      "passVariantCount": 6759,
+      "commonVariantCount": 2542,
+      "maxAlleleFrequency": 0.992,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "KCNH2": {
+      "location": "chr16:15735820-15768605",
+      "variantCount": 723,
+      "passVariantCount": 387,
+      "commonVariantCount": 71,
+      "maxAlleleFrequency": 0.94,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "SCN5A": {
+      "location": "chr23:8517525-8595709",
+      "variantCount": 2004,
+      "passVariantCount": 1350,
+      "commonVariantCount": 383,
+      "maxAlleleFrequency": 0.959,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "ACTN2": {
+      "location": "chr4:3719762-3786237",
+      "variantCount": 1206,
+      "passVariantCount": 675,
+      "commonVariantCount": 243,
+      "maxAlleleFrequency": 0.801,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "STRN": {
+      "location": "chr17:29427442-29523408",
+      "variantCount": 1597,
+      "passVariantCount": 1014,
+      "commonVariantCount": 234,
+      "maxAlleleFrequency": 0.959,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "PDK4": {
+      "location": "chr14:20785483-20798897",
+      "variantCount": 212,
+      "passVariantCount": 137,
+      "commonVariantCount": 45,
+      "maxAlleleFrequency": 0.967,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "TTN": {
+      "location": "chr36:22479043-22752940",
+      "variantCount": 14684,
+      "passVariantCount": 6936,
+      "commonVariantCount": 1402,
+      "maxAlleleFrequency": 0.994,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "RYR2": {
+      "location": "chr4:2743722-3470663",
+      "variantCount": 13125,
+      "passVariantCount": 7097,
+      "commonVariantCount": 2651,
+      "maxAlleleFrequency": 1,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "ACVRL1": {
+      "location": "chr27:43565141-43579587",
+      "variantCount": 581,
+      "passVariantCount": 420,
+      "commonVariantCount": 152,
+      "maxAlleleFrequency": 0.969,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "ITGB2": {
+      "location": "chr31:38463168-38490402",
+      "variantCount": 1706,
+      "passVariantCount": 1132,
+      "commonVariantCount": 560,
+      "maxAlleleFrequency": 0.972,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "IL1RN": {
+      "location": "chr17:37426795-37431843",
+      "variantCount": 133,
+      "passVariantCount": 91,
+      "commonVariantCount": 27,
+      "maxAlleleFrequency": 0.346,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "IL6": {
+      "location": "chr14:36553276-36557530",
+      "variantCount": 51,
+      "passVariantCount": 43,
+      "commonVariantCount": 18,
+      "maxAlleleFrequency": 0.833,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "IL10": {
+      "location": "chr7:5697728-5701500",
+      "variantCount": 132,
+      "passVariantCount": 96,
+      "commonVariantCount": 36,
+      "maxAlleleFrequency": 0.836,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "TNF": {
+      "location": "chr12:1213251-1215120",
+      "variantCount": 72,
+      "passVariantCount": 46,
+      "commonVariantCount": 16,
+      "maxAlleleFrequency": 0.957,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "TLR4": {
+      "location": "chr11:71767611-71778394",
+      "variantCount": 347,
+      "passVariantCount": 181,
+      "commonVariantCount": 61,
+      "maxAlleleFrequency": 0.962,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "PTPN22": {
+      "location": "chr17:52148984-52209317",
+      "variantCount": 1371,
+      "passVariantCount": 929,
+      "commonVariantCount": 513,
+      "maxAlleleFrequency": 0.998,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "C3": {
+      "location": "chr20:53965350-53997908",
+      "variantCount": 1020,
+      "passVariantCount": 572,
+      "commonVariantCount": 248,
+      "maxAlleleFrequency": 0.88,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "CTLA4": {
+      "location": "chr37:12505745-12511890",
+      "variantCount": 163,
+      "passVariantCount": 77,
+      "commonVariantCount": 24,
+      "maxAlleleFrequency": 0.615,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "IFNG": {
+      "location": "chr10:10768058-10772882",
+      "variantCount": 63,
+      "passVariantCount": 36,
+      "commonVariantCount": 12,
+      "maxAlleleFrequency": 0.345,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "FAS": {
+      "location": "chr26:39027502-39052301",
+      "variantCount": 1284,
+      "passVariantCount": 848,
+      "commonVariantCount": 520,
+      "maxAlleleFrequency": 0.954,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "PSMB8": {
+      "location": "chr12:2574324-2577715",
+      "variantCount": 89,
+      "passVariantCount": 55,
+      "commonVariantCount": 18,
+      "maxAlleleFrequency": 0.581,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "RAG1": {
+      "location": "chr18:32033403-32036534",
+      "variantCount": 274,
+      "passVariantCount": 85,
+      "commonVariantCount": 15,
+      "maxAlleleFrequency": 0.747,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "IL2RA": {
+      "location": "chr2:28928272-28977130",
+      "variantCount": 1001,
+      "passVariantCount": 699,
+      "commonVariantCount": 257,
+      "maxAlleleFrequency": 0.411,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "CYBB": {
+      "location": "chrX:32671823-32706767",
+      "variantCount": 532,
+      "passVariantCount": 418,
+      "commonVariantCount": 146,
+      "maxAlleleFrequency": 0.816,
+      "cohortAlleleNumberMax": 3018,
+      "vcfSource": "chrX.NONPAR"
+    },
+    "BRCA1": {
+      "location": "chr9:19833116-19896786",
+      "variantCount": 1495,
+      "passVariantCount": 596,
+      "commonVariantCount": 209,
+      "maxAlleleFrequency": 0.99,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "TP53": {
+      "location": "chr5:32768467-32781775",
+      "variantCount": 301,
+      "passVariantCount": 129,
+      "commonVariantCount": 30,
+      "maxAlleleFrequency": 0.685,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "MYC": {
+      "location": "chr13:25629077-25633621",
+      "variantCount": 241,
+      "passVariantCount": 73,
+      "commonVariantCount": 31,
+      "maxAlleleFrequency": 0.686,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "PTEN": {
+      "location": "chr26:38118261-38202372",
+      "variantCount": 1233,
+      "passVariantCount": 583,
+      "commonVariantCount": 356,
+      "maxAlleleFrequency": 0.95,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "KIT": {
+      "location": "chr13:47870472-47952050",
+      "variantCount": 2010,
+      "passVariantCount": 1322,
+      "commonVariantCount": 435,
+      "maxAlleleFrequency": 0.989,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "BRAF": {
+      "location": "chr16:7929505-8101841",
+      "variantCount": 2986,
+      "passVariantCount": 1408,
+      "commonVariantCount": 424,
+      "maxAlleleFrequency": 0.915,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "MDM2": {
+      "location": "chr10:11296600-11322142",
+      "variantCount": 708,
+      "passVariantCount": 362,
+      "commonVariantCount": 119,
+      "maxAlleleFrequency": 0.826,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "CDKN2A": {
+      "location": "chr11:41337054-41366301",
+      "variantCount": 574,
+      "passVariantCount": 348,
+      "commonVariantCount": 180,
+      "maxAlleleFrequency": 0.807,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "RB1": {
+      "location": "chr22:3028586-3174226",
+      "variantCount": 2623,
+      "passVariantCount": 1269,
+      "commonVariantCount": 489,
+      "maxAlleleFrequency": 0.789,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "NRAS": {
+      "location": "chr17:52938741-52945813",
+      "variantCount": 277,
+      "passVariantCount": 110,
+      "commonVariantCount": 33,
+      "maxAlleleFrequency": 0.533,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "BCL2": {
+      "location": "chr1:13811587-13978482",
+      "variantCount": 3254,
+      "passVariantCount": 2313,
+      "commonVariantCount": 828,
+      "maxAlleleFrequency": 0.927,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "MET": {
+      "location": "chr14:55755770-55839237",
+      "variantCount": 2235,
+      "passVariantCount": 1282,
+      "commonVariantCount": 400,
+      "maxAlleleFrequency": 0.967,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "HMGA1": {
+      "location": "chr12:3707513-3716880",
+      "variantCount": 297,
+      "passVariantCount": 142,
+      "commonVariantCount": 43,
+      "maxAlleleFrequency": 0.869,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "PTPN11": {
+      "location": "chr26:10314568-10397234",
+      "variantCount": 1962,
+      "passVariantCount": 926,
+      "commonVariantCount": 369,
+      "maxAlleleFrequency": 1,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "ERBB3": {
+      "location": "chr10:758352-776205",
+      "variantCount": 574,
+      "passVariantCount": 225,
+      "commonVariantCount": 45,
+      "maxAlleleFrequency": 0.459,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "PIK3CA": {
+      "location": "chr34:12771120-12850124",
+      "variantCount": 1349,
+      "passVariantCount": 769,
+      "commonVariantCount": 317,
+      "maxAlleleFrequency": 0.982,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "CCND1": {
+      "location": "chr18:48958012-48967584",
+      "variantCount": 367,
+      "passVariantCount": 206,
+      "commonVariantCount": 69,
+      "maxAlleleFrequency": 0.96,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "SMOC2": {
+      "location": "chr1:56380993-56539474",
+      "variantCount": 4783,
+      "passVariantCount": 3596,
+      "commonVariantCount": 1529,
+      "maxAlleleFrequency": 1,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "OXTR": {
+      "location": "chr20:9429314-9449013",
+      "variantCount": 554,
+      "passVariantCount": 363,
+      "commonVariantCount": 181,
+      "maxAlleleFrequency": 0.953,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "DRD4": {
+      "location": "chr18:26081003-26083706",
+      "variantCount": 84,
+      "passVariantCount": 33,
+      "commonVariantCount": 8,
+      "maxAlleleFrequency": 0.767,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "TH": {
+      "location": "chr18:46782129-46789967",
+      "variantCount": 310,
+      "passVariantCount": 179,
+      "commonVariantCount": 71,
+      "maxAlleleFrequency": 0.899,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "SLC1A2": {
+      "location": "chr18:32967648-33106043",
+      "variantCount": 3357,
+      "passVariantCount": 2257,
+      "commonVariantCount": 918,
+      "maxAlleleFrequency": 0.989,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "GTF2I": {
+      "location": "chr6:5644547-5758859",
+      "variantCount": 2116,
+      "passVariantCount": 1068,
+      "commonVariantCount": 475,
+      "maxAlleleFrequency": 0.994,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    },
+    "GTF2IRD1": {
+      "location": "chr6:5806109-5917143",
+      "variantCount": 2356,
+      "passVariantCount": 1491,
+      "commonVariantCount": 579,
+      "maxAlleleFrequency": 0.85,
+      "cohortAlleleNumberMax": 3974,
+      "vcfSource": "AutoAndXPAR"
+    }
+  }
+}

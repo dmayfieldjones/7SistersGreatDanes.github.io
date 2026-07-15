@@ -105,6 +105,31 @@
   margin-top: 0.5rem;
 }
 
+.genome-population-data {
+  margin-top: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--genome-border);
+  border-radius: 6px;
+  font-size: 0.85rem;
+}
+
+.genome-population-title {
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.genome-population-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 1rem;
+  margin-bottom: 0.3rem;
+}
+
+.genome-population-caveat {
+  color: var(--genome-muted);
+  font-size: 0.78rem;
+}
+
 .genome-ideogram {
   position: relative;
   margin: 1rem 0;
