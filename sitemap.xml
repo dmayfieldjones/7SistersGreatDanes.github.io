@@ -1,135 +1,135 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<url>
-<loc>https://7sistersgreatdanes.com</loc>
-<lastmod>2026-07-15T19:36:05.909Z</lastmod>
-<changefreq>monthly</changefreq>
-<priority>1</priority>
-</url>
-<url>
-<loc>https://7sistersgreatdanes.com/about</loc>
-<lastmod>2026-07-15T19:36:05.909Z</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.9</priority>
-</url>
-<url>
-<loc>https://7sistersgreatdanes.com/7Sisters</loc>
-<lastmod>2026-07-15T19:36:05.909Z</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.9</priority>
-</url>
-<url>
-<loc>https://7sistersgreatdanes.com/Litters</loc>
-<lastmod>2026-07-15T19:36:05.909Z</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.9</priority>
-</url>
-<url>
-<loc>https://7sistersgreatdanes.com/Farm</loc>
-<lastmod>2026-07-15T19:36:05.909Z</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.8</priority>
-</url>
-<url>
-<loc>https://7sistersgreatdanes.com/BreedingPhilosophy</loc>
-<lastmod>2026-07-15T19:36:05.909Z</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.8</priority>
-</url>
-<url>
-<loc>https://7sistersgreatdanes.com/CommonQuestions</loc>
-<lastmod>2026-07-15T19:36:05.909Z</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.8</priority>
-</url>
-<url>
-<loc>https://7sistersgreatdanes.com/archive</loc>
-<lastmod>2026-07-15T19:36:05.909Z</lastmod>
-<changefreq>weekly</changefreq>
-<priority>0.7</priority>
-</url>
-<url>
-<loc>https://7sistersgreatdanes.com/GreatDaneGenomeBrowser</loc>
-<lastmod>2026-07-15T19:36:05.909Z</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.7</priority>
-</url>
-<url>
-<loc>https://7sistersgreatdanes.com/PlacementProcess</loc>
-<lastmod>2026-07-15T19:36:05.909Z</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.85</priority>
-</url>
-<url>
-<loc>https://7sistersgreatdanes.com/EzraxPiper</loc>
-<lastmod>2026-07-15T19:36:05.909Z</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.85</priority>
-</url>
-<url>
-<loc>https://7sistersgreatdanes.com/contact</loc>
-<lastmod>2026-07-15T19:36:05.909Z</lastmod>
-<changefreq>yearly</changefreq>
-<priority>0.6</priority>
-</url>
-<url>
-<loc>https://7sistersgreatdanes.com/SeanXPiper</loc>
-<lastmod>2026-07-15T19:36:05.909Z</lastmod>
-<changefreq>yearly</changefreq>
-<priority>0.6</priority>
-</url>
-<url>
-<loc>https://7sistersgreatdanes.com/RolexXPiper</loc>
-<lastmod>2026-07-15T19:36:05.909Z</lastmod>
-<changefreq>yearly</changefreq>
-<priority>0.6</priority>
-</url>
-<url>
-<loc>https://7sistersgreatdanes.com/posts/2026-03-28-the-deep-history-of-dogs-palaeolithic-partners</loc>
-<lastmod>2026-03-28T05:00:00.000Z</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.6</priority>
-</url>
-<url>
-<loc>https://7sistersgreatdanes.com/posts/2025-10-01-the-deep-history-of-dogs-ancient-dna</loc>
-<lastmod>2025-10-01T05:00:00.000Z</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.6</priority>
-</url>
-<url>
-<loc>https://7sistersgreatdanes.com/posts/2025-09-12-breeding-for-temperament-research-tools</loc>
-<lastmod>2025-09-12T05:00:00.000Z</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.6</priority>
-</url>
-<url>
-<loc>https://7sistersgreatdanes.com/posts/2025-07-17-feeding-your-growing-great-dane</loc>
-<lastmod>2025-07-17T05:00:00.000Z</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.6</priority>
-</url>
-<url>
-<loc>https://7sistersgreatdanes.com/posts/2025-07-03-the-first-year</loc>
-<lastmod>2025-07-03T05:00:00.000Z</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.6</priority>
-</url>
-<url>
-<loc>https://7sistersgreatdanes.com/posts/2025-06-25-choosing-a-great-dane-breeder</loc>
-<lastmod>2025-06-25T05:00:00.000Z</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.6</priority>
-</url>
-<url>
-<loc>https://7sistersgreatdanes.com/posts/2025-06-24-laying-the-foundation</loc>
-<lastmod>2025-06-24T05:00:00.000Z</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.6</priority>
-</url>
-<url>
-<loc>https://7sistersgreatdanes.com/posts/2025-06-23-more-than-show-and-go</loc>
-<lastmod>2025-06-23T05:00:00.000Z</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.6</priority>
-</url>
+  <url>
+    <loc>https://7sistersgreatdanes.com</loc>
+    <lastmod>2026-07-15T23:05:52.678Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://7sistersgreatdanes.com/about</loc>
+    <lastmod>2026-07-15T23:05:52.678Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://7sistersgreatdanes.com/7Sisters</loc>
+    <lastmod>2026-07-15T23:05:52.678Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://7sistersgreatdanes.com/Litters</loc>
+    <lastmod>2026-07-15T23:05:52.678Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://7sistersgreatdanes.com/Farm</loc>
+    <lastmod>2026-07-15T23:05:52.678Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://7sistersgreatdanes.com/BreedingPhilosophy</loc>
+    <lastmod>2026-07-15T23:05:52.678Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://7sistersgreatdanes.com/CommonQuestions</loc>
+    <lastmod>2026-07-15T23:05:52.678Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://7sistersgreatdanes.com/archive</loc>
+    <lastmod>2026-07-15T23:05:52.678Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://7sistersgreatdanes.com/GreatDaneGenomeBrowser</loc>
+    <lastmod>2026-07-15T23:05:52.678Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://7sistersgreatdanes.com/PlacementProcess</loc>
+    <lastmod>2026-07-15T23:05:52.678Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://7sistersgreatdanes.com/EzraxPiper</loc>
+    <lastmod>2026-07-15T23:05:52.678Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://7sistersgreatdanes.com/contact</loc>
+    <lastmod>2026-07-15T23:05:52.678Z</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://7sistersgreatdanes.com/SeanXPiper</loc>
+    <lastmod>2026-07-15T23:05:52.678Z</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://7sistersgreatdanes.com/RolexXPiper</loc>
+    <lastmod>2026-07-15T23:05:52.678Z</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://7sistersgreatdanes.com/posts/2026-03-28-the-deep-history-of-dogs-palaeolithic-partners</loc>
+    <lastmod>2026-03-28T05:00:00.000Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://7sistersgreatdanes.com/posts/2025-10-01-the-deep-history-of-dogs-ancient-dna</loc>
+    <lastmod>2025-10-01T05:00:00.000Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://7sistersgreatdanes.com/posts/2025-09-12-breeding-for-temperament-research-tools</loc>
+    <lastmod>2025-09-12T05:00:00.000Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://7sistersgreatdanes.com/posts/2025-07-17-feeding-your-growing-great-dane</loc>
+    <lastmod>2025-07-17T05:00:00.000Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://7sistersgreatdanes.com/posts/2025-07-03-the-first-year</loc>
+    <lastmod>2025-07-03T05:00:00.000Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://7sistersgreatdanes.com/posts/2025-06-25-choosing-a-great-dane-breeder</loc>
+    <lastmod>2025-06-25T05:00:00.000Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://7sistersgreatdanes.com/posts/2025-06-24-laying-the-foundation</loc>
+    <lastmod>2025-06-24T05:00:00.000Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://7sistersgreatdanes.com/posts/2025-06-23-more-than-show-and-go</loc>
+    <lastmod>2025-06-23T05:00:00.000Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
 </urlset>

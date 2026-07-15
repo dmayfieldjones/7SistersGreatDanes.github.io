@@ -1,0 +1,1 @@
+import{t as e}from"./dateAge.DuMZAE3L.js";var t=new Date(Date.UTC(2026,2,23)),n=document.querySelector(`#future-date`),r=document.querySelector(`#calculated-age`);n?.addEventListener(`change`,()=>{let i=n.value;if(i&&r){let[n,a,o]=i.split(`-`).map(Number);r.textContent=e(t,new Date(Date.UTC(n,a-1,o))),r.removeAttribute(`hidden`)}else r?.setAttribute(`hidden`,``)});
