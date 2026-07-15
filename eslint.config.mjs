@@ -1,50 +1,27 @@
 import eslint from '@eslint/js'
-import eslintPluginReact from 'eslint-plugin-react'
-import eslintPluginReactHooks from 'eslint-plugin-react-hooks'
-import eslintPluginReactRefresh from 'eslint-plugin-react-refresh'
-import eslintPluginUnicorn from 'eslint-plugin-unicorn'
+import eslintPluginAstro from 'eslint-plugin-astro'
 import tseslint from 'typescript-eslint'
 
 export default tseslint.config(
   {
-    ignores: ['out/**/*', 'eslint.config.mjs', '.next/**/*'],
+    ignores: [
+      'out/**/*',
+      'dist/**/*',
+      '.astro/**/*',
+      'eslint.config.mjs',
+      'getGeneLocations.ts',
+      'updateCategories.ts',
+    ],
   },
+  eslint.configs.recommended,
+  ...tseslint.configs.recommended,
+  ...eslintPluginAstro.configs.recommended,
   {
-    languageOptions: {
-      parserOptions: {
-        projectService: {
-          allowDefaultProject: ['*.js'],
-          defaultProject: './tsconfig.json',
-        },
-        tsconfigRootDir: import.meta.dirname,
-      },
+    rules: {
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+      ],
     },
-    settings: {
-      react: {
-        version: 'detect',
-      },
-    },
-  },
-  //eslint.configs.recommended,
-  //...tseslint.configs.recommended,
-  //...tseslint.configs.stylisticTypeChecked,
-  //...tseslint.configs.strictTypeChecked,
-  //eslintPluginReact.configs.flat.recommended,
-  //{
-  //  plugins: {
-  //    'react-hooks': eslintPluginReactHooks,
-  //  },
-  //  rules: eslintPluginReactHooks.configs.recommended.rules,
-  //},
-  //{
-  //  // in main config for TSX/JSX source files
-  //  plugins: {
-  //    'react-refresh': eslintPluginReactRefresh,
-  //  },
-  //  rules: {},
-  //},
-  //eslintPluginUnicorn.configs['flat/recommended'],
-  {
-    rules: {},
   },
 )

@@ -1,0 +1,945 @@
+@layer theme, base, components, utilities;
+
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities' layer(utilities);
+
+a {
+  color: #bf141c;
+}
+
+html {
+  /* Ensure html is the scroll container */
+  height: auto;
+  min-height: 100%;
+  overflow-y: scroll; /* Use scroll to ensure scrollbar is always available */
+  -webkit-overflow-scrolling: touch;
+  /* Ensure page is immediately scrollable */
+  scroll-behavior: smooth;
+  /* Ensure scroll events are handled at document level */
+  overscroll-behavior-y: auto;
+  /* Ensure scrollbar is always on the html element, not nested containers */
+  position: relative;
+}
+
+body {
+  font-family:
+    Fira Sans,
+    sans-serif;
+  font-weight: 300;
+  background: url('/img/placeholder-big.jpg');
+  /*
+   * https://dev.to/madsstoumann/dark-mode-in-3-lines-of-css-and-other-adventures-1ljj 
+   */
+  background-color: Canvas;
+  color: CanvasText;
+  color-scheme: light dark;
+  overflow-x: auto;
+  overflow-y: visible; /* Let html handle scrolling */
+  /* Ensure smooth scrolling on mobile */
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  /* Prevent scroll chaining issues */
+  overscroll-behavior-y: auto;
+  /* Ensure body doesn't create a scroll context */
+  height: auto;
+  min-height: 100%;
+}
+
+.container {
+  width: 36rem;
+  max-width: 550px;
+  padding-right: 15px;
+  padding-left: 15px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #fff;
+  color: #282828;
+  z-index: 1;
+  border-radius: 3px;
+  box-shadow: 0 0 10px 0 rgba(40, 40, 40, 0.3);
+  -webkit-transition: 0.5s;
+  -moz-transition: 0.5s;
+  -ms-transition: 0.5s;
+  -o-transition: 0.5s;
+  transition: 0.5s;
+}
+
+.social-btn,
+.btn {
+  display: inline-block;
+  border: 1px solid;
+  border-color: rgba(229, 230, 233, 0.5) rgba(223, 224, 228, 0.5) #d0d1d5;
+  border-radius: 3px;
+  text-decoration: none;
+  background: #fff;
+  color: #282828;
+}
+
+.btn {
+  padding: 10px 18px;
+  font-size: 14px;
+  font-size: 0.875rem;
+  margin: 4px auto;
+}
+
+hr.hr-line {
+  border: 0;
+  height: 1px;
+  opacity: 0.15;
+  margin: 1em 0;
+  background-image: -webkit-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
+  background-image: -moz-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
+  background-image: -ms-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
+  background-image: -o-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
+}
+
+.wrapper {
+  width: 75%;
+  max-width: 850px;
+  margin: 0 auto;
+  background: #fff;
+  color: #383838;
+  padding: 0.5em;
+  border-radius: 3px;
+  box-shadow: 0 0 10px 0 rgba(40, 40, 40, 0.3);
+  -webkit-transition: 0.5s;
+  -moz-transition: 0.5s;
+  -ms-transition: 0.5s;
+  -o-transition: 0.5s;
+  transition: 0.5s;
+  overflow: visible;
+  /* Ensure wrapper doesn't create scroll context */
+  position: relative;
+}
+
+/* Override wrapper for homepage to allow full-width video */
+.wrapper:has(.homepage-container) {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  /* Ensure no scroll context is created */
+  overflow: visible !important;
+  overflow-x: visible !important;
+  overflow-y: visible !important;
+  height: auto !important;
+  /* Don't block scroll events */
+  position: relative !important;
+  z-index: auto !important;
+  /* Ensure scrollbar is on html, not here */
+  max-height: none !important;
+}
+
+/* Alternative selector for browsers that don't support :has() */
+.homepage-container {
+  /* Ensure parent wrapper doesn't interfere */
+}
+
+.homepage-container ~ * {
+  /* This won't match, but ensures specificity */
+}
+
+.resource-image {
+  width: 300px; /* Force a consistent width */
+  height: 200px; /* Force a consistent height */
+  object-fit: cover; /* Ensures the image is cropped to fit the dimensions */
+  display: block;
+  margin: 0 auto;
+  border-radius: 8px; /* Optional: Add rounded corners for consistency */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
+}
+
+@media (max-width: 768px) {
+  .wrapper {
+    width: 95%;
+  }
+}
+
+/* Homepage Video Background Styles */
+/* Override body background for homepage to avoid loading unnecessary image */
+body:has(.homepage-container) {
+  background: none !important;
+  background-color: #000 !important; /* Black background for video */
+}
+
+.homepage-container {
+  position: relative;
+  overflow-x: hidden; /* Prevent horizontal scroll */
+  /* Don't create a scroll container - let html handle scrolling */
+  overflow-y: visible !important;
+  /* Ensure scroll events pass through */
+  touch-action: pan-y !important;
+  -webkit-overflow-scrolling: touch;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  /* Ensure it doesn't create a scroll context */
+  height: auto !important;
+  min-height: auto !important;
+  max-height: none !important;
+}
+
+/* Make video background extend behind content section */
+.homepage-container::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  /* Ensure it doesn't block scrolling */
+  touch-action: none;
+}
+
+/* Full-screen video hero section */
+.video-hero-section {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 0;
+  /* Ensure scrolling works - allow scroll events to pass through */
+  pointer-events: auto;
+  /* Enable smooth scrolling */
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y !important;
+  /* Ensure scroll events are not blocked */
+  overscroll-behavior: none;
+  /* Change overflow to visible to allow scroll-through */
+  overflow: visible !important;
+}
+
+.video-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: -1;
+  /* Allow scrolling through video area - don't block scroll events */
+  pointer-events: none;
+  /* Ensure it doesn't interfere with scrolling */
+  touch-action: none;
+  /* Prevent it from creating a scroll context */
+  will-change: transform;
+}
+
+.video-background iframe,
+.video-background video,
+.video-background img.hero-mobile-photo {
+  pointer-events: none;
+  touch-action: none;
+}
+
+.video-iframe,
+.video-native {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100vw;
+  height: 100vh;
+  min-width: 100%;
+  min-height: 100%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  /* Ensure it doesn't block scrolling - allow scroll to pass through */
+  touch-action: none;
+  /* Prevent iframe from capturing scroll events */
+  will-change: transform;
+  z-index: 0;
+}
+
+/* Fills the same box as the iframe before the embed mounts (deferred load). */
+.video-iframe.video-iframe-placeholder {
+  background: #0a0a0a;
+  pointer-events: none;
+}
+
+.hero-mobile-photo {
+  object-fit: cover;
+  object-position: center 40%;
+}
+
+/* On mobile, adjust video to fill better and reduce black space */
+@media (max-width: 768px) {
+  /*
+   * 100vh is often taller than the *visible* viewport (browser chrome), so the hero
+   * extends below the fold and bottom-aligned controls are clipped. svh = small viewport.
+   */
+  .video-hero-section {
+    height: 100vh;
+    height: 100svh;
+    min-height: 100vh;
+    min-height: 100svh;
+  }
+
+  .video-iframe,
+  .video-native {
+    /* Portrait: fill visible height; svh keeps ratio in sync with hero */
+    width: calc(100svh * 16 / 9) !important;
+    width: calc(100vh * 16 / 9) !important;
+    height: 100svh !important;
+    height: 100vh !important;
+    min-width: 100vw !important;
+    min-height: 100svh !important;
+    min-height: 100vh !important;
+  }
+  
+  .content-section {
+    padding-top: 1rem !important;
+    padding-bottom: 1.5rem !important;
+  }
+}
+
+/* On desktop, make the video wider so it extends beyond content container */
+@media (min-width: 1024px) {
+  .video-iframe,
+  .video-native {
+    width: 120vw; /* 20% wider than viewport */
+    height: 67.5vw; /* Maintain 16:9 aspect ratio */
+    min-height: 100vh;
+    min-width: 177.78vh; /* Ensure it covers height */
+  }
+}
+
+/* On very wide screens, make it even wider */
+@media (min-width: 1920px) {
+  .video-iframe,
+  .video-native {
+    width: 140vw; /* 40% wider than viewport */
+    height: 78.75vw; /* Maintain 16:9 aspect ratio */
+    min-height: 100vh;
+    min-width: 177.78vh;
+  }
+}
+
+/* Optional: Add a subtle overlay to ensure text readability */
+.video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.1);
+  z-index: 1;
+  /* Don't block scroll indicator */
+  pointer-events: none;
+}
+
+/* Full-width bar pinned to the visible viewport bottom — hides YouTube chrome / “More videos”. */
+.video-bottom-mask {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  height: calc(7.5rem + env(safe-area-inset-bottom, 0px));
+  background: #000;
+  z-index: 5;
+  pointer-events: none;
+  transform: translateZ(0);
+}
+
+@media (max-width: 768px) {
+  .video-bottom-mask {
+    height: calc(9rem + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/* Scroll indicator */
+.scroll-indicator {
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  margin-left: 0;
+  transform: translateX(-50%);
+  z-index: 100; /* High z-index to ensure it's always visible */
+  animation: bounce 2s infinite;
+  cursor: pointer;
+  padding: 10px;
+  /* Add subtle background for better visibility */
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  backdrop-filter: blur(5px);
+  /* Ensure it doesn't block scrolling */
+  touch-action: manipulation;
+}
+
+/* On mobile, make scroll indicator more prominent and ensure it's centered */
+@media (max-width: 768px) {
+  /*
+   * position: fixed ties this to the *visible* viewport, not the (often taller) hero box,
+   * so “More below” isn’t clipped under browser chrome. Look = compact translucent chip.
+   */
+  .video-hero-section .scroll-indicator {
+    position: fixed !important;
+    left: 50% !important;
+    right: auto !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    bottom: calc(1.35rem + env(safe-area-inset-bottom, 0px)) !important;
+    z-index: 2000 !important;
+    transform: translateX(-50%) !important;
+    padding: 10px 18px 11px !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    width: max-content !important;
+    max-width: min(18rem, calc(100vw - 2rem)) !important;
+    background: rgba(0, 0, 0, 0.68) !important;
+    border: 1px solid rgba(255, 255, 255, 0.22) !important;
+    border-radius: 9999px !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    animation: bounce-mobile-fixed 2.25s infinite ease-in-out !important;
+  }
+
+  /* Keep horizontal center while bouncing vertically */
+  @keyframes bounce-mobile-fixed {
+    0%, 20%, 50%, 80%, 100% {
+      transform: translateX(-50%) translateY(0);
+    }
+    40% {
+      transform: translateX(-50%) translateY(-10px);
+    }
+    60% {
+      transform: translateX(-50%) translateY(-5px);
+    }
+  }
+
+  .video-hero-section .scroll-indicator .scroll-arrow {
+    width: 26px !important;
+    height: 26px !important;
+    border-right: 3px solid rgba(255, 255, 255, 0.95) !important;
+    border-bottom: 3px solid rgba(255, 255, 255, 0.95) !important;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4)) !important;
+    margin-bottom: 0 !important;
+  }
+
+  .video-hero-section .scroll-indicator .scroll-text {
+    color: rgba(255, 255, 255, 0.96) !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    margin-top: 5px !important;
+    letter-spacing: 0.04em !important;
+    text-transform: none !important;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.75) !important;
+  }
+
+  /* Fixed chip hides once user scrolls past the hero (ScrollIndicator intersection observer) */
+  .video-hero-section .scroll-indicator.scroll-indicator--hero-out {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transition: opacity 0.25s ease;
+  }
+}
+
+/* On desktop, position it higher for better visibility */
+@media (min-width: 1024px) {
+  .scroll-indicator {
+    bottom: 80px;
+  }
+}
+
+.scroll-arrow {
+  width: 30px;
+  height: 30px;
+  border-right: 3px solid rgba(255, 255, 255, 0.95);
+  border-bottom: 3px solid rgba(255, 255, 255, 0.95);
+  transform: rotate(45deg);
+  /* Add shadow for better visibility */
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  margin: 0 auto;
+}
+
+.scroll-text {
+  display: none;
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 12px;
+  font-weight: 500;
+  margin-top: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Homepage hero scroll chip: .video-hero-section .scroll-indicator .scroll-text handles mobile */
+@media (max-width: 768px) {
+  .video-hero-section .scroll-indicator .scroll-text {
+    display: block !important;
+  }
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  40% {
+    transform: translateX(-50%) translateY(-10px);
+  }
+  60% {
+    transform: translateX(-50%) translateY(-5px);
+  }
+}
+
+/* Ensure bounce animation maintains centering */
+.scroll-indicator {
+  animation-name: bounce;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+
+/* Content section - appears after scrolling */
+.content-section {
+  position: relative;
+  z-index: 2;
+  /* Semi-transparent background so video shows through on sides */
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.95) 20%, #fff 40%);
+  padding: 4rem 2rem;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Add tiny bit of extra height to ensure immediate scrollability */
+  padding-bottom: calc(4rem + 1px);
+  /* Ensure it doesn't create a scroll context */
+  overflow: visible !important;
+  /* Initial state - hidden and below */
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+/* When visible - fade in and slide up */
+.content-section.content-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Litter spotlight - prominent CTA for upcoming litter */
+/* Anchor lowered so translate(-50%, -50%) doesn’t pull the card under the sticky navbar (z-index 1000). */
+.litter-spotlight-hero-wrap {
+  position: absolute;
+  top: calc(38% + 3.75rem + env(safe-area-inset-top, 0px));
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 50;
+  pointer-events: auto;
+  width: 100%;
+  max-width: 420px;
+  padding: 0 1rem;
+}
+
+@media (max-width: 768px) {
+  /*
+   * Top-anchored so the CTA sits high, stays clear of the bottom gradient + scroll chip,
+   * and TikTok isn’t clipped off-screen. z-index above .video-bottom-mask (45).
+   */
+  .litter-spotlight-hero-wrap {
+    top: calc(0.35rem + env(safe-area-inset-top, 0px));
+    bottom: auto;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    z-index: 90;
+    max-width: calc(100% - 1.5rem);
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .litter-spotlight-hero .litter-spotlight-img {
+    max-height: min(320px, 48vh);
+    width: 100%;
+    object-fit: contain;
+    object-position: center top;
+    background: #0d0d0d;
+  }
+
+  .litter-spotlight-hero {
+    margin-bottom: 0.4rem;
+    flex-shrink: 0;
+  }
+
+  .litter-spotlight-tiktok {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 0.55rem 0.85rem;
+    background: #1a1a1a;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+    flex-shrink: 0;
+  }
+
+  .litter-spotlight-tiktok-link {
+    color: #fff !important;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-shadow: none;
+  }
+
+  .litter-spotlight-tiktok-link:hover {
+    color: #f5f5f5 !important;
+  }
+
+  .litter-spotlight-hero .litter-spotlight-content {
+    padding: 0.65rem 0.9rem;
+  }
+
+  .litter-spotlight-hero .litter-spotlight-title {
+    font-size: 1.28rem;
+  }
+}
+
+.litter-spotlight {
+  display: block;
+  margin: 0 auto 2rem;
+  max-width: 500px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  border: 2px solid #bf141c;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.litter-spotlight-hero {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+  margin: 0;
+}
+
+.litter-spotlight-hero .litter-spotlight-content {
+  background: rgba(255, 255, 255, 0.98);
+}
+
+.litter-spotlight:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 24px rgba(191, 20, 28, 0.25);
+}
+.litter-spotlight-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.litter-spotlight-content {
+  padding: 1rem 1.25rem;
+  background: linear-gradient(to bottom, #fff 0%, #f8f8f8 100%);
+  text-align: center;
+}
+.litter-spotlight-badge {
+  display: inline-block;
+  background: #bf141c;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+}
+.litter-spotlight-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #bf141c;
+  margin: 0 0 0.25rem;
+}
+.litter-spotlight-date {
+  font-size: 1rem;
+  color: #666;
+  margin: 0 0 0.5rem;
+}
+.litter-spotlight-cta {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #bf141c;
+}
+
+.litter-spotlight-tiktok {
+  text-align: center;
+  margin: 0.75rem 0 0;
+  font-size: 0.9rem;
+}
+
+.litter-spotlight-tiktok-link {
+  color: #fff;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+.litter-spotlight-tiktok-link:hover {
+  color: #fce8e9;
+}
+
+/* Thin blog CTA under TikTok — matches litter spotlight accent */
+.litter-spotlight-article-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem 0.75rem;
+  margin: 0.85rem auto 0;
+  padding: 0.5rem 1rem;
+  max-width: 100%;
+  border-radius: 10px;
+  border: 2px solid #bf141c;
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+  text-decoration: none;
+  color: #1a1a1a;
+  font-size: 0.88rem;
+  line-height: 1.35;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.litter-spotlight-article-bar:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(191, 20, 28, 0.2);
+}
+
+.litter-spotlight-article-badge {
+  flex-shrink: 0;
+  background: #bf141c;
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+}
+
+.litter-spotlight-article-text {
+  font-weight: 600;
+  color: #bf141c;
+  text-align: center;
+}
+
+/* Homepage below hero: don’t force full viewport height */
+.content-section.home-below-hero {
+  min-height: auto;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 3rem;
+  padding-bottom: 4rem;
+}
+
+.home-below-hero > .site-tiktok-section {
+  margin-top: 1.25rem;
+  padding-top: 0;
+  border-top: none;
+  width: 100%;
+  max-width: 44rem;
+}
+
+.home-below-hero > .site-tiktok-section .site-tiktok-embed-wrap {
+  max-width: none;
+}
+
+@media (min-width: 768px) {
+  .home-below-hero > .site-tiktok-section .site-tiktok-embed {
+    height: 520px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .home-below-hero > .site-tiktok-section {
+    max-width: 46rem;
+  }
+
+  .home-below-hero > .site-tiktok-section .site-tiktok-embed {
+    height: 540px;
+  }
+}
+
+.site-tiktok-section {
+  margin-top: 2rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.site-tiktok-embed-wrap {
+  width: 100%;
+  max-width: 28rem;
+  line-height: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.site-tiktok-embed {
+  display: block;
+  width: 100%;
+  height: 458px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: #000;
+  vertical-align: top;
+}
+
+.home-intro-logo {
+  margin: 0 auto 1.5rem;
+  display: block;
+}
+
+.home-intro-text {
+  text-align: left;
+  margin: 0 auto 1.75rem;
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: #383838;
+}
+
+@media (min-width: 640px) {
+  .home-intro-text {
+    text-align: center;
+  }
+}
+
+.home-cta-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 22rem;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .home-cta-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 44rem;
+    gap: 1rem;
+  }
+
+  .home-cta {
+    flex: 1 1 12rem;
+    min-width: 10rem;
+  }
+}
+
+.home-cta {
+  display: block;
+  padding: 0.875rem 1.25rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  text-align: center;
+  text-decoration: none;
+  border: 2px solid #bf141c;
+  background: #fff;
+  color: #bf141c;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.home-cta:hover {
+  background: #bf141c;
+  color: #fff;
+}
+
+.home-cta-primary {
+  background: #bf141c;
+  color: #fff;
+}
+
+.home-cta-primary:hover {
+  background: #9e1018;
+  border-color: #9e1018;
+  color: #fff;
+}
+
+.content-overlay {
+  position: relative;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(5px);
+  padding: 3rem;
+  border-radius: 12px;
+  margin: 0 auto;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 600px;
+  /* Ensure it doesn't create a scroll context */
+  overflow: visible !important;
+}
+
+/* Homepage card: wider than default 600px for intro + CTA row */
+.content-overlay.home-intro-wrap {
+  max-width: 44rem;
+}
+
+/* Desktop - larger container for better proportions */
+@media (min-width: 1024px) {
+  .content-section {
+    padding: 5rem 3rem;
+  }
+  
+  .content-overlay {
+    max-width: 700px;
+    padding: 4rem;
+  }
+
+  .content-overlay.home-intro-wrap {
+    max-width: 46rem;
+    padding: 3.5rem 4rem;
+  }
+}
+
+/* Tablet */
+@media (min-width: 769px) and (max-width: 1023px) {
+  .content-overlay {
+    max-width: 600px;
+    padding: 3rem;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .content-section {
+    padding: 1rem 1rem 1.5rem 1rem !important;
+    /* Reduce top padding to bring content closer to video */
+  }
+  
+  .content-overlay {
+    margin: 0;
+    padding: 2rem 1.5rem;
+    border-radius: 8px;
+  }
+  
+  /* Reduce video hero section height slightly on mobile to reduce black space */
+  .video-hero-section {
+    height: 100vh;
+    min-height: 100vh;
+  }
+}

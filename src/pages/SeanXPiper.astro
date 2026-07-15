@@ -1,0 +1,169 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import '../styles/litter.css'
+import { timeSincePastDate } from '../utils/dateAge'
+
+const birthDate = new Date(Date.UTC(2024, 7, 19))
+const birthDateIso = '2024-08-19'
+const ageToday = timeSincePastDate(birthDate)
+---
+
+<BaseLayout
+  title="7Sisters - Sean X Piper"
+  description="Our mission and approach to breeding exceptional Great Danes at 7Sisters Farm"
+>
+  <div class="content">
+    <div class="post-title">
+      <h1>
+        Sean x Piper Litter at <span style="color: #bf141c">7</span>Sisters
+        Farm
+      </h1>
+    </div>
+    <main class="content-wrapper">
+      <section class="hero-section">
+        <img
+          src="/img/Colorlogo_nobackground.png"
+          alt="7Sisters Farm Logo"
+          width="300"
+          height="auto"
+          class="hero-logo"
+          loading="lazy"
+        />
+      </section>
+
+      <section class="litter-info-section">
+        <div class="litter-details">
+          <h2 class="section-title">Litter Information</h2>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="label">Litter Number:</span>
+              <span class="value">WS848503</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Litter's age today:</span>
+              <span class="value" id="timeSinceWhelp">{ageToday}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Litter's age on Selected (Show) Date:</span>
+              <div class="age-calculator">
+                <input
+                  type="date"
+                  id="future-date"
+                  data-birth={birthDateIso}
+                  class="date-input"
+                />
+                <span class="value" id="calculated-age" hidden></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="parents-info">
+          <div class="parent-card">
+            <h3 class="parent-title">Sire</h3>
+            <p class="parent-name">
+              CH Legado N IZYA's Oops! I Did It Again
+              <span class="call-name">"Sean"</span>
+            </p>
+            <p class="registration">
+              <a
+                href="https://ofa.org/advanced-search/?regnum=WS80095602"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="ofa-link"
+              >
+                WS80095602 OFA Results
+              </a>
+            </p>
+          </div>
+          <div class="parent-card">
+            <h3 class="parent-title">Dam</h3>
+            <p class="parent-name">
+              CH Legado N Danekraaft's How Can I Tell You?
+              <span class="call-name">"Piper"</span>
+            </p>
+            <p class="registration">
+              <a
+                href="https://ofa.org/advanced-search/?regnum=WS69691106"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="ofa-link"
+              >
+                WS69691106 OFA Results
+              </a>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="offspring-section">
+        <h2 class="section-title">Offspring</h2>
+        <div class="puppies-list">
+          <div class="puppy-card">
+            <p class="puppy-reg">WS84850301</p>
+            <p class="puppy-name">
+              <span class="brand-number">7</span>Sisters N Legado's
+              Interstellar <span class="call-name">"Stella"</span>
+            </p>
+          </div>
+          <div class="puppy-card">
+            <p class="puppy-reg">WS84850302</p>
+            <p class="puppy-name">
+              <span class="brand-number">7</span>Sisters Tilly In The Sky With
+              Diamonds <span class="call-name">"Tilly"</span>
+            </p>
+          </div>
+          <div class="puppy-card">
+            <p class="puppy-reg">WS84850303</p>
+            <p class="puppy-name">
+              <span class="brand-number">7</span>Sisters N Legado's Cruising
+              To The Oldies <span class="call-name">"Cruz"</span>
+            </p>
+          </div>
+          <div class="puppy-card">
+            <p class="puppy-reg">WS84850304</p>
+            <p class="puppy-name">
+              <span class="brand-number">7</span>Sisters N Legado's Heart of
+              Gold <span class="call-name">"Cora"</span>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="advertisement-section">
+        <a
+          href="/SeanXPiper"
+          class="ad-link"
+          aria-label="View full Sean X Piper litter details"
+        >
+          <img
+            src="/img/SeanXPiper.jpg"
+            alt="Sean X Piper litter advertisement"
+            class="ad-image"
+            loading="lazy"
+          />
+        </a>
+      </section>
+    </main>
+  </div>
+</BaseLayout>
+
+<script>
+  import { timeSincePastDate } from '../utils/dateAge'
+
+  const input = document.querySelector<HTMLInputElement>('#future-date')
+  const output = document.querySelector<HTMLElement>('#calculated-age')
+
+  input?.addEventListener('change', () => {
+    const birth = input.dataset.birth
+    if (!birth || !input.value || !output) {
+      return
+    }
+    const [by, bm, bd] = birth.split('-').map(Number)
+    const [sy, sm, sd] = input.value.split('-').map(Number)
+    const birthDate = new Date(Date.UTC(by, bm - 1, bd))
+    const selectedDate = new Date(Date.UTC(sy, sm - 1, sd))
+    output.textContent = timeSincePastDate(birthDate, selectedDate)
+    output.hidden = false
+  })
+</script>

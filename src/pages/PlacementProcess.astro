@@ -1,0 +1,173 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import '../styles/PlacementProcess.css'
+import { SITE_MOTTO } from '../lib/site'
+
+const keywords = [
+  'Great Dane puppy placement',
+  'Great Dane breeder process',
+  'responsible Great Dane breeder',
+  '7Sisters Farm puppies',
+  'Great Dane waitlist',
+  'Illinois Great Dane breeder',
+]
+---
+
+<BaseLayout
+  title="Great Dane Puppy Placement Process | 7Sisters Farm"
+  description="How puppy placement works at 7Sisters Farm: inquiry, conversation, thoughtful matching, and lifetime support."
+  keywords={keywords}
+  image="https://7sistersgreatdanes.com/img/2025_4pt_WB_IlliniGDC_Mimi_Kim.jpg"
+  canonical="https://7sistersgreatdanes.com/PlacementProcess"
+>
+  <div class="content">
+    <div class="post-title">
+      <h1>Puppy Placement Process</h1>
+    </div>
+    <main class="content-wrapper">
+      <section class="hero-section">
+        <img
+          src="/img/Colorlogo_nobackground.png"
+          alt="7Sisters Farm Logo"
+          width="300"
+          height="auto"
+          class="hero-logo"
+          loading="lazy"
+        />
+      </section>
+      <section class="intro-section">
+        <p class="intro-motto">{SITE_MOTTO}</p>
+        <p class="intro-lead">
+          That is the goal behind every placement at
+          <span class="brand-number">7</span>Sisters Farm. Here is how it
+          works, from first contact through go-home and beyond.
+        </p>
+      </section>
+
+      <section class="steps-section" aria-labelledby="steps-heading">
+        <h2 id="steps-heading" class="section-title">Step by step</h2>
+        <ol class="process-steps">
+          <li class="process-step">
+            <span class="step-number" aria-hidden="true">1</span>
+            <div class="step-body">
+              <h3 class="step-title">Start with an inquiry</h3>
+              <p>
+                Reach out through our
+                <a href="/contact">contact form</a> or by email — a brief
+                introduction about your experience, timeline, and what you
+                are looking for. If you are still researching, our
+                <a href="/CommonQuestions">Common Questions</a> and
+                <a href="/posts/2025-06-25-choosing-a-great-dane-breeder">
+                  guide to finding a responsible breeder
+                </a>
+                are a good place to begin before you write.
+              </p>
+            </div>
+          </li>
+          <li class="process-step">
+            <span class="step-number" aria-hidden="true">2</span>
+            <div class="step-body">
+              <h3 class="step-title">Detailed application & review</h3>
+              <p>
+                If your inquiry looks like a potential fit, we follow up by
+                email with a longer application about your household,
+                lifestyle, and plans for a Great Dane. Once we receive it, we
+                review your answers and get back to you to continue the
+                conversation.
+              </p>
+            </div>
+          </li>
+          <li class="process-step">
+            <span class="step-number" aria-hidden="true">3</span>
+            <div class="step-body">
+              <h3 class="step-title">Getting acquainted</h3>
+              <p>
+                We follow up by phone, video call, or email — and when
+                geography allows, we encourage a visit to meet our dogs. This
+                is a chance to ask questions and make sure a Great Dane is
+                the right fit for your home.
+              </p>
+            </div>
+          </li>
+          <li class="process-step">
+            <span class="step-number" aria-hidden="true">4</span>
+            <div class="step-body">
+              <h3 class="step-title">Matching & timing</h3>
+              <p>
+                We breed as part of an ongoing, carefully planned program, so
+                you may be waiting for the right litter rather than a puppy
+                available today. When puppies are on the ground, we match
+                around 6–8 weeks based on temperament, structure, and fit —
+                not the order inquiries arrived.
+              </p>
+            </div>
+          </li>
+          <li class="process-step">
+            <span class="step-number" aria-hidden="true">5</span>
+            <div class="step-body">
+              <h3 class="step-title">Agreement & go-home</h3>
+              <p>
+                When we agree on a match, we work through a customized
+                contract covering health, spay/neuter expectations for pet
+                homes, return policy, and responsibilities on both sides.
+                Puppies usually go home between 8–12 weeks. See
+                <a href="/CommonQuestions">Common Questions</a> for what your
+                purchase includes and go-home timing.
+              </p>
+            </div>
+          </li>
+          <li class="process-step">
+            <span class="step-number" aria-hidden="true">6</span>
+            <div class="step-body">
+              <h3 class="step-title">Lifetime support</h3>
+              <p>
+                Placement does not end at go-home. We offer lifetime breeder
+                support, welcome updates on your dog, and our dogs always
+                have a place with us if life circumstances change.
+              </p>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <section class="expect-section" aria-labelledby="expect-heading">
+        <h2 id="expect-heading" class="section-title">
+          What we look for in a home
+        </h2>
+        <ul class="expect-list">
+          <li>Honest communication about your experience and expectations</li>
+          <li>Patience — good matching takes time</li>
+          <li>
+            Commitment to staying in touch and honoring terms that protect
+            the dog
+          </li>
+        </ul>
+      </section>
+
+      <section class="related-section" aria-labelledby="related-heading">
+        <h2 id="related-heading" class="section-title">Related reading</h2>
+        <ul class="related-links">
+          <li>
+            <a href="/CommonQuestions">Common Questions</a> — detailed FAQs on
+            purchase details and breeder policies
+          </li>
+          <li>
+            <a href="/Litters">Puppies &amp; Litters</a> — current and previous
+            litters with parent health and pedigree detail
+          </li>
+          <li>
+            <a href="/BreedingPhilosophy">Breeding Philosophy</a> — why we
+            prioritize fit and breed betterment
+          </li>
+        </ul>
+      </section>
+
+      <section class="cta-section">
+        <p>
+          Ready to start a conversation?
+          <a href="/contact" class="cta-button">Contact us</a>
+        </p>
+      </section>
+    </main>
+  </div>
+</BaseLayout>

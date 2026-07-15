@@ -1,0 +1,203 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import '../../styles/post.css'
+import { getAllPosts, getPostById } from '../../lib/api'
+import { getArticleCategory, getReadingTime } from '../../utils/archive'
+import {
+  formatPostDateEnUS,
+  postDateToPublishedInstant,
+} from '../../lib/postDate'
+
+export function getStaticPaths() {
+  return getAllPosts().map(post => ({ params: { id: post.id } }))
+}
+
+const { id } = Astro.params
+const { title, date, updated, description, tags, categories, Content } =
+  getPostById(id)
+
+const category = getArticleCategory(id, title)
+const readingTime = getReadingTime(id)
+
+const trimmedDescription = typeof description === 'string' ? description.trim() : ''
+
+const keywords = [
+  'Great Dane',
+  'dog breeding',
+  'dog care',
+  category.toLowerCase(),
+  ...title
+    .toLowerCase()
+    .split(' ')
+    .filter(word => word.length > 3),
+]
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: title,
+  description: trimmedDescription,
+  image: 'https://7sistersgreatdanes.com/img/Colorlogo_nobackground.png',
+  author: {
+    '@type': 'Person',
+    name: 'Dustin Mayfield-Jones',
+    url: 'https://7sistersgreatdanes.com/about',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: '7Sisters Farm',
+    logo: {
+      '@type': 'ImageObject',
+      url: 'https://7sistersgreatdanes.com/img/Colorlogo_nobackground.png',
+    },
+  },
+  datePublished: postDateToPublishedInstant(date),
+  dateModified: postDateToPublishedInstant(updated !== undefined ? updated : date),
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': `https://7sistersgreatdanes.com/posts/${id}`,
+  },
+  articleSection: category,
+  keywords: ['Great Dane', 'dog breeding', 'dog care', category.toLowerCase()],
+  timeRequired: readingTime,
+  inLanguage: 'en-US',
+}
+---
+
+<BaseLayout
+  title={`${title} | 7Sisters Farm`}
+  description={trimmedDescription}
+  keywords={keywords}
+  image="https://7sistersgreatdanes.com/img/Colorlogo_nobackground.png"
+  canonical={`https://7sistersgreatdanes.com/posts/${id}`}
+  ogType="article"
+>
+  <Fragment slot="head">
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(structuredData)}
+    />
+  </Fragment>
+
+  <div class="content">
+    <div class="post-title">
+      <h1>{title}</h1>
+      <div class="post-meta">
+        <div class="post-dates">
+          <span class="post-date">{formatPostDateEnUS(date)}</span>
+          {
+            updated ? (
+              <span class="post-updated">
+                Updated {formatPostDateEnUS(updated)}
+              </span>
+            ) : null
+          }
+        </div>
+        {
+          tags.length > 0 ? (
+            <div class="post-tags">
+              {tags.map(tag => (
+                <span class="post-tag">{tag}</span>
+              ))}
+            </div>
+          ) : (
+            <span class="post-category">{category}</span>
+          )
+        }
+        <span class="post-reading-time">{readingTime}</span>
+      </div>
+    </div>
+
+    <main class="content-wrapper">
+      <article class="blog-content">
+        <Content />
+      </article>
+      <div style="margin-top: 2rem; text-align: center">
+        <a href="/BreedingPhilosophy">
+          Curious about our breeding philosophy and how we select our dogs?
+          Visit our <strong>Breeding Philosophy</strong> page.
+        </a>
+      </div>
+
+      <div
+        class="related-articles"
+        style="margin-top: 3rem; padding: 2rem; background-color: #f8f8f8; border-radius: 8px"
+      >
+        <h3 style="color: #bf141c; margin-bottom: 1rem">Related Articles</h3>
+        <div style="display: flex; flex-direction: column; gap: 0.5rem">
+          <a
+            href="/posts/2025-10-01-the-deep-history-of-dogs-ancient-dna"
+            style="color: #bf141c; text-decoration: none"
+          >
+            → The Deep History of Dogs: A Story Written in Ancient DNA (Part
+            1)
+          </a>
+          <a
+            href="/posts/2025-06-25-choosing-a-great-dane-breeder"
+            style="color: #bf141c; text-decoration: none"
+          >
+            → The Family's Guide to Choosing a Great Dane Breeder
+          </a>
+          <a
+            href="/posts/2025-07-03-the-first-year"
+            style="color: #bf141c; text-decoration: none"
+          >
+            → The First Year: A Comprehensive Guide to Great Dane Puppy
+            Development
+          </a>
+          <a
+            href="/posts/2025-06-24-laying-the-foundation"
+            style="color: #bf141c; text-decoration: none"
+          >
+            → Laying the Foundation: Our Breeding Philosophy
+          </a>
+        </div>
+      </div>
+    </main>
+  </div>
+</BaseLayout>
+
+<script>
+  function replace7Sisters() {
+    const content = document.querySelector<HTMLElement>('.blog-content')
+    if (!content) {
+      return
+    }
+    const walker = document.createTreeWalker(content, NodeFilter.SHOW_TEXT)
+    const textNodes: Text[] = []
+    let node = walker.nextNode()
+    while (node) {
+      textNodes.push(node as Text)
+      node = walker.nextNode()
+    }
+    textNodes.forEach(textNode => {
+      const text = textNode.textContent ?? ''
+      if (text.includes('7Sisters')) {
+        const span = document.createElement('span')
+        span.innerHTML = text.replace(
+          /7Sisters/g,
+          '<span style="color: #bf141c; font-weight: 600;">7</span>Sisters',
+        )
+        textNode.parentNode?.replaceChild(span, textNode)
+      }
+    })
+  }
+
+  replace7Sisters()
+
+  const details = document.querySelectorAll<HTMLDetailsElement>(
+    '.blog-content details',
+  )
+  details.forEach(detail => {
+    const summary = detail.querySelector('summary')
+    summary?.addEventListener('click', event => {
+      event.preventDefault()
+      details.forEach(other => {
+        if (other !== detail && other.open) {
+          other.open = false
+        }
+      })
+      detail.open = !detail.open
+    })
+  })
+</script>

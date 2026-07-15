@@ -1,9 +1,10 @@
 # Dependencies
 node_modules/
 
-# Next.js build & static export (publish with: yarn build && yarn deploy)
-.next/
+# Astro build & static export (publish with: pnpm build && pnpm deploy)
+.astro/
 out/
+dist/
 
 # macOS
 .DS_Store

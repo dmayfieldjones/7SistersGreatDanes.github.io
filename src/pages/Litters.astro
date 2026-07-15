@@ -1,0 +1,274 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import '../styles/Litters.css'
+import { SITE_TIKTOK_EMBED_URL } from '../lib/site'
+
+const keywords = [
+  'Great Dane puppies',
+  'Great Dane litters',
+  'Great Dane puppies for sale',
+  'Illinois Great Dane puppies',
+  'available Great Dane puppies',
+  'Great Dane puppies Illinois',
+  'responsible Great Dane breeders',
+  'health tested Great Dane puppies',
+  'Central Illinois Great Dane puppies',
+  'Champaign Great Dane puppies',
+  'Urbana Great Dane puppies',
+]
+
+// Images in the exact order they appear on the page; first 4 are above the fold.
+const allImages = [
+  '/img/EzraxPiper.jpg',
+  '/img/SeanXPiper.jpg',
+  '/img/RolexPiper.jpg',
+  '/img/piper-second-litter-3-fawn-1-brindle-puppies-with-breeding-female-cora.jpg',
+  '/img/piper-first-litter-5-fawn-puppies-4-boys-1-girl-breeding-female-mia.jpg',
+  '/img/dustin-pulling-cart-piper-first-litter-5-fawn-puppies.jpg',
+  '/img/close-up-puppy-faces-cart-illinois-corn-field-sunset.jpg',
+  '/img/two-fawn-puppies-tall-grass-clover-sunset.jpg',
+  '/img/future-champion-pumpkin-giant-stick-piper-first-litter.jpg',
+  '/img/four-fawn-puppies-nursery-soft-mat-stuffed-toy.jpg',
+  '/img/piper-captain-mother-son-tiktok-star-sweetest-dog.jpg',
+]
+const priorityCount = 4
+---
+
+<BaseLayout
+  title="Great Dane Puppies & Litters | Available & Previous Litters | 7Sisters Farm"
+  description="View our Great Dane puppies and litters. Health-tested parents, responsible breeding practices, and lifetime support. Located in Central Illinois."
+  keywords={keywords}
+  image="https://7sistersgreatdanes.com/img/EzraxPiper.jpg"
+  canonical="https://7sistersgreatdanes.com/Litters"
+>
+  <Fragment slot="head">
+    {
+      allImages.map((src, index) =>
+        index < priorityCount ? (
+          <link
+            rel="preload"
+            as="image"
+            href={src}
+            fetchpriority={index < 2 ? 'high' : undefined}
+          />
+        ) : (
+          <link rel="prefetch" as="image" href={src} />
+        ),
+      )
+    }
+  </Fragment>
+
+  <div class="content">
+    <div class="post-title">
+      <h1>Great Dane Litters</h1>
+    </div>
+    <main class="content-wrapper">
+      <section class="hero-section">
+        <img
+          src="/img/Colorlogo_nobackground.png"
+          alt="7Sisters Farm Logo"
+          width="300"
+          height="auto"
+          class="hero-logo"
+          loading="lazy"
+        />
+      </section>
+
+      <section class="memberships-section">
+        <p class="membership-text">
+          We are members of the Illini Great Dane Club and the
+          <a href="https://gdca.org/" target="_blank" rel="noopener noreferrer">
+            Great Dane Club of America
+          </a>.
+        </p>
+      </section>
+
+      <section class="litters-section">
+        <h2 class="section-title">
+          <span class="accent-color">7</span>Sisters Upcoming Litters
+        </h2>
+        <p class="section-description">
+          <a href="/contact">Contact us</a> about placement and upcoming litters.
+        </p>
+      </section>
+
+      <section class="litters-section">
+        <h2 class="section-title">
+          <span class="accent-color">7</span>Sisters Previous Litters
+        </h2>
+        <p class="section-description">Click on images for details</p>
+        <div class="litter-gallery">
+          <a
+            href="/EzraxPiper"
+            class="litter-link"
+            aria-label="View Ezra X Piper litter details"
+          >
+            <img
+              src="/img/EzraxPiper.jpg"
+              alt="Ezra X Piper litter advertisement"
+              class="litter-image"
+              loading="lazy"
+              fetchpriority="auto"
+            />
+          </a>
+          <a
+            href="/SeanXPiper"
+            class="litter-link"
+            aria-label="View Sean X Piper litter details"
+          >
+            <img
+              src="/img/SeanXPiper.jpg"
+              alt="Sean X Piper litter advertisement"
+              class="litter-image"
+              loading="lazy"
+              fetchpriority="auto"
+            />
+          </a>
+          <a
+            href="/RolexXPiper"
+            class="litter-link"
+            aria-label="View Rolex X Piper litter details"
+          >
+            <img
+              src="/img/RolexPiper.jpg"
+              alt="Rolex X Piper litter advertisement"
+              class="litter-image"
+              loading="lazy"
+              fetchpriority="auto"
+            />
+          </a>
+        </div>
+      </section>
+
+      <section class="puppy-gallery-section">
+        <h2 class="section-title">
+          Our <span class="accent-color">7</span>Sisters Puppies
+        </h2>
+        <p class="section-description">
+          Celebrating our breeding program's success and the exceptional Great
+          Danes we produce
+        </p>
+        <div class="puppy-gallery">
+          <div class="puppy-card">
+            <img
+              src="/img/piper-second-litter-3-fawn-1-brindle-puppies-with-breeding-female-cora.jpg"
+              alt="Fawn Great Dane Piper with her four puppies from second litter at 7Sisters Farm Illinois - 3 fawn and 1 brindle including breeding female Cora"
+              class="puppy-image"
+              loading="eager"
+              fetchpriority="high"
+            />
+            <div class="puppy-overlay">
+              <h3>Piper with her second litter</h3>
+              <p>Three fawn, one brindle</p>
+            </div>
+          </div>
+          <div class="puppy-card">
+            <img
+              src="/img/piper-first-litter-5-fawn-puppies-4-boys-1-girl-breeding-female-mia.jpg"
+              alt="Fawn Great Dane Piper with her first litter of 5 all fawn puppies at 7Sisters Farm Illinois - 4 boys and 1 girl Mia in pink collar"
+              class="puppy-image"
+              loading="eager"
+              fetchpriority="high"
+            />
+            <div class="puppy-overlay">
+              <h3>Piper's first litter</h3>
+              <p>Five fawn puppies, Mia in the pink collar</p>
+            </div>
+          </div>
+          <div class="puppy-card">
+            <img
+              src="/img/dustin-pulling-cart-piper-first-litter-5-fawn-puppies.jpg"
+              alt="Dustin pulling cart of Great Dane puppies from Piper's first litter at 7Sisters Farm Illinois - 5 all fawn puppies including breeding female Mia"
+              class="puppy-image"
+              loading="eager"
+              fetchpriority="auto"
+            />
+            <div class="puppy-overlay">
+              <h3>Evening rounds</h3>
+            </div>
+          </div>
+          <div class="puppy-card">
+            <img
+              src="/img/close-up-puppy-faces-cart-illinois-corn-field-sunset.jpg"
+              alt="Close-up of Great Dane puppy faces in cart at 7Sisters Farm Illinois with corn field background at sunset"
+              class="puppy-image"
+              loading="eager"
+              fetchpriority="auto"
+            />
+            <div class="puppy-overlay">
+              <h3>The passengers</h3>
+            </div>
+          </div>
+          <div class="puppy-card">
+            <img
+              src="/img/two-fawn-puppies-tall-grass-clover-sunset.jpg"
+              alt="Two fawn Great Dane puppies sitting in tall grass with clover at 7Sisters Farm Illinois near sunset"
+              class="puppy-image"
+              loading="lazy"
+            />
+            <div class="puppy-overlay">
+              <h3>Getting into the clover</h3>
+            </div>
+          </div>
+          <div class="puppy-card">
+            <img
+              src="/img/future-champion-pumpkin-giant-stick-piper-first-litter.jpg"
+              alt="Two fawn Great Dane puppy boys from Piper's first litter at 7Sisters Farm Illinois - one holding giant stick future champion Pumpkin"
+              class="puppy-image"
+              loading="lazy"
+            />
+            <div class="puppy-overlay">
+              <h3>Pumpkin found a stick.</h3>
+              <p>Pumpkin is not sharing the stick.</p>
+            </div>
+          </div>
+          <div class="puppy-card">
+            <img
+              src="/img/four-fawn-puppies-nursery-soft-mat-stuffed-toy.jpg"
+              alt="Four fawn Great Dane puppies sitting patiently on soft mat in puppy nursery at 7Sisters Farm Illinois with stuffed toy and blanket"
+              class="puppy-image"
+              loading="lazy"
+            />
+            <div class="puppy-overlay">
+              <h3>Four of five, pretending to be patient</h3>
+            </div>
+          </div>
+          <div class="puppy-card">
+            <img
+              src="/img/piper-captain-mother-son-tiktok-star-sweetest-dog.jpg"
+              alt="Fawn Great Dane Piper looking into eyes of her fawn puppy Captain in nursery at 7Sisters Farm Illinois"
+              class="puppy-image"
+              loading="lazy"
+            />
+            <div class="puppy-overlay">
+              <h3>Piper and her boy Captain</h3>
+            </div>
+          </div>
+        </div>
+        <div class="gallery-cta">
+          <p>
+            Interested in one of our puppies?
+            <a href="/contact" class="cta-link">Contact us today</a>
+            or read our
+            <a href="/PlacementProcess" class="cta-link">placement process</a>
+            to learn how matching works at 7Sisters.
+          </p>
+        </div>
+      </section>
+
+      <section
+        class="site-tiktok-section"
+        aria-label="7Sisters Great Danes on TikTok"
+      >
+        <div class="site-tiktok-embed-wrap">
+          <iframe
+            src={SITE_TIKTOK_EMBED_URL}
+            class="site-tiktok-embed"
+            title="7Sisters Great Danes on TikTok"
+            loading="lazy"
+            allow="encrypted-media; fullscreen"></iframe>
+        </div>
+      </section>
+    </main>
+  </div>
+</BaseLayout>
