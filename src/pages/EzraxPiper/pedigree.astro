@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+
+const keywords = [
+  'Ezra Piper Great Dane litter',
+  '7Sisters Farm litter',
+  'Great Dane puppies Illinois',
+  'Central Illinois Great Dane puppies',
+  'health tested Great Dane puppies',
+  'Great Dane pedigree',
+]
+---
+
+<BaseLayout
+  title="Ezra × Piper Litter | 7Sisters Farm — Great Dane Puppies Born"
+  description="Ezra × Piper litter at 7Sisters Farm: six puppies (two girls, four boys), whelped March 2026. Health-tested parents, pedigree explorer. Follow us on TikTok for wins, litters, and life with our dogs. Central Illinois Great Dane breeders."
+  keywords={keywords}
+  image="https://7sistersgreatdanes.com/img/EzraxPiper.jpg"
+  canonical="https://7sistersgreatdanes.com/EzraxPiper"
+>
+  <Fragment slot="head">
+    <meta http-equiv="refresh" content="0; url=/ezra-piper-pedigree.html" />
+  </Fragment>
+
+  <div style="padding: 2rem; text-align: center; font-family: Arial">
+    <p>Redirecting to Pedigree Explorer…</p>
+  </div>
+</BaseLayout>
+
+<script>
+  window.location.replace('/ezra-piper-pedigree.html')
+</script>

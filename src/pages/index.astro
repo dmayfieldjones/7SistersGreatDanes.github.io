@@ -1,0 +1,193 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import { SITE_TIKTOK_EMBED_URL } from '../lib/site'
+
+const HERO_VIDEO_EMBED_SRC =
+  'https://www.youtube.com/embed/M14l3BrfXhA?autoplay=1&mute=1&playsinline=1&loop=1&playlist=M14l3BrfXhA&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&fs=0&cc_load_policy=0&disablekb=1&enablejsapi=1'
+const HERO_MOBILE_PHOTO = '/img/hero-options/hero-option-1m12s.jpg'
+
+const keywords = [
+  'Illinois Great Dane breeders',
+  'Illinois dogs',
+  'Illinois breeders',
+  'Great Dane breeders Illinois',
+  'Central Illinois Great Danes',
+  'AKC Great Danes Illinois',
+  'Illinois dog breeders',
+  'Great Dane puppies Illinois',
+  '7Sisters Farm',
+  'Champaign Illinois breeders',
+  'Urbana Illinois dogs',
+  'Illinois Great Dane kennel',
+]
+---
+
+<BaseLayout
+  title="Illinois Great Dane Breeders | 7Sisters Farm - Central Illinois"
+  description="Premier Illinois Great Dane breeders at 7Sisters Farm in Central Illinois. AKC registered Great Danes, health tested, family raised. Serving Illinois and surrounding states."
+  keywords={keywords}
+  image="https://7sistersgreatdanes.com/img/wedding.png"
+  canonical="https://7sistersgreatdanes.com"
+>
+  <div
+    class="homepage-container"
+    style="overflow-y: visible; touch-action: pan-y"
+  >
+    <section class="video-hero-section">
+      <div class="video-background" id="video-background">
+        <div class="video-iframe video-iframe-placeholder" aria-hidden="true">
+        </div>
+        <div class="video-overlay"></div>
+      </div>
+      <div class="video-bottom-mask" aria-hidden="true" hidden></div>
+      <div
+        class="scroll-indicator"
+        id="scroll-indicator"
+        role="button"
+        aria-label="Scroll down for more about 7Sisters"
+        tabindex="0"
+      >
+        <div class="scroll-arrow"></div>
+        <span class="scroll-text">More below</span>
+      </div>
+    </section>
+
+    <section class="content-section home-below-hero" id="home-below-hero">
+      <div class="content-overlay text-center home-intro-wrap">
+        <img
+          src="/img/Colorlogo_nobackground.png"
+          alt="7Sisters Farm"
+          width="220"
+          height="auto"
+          class="hero-logo home-intro-logo"
+          loading="lazy"
+        />
+
+        <p class="home-intro-text">
+          We're <strong>Dustin and Karen Mayfield-Jones</strong>, breeders of
+          Champion Great Danes at <span class="text-red-600 font-semibold"
+            >7</span
+          >Sisters Farm in Central Illinois (Champaign–Urbana area). Our dogs are
+          AKC-registered, live with us, receive health testing, and are raised
+          with a focus on sound structure and temperament. Exploring a litter or
+          a breeder? Start below; everything else—our farm, articles, genome
+          tools—is in the menu.
+        </p>
+
+        <div class="home-cta-list" role="navigation" aria-label="Primary actions">
+          <a href="/7Sisters" class="home-cta home-cta-primary">Meet our dogs</a>
+          <a href="/BreedingPhilosophy" class="home-cta">
+            Our breeding philosophy
+          </a>
+          <a href="/contact" class="home-cta">Contact us</a>
+        </div>
+      </div>
+
+      <section
+        class="site-tiktok-section"
+        aria-label="7Sisters Great Danes on TikTok"
+      >
+        <div class="site-tiktok-embed-wrap">
+          <iframe
+            src={SITE_TIKTOK_EMBED_URL}
+            class="site-tiktok-embed"
+            title="7Sisters Great Danes on TikTok"
+            loading="lazy"
+            allow="encrypted-media; fullscreen"></iframe>
+        </div>
+      </section>
+    </section>
+  </div>
+</BaseLayout>
+
+<script is:inline define:vars={{ HERO_VIDEO_EMBED_SRC, HERO_MOBILE_PHOTO }}>
+  ;(function () {
+    const isMobile = window.matchMedia(
+      '(max-width: 768px), (pointer: coarse)',
+    ).matches
+    const background = document.getElementById('video-background')
+    const placeholder = background?.querySelector('.video-iframe-placeholder')
+    const bottomMask = document.querySelector('.video-bottom-mask')
+
+    function swapIn(el) {
+      if (background && placeholder) {
+        background.replaceChild(el, placeholder)
+      }
+    }
+
+    if (isMobile) {
+      const img = document.createElement('img')
+      img.src = HERO_MOBILE_PHOTO
+      img.alt = ''
+      img.className = 'video-iframe hero-mobile-photo'
+      img.decoding = 'async'
+      img.setAttribute('aria-hidden', 'true')
+      swapIn(img)
+    } else {
+      if (bottomMask) {
+        bottomMask.hidden = false
+      }
+      window.setTimeout(function () {
+        const iframe = document.createElement('iframe')
+        iframe.src = HERO_VIDEO_EMBED_SRC
+        iframe.className = 'video-iframe'
+        iframe.setAttribute(
+          'allow',
+          'autoplay; encrypted-media; picture-in-picture; fullscreen',
+        )
+        iframe.setAttribute('allowfullscreen', '')
+        iframe.title = 'Background video'
+        swapIn(iframe)
+      }, 120)
+    }
+
+    // Scroll indicator: click/keyboard scrolls past the hero; hide once hero leaves view
+    const heroSection = document.querySelector('.video-hero-section')
+    const indicator = document.getElementById('scroll-indicator')
+    function scrollDown() {
+      const y = heroSection
+        ? heroSection.getBoundingClientRect().height + window.scrollY
+        : window.innerHeight
+      window.scrollTo({ top: y, behavior: 'smooth' })
+    }
+    indicator?.addEventListener('click', function () {
+      scrollDown()
+    })
+    indicator?.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault()
+        scrollDown()
+      }
+    })
+    if (heroSection && 'IntersectionObserver' in window) {
+      new IntersectionObserver(
+        function (entries) {
+          indicator?.classList.toggle(
+            'scroll-indicator--hero-out',
+            !entries[0].isIntersecting,
+          )
+        },
+        { threshold: 0, rootMargin: '0px 0px -32px 0px' },
+      ).observe(heroSection)
+    }
+
+    // Reveal below-hero content when it scrolls into view
+    const below = document.getElementById('home-below-hero')
+    if (below && 'IntersectionObserver' in window) {
+      const io = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              below.classList.add('content-visible')
+              io.unobserve(entry.target)
+            }
+          })
+        },
+        { threshold: 0.1, rootMargin: '0px 0px -50px 0px' },
+      )
+      io.observe(below)
+    } else if (below) {
+      below.classList.add('content-visible')
+    }
+  })()
+</script>

@@ -1,0 +1,84 @@
+---
+import '../styles/global.css'
+import '../styles/navbar.css'
+import Navigation from '../components/Navigation.astro'
+import LocalBusinessSchema from '../components/LocalBusinessSchema.astro'
+
+interface Props {
+  title: string
+  description?: string
+  keywords?: string[]
+  image?: string
+  canonical?: string
+  ogType?: string
+  siteName?: string
+}
+
+const {
+  title,
+  description,
+  keywords,
+  image,
+  canonical,
+  ogType = 'website',
+  siteName = '7Sisters Farm',
+} = Astro.props
+
+const gaId = 'G-SDSX26JETX'
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link
+      rel="preload"
+      href="/img/Colorlogo_nobackground.png"
+      as="image"
+      type="image/png"
+    />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    {
+      keywords && keywords.length > 0 && (
+        <meta name="keywords" content={keywords.join(', ')} />
+      )
+    }
+    {canonical && <link rel="canonical" href={canonical} />}
+
+    <meta property="og:title" content={title} />
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={siteName} />
+    {canonical && <meta property="og:url" content={canonical} />}
+    {image && <meta property="og:image" content={image} />}
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    {description && <meta name="twitter:description" content={description} />}
+    {image && <meta name="twitter:image" content={image} />}
+
+    <LocalBusinessSchema />
+    <slot name="head" />
+
+    <script
+      async
+      src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
+    <script is:inline define:vars={{ gaId }}>
+      window.dataLayer = window.dataLayer || []
+      function gtag() {
+        // eslint-disable-next-line prefer-rest-params
+        window.dataLayer.push(arguments)
+      }
+      gtag('js', new Date())
+      gtag('config', gaId)
+    </script>
+  </head>
+  <body>
+    <Navigation />
+    <div class="wrapper">
+      <slot />
+    </div>
+  </body>
+</html>

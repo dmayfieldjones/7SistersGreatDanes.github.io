@@ -1,0 +1,26 @@
+---
+import fs from 'node:fs'
+import path from 'node:path'
+import BaseLayout from '../layouts/BaseLayout.astro'
+import Browser from '../islands/genome-browser/Browser'
+
+const lines = fs
+  .readFileSync(path.join(process.cwd(), 'categories2.tsv'), 'utf8')
+  .split('\n')
+  .map(line => line.trim())
+  .filter(line => !!line)
+const header = lines[0].split('\t')
+const geneCategories: Record<string, string>[] = lines.slice(1).map(line =>
+  Object.fromEntries(
+    line.split('\t').map((value, idx) => [header[idx], value] as const),
+  ),
+)
+---
+
+<BaseLayout
+  title="7Sisters - Genome Browsers"
+  description="Our mission and approach to breeding exceptional Great Danes at 7Sisters Farm"
+  canonical="https://7sistersgreatdanes.com/GreatDaneGenomeBrowser"
+>
+  <Browser geneCategories={geneCategories} client:only="react" />
+</BaseLayout>

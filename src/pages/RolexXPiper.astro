@@ -1,0 +1,224 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import '../styles/litter.css'
+import { timeSincePastDate } from '../utils/dateAge'
+
+const birthDate = new Date(Date.UTC(2023, 6, 9))
+const birthDateIso = '2023-07-09'
+const ageToday = timeSincePastDate(birthDate)
+---
+
+<BaseLayout
+  title="7Sisters - Rolex X Piper"
+  description="Our mission and approach to breeding exceptional Great Danes at 7Sisters Farm"
+>
+  <div class="content">
+    <div class="post-title">
+      <h1>
+        Rolex x Piper Litter at <span style="color: #bf141c">7</span>Sisters
+        Farm
+      </h1>
+    </div>
+    <main class="content-wrapper">
+      <section class="hero-section">
+        <img
+          src="/img/Colorlogo_nobackground.png"
+          alt="7Sisters Farm Logo"
+          width="300"
+          height="auto"
+          class="hero-logo"
+          loading="lazy"
+        />
+      </section>
+
+      <section class="litter-info-section">
+        <div class="litter-details">
+          <h2 class="section-title">Litter Information</h2>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="label">Litter Number:</span>
+              <span class="value">WS848503</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Litter's age today:</span>
+              <span class="value" id="timeSinceWhelp">{ageToday}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Litter's age on Selected (Show) Date:</span>
+              <div class="age-calculator">
+                <input
+                  type="date"
+                  id="future-date"
+                  data-birth={birthDateIso}
+                  class="date-input"
+                />
+                <span class="value" id="calculated-age" hidden></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="parents-info">
+          <div class="parent-card">
+            <h3 class="parent-title">Sire</h3>
+            <p class="parent-name">
+              MBISS AM GCHS Fendanesylcrest N Diriso's This Is The Right Time
+              <span class="call-name">"Rolex"</span>
+            </p>
+            <p class="registration">
+              <a
+                href="https://ofa.org/advanced-search/?regnum=WS66273805"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="ofa-link"
+              >
+                WS66273805 OFA Results
+              </a>
+            </p>
+            <p class="registration">Additional Mexican Test Results</p>
+            <p class="registration">
+              <a
+                href="/img/rolexfulldentition.png"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="ofa-link"
+              >
+                Dentition
+              </a>
+              ·
+              <a
+                href="/img/rolexGeneticTest.png"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="ofa-link"
+              >
+                Genetic Testing 1
+              </a>
+              ·
+              <a
+                href="/img/rolexgenetictestpart2.png"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="ofa-link"
+              >
+                Genetic Testing 2
+              </a>
+              ·
+              <a
+                href="/img/RolexHips.png"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="ofa-link"
+              >
+                Hip Dysplasia
+              </a>
+              ·
+              <a
+                href="/img/rolexpatella.png"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="ofa-link"
+              >
+                Patella
+              </a>
+            </p>
+          </div>
+          <div class="parent-card">
+            <h3 class="parent-title">Dam</h3>
+            <p class="parent-name">
+              CH Legado N Danekraaft's How Can I Tell You?
+              <span class="call-name">"Piper"</span>
+            </p>
+            <p class="registration">
+              <a
+                href="https://ofa.org/advanced-search/?regnum=WS69691106"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="ofa-link"
+              >
+                WS69691106 OFA Results
+              </a>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="offspring-section">
+        <h2 class="section-title">Offspring</h2>
+        <div class="puppies-list">
+          <div class="puppy-card">
+            <p class="puppy-reg">WS81418801</p>
+            <p class="puppy-name">
+              CH <span class="brand-number">7</span>Sisters N Legado's I Wanna
+              Dance, I Wanna Win
+              <span class="call-name">"Mia"</span>
+            </p>
+          </div>
+          <div class="puppy-card">
+            <p class="puppy-reg">WS81418802</p>
+            <p class="puppy-name">
+              <span class="brand-number">7</span>Sisters N Legado's Final Act
+              V Echoln <span class="call-name">"Zee"</span>
+            </p>
+          </div>
+          <div class="puppy-card">
+            <p class="puppy-reg">WS81418803</p>
+            <p class="puppy-name">
+              CH <span class="brand-number">7</span>Sisters N Legado's I Know
+              A Guy At Cherryhill <span class="call-name">"Pumpkin"</span>
+            </p>
+          </div>
+          <div class="puppy-card">
+            <p class="puppy-reg">WS81418804</p>
+            <p class="puppy-name">
+              <span class="brand-number">7</span>Sisters N Legado's Gonna Get
+              Medieval <span class="call-name">"Wallace"</span>
+            </p>
+          </div>
+          <div class="puppy-card">
+            <p class="puppy-reg">WS81418805</p>
+            <p class="puppy-name">
+              Legado N <span class="brand-number">7</span>Sisters' I Got
+              Somethin' For You <span class="call-name">"Captain"</span>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="advertisement-section">
+        <a
+          href="/RolexXPiper"
+          class="ad-link"
+          aria-label="View full Rolex X Piper litter details"
+        >
+          <img
+            src="/img/RolexPiper.jpg"
+            alt="Rolex X Piper litter advertisement"
+            class="ad-image"
+            loading="lazy"
+          />
+        </a>
+      </section>
+    </main>
+  </div>
+</BaseLayout>
+
+<script>
+  import { timeSincePastDate } from '../utils/dateAge'
+
+  const input = document.querySelector<HTMLInputElement>('#future-date')
+  const output = document.querySelector<HTMLElement>('#calculated-age')
+
+  input?.addEventListener('change', () => {
+    const birth = input.dataset.birth
+    if (!birth || !input.value || !output) {
+      return
+    }
+    const [by, bm, bd] = birth.split('-').map(Number)
+    const [sy, sm, sd] = input.value.split('-').map(Number)
+    const birthDate = new Date(Date.UTC(by, bm - 1, bd))
+    const selectedDate = new Date(Date.UTC(sy, sm - 1, sd))
+    output.textContent = timeSincePastDate(birthDate, selectedDate)
+    output.hidden = false
+  })
+</script>

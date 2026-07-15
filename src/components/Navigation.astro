@@ -1,0 +1,96 @@
+---
+---
+
+<nav class="navbar">
+  <div class="navbar-container">
+    <button
+      type="button"
+      class="hamburger-icon"
+      id="hamburger"
+      aria-label="Open menu"
+      aria-expanded="false"
+    >
+      <span class="hamburger-line" aria-hidden="true"></span>
+      <span class="hamburger-line" aria-hidden="true"></span>
+      <span class="hamburger-line" aria-hidden="true"></span>
+    </button>
+    <a href="/" class="navbar-logo" aria-label="7Sisters Farm home">
+      <span class="navbar-logo-flip">
+        <span class="navbar-logo-face navbar-logo-front">
+          <img
+            src="/img/Colorlogo_nobackground.png"
+            alt=""
+            class="navbar-logo-img"
+            width="160"
+            height="48"
+          />
+        </span>
+        <span class="navbar-logo-face navbar-logo-back" aria-hidden="true">
+          Home
+        </span>
+      </span>
+    </a>
+  </div>
+  <ul class="navbar-menu" id="navbar-menu">
+    <li class="nav-item-with-submenu">
+      <button class="nav-button" data-submenu="about">About</button>
+      <ul class="submenu" data-submenu-panel="about">
+        <li><a href="/about">About Us</a></li>
+        <li><a href="/Farm">Our Farm</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="/contact">Contact</a>
+    </li>
+    <li class="nav-item-with-submenu">
+      <button class="nav-button" data-submenu="great-danes">Great Danes</button>
+      <ul class="submenu" data-submenu-panel="great-danes">
+        <li><a href="/7Sisters">Our Great Danes</a></li>
+        <li><a href="/Litters">Puppies & Litters</a></li>
+        <li><a href="/PlacementProcess">Placement Process</a></li>
+        <li><a href="/BreedingPhilosophy">Breeding Philosophy</a></li>
+      </ul>
+    </li>
+    <li class="nav-item-with-submenu">
+      <button class="nav-button" data-submenu="resources">Resources</button>
+      <ul class="submenu" data-submenu-panel="resources">
+        <li><a href="/archive">7Sisters Articles</a></li>
+        <li><a href="/CommonQuestions">Common Questions</a></li>
+        <li><a href="/GreatDaneGenomeBrowser">Genome Explorer</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+<script>
+  const hamburger = document.getElementById('hamburger')
+  const menu = document.getElementById('navbar-menu')
+  const lines = hamburger?.querySelectorAll('.hamburger-line')
+
+  hamburger?.addEventListener('click', () => {
+    const open = menu?.classList.toggle('show') ?? false
+    hamburger.setAttribute('aria-expanded', String(open))
+    hamburger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu')
+    lines?.forEach(line => line.classList.toggle('open', open))
+  })
+
+  const buttons =
+    document.querySelectorAll<HTMLButtonElement>('.nav-button[data-submenu]')
+  buttons.forEach(button => {
+    button.addEventListener('click', () => {
+      const name = button.dataset.submenu
+      const panel = document.querySelector(
+        `.submenu[data-submenu-panel="${name}"]`,
+      )
+      const willOpen = !button.classList.contains('expanded')
+
+      buttons.forEach(other => other.classList.remove('expanded'))
+      document
+        .querySelectorAll('.submenu')
+        .forEach(other => other.classList.remove('show'))
+
+      button.classList.toggle('expanded', willOpen)
+      panel?.classList.toggle('show', willOpen)
+    })
+  })
+</script>

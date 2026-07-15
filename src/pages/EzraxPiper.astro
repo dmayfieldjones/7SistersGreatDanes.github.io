@@ -1,0 +1,219 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import '../styles/litter.css'
+import { timeSincePastDate } from '../utils/dateAge'
+
+const TIKTOK_URL = 'https://www.tiktok.com/@7sistersgreatdanes'
+const birthDate = new Date(Date.UTC(2026, 2, 23))
+
+const keywords = [
+  'Ezra Piper Great Dane litter',
+  '7Sisters Farm litter',
+  'Great Dane puppies Illinois',
+  'Central Illinois Great Dane puppies',
+  'health tested Great Dane puppies',
+  'Great Dane pedigree',
+]
+---
+
+<BaseLayout
+  title="Ezra × Piper Litter | 7Sisters Farm — Great Dane Puppies Born"
+  description="Ezra × Piper litter at 7Sisters Farm: six puppies (two girls, four boys), whelped March 2026. Health-tested parents, pedigree explorer. Follow us on TikTok for wins, litters, and life with our dogs. Central Illinois Great Dane breeders."
+  keywords={keywords}
+  image="https://7sistersgreatdanes.com/img/EzraxPiper.jpg"
+  canonical="https://7sistersgreatdanes.com/EzraxPiper"
+>
+  <div class="content">
+    <div class="post-title">
+      <h1>
+        Ezra x Piper Litter at <span style="color: #bf141c">7</span>Sisters Farm
+      </h1>
+    </div>
+    <main class="content-wrapper">
+      <section class="hero-section">
+        <img
+          src="/img/Colorlogo_nobackground.png"
+          alt="7Sisters Farm Logo"
+          width="300"
+          height="auto"
+          class="hero-logo"
+          loading="lazy"
+        />
+      </section>
+      <section class="advertisement-section">
+        <a
+          href={TIKTOK_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="ad-link"
+          aria-label="Follow 7Sisters Great Danes on TikTok"
+        >
+          <img
+            src="/img/EzraxPiper.jpg"
+            alt="Ezra X Piper litter advertisement"
+            class="ad-image"
+            loading="eager"
+          />
+        </a>
+        <p class="ad-caption">
+          Scroll down for litter details, parents, and the pedigree explorer.
+        </p>
+      </section>
+      <section class="litter-info-section">
+        <div class="litter-details">
+          <h2 class="section-title">Litter Information</h2>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="label">Litter Number:</span>
+              <span class="value">WS889639</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Puppies:</span>
+              <span class="value">Six total — two girls, four boys</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Whelped:</span>
+              <span class="value">March 23, 2026</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Litter's age today:</span>
+              <span class="value" id="timeSinceWhelp"
+                >{timeSincePastDate(birthDate)}</span
+              >
+            </div>
+            <div class="info-item">
+              <span class="label">Litter's age on selected (show) date:</span>
+              <div class="age-calculator">
+                <input
+                  type="date"
+                  id="future-date"
+                  class="date-input"
+                />
+                <span class="value" id="calculated-age" hidden></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="parents-info">
+          <div class="parent-card">
+            <h3 class="parent-title">Sire</h3>
+            <p class="parent-name">
+              BISS GCH Sonya Danes N Krisda Our Peace And Harmony Fontana
+              <span class="call-name">"Ezra"</span>
+            </p>
+            <p class="registration">
+              <a
+                href="https://ofa.org/advanced-search/?regnum=WS81479201"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="ofa-link">WS81479201 OFA Results</a
+              >
+            </p>
+            <p class="registration">
+              <a
+                href="/img/EzraPrelimOFA.png"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="ofa-link">Additional Test Results</a
+              >
+            </p>
+          </div>
+          <div class="parent-card">
+            <h3 class="parent-title">Dam</h3>
+            <p class="parent-name">
+              CH Legado N Danekraaft's How Can I Tell You?
+              <span class="call-name">"Piper"</span>
+            </p>
+            <p class="registration">
+              <a
+                href="https://ofa.org/advanced-search/?regnum=WS69691106"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="ofa-link">WS69691106 OFA Results</a
+              >
+            </p>
+          </div>
+        </div>
+      </section>
+      <section class="pedigree-section">
+        <h2 class="section-title">Pedigree Explorer</h2>
+        <p class="pedigree-intro">
+          Explore the full 10-generation pedigree analysis for Ezra × Piper,
+          including Wright's cross COI, common ancestor paths, and structural
+          findings.
+        </p>
+        <a href="/ezra-piper-pedigree.html" class="pedigree-link">
+          Open Pedigree Explorer →
+        </a>
+      </section>
+      <section class="offspring-section">
+        <h2 class="section-title">Offspring</h2>
+        <div class="puppies-list">
+          <div class="puppy-card">
+            <p class="puppy-reg">WS88963901</p>
+            <p class="puppy-name">
+              <span class="brand-number">7</span>Sisters N Legado's With This
+              Ring <span class="call-name">"Glen"</span>
+            </p>
+          </div>
+          <div class="puppy-card">
+            <p class="puppy-reg">WS88963902</p>
+            <p class="puppy-name">
+              <span class="brand-number">7</span>Sisters Come Fly With Bea
+              <span class="call-name">"Beatrice"</span>
+            </p>
+          </div>
+          <div class="puppy-card">
+            <p class="puppy-reg">WS88963903</p>
+            <p class="puppy-name">
+              <span class="brand-number">7</span>Sisters N Legado's Judge's
+              Choice <span class="call-name">"Elliot"</span>
+            </p>
+          </div>
+          <div class="puppy-card">
+            <p class="puppy-reg">WS88963904</p>
+            <p class="puppy-name">
+              <span class="brand-number">7</span>Sisters N Legado's Odie Just
+              Wants To Have Fun <span class="call-name">"Odie"</span>
+            </p>
+          </div>
+          <div class="puppy-card">
+            <p class="puppy-reg">WS88963905</p>
+            <p class="puppy-name">
+              <span class="brand-number">7</span>Sisters N Legado's Stop Sign
+              What Stop Sign <span class="call-name">"Buford"</span>
+            </p>
+          </div>
+          <div class="puppy-card">
+            <p class="puppy-reg">WS88963906</p>
+            <p class="puppy-name">
+              <span class="brand-number">7</span>Sisters She's All That @
+              Sonya Danes N Andalyn <span class="call-name">"Vogue"</span>
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</BaseLayout>
+
+<script>
+  import { timeSincePastDate } from '../utils/dateAge'
+
+  const birthDate = new Date(Date.UTC(2026, 2, 23))
+  const dateInput = document.querySelector<HTMLInputElement>('#future-date')
+  const calculatedAge = document.querySelector<HTMLElement>('#calculated-age')
+
+  dateInput?.addEventListener('change', () => {
+    const selectedDateStr = dateInput.value
+
+    if (selectedDateStr && calculatedAge) {
+      const [year, month, day] = selectedDateStr.split('-').map(Number)
+      const selectedDate = new Date(Date.UTC(year, month - 1, day))
+      calculatedAge.textContent = timeSincePastDate(birthDate, selectedDate)
+      calculatedAge.removeAttribute('hidden')
+    } else {
+      calculatedAge?.setAttribute('hidden', '')
+    }
+  })
+</script>
