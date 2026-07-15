@@ -1,0 +1,242 @@
+:root {
+  --genome-accent: #bf141c;
+  --genome-selected: #1d6fa5;
+  --genome-bar: #d8d3cc;
+  --genome-surface: rgba(255, 255, 255, 0.92);
+  --genome-border: rgba(0, 0, 0, 0.12);
+  --genome-muted: #666;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --genome-bar: #4a4a4a;
+    --genome-surface: rgba(30, 30, 30, 0.95);
+    --genome-border: rgba(255, 255, 255, 0.18);
+    --genome-muted: #aaa;
+  }
+}
+
+.genome-controls {
+  margin: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.genome-search {
+  position: relative;
+  max-width: 320px;
+}
+
+.genome-search-input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  border: 1px solid var(--genome-border);
+  border-radius: 6px;
+}
+
+.genome-search-results {
+  position: absolute;
+  z-index: 5;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin: 4px 0 0;
+  padding: 4px;
+  list-style: none;
+  background: var(--genome-surface);
+  border: 1px solid var(--genome-border);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.genome-search-results button {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.4rem 0.5rem;
+  text-align: left;
+  background: none;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.genome-search-results button:hover {
+  background: rgba(191, 20, 28, 0.1);
+}
+
+.genome-search-category {
+  color: var(--genome-muted);
+  font-size: 0.8rem;
+}
+
+.genome-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.genome-pill {
+  padding: 0.3rem 0.7rem;
+  font-size: 0.85rem;
+  border-radius: 999px;
+  border: 1px solid var(--genome-border);
+  background: transparent;
+  cursor: pointer;
+}
+
+.genome-pill-active {
+  background: var(--genome-accent);
+  border-color: var(--genome-accent);
+  color: #fff;
+}
+
+.genome-description {
+  margin: 1rem 0;
+}
+
+.genome-description-links {
+  margin-top: 0.5rem;
+}
+
+.genome-ideogram {
+  position: relative;
+  margin: 1rem 0;
+}
+
+.genome-ideogram-columns {
+  display: flex;
+  gap: 28px;
+}
+
+.genome-ideogram-column {
+  flex: 1;
+  min-width: 0;
+}
+
+.genome-chr-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.genome-chr-label {
+  width: 34px;
+  flex: 0 0 auto;
+  font-size: 0.75rem;
+  color: var(--genome-muted);
+  text-align: right;
+}
+
+.genome-chr-track {
+  flex: 0 0 auto;
+  overflow: visible;
+}
+
+.genome-chr-bar {
+  fill: var(--genome-bar);
+}
+
+.genome-chr-count {
+  width: 26px;
+  flex: 0 0 auto;
+  font-size: 0.7rem;
+  color: var(--genome-muted);
+}
+
+.genome-marker {
+  cursor: pointer;
+}
+
+.genome-marker-dot {
+  fill: var(--genome-accent);
+  transition:
+    r 0.1s ease,
+    opacity 0.1s ease;
+}
+
+.genome-marker-leader {
+  stroke: var(--genome-muted);
+  stroke-width: 1;
+}
+
+.genome-marker-dimmed .genome-marker-dot,
+.genome-marker-dimmed .genome-marker-leader {
+  opacity: 0.2;
+}
+
+.genome-marker-selected .genome-marker-dot {
+  fill: var(--genome-selected);
+  stroke: var(--genome-surface);
+  stroke-width: 1.5;
+}
+
+.genome-tooltip {
+  position: fixed;
+  z-index: 10;
+  pointer-events: none;
+  background: var(--genome-surface);
+  border: 1px solid var(--genome-border);
+  border-radius: 6px;
+  padding: 0.5rem 0.65rem;
+  font-size: 0.8rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  max-width: 260px;
+}
+
+.genome-tooltip-category {
+  color: var(--genome-muted);
+}
+
+.genome-tooltip-location {
+  font-family: monospace;
+  font-size: 0.75rem;
+}
+
+.genome-unplaced {
+  margin: 1.5rem 0;
+}
+
+.genome-unplaced-title {
+  font-size: 0.85rem;
+  color: var(--genome-muted);
+  margin-bottom: 0.4rem;
+}
+
+.genome-unplaced-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.genome-chip {
+  padding: 0.25rem 0.6rem;
+  font-size: 0.8rem;
+  border-radius: 999px;
+  border: 1px solid var(--genome-border);
+  background: transparent;
+  cursor: pointer;
+}
+
+.genome-chip-active {
+  background: var(--genome-selected);
+  border-color: var(--genome-selected);
+  color: #fff;
+}
+
+.genome-chip-dimmed {
+  opacity: 0.4;
+}
+
+@media (max-width: 640px) {
+  .genome-ideogram-columns {
+    flex-direction: column;
+    gap: 0;
+  }
+}

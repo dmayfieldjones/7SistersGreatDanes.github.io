@@ -1,6 +1,7 @@
 {
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@11.13.0",
   "scripts": {
     "format": "prettier --write .",
     "dev": "astro dev",
@@ -20,7 +21,6 @@
     "@types/react-dom": "^19.0.1",
     "astro": "^7.0.9",
     "d3": "^7.9.0",
-    "ideogram": "^1.50.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "typescript": "^5.4.2"
