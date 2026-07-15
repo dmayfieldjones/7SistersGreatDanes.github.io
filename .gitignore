@@ -3,6 +3,7 @@ node_modules/
 
 # Astro build & static export (publish with: pnpm build && pnpm deploy)
 .astro/
+.next/
 out/
 dist/
 

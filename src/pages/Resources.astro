@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+
+const DESTINATION = '/GreatDaneGenomeBrowser'
+---
+
+<BaseLayout
+  title="Genome Explorer Has Moved | 7Sisters Farm"
+  description="The Canine Genome Explorer has moved to a new URL."
+  canonical="https://7sistersgreatdanes.com/Resources"
+>
+  <Fragment slot="head">
+    <meta http-equiv="refresh" content={`0;url=${DESTINATION}`} />
+    <meta name="robots" content="noindex" />
+  </Fragment>
+
+  <main class="content-wrapper" style="padding: 2rem; text-align: center">
+    <p>
+      The Genome Explorer has moved. If you are not redirected, open
+      <a href={DESTINATION}>{DESTINATION}</a>.
+    </p>
+  </main>
+</BaseLayout>
+
+<script>
+  const DESTINATION = '/GreatDaneGenomeBrowser'
+  window.location.replace(DESTINATION)
+</script>

@@ -1,0 +1,97 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import '../styles/CommonQuestions.css'
+import { faqData } from '../lib/faqData'
+
+const keywords = [
+  'Great Dane breeder FAQ',
+  'Great Dane breeder questions',
+  'Great Dane health testing FAQ',
+  'Great Dane breeder contracts',
+  'Great Dane breeder guarantees',
+  'Great Dane puppy questions',
+  'Great Dane breeder support',
+  'Great Dane breeder policies',
+]
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqData.map(faq => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: faq.answer.replace(/<[^>]*>/g, ''),
+    },
+  })),
+}
+---
+
+<BaseLayout
+  title="Great Dane Breeder FAQ: Common Questions About Health Testing, Contracts & More"
+  description="Frequently asked questions about Great Dane breeders, health testing, contracts, guarantees, and what to expect when buying a Great Dane puppy from responsible breeders."
+  keywords={keywords}
+  image="https://7sistersgreatdanes.com/img/Colorlogo_nobackground.png"
+  canonical="https://7sistersgreatdanes.com/CommonQuestions"
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  </Fragment>
+
+  <div class="content">
+    <div class="post-title">
+      <h1>Common Questions About <span style="color: #bf141c">7</span>Sisters Great Danes</h1>
+    </div>
+    <main class="content-wrapper">
+      <section class="hero-section">
+        <img
+          src="/img/Colorlogo_nobackground.png"
+          alt="7Sisters Farm Logo"
+          width="300"
+          height="auto"
+          class="hero-logo"
+          loading="lazy"
+          style="margin: 0 auto"
+        />
+      </section>
+      <div class="accordion-container">
+        {
+          faqData.map(item => (
+            <div class="accordion-item">
+              <button
+                class="accordion"
+                data-toggle={item.id}
+                aria-expanded="false"
+                aria-controls={`${item.id}-panel`}
+              >
+                <span class="accent-color">{item.question}</span>
+              </button>
+              <div class="panel" id={`${item.id}-panel`}>
+                <p set:html={item.answer} />
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </main>
+  </div>
+</BaseLayout>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>(
+    '.accordion[data-toggle]',
+  )
+
+  buttons.forEach(button => {
+    button.addEventListener('click', () => {
+      const id = button.dataset.toggle
+      const panel = document.getElementById(`${id}-panel`)
+      const willOpen = !button.classList.contains('active')
+
+      button.classList.toggle('active', willOpen)
+      button.setAttribute('aria-expanded', String(willOpen))
+      panel?.classList.toggle('panel-open', willOpen)
+    })
+  })
+</script>

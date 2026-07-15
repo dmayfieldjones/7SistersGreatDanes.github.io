@@ -1,0 +1,17 @@
+.content-wrapper {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.hero-section {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.hero-logo {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}

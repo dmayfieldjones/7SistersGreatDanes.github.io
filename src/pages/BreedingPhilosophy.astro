@@ -1,0 +1,161 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import '../styles/BreedingPhilosophy.css'
+
+const keywords = [
+  'responsible Great Dane breeding philosophy',
+  'responsible Great Dane breeders',
+  'Great Dane breeding philosophy',
+  'responsible dog breeding',
+  'Great Dane breeder mission',
+  'breed betterment Great Danes',
+  'responsible breeding practices',
+]
+---
+
+<BaseLayout
+  title="Responsible Great Dane Breeding Philosophy | 7Sisters Farm"
+  description="Our responsible Great Dane breeding philosophy at 7Sisters Farm. Health testing, thoughtful placement, and commitment to breed betterment."
+  keywords={keywords}
+  image="https://7sistersgreatdanes.com/img/2021_5pt_BOW_BOBOH_Waukesha_Mimi_Kim.jpg"
+  canonical="https://7sistersgreatdanes.com/BreedingPhilosophy"
+>
+  <div class="content">
+    <div class="post-title">
+      <h1>Breeding Philosophy</h1>
+    </div>
+    <main class="content-wrapper">
+      <section class="hero-section">
+        <img
+          src="/img/Colorlogo_nobackground.png"
+          alt="7Sisters Farm Logo"
+          width="300"
+          height="auto"
+          class="hero-logo"
+          loading="lazy"
+        />
+      </section>
+      <section class="mission-section">
+        <h2 class="section-title">Our Mission</h2>
+        <p class="mission-statement">
+          To make the world a better place for dogs by supporting the
+          dog-loving community and securing Great Danes as the most desired,
+          aspirational dog companion.
+        </p>
+      </section>
+      <section class="philosophy-section">
+        <h2 class="section-title">Our Approach</h2>
+        <div class="philosophy-content">
+          <p>
+            We advance our mission by producing the best possible Great Danes
+            and placing them in homes that give them the best possible lives.
+            Dogs thrive in homes where they can live full, enriched lives with
+            their people and canine companions.
+          </p>
+          <p>
+            Demand for dogs far outpaces the supply from breeders most of us
+            would consider responsible, and a lot of dog owners simply
+            aren't aware of their dog's origins. We work to close that gap through
+            education: reaching dog owners, shelters, and the broader animal
+            welfare community with a clearer picture of what honorable breeding
+            looks like.
+          </p>
+        </div>
+      </section>
+      <section class="values-section">
+        <h2 class="section-title">Our Values</h2>
+        <div class="values-content">
+          <p>
+            Our relationship with dogs is complex, personal, and subtle — as
+            individual as our tastes in music or food. Dogs mean different
+            things to different people, and not every dog is suited for every
+            home. We believe there is very little more important than matching
+            people with the dog that fits them.
+          </p>
+          <p>
+            Many dog communities differ in their values and perspectives, and
+            we have a great deal to learn from one another. We endorse and
+            discourage specific practices in breeding, but we do so while
+            respecting that thoughtful people can disagree. Those working to
+            further the welfare of dogs should be encouraged, celebrated, and
+            supported.
+          </p>
+        </div>
+      </section>
+
+      <section class="practice-section" aria-labelledby="practice-heading">
+        <h2 id="practice-heading" class="section-title">Our Philosophy in Practice</h2>
+        <p class="practice-intro">
+          Curious what this looks like in practice? Here's where our
+          philosophy meets pedigrees, genomics, and documented reasoning.
+        </p>
+        <ul class="practice-card-list">
+          <li>
+            <a class="practice-card" href="/posts/2025-06-24-laying-the-foundation">
+              <span class="practice-card-title">Laying the Foundation</span>
+              <span class="practice-card-desc">
+                Our first 7Sisters litters: how we chose sires using pedigree
+                analysis and health data, what we weighed, what we risked, and
+                what our mentors taught us along the way.
+              </span>
+            </a>
+          </li>
+          <li>
+            <a class="practice-card" href="/EzraxPiper">
+              <span class="practice-card-title">Ezra × Piper litter</span>
+              <span class="practice-card-desc">
+                A current breeding presented with pedigree detail and
+                visualization—an example of how we connect type, health, and
+                numbers on the page.
+              </span>
+            </a>
+          </li>
+          <li class="practice-card-item-multi">
+            <div class="practice-card practice-card-static">
+              <span class="practice-card-title">The Deep History of Dogs</span>
+              <p class="practice-card-desc">
+                A two-part series tracing dog ancestry from Ice Age wolves to
+                the modern breeds we know. This is the kind of science literacy
+                that shapes how we read evidence and avoid folklore in our
+                breeding decisions.
+              </p>
+              <p class="practice-card-link-row">
+                <a href="/posts/2025-10-01-the-deep-history-of-dogs-ancient-dna">
+                  Part 1: Ancient DNA →
+                </a>
+                <a href="/posts/2026-03-28-the-deep-history-of-dogs-palaeolithic-partners">
+                  Part 2: Palaeolithic Partners →
+                </a>
+              </p>
+            </div>
+          </li>
+          <li class="practice-card-item-multi">
+            <div class="practice-card practice-card-static">
+              <span class="practice-card-title">Canine Genome Explorer</span>
+              <p class="practice-card-desc">
+                The dog genome is 2.4 billion base pairs long. We built a tool
+                that lets you explore it. Browse genes linked to health,
+                disease, and the traits breeders care about — mapped to
+                chromosomes with plain-language descriptions and links to
+                current research. Then open the
+                <a href="https://jbrowse.org/jb2/" target="_blank" rel="noopener noreferrer"
+                  >JBrowse 2</a
+                > genome browser tracks that
+                <a
+                  href="https://scholar.google.com/citations?user=--FwzsgAAAAJ&hl=en&oi=ao"
+                  target="_blank"
+                  rel="noopener noreferrer">Colin Diesh</a
+                > and I have assembled with a focus on dogs: scroll across whole
+                chromosomes, zoom into individual exons, compare sequence data
+                from multiple projects, and download what you find.
+              </p>
+              <p class="practice-card-link-row">
+                <a href="/GreatDaneGenomeBrowser">Open Canine Genome Explorer →</a>
+              </p>
+            </div>
+          </li>
+        </ul>
+      </section>
+    </main>
+  </div>
+</BaseLayout>
