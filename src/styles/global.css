@@ -337,25 +337,6 @@ body:has(.homepage-container) {
   pointer-events: none;
 }
 
-/* Full-width bar pinned to the visible viewport bottom — hides YouTube chrome / “More videos”. */
-.video-bottom-mask {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100vw;
-  height: calc(7.5rem + env(safe-area-inset-bottom, 0px));
-  background: #000;
-  z-index: 5;
-  pointer-events: none;
-  transform: translateZ(0);
-}
-
-@media (max-width: 768px) {
-  .video-bottom-mask {
-    height: calc(9rem + env(safe-area-inset-bottom, 0px));
-  }
-}
-
 /* Scroll indicator */
 .scroll-indicator {
   position: absolute;
@@ -550,7 +531,7 @@ body:has(.homepage-container) {
 @media (max-width: 768px) {
   /*
    * Top-anchored so the CTA sits high, stays clear of the bottom gradient + scroll chip,
-   * and TikTok isn’t clipped off-screen. z-index above .video-bottom-mask (45).
+   * and TikTok isn’t clipped off-screen.
    */
   .litter-spotlight-hero-wrap {
     top: calc(0.35rem + env(safe-area-inset-top, 0px));

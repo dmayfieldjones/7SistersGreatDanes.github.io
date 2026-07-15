@@ -2,8 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro'
 import { SITE_TIKTOK_EMBED_URL } from '../lib/site'
 
-const HERO_VIDEO_EMBED_SRC =
-  'https://www.youtube.com/embed/M14l3BrfXhA?autoplay=1&mute=1&playsinline=1&loop=1&playlist=M14l3BrfXhA&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&fs=0&cc_load_policy=0&disablekb=1&enablejsapi=1'
+const HERO_VIDEO_SRC = '/video/hero-bg.mp4'
+const HERO_VIDEO_POSTER = '/img/hero-bg-poster.jpg'
 const HERO_MOBILE_PHOTO = '/img/hero-options/hero-option-1m12s.jpg'
 
 const keywords = [
@@ -39,7 +39,6 @@ const keywords = [
         </div>
         <div class="video-overlay"></div>
       </div>
-      <div class="video-bottom-mask" aria-hidden="true" hidden></div>
       <div
         class="scroll-indicator"
         id="scroll-indicator"
@@ -100,14 +99,16 @@ const keywords = [
   </div>
 </BaseLayout>
 
-<script is:inline define:vars={{ HERO_VIDEO_EMBED_SRC, HERO_MOBILE_PHOTO }}>
+<script
+  is:inline
+  define:vars={{ HERO_VIDEO_SRC, HERO_VIDEO_POSTER, HERO_MOBILE_PHOTO }}
+>
   ;(function () {
     const isMobile = window.matchMedia(
       '(max-width: 768px), (pointer: coarse)',
     ).matches
     const background = document.getElementById('video-background')
     const placeholder = background?.querySelector('.video-iframe-placeholder')
-    const bottomMask = document.querySelector('.video-bottom-mask')
 
     function swapIn(el) {
       if (background && placeholder) {
@@ -124,21 +125,16 @@ const keywords = [
       img.setAttribute('aria-hidden', 'true')
       swapIn(img)
     } else {
-      if (bottomMask) {
-        bottomMask.hidden = false
-      }
-      window.setTimeout(function () {
-        const iframe = document.createElement('iframe')
-        iframe.src = HERO_VIDEO_EMBED_SRC
-        iframe.className = 'video-iframe'
-        iframe.setAttribute(
-          'allow',
-          'autoplay; encrypted-media; picture-in-picture; fullscreen',
-        )
-        iframe.setAttribute('allowfullscreen', '')
-        iframe.title = 'Background video'
-        swapIn(iframe)
-      }, 120)
+      const video = document.createElement('video')
+      video.src = HERO_VIDEO_SRC
+      video.poster = HERO_VIDEO_POSTER
+      video.className = 'video-iframe video-native'
+      video.autoplay = true
+      video.muted = true
+      video.loop = true
+      video.playsInline = true
+      video.setAttribute('aria-hidden', 'true')
+      swapIn(video)
     }
 
     // Scroll indicator: click/keyboard scrolls past the hero; hide once hero leaves view
