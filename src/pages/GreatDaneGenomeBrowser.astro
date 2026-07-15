@@ -3,6 +3,8 @@ import fs from 'node:fs'
 import path from 'node:path'
 import BaseLayout from '../layouts/BaseLayout.astro'
 import Browser from '../islands/genome-browser/Browser'
+import '../styles/7Sisters.css'
+import '../styles/genome-browser.css'
 
 const lines = fs
   .readFileSync(path.join(process.cwd(), 'categories2.tsv'), 'utf8')
@@ -15,6 +17,24 @@ const geneCategories: Record<string, string>[] = lines.slice(1).map(line =>
     line.split('\t').map((value, idx) => [header[idx], value] as const),
   ),
 )
+
+const chrBandsData = JSON.parse(
+  fs.readFileSync(
+    path.join(process.cwd(), 'public/canis-lupus-familiaris.json'),
+    'utf8',
+  ),
+) as { chrBands: string[] }
+
+const chromosomeLengths = new Map<string, number>()
+for (const band of chrBandsData.chrBands) {
+  const fields = band.split(' ')
+  const chr = fields[0]
+  const bpStop = Number(fields[6])
+  chromosomeLengths.set(chr, Math.max(chromosomeLengths.get(chr) ?? 0, bpStop))
+}
+const chromosomes = [...chromosomeLengths.entries()].map(
+  ([chr, lengthBp]) => ({ chr, lengthBp }),
+)
 ---
 
 <BaseLayout
@@ -22,5 +42,9 @@ const geneCategories: Record<string, string>[] = lines.slice(1).map(line =>
   description="Our mission and approach to breeding exceptional Great Danes at 7Sisters Farm"
   canonical="https://7sistersgreatdanes.com/GreatDaneGenomeBrowser"
 >
-  <Browser geneCategories={geneCategories} client:only="react" />
+  <Browser
+    geneCategories={geneCategories}
+    chromosomes={chromosomes}
+    client:only="react"
+  />
 </BaseLayout>
