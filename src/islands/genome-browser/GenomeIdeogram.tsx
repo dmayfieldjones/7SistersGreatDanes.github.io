@@ -50,6 +50,15 @@ function laneOffset(lane: number) {
   return sign * level * LANE_GAP
 }
 
+function computeRowLayout(annotations: GeneAnnotation[], pxPerBp: number) {
+  const lanes = assignLanes(annotations, pxPerBp)
+  const maxLane = lanes.length ? Math.max(...lanes) : 0
+  const topPad = Math.ceil(maxLane / 2) * LANE_GAP + 5
+  const bottomPad = Math.floor(maxLane / 2) * LANE_GAP + 5
+  const svgHeight = BAR_HEIGHT + topPad + bottomPad
+  return { lanes, topPad, bottomPad, svgHeight }
+}
+
 interface TooltipState {
   annotation: GeneAnnotation
   x: number
@@ -77,14 +86,10 @@ function ChromosomeRow({
   onSelectGene,
   onHover,
 }: ChromosomeRowProps) {
-  const lanes = useMemo(
-    () => assignLanes(annotations, pxPerBp),
+  const { lanes, topPad, svgHeight } = useMemo(
+    () => computeRowLayout(annotations, pxPerBp),
     [annotations, pxPerBp],
   )
-  const maxLane = lanes.length ? Math.max(...lanes) : 0
-  const topPad = Math.ceil(maxLane / 2) * LANE_GAP + 5
-  const bottomPad = Math.floor(maxLane / 2) * LANE_GAP + 5
-  const svgHeight = BAR_HEIGHT + topPad + bottomPad
   const barWidth = Math.max(chromInfo.lengthBp * pxPerBp, 2)
 
   return (
@@ -198,10 +203,28 @@ export default function GenomeIdeogram({
     return map
   }, [annotations])
 
-  const columnSize = Math.ceil(chromosomes.length / columnCount)
-  const columnsOfChromosomes = Array.from({ length: columnCount }, (_, i) =>
-    chromosomes.slice(i * columnSize, (i + 1) * columnSize),
-  )
+  const columnsOfChromosomes = useMemo(() => {
+    if (columnCount === 1) return [chromosomes]
+
+    const rowHeights = chromosomes.map(
+      c => computeRowLayout(annotationsByChr.get(c.chr) ?? [], pxPerBp).svgHeight,
+    )
+    const totalHeight = rowHeights.reduce((sum, h) => sum + h, 0)
+
+    let bestSplit = Math.ceil(chromosomes.length / 2)
+    let bestDiff = Infinity
+    let leftHeight = 0
+    for (let k = 0; k <= chromosomes.length; k++) {
+      const diff = Math.abs(leftHeight - (totalHeight - leftHeight))
+      if (diff < bestDiff) {
+        bestDiff = diff
+        bestSplit = k
+      }
+      if (k < chromosomes.length) leftHeight += rowHeights[k]
+    }
+
+    return [chromosomes.slice(0, bestSplit), chromosomes.slice(bestSplit)]
+  }, [chromosomes, annotationsByChr, pxPerBp, columnCount])
 
   return (
     <div className="genome-ideogram" ref={containerRef}>
