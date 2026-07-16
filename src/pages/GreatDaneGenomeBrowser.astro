@@ -26,14 +26,21 @@ const chrBandsData = JSON.parse(
 ) as { chrBands: string[] }
 
 const chromosomeLengths = new Map<string, number>()
+const centromereBp = new Map<string, number>()
 for (const band of chrBandsData.chrBands) {
   const fields = band.split(' ')
   const chr = fields[0]
+  const arm = fields[1]
   const bpStop = Number(fields[6])
   chromosomeLengths.set(chr, Math.max(chromosomeLengths.get(chr) ?? 0, bpStop))
+  if (arm === 'p') centromereBp.set(chr, bpStop)
 }
 const chromosomes = [...chromosomeLengths.entries()].map(
-  ([chr, lengthBp]) => ({ chr, lengthBp }),
+  ([chr, lengthBp]) => ({
+    chr,
+    lengthBp,
+    centromereBp: centromereBp.get(chr) ?? 0,
+  }),
 )
 
 ---

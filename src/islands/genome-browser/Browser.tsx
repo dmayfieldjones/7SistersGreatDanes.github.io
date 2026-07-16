@@ -71,6 +71,13 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
     ]
   })
 
+  const categoryGenes =
+    effectiveType !== 'all'
+      ? placedGenes
+          .filter(entry => entry.type === effectiveType)
+          .toSorted((a, b) => a.name.localeCompare(b.name))
+      : []
+
   const searchMatches = searchQuery.trim()
     ? geneCategories
         .filter(entry =>
@@ -176,6 +183,29 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
               ))}
             </div>
           </div>
+          {categoryGenes.length ? (
+            <div className="genome-category-genes">
+              <div className="genome-category-genes-title">
+                {effectiveType} genes ({categoryGenes.length}) - select one to
+                learn more
+              </div>
+              <div className="genome-category-genes-chips">
+                {categoryGenes.map(entry => (
+                  <button
+                    key={entry.name}
+                    type="button"
+                    className={
+                      'genome-chip' +
+                      (entry.name === gene ? ' genome-chip-active' : '')
+                    }
+                    onClick={() => selectGene(entry.name)}
+                  >
+                    {entry.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : null}
           {geneEntry ? <DescriptionComponent geneEntry={geneEntry} /> : null}
         </main>
       </div>
