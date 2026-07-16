@@ -168,13 +168,6 @@
   fill: var(--genome-bar);
 }
 
-.genome-chr-count {
-  width: 26px;
-  flex: 0 0 auto;
-  font-size: 0.7rem;
-  color: var(--genome-muted);
-}
-
 .genome-marker {
   cursor: pointer;
 }

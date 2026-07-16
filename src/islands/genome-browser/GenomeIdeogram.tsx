@@ -23,7 +23,6 @@ interface GenomeIdeogramProps {
 
 const BAR_HEIGHT = 10
 const LABEL_WIDTH = 34
-const COUNT_WIDTH = 26
 const COLUMN_GAP = 28
 const LANE_GAP = 7
 const MIN_MARKER_GAP = 6
@@ -150,9 +149,6 @@ function ChromosomeRow({
           )
         })}
       </svg>
-      <span className="genome-chr-count">
-        {annotations.length || ''}
-      </span>
     </div>
   )
 }
@@ -183,7 +179,7 @@ export default function GenomeIdeogram({
   const columnCount = containerWidth < 640 ? 1 : 2
   const columnWidth =
     (containerWidth - COLUMN_GAP * (columnCount - 1)) / columnCount
-  const trackWidth = Math.max(columnWidth - LABEL_WIDTH - COUNT_WIDTH, 60)
+  const trackWidth = Math.max(columnWidth - LABEL_WIDTH, 60)
 
   const maxLengthBp = useMemo(
     () => Math.max(...chromosomes.map(c => c.lengthBp), 1),
