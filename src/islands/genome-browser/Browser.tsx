@@ -2,36 +2,11 @@ import { useState } from 'react'
 
 import GenomeIdeogram, { type ChromosomeInfo } from './GenomeIdeogram'
 
-export interface Dog10kGeneSummary {
-  variantCount: number
-  passVariantCount: number
-  commonVariantCount: number
-  maxAlleleFrequency: number
-  cohortAlleleNumberMax: number
-}
-
-export interface Dog10kMeta {
-  source: string
-  sourceUrl: string
-  doi: string
-  citation: string
-  license: string
-  caveat: string
-}
-
 interface DescriptionComponentProps {
   geneEntry: Record<string, string>
-  dog10kVariants: Record<string, Dog10kGeneSummary>
-  dog10kMeta: Dog10kMeta
 }
 
-function DescriptionComponent({
-  geneEntry,
-  dog10kVariants,
-  dog10kMeta,
-}: DescriptionComponentProps) {
-  const dog10k = dog10kVariants[geneEntry.name2]
-
+function DescriptionComponent({ geneEntry }: DescriptionComponentProps) {
   return (
     <div className="genome-description">
       <strong>{geneEntry.name}</strong> - {geneEntry.summary}{' '}
@@ -54,31 +29,6 @@ function DescriptionComponent({
           </li>
         </ul>
       ) : null}
-      {dog10k ? (
-        <div className="genome-population-data">
-          <div className="genome-population-title">
-            Population variant data (Dog10K Genomes Project)
-          </div>
-          <div className="genome-population-stats">
-            <span>{dog10k.variantCount.toLocaleString()} variant sites observed</span>
-            <span>{dog10k.commonVariantCount.toLocaleString()} common (&ge;1% frequency)</span>
-            <span>
-              highest allele frequency:{' '}
-              {(dog10k.maxAlleleFrequency * 100).toLocaleString(undefined, {
-                maximumFractionDigits: 1,
-              })}
-              %
-            </span>
-          </div>
-          <div className="genome-population-caveat">
-            {dog10kMeta.caveat} Source:{' '}
-            <a href={dog10kMeta.sourceUrl} target="_blank">
-              {dog10kMeta.source}
-            </a>
-            , licensed {dog10kMeta.license}.
-          </div>
-        </div>
-      ) : null}
     </div>
   )
 }
@@ -86,16 +36,9 @@ function DescriptionComponent({
 interface BrowserProps {
   geneCategories: Record<string, string>[]
   chromosomes: ChromosomeInfo[]
-  dog10kVariants: Record<string, Dog10kGeneSummary>
-  dog10kMeta: Dog10kMeta
 }
 
-export default function Browser({
-  geneCategories,
-  chromosomes,
-  dog10kVariants,
-  dog10kMeta,
-}: BrowserProps) {
+export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
   const [type, setType] = useState('all')
   const [gene, setGene] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
@@ -140,6 +83,11 @@ export default function Browser({
     setGene(name)
     setSearchQuery('')
     setSearchOpen(false)
+  }
+
+  function selectType(newType: string) {
+    setType(newType)
+    setGene('')
   }
 
   return (
@@ -208,7 +156,7 @@ export default function Browser({
                   'genome-pill' +
                   (effectiveType === 'all' ? ' genome-pill-active' : '')
                 }
-                onClick={() => setType('all')}
+                onClick={() => selectType('all')}
               >
                 All ({geneCategories.length})
               </button>
@@ -220,7 +168,7 @@ export default function Browser({
                     'genome-pill' +
                     (effectiveType === category ? ' genome-pill-active' : '')
                   }
-                  onClick={() => setType(category)}
+                  onClick={() => selectType(category)}
                 >
                   {category} (
                   {geneCategories.filter(e => e.type === category).length})
@@ -228,13 +176,7 @@ export default function Browser({
               ))}
             </div>
           </div>
-          {geneEntry ? (
-            <DescriptionComponent
-              geneEntry={geneEntry}
-              dog10kVariants={dog10kVariants}
-              dog10kMeta={dog10kMeta}
-            />
-          ) : null}
+          {geneEntry ? <DescriptionComponent geneEntry={geneEntry} /> : null}
         </main>
       </div>
       <GenomeIdeogram
