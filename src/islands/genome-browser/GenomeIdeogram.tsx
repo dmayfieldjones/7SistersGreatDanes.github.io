@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 export interface ChromosomeInfo {
   chr: string
   lengthBp: number
+  centromereBp?: number
 }
 
 export interface GeneAnnotation {
@@ -50,6 +51,14 @@ function laneOffset(lane: number) {
   return sign * level * LANE_GAP
 }
 
+function filterByCategory(
+  annotations: GeneAnnotation[],
+  activeCategory?: string,
+) {
+  if (!activeCategory || activeCategory === 'all') return annotations
+  return annotations.filter(a => a.category === activeCategory)
+}
+
 function computeRowLayout(annotations: GeneAnnotation[], pxPerBp: number) {
   const lanes = assignLanes(annotations, pxPerBp)
   const maxLane = lanes.length ? Math.max(...lanes) : 0
@@ -86,11 +95,20 @@ function ChromosomeRow({
   onSelectGene,
   onHover,
 }: ChromosomeRowProps) {
+  const visibleAnnotations = useMemo(
+    () => filterByCategory(annotations, activeCategory),
+    [annotations, activeCategory],
+  )
   const { lanes, topPad, svgHeight } = useMemo(
-    () => computeRowLayout(annotations, pxPerBp),
-    [annotations, pxPerBp],
+    () => computeRowLayout(visibleAnnotations, pxPerBp),
+    [visibleAnnotations, pxPerBp],
   )
   const barWidth = Math.max(chromInfo.lengthBp * pxPerBp, 2)
+  const barCenterY = topPad + BAR_HEIGHT / 2
+  const centromerePos =
+    chromInfo.centromereBp !== undefined
+      ? Math.min(Math.max(chromInfo.centromereBp * pxPerBp, 1), barWidth - 1)
+      : null
 
   return (
     <div className="genome-chr-row">
@@ -109,24 +127,33 @@ function ChromosomeRow({
           rx={BAR_HEIGHT / 2}
           className="genome-chr-bar"
         />
-        {annotations.map((annotation, idx) => {
+        {centromerePos !== null ? (
+          <g className="genome-centromere">
+            <title>
+              Centromere · ~{Math.round(chromInfo.centromereBp! / 1e6)} Mb from
+              p-terminus
+            </title>
+            <rect
+              x={centromerePos - 1.25}
+              y={topPad - 2}
+              width={2.5}
+              height={BAR_HEIGHT + 4}
+              rx={1.25}
+              className="genome-centromere-mark"
+            />
+          </g>
+        ) : null}
+        {visibleAnnotations.map((annotation, idx) => {
           const pos = ((annotation.start + annotation.stop) / 2) * pxPerBp
           const offset = laneOffset(lanes[idx])
-          const barCenterY = topPad + BAR_HEIGHT / 2
           const cy = barCenterY + offset
           const isSelected = annotation.name === selectedGene
-          const isDimmed =
-            !!activeCategory &&
-            activeCategory !== 'all' &&
-            annotation.category !== activeCategory
 
           return (
             <g
               key={annotation.name}
               className={
-                'genome-marker' +
-                (isSelected ? ' genome-marker-selected' : '') +
-                (isDimmed ? ' genome-marker-dimmed' : '')
+                'genome-marker' + (isSelected ? ' genome-marker-selected' : '')
               }
               onClick={() => onSelectGene(annotation.name)}
               onMouseEnter={evt =>
@@ -207,7 +234,11 @@ export default function GenomeIdeogram({
     if (columnCount === 1) return [chromosomes]
 
     const rowHeights = chromosomes.map(
-      c => computeRowLayout(annotationsByChr.get(c.chr) ?? [], pxPerBp).svgHeight,
+      c =>
+        computeRowLayout(
+          filterByCategory(annotationsByChr.get(c.chr) ?? [], activeCategory),
+          pxPerBp,
+        ).svgHeight,
     )
     const totalHeight = rowHeights.reduce((sum, h) => sum + h, 0)
 
@@ -224,7 +255,7 @@ export default function GenomeIdeogram({
     }
 
     return [chromosomes.slice(0, bestSplit), chromosomes.slice(bestSplit)]
-  }, [chromosomes, annotationsByChr, pxPerBp, columnCount])
+  }, [chromosomes, annotationsByChr, pxPerBp, columnCount, activeCategory])
 
   return (
     <div className="genome-ideogram" ref={containerRef}>

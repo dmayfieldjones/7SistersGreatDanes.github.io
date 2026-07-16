@@ -159,9 +159,9 @@
   stroke-width: 1;
 }
 
-.genome-marker-dimmed .genome-marker-dot,
-.genome-marker-dimmed .genome-marker-leader {
-  opacity: 0.2;
+.genome-centromere-mark {
+  fill: var(--genome-muted);
+  opacity: 0.55;
 }
 
 .genome-marker-selected .genome-marker-dot {
@@ -190,6 +190,22 @@
 .genome-tooltip-location {
   font-family: monospace;
   font-size: 0.75rem;
+}
+
+.genome-category-genes {
+  margin: 1rem 0;
+}
+
+.genome-category-genes-title {
+  font-size: 0.85rem;
+  color: var(--genome-muted);
+  margin-bottom: 0.4rem;
+}
+
+.genome-category-genes-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
 }
 
 .genome-unplaced {
