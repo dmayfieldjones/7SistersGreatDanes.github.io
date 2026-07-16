@@ -36,31 +36,6 @@ const chromosomes = [...chromosomeLengths.entries()].map(
   ([chr, lengthBp]) => ({ chr, lengthBp }),
 )
 
-const dog10k = JSON.parse(
-  fs.readFileSync(
-    path.join(process.cwd(), 'public/dog10k-variants.json'),
-    'utf8',
-  ),
-) as {
-  _meta: {
-    source: string
-    sourceUrl: string
-    doi: string
-    citation: string
-    license: string
-    caveat: string
-  }
-  genes: Record<
-    string,
-    {
-      variantCount: number
-      passVariantCount: number
-      commonVariantCount: number
-      maxAlleleFrequency: number
-      cohortAlleleNumberMax: number
-    }
-  >
-}
 ---
 
 <BaseLayout
@@ -71,8 +46,6 @@ const dog10k = JSON.parse(
   <Browser
     geneCategories={geneCategories}
     chromosomes={chromosomes}
-    dog10kVariants={dog10k.genes}
-    dog10kMeta={dog10k._meta}
     client:only="react"
   />
 </BaseLayout>
