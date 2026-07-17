@@ -4,7 +4,6 @@ import { SITE_TIKTOK_EMBED_URL } from '../lib/site'
 
 const HERO_VIDEO_SRC = '/video/hero-bg.mp4'
 const HERO_VIDEO_POSTER = '/img/hero-bg-poster.jpg'
-const HERO_MOBILE_PHOTO = '/img/hero-options/hero-option-1m12s.jpg'
 
 const keywords = [
   'Illinois Great Dane breeders',
@@ -99,14 +98,8 @@ const keywords = [
   </div>
 </BaseLayout>
 
-<script
-  is:inline
-  define:vars={{ HERO_VIDEO_SRC, HERO_VIDEO_POSTER, HERO_MOBILE_PHOTO }}
->
+<script is:inline define:vars={{ HERO_VIDEO_SRC, HERO_VIDEO_POSTER }}>
   ;(function () {
-    const isMobile = window.matchMedia(
-      '(max-width: 768px), (pointer: coarse)',
-    ).matches
     const background = document.getElementById('video-background')
     const placeholder = background?.querySelector('.video-iframe-placeholder')
 
@@ -116,26 +109,16 @@ const keywords = [
       }
     }
 
-    if (isMobile) {
-      const img = document.createElement('img')
-      img.src = HERO_MOBILE_PHOTO
-      img.alt = ''
-      img.className = 'video-iframe hero-mobile-photo'
-      img.decoding = 'async'
-      img.setAttribute('aria-hidden', 'true')
-      swapIn(img)
-    } else {
-      const video = document.createElement('video')
-      video.src = HERO_VIDEO_SRC
-      video.poster = HERO_VIDEO_POSTER
-      video.className = 'video-iframe video-native'
-      video.autoplay = true
-      video.muted = true
-      video.loop = true
-      video.playsInline = true
-      video.setAttribute('aria-hidden', 'true')
-      swapIn(video)
-    }
+    const video = document.createElement('video')
+    video.src = HERO_VIDEO_SRC
+    video.poster = HERO_VIDEO_POSTER
+    video.className = 'video-iframe video-native'
+    video.autoplay = true
+    video.muted = true
+    video.loop = true
+    video.playsInline = true
+    video.setAttribute('aria-hidden', 'true')
+    swapIn(video)
 
     // Scroll indicator: click/keyboard scrolls past the hero; hide once hero leaves view
     const heroSection = document.querySelector('.video-hero-section')
