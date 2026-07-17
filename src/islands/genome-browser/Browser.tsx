@@ -38,21 +38,12 @@ interface BrowserProps {
   chromosomes: ChromosomeInfo[]
 }
 
-const INFO_SEEN_KEY = 'genome-browser-info-seen'
-
 export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
   const [type, setType] = useState('all')
   const [gene, setGene] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
   const [searchOpen, setSearchOpen] = useState(false)
-  const [infoOpen, setInfoOpen] = useState(
-    () => localStorage.getItem(INFO_SEEN_KEY) !== 'true',
-  )
-
-  function closeInfo() {
-    setInfoOpen(false)
-    localStorage.setItem(INFO_SEEN_KEY, 'true')
-  }
+  const [infoOpen, setInfoOpen] = useState(false)
 
   // Treat 'all' and empty string the same - show all genes
   const effectiveType = type === '' ? 'all' : type
@@ -130,18 +121,19 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
           Search for a gene, or filter by category, then explore its position
           on the genome below.
           <div className="genome-info">
+            <button
+              type="button"
+              className="genome-info-toggle"
+              aria-expanded={infoOpen}
+              onClick={() => setInfoOpen(open => !open)}
+            >
+              What am I looking at?{' '}
+              <span className="genome-info-caret">
+                {infoOpen ? '▾' : '▸'}
+              </span>
+            </button>
             {infoOpen ? (
               <div className="genome-info-panel">
-                <div className="genome-info-header">
-                  <strong>What am I looking at?</strong>
-                  <button
-                    type="button"
-                    className="genome-info-close"
-                    onClick={closeInfo}
-                  >
-                    Got it, hide this
-                  </button>
-                </div>
                 <p>
                   Each bar below is one dog chromosome from the CanFam4
                   reference genome, drawn to scale by length. The small tick
@@ -156,15 +148,7 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
                   highlighted.
                 </p>
               </div>
-            ) : (
-              <button
-                type="button"
-                className="genome-info-toggle"
-                onClick={() => setInfoOpen(true)}
-              >
-                What am I looking at?
-              </button>
-            )}
+            ) : null}
           </div>
           <div className="genome-controls">
             <div className="genome-search">
