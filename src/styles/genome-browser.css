@@ -23,6 +23,52 @@
   gap: 0.75rem;
 }
 
+.genome-info {
+  margin: 1rem 0;
+}
+
+.genome-info-panel {
+  border: 1px solid var(--genome-border);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  background: var(--genome-surface);
+  font-size: 0.9rem;
+}
+
+.genome-info-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.4rem;
+}
+
+.genome-info-close {
+  flex: 0 0 auto;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.8rem;
+  border-radius: 999px;
+  border: 1px solid var(--genome-border);
+  background: transparent;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.genome-info-panel p {
+  margin: 0.4rem 0;
+  color: var(--genome-muted);
+}
+
+.genome-info-toggle {
+  font-size: 0.85rem;
+  color: var(--genome-muted);
+  background: none;
+  border: none;
+  border-bottom: 1px dashed var(--genome-border);
+  padding: 0;
+  cursor: pointer;
+}
+
 .genome-search {
   position: relative;
   max-width: 320px;
