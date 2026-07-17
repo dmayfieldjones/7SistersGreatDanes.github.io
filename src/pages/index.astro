@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
-import { SITE_TIKTOK_EMBED_URL } from '../lib/site'
+import { SITE_TIKTOK_EMBED_URL, SITE_TIKTOK_URL } from '../lib/site'
 
 const HERO_VIDEO_SRC = '/video/hero-bg.mp4'
 const HERO_VIDEO_POSTER = '/img/hero-bg-poster.jpg'
@@ -85,18 +85,53 @@ const keywords = [
         class="site-tiktok-section"
         aria-label="7Sisters Great Danes on TikTok"
       >
-        <div class="site-tiktok-embed-wrap">
-          <iframe
-            src={SITE_TIKTOK_EMBED_URL}
-            class="site-tiktok-embed"
-            title="7Sisters Great Danes on TikTok"
-            loading="lazy"
-            allow="encrypted-media; fullscreen"></iframe>
+        <div class="site-tiktok-embed-wrap" id="tiktok-embed-wrap">
+          <button
+            type="button"
+            class="site-tiktok-embed site-tiktok-placeholder"
+            id="tiktok-load-button"
+            aria-label="Load our TikTok videos"
+          >
+            <svg
+              class="tiktok-placeholder-icon"
+              viewBox="0 0 24 24"
+              width="40"
+              height="40"
+              aria-hidden="true"
+            >
+              <path
+                fill="currentColor"
+                d="M16.6 5.82c-1-.86-1.6-2.13-1.6-3.55h-3.02v13.9c0 1.66-1.35 3.01-3.02 3.01a3.01 3.01 0 0 1-3.02-3.01 3.01 3.01 0 0 1 3.02-3.02c.31 0 .61.05.9.13V9.94a6.03 6.03 0 0 0-.9-.07A6.03 6.03 0 0 0 3.94 16a6.03 6.03 0 0 0 6.02 6.02A6.03 6.03 0 0 0 16 16V8.36a7.9 7.9 0 0 0 4.62 1.48V6.82c-1.4 0-2.7-.44-3.98-1z"
+              ></path>
+            </svg>
+            <span class="tiktok-placeholder-text"
+              >View our latest videos on TikTok</span
+            >
+          </button>
         </div>
+        <a href={SITE_TIKTOK_URL} class="site-tiktok-profile-link"
+          >@7sistersgreatdanes on TikTok</a
+        >
       </section>
     </section>
   </div>
 </BaseLayout>
+
+<script is:inline define:vars={{ SITE_TIKTOK_EMBED_URL }}>
+  ;(function () {
+    const wrap = document.getElementById('tiktok-embed-wrap')
+    const button = document.getElementById('tiktok-load-button')
+
+    button?.addEventListener('click', function () {
+      const iframe = document.createElement('iframe')
+      iframe.src = SITE_TIKTOK_EMBED_URL
+      iframe.className = 'site-tiktok-embed'
+      iframe.title = '7Sisters Great Danes on TikTok'
+      iframe.setAttribute('allow', 'encrypted-media; fullscreen')
+      wrap?.replaceChild(iframe, button)
+    })
+  })()
+</script>
 
 <script is:inline define:vars={{ HERO_VIDEO_SRC, HERO_VIDEO_POSTER }}>
   ;(function () {
