@@ -754,7 +754,9 @@ body:has(.homepage-container) {
   padding-top: 1.75rem;
   border-top: 1px solid rgba(0, 0, 0, 0.08);
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
   width: 100%;
 }
 
@@ -777,6 +779,45 @@ body:has(.homepage-container) {
   border: 0;
   background: #000;
   vertical-align: top;
+}
+
+.site-tiktok-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  transition: filter 0.2s ease;
+}
+
+.site-tiktok-placeholder:hover,
+.site-tiktok-placeholder:focus-visible {
+  filter: brightness(1.2);
+}
+
+.tiktok-placeholder-icon {
+  color: #fff;
+}
+
+.tiktok-placeholder-text {
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0 1.5rem;
+  text-align: center;
+}
+
+.site-tiktok-profile-link {
+  font-size: 0.9rem;
+  color: #666;
+  text-decoration: none;
+}
+
+.site-tiktok-profile-link:hover {
+  color: #bf141c;
+  text-decoration: underline;
 }
 
 .home-intro-logo {
