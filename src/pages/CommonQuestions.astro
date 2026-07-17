@@ -34,6 +34,7 @@ const faqSchema = {
   keywords={keywords}
   image="https://7sistersgreatdanes.com/img/Colorlogo_nobackground.png"
   canonical="https://7sistersgreatdanes.com/CommonQuestions"
+  breadcrumbs={[{ name: 'Common Questions', path: '/CommonQuestions' }]}
 >
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
