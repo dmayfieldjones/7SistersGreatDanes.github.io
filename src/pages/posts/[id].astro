@@ -71,6 +71,10 @@ const structuredData = {
   image="https://7sistersgreatdanes.com/img/Colorlogo_nobackground.png"
   canonical={`https://7sistersgreatdanes.com/posts/${id}`}
   ogType="article"
+  breadcrumbs={[
+    { name: '7Sisters Articles', path: '/archive' },
+    { name: title, path: `/posts/${id}` },
+  ]}
 >
   <Fragment slot="head">
     <script
