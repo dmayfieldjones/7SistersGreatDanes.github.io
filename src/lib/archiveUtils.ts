@@ -68,6 +68,9 @@ export const getArticleCategory = (id: string, _title: string) => {
   if (id === '2026-03-28-the-deep-history-of-dogs-palaeolithic-partners') {
     return 'Breeding Science'
   }
+  if (id === '2026-07-18-2026-akc-point-schedule') {
+    return 'Community & Show Experience'
+  }
 
   // Fallback for any future articles
   return 'General Care'
@@ -84,6 +87,7 @@ export const getReadingTime = (id: string) => {
     '2025-09-12-breeding-for-temperament-research-tools': '9 min read', // ~1,930 words
     '2025-10-01-the-deep-history-of-dogs-ancient-dna': '12 min read', // 2,647 words
     '2026-03-28-the-deep-history-of-dogs-palaeolithic-partners': '14 min read',
+    '2026-07-18-2026-akc-point-schedule': '3 min read',
   }
   return readingTimes[id] || '5 min read'
 }
