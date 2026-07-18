@@ -1,6 +1,8 @@
 import { execSync } from 'node:child_process'
 import { getAllPosts } from '../lib/api'
 import { parsePostDateLocal } from '../lib/postDate'
+import { slugifyBreed } from '../lib/pointSchedule2026'
+import { loadPointScheduleData } from '../lib/pointScheduleServer'
 
 const BASE_URL = 'https://7sistersgreatdanes.com'
 
@@ -46,6 +48,7 @@ export const GET = () => {
     { url: `${BASE_URL}/CommonQuestions`, lastModified: lastCommitDate('src/lib/faqData.ts', now), changeFrequency: 'monthly', priority: 0.8 },
     { url: `${BASE_URL}/archive`, lastModified: lastCommitDate('src/pages/archive.astro', now), changeFrequency: 'weekly', priority: 0.7 },
     { url: `${BASE_URL}/GreatDaneGenomeBrowser`, lastModified: lastCommitDate('src/pages/GreatDaneGenomeBrowser.astro', now), changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${BASE_URL}/AKCPointSchedule`, lastModified: lastCommitDate('src/pages/AKCPointSchedule.astro', now), changeFrequency: 'yearly', priority: 0.6 },
     { url: `${BASE_URL}/PlacementProcess`, lastModified: lastCommitDate('src/pages/PlacementProcess.astro', now), changeFrequency: 'monthly', priority: 0.85 },
     { url: `${BASE_URL}/EzraxPiper`, lastModified: lastCommitDate('src/pages/EzraxPiper.astro', now), changeFrequency: 'monthly', priority: 0.85 },
     { url: `${BASE_URL}/contact`, lastModified: lastCommitDate('src/pages/contact.astro', now), changeFrequency: 'yearly', priority: 0.6 },
@@ -60,9 +63,22 @@ export const GET = () => {
     priority: 0.6,
   }))
 
+  const breedPageLastModified = lastCommitDate(
+    'src/pages/AKCPointSchedule/breed/[slug].astro',
+    now,
+  )
+  const breedPages: SitemapEntry[] = loadPointScheduleData().breeds.map(
+    breed => ({
+      url: `${BASE_URL}/AKCPointSchedule/breed/${slugifyBreed(breed)}`,
+      lastModified: breedPageLastModified,
+      changeFrequency: 'yearly',
+      priority: 0.4,
+    }),
+  )
+
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${[...staticPages, ...blogPosts].map(toUrlXml).join('\n')}
+${[...staticPages, ...blogPosts, ...breedPages].map(toUrlXml).join('\n')}
 </urlset>
 `
 

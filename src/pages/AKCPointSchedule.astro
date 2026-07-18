@@ -1,0 +1,131 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import PointScheduleMap from '../islands/point-schedule/PointScheduleMap'
+import PointScheduleTable from '../components/PointScheduleTable.astro'
+import '../styles/point-schedule.css'
+import { pointsForBreed, slugifyBreed } from '../lib/pointSchedule2026'
+import { loadPointScheduleData } from '../lib/pointScheduleServer'
+
+const scheduleData = loadPointScheduleData()
+
+const EFFECTIVE_DATE = scheduleData.effectiveDate
+const GREAT_DANE_DIVISIONS = scheduleData.divisions.map(division => ({
+  id: division.id,
+  states: division.states,
+  points: pointsForBreed(division, 'Great Danes')!,
+}))
+
+const breedLinks = scheduleData.breeds.map(breed => ({
+  name: breed,
+  slug: slugifyBreed(breed),
+}))
+
+const keywords = [
+  'AKC point schedule',
+  'AKC point schedule by breed',
+  '2026 point schedule',
+  'dog show points needed for major',
+  'AKC conformation divisions',
+  'Great Dane majors',
+]
+---
+
+<BaseLayout
+  title="2026 AKC Point Schedule by Division | 7Sisters Farm"
+  description="Interactive map of the AKC's 2026 point schedule by division for every breed — defaults to Great Danes, search any breed to see dogs and bitches needed for a major, effective May 12, 2026."
+  keywords={keywords}
+  canonical="https://7sistersgreatdanes.com/AKCPointSchedule"
+  breadcrumbs={[
+    { name: 'AKC Point Schedule', path: '/AKCPointSchedule' },
+  ]}
+>
+  <div class="content">
+    <div class="post-title">
+      <h1>2026 AKC Point Schedule</h1>
+    </div>
+    <main class="content-wrapper">
+      <section>
+        <p>
+          The AKC redraws how many Great Danes you need to beat for a major
+          every year, division by division. This map covers the schedule
+          effective <strong>{EFFECTIVE_DATE}</strong>. Hover or focus a state
+          to see the minimum dogs and bitches needed for a 3-point major
+          there; click or tap it for that division's full 1-through-5-point
+          breakdown (3, 4, and 5-point wins are majors). The map defaults to
+          Great Danes, but the breed field above it searches every AKC breed
+          and variety — just type in your breed to switch.
+        </p>
+        <p>
+          <em
+            >AKC point schedules can be revised — always confirm the current
+            numbers at <a
+              href={scheduleData.sourceUrl}
+              target="_blank"
+              rel="noopener noreferrer">akc.org</a
+            > before entering a show. Last pulled from the AKC's all-divisions
+            schedule on <strong>{scheduleData.sourceCheckedDate}</strong
+            >.</em
+          >
+        </p>
+      </section>
+
+      <section aria-label="Interactive point schedule map">
+        <PointScheduleMap client:only="react" />
+      </section>
+
+      <section style="margin-top: 2.5rem">
+        <h2 class="section-title">Full Great Dane schedule, all divisions</h2>
+        <p>
+          For other breeds, use the breed field in the map above — it
+          updates the map, the division detail, and the tooltips, but this
+          reference table below stays Great Dane-specific.
+        </p>
+        <PointScheduleTable breed="Great Danes" divisions={GREAT_DANE_DIVISIONS} />
+      </section>
+
+      <section style="margin-top: 2.5rem">
+        <details class="ps-breed-index">
+          <summary class="section-title ps-breed-index-summary">
+            Browse the schedule for every breed
+          </summary>
+          <p>
+            Each of the AKC's {breedLinks.length} breeds and varieties has its
+            own page with the full 2026 schedule and the same interactive map,
+            defaulted to that breed.
+          </p>
+          <ul class="ps-breed-index-list">
+            {
+              breedLinks.map(({ name, slug }) => (
+                <li>
+                  <a href={`/AKCPointSchedule/breed/${slug}`}>{name}</a>
+                </li>
+              ))
+            }
+          </ul>
+        </details>
+      </section>
+    </main>
+  </div>
+</BaseLayout>
+
+<style>
+  .ps-breed-index-summary {
+    cursor: pointer;
+  }
+
+  .ps-breed-index-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 0.35rem 1rem;
+    margin: 1rem 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.9rem;
+  }
+
+  .ps-breed-index-list li {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+</style>
