@@ -93,7 +93,7 @@ const keywords = [
           <p>
             Looking for a different breed? The breed field above the map
             searches all {scheduleData.breeds.length} AKC breeds and
-            varieties, or see the <a href="/AKCPointSchedule"
+            varieties, or see the <a href="/AKCPointSchedule#breed-index"
               >full breed index</a
             >.
           </p>
@@ -114,7 +114,11 @@ const keywords = [
       </section>
 
       <section aria-label="Interactive point schedule map">
-        <PointScheduleMap client:only="react" initialBreed={breed} />
+        <PointScheduleMap
+          client:only="react"
+          initialBreed={breed}
+          breedIndexHref="/AKCPointSchedule#breed-index"
+        />
       </section>
 
       <section style="margin-top: 2.5rem">

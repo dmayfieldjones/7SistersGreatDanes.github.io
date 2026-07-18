@@ -5,6 +5,8 @@ interface BreedPickerProps {
   breeds: string[]
   value: string
   onChange: (breed: string) => void
+  /** Link to the full breed index (an in-page anchor on the hub, or a cross-page link + anchor elsewhere). */
+  breedIndexHref: string
 }
 
 const MAX_VISIBLE_OPTIONS = 300
@@ -13,6 +15,7 @@ export default function BreedPicker({
   breeds,
   value,
   onChange,
+  breedIndexHref,
 }: BreedPickerProps) {
   const [inputValue, setInputValue] = useState(breedLabel(value))
   const [isOpen, setIsOpen] = useState(false)
@@ -69,7 +72,7 @@ export default function BreedPicker({
   return (
     <div className="ps-breed-picker" ref={rootRef}>
       <label className="ps-breed-label" htmlFor={`${optionIdPrefix}-input`}>
-        Breed (type to search)
+        Breed (type to search, or <a href={breedIndexHref}>browse all breeds</a>)
       </label>
       <div className="ps-breed-combobox">
         <input
