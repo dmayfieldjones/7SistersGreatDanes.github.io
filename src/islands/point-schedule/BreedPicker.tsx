@@ -69,7 +69,7 @@ export default function BreedPicker({
   return (
     <div className="ps-breed-picker" ref={rootRef}>
       <label className="ps-breed-label" htmlFor={`${optionIdPrefix}-input`}>
-        Breed
+        Breed (type to search)
       </label>
       <div className="ps-breed-combobox">
         <input

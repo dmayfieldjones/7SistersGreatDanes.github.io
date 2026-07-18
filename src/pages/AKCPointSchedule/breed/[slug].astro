@@ -57,44 +57,60 @@ const keywords = [
         {
           isCatchAll ? (
             <p>
-              "All other breeds and varieties" is the AKC's catch-all
-              division-points bucket for breeds and varieties that aren't
-              individually broken out in the point schedule. This map covers
-              the schedule effective <strong>{EFFECTIVE_DATE}</strong>. Hover
-              or focus a state to see the minimum dogs and bitches needed for
-              a 3-point major there; click or tap it for that division's full
-              1-through-5-point breakdown (3, 4, and 5-point wins are
-              majors).
+              Tap a state below to see what it takes for a major there
+              under this AKC catch-all.
             </p>
           ) : (
-            <p>
-              The AKC redraws how many {breed} you need to beat for a major
-              every year, division by division. This map covers the schedule
-              effective <strong>{EFFECTIVE_DATE}</strong>. Hover or focus a
-              state to see the minimum dogs and bitches needed for a 3-point
-              major there; click or tap it for that division's full
-              1-through-5-point breakdown (3, 4, and 5-point wins are
-              majors).
-            </p>
+            <p>Tap a state below to see what it takes for a {breed} major there.</p>
           )
         }
-        <p>
-          Looking for a different breed? The breed field above the map
-          searches all {scheduleData.breeds.length} AKC breeds and varieties,
-          or see the <a href="/AKCPointSchedule">full breed index</a>.
-        </p>
-        <p>
-          <em
-            >AKC point schedules can be revised — always confirm the current
-            numbers at <a
-              href={scheduleData.sourceUrl}
-              target="_blank"
-              rel="noopener noreferrer">akc.org</a
-            > before entering a show. Last pulled from the AKC's all-divisions
-            schedule on <strong>{scheduleData.sourceCheckedDate}</strong
-            >.</em
-          >
-        </p>
+        <details class="ps-intro-details">
+          <summary class="ps-details-summary">What am I looking at?</summary>
+          {
+            isCatchAll ? (
+              <p>
+                "All other breeds and varieties" is the AKC's catch-all
+                division-points bucket for breeds and varieties that aren't
+                individually broken out in the point schedule. This covers
+                the schedule effective <strong>{EFFECTIVE_DATE}</strong>.
+                Hover or focus a state to see the minimum dogs and bitches
+                needed for a 3-point major there; click or tap it for that
+                division's full 1-through-5-point breakdown (3, 4, and
+                5-point wins are majors).
+              </p>
+            ) : (
+              <p>
+                The AKC redraws how many {breed} you need to beat for a
+                major every year, division by division. This covers the
+                schedule effective <strong>{EFFECTIVE_DATE}</strong>. Hover
+                or focus a state to see the minimum dogs and bitches needed
+                for a 3-point major there; click or tap it for that
+                division's full 1-through-5-point breakdown (3, 4, and
+                5-point wins are majors).
+              </p>
+            )
+          }
+          <p>
+            Looking for a different breed? The breed field above the map
+            searches all {scheduleData.breeds.length} AKC breeds and
+            varieties, or see the <a href="/AKCPointSchedule"
+              >full breed index</a
+            >.
+          </p>
+          <p>
+            <em
+              >AKC point schedules can be revised — always confirm the
+              current numbers at <a
+                href={scheduleData.sourceUrl}
+                target="_blank"
+                rel="noopener noreferrer">akc.org</a
+              > before entering a show. Last pulled from the AKC's
+              all-divisions schedule on <strong
+                >{scheduleData.sourceCheckedDate}</strong
+              >.</em
+            >
+          </p>
+        </details>
       </section>
 
       <section aria-label="Interactive point schedule map">
