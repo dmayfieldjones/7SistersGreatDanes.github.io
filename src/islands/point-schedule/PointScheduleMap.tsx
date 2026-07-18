@@ -61,19 +61,6 @@ const POINT_ROWS: { key: keyof PointLevels; label: string }[] = [
   { key: 'fivePoint', label: '5 pt' },
 ]
 
-function useColorMode(): 'light' | 'dark' {
-  const [mode, setMode] = useState<'light' | 'dark'>('light')
-  useEffect(() => {
-    const query = window.matchMedia('(prefers-color-scheme: dark)')
-    setMode(query.matches ? 'dark' : 'light')
-    const listener = (e: MediaQueryListEvent) =>
-      setMode(e.matches ? 'dark' : 'light')
-    query.addEventListener('change', listener)
-    return () => query.removeEventListener('change', listener)
-  }, [])
-  return mode
-}
-
 function syncUrl(breed: string, divisionId: number, sex: Sex) {
   const url = new URL(window.location.href)
   url.searchParams.set('breed', breed)
@@ -101,7 +88,6 @@ export default function PointScheduleMap({
   const [viewBox, setViewBox] = useState('0 0 975 610')
   const [tooltip, setTooltip] = useState<TooltipState | null>(null)
   const mapWrapRef = useRef<HTMLDivElement>(null)
-  const mode = useColorMode()
 
   const showTooltipAt = (
     clientX: number,
@@ -265,7 +251,7 @@ export default function PointScheduleMap({
     const levels = breedPointsByDivision.get(divisionId)
     if (!levels) return 'var(--ps-water)'
     const t = max === min ? 0.5 : (levels.threePoint - min) / (max - min)
-    return sequentialRed(t, mode)
+    return sequentialRed(t, 'light')
   }
 
   const selectedDivision = scheduleData
@@ -448,8 +434,8 @@ export default function PointScheduleMap({
             style={{
               background: `linear-gradient(to right, ${sequentialRed(
                 0,
-                mode,
-              )}, ${sequentialRed(1, mode)})`,
+                'light',
+              )}, ${sequentialRed(1, 'light')})`,
             }}
             aria-hidden="true"
           />
@@ -457,8 +443,7 @@ export default function PointScheduleMap({
         </div>
         <p className="ps-legend-caption">
           Color shows {sex} needed for a 3-point major, by division, for{' '}
-          {displayBreed}. Darker (light mode) / brighter (dark mode) means
-          more dogs to beat.
+          {displayBreed}. Darker means more dogs to beat.
         </p>
       </div>
 
