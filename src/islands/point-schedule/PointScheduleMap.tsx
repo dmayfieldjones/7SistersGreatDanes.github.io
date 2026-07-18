@@ -23,7 +23,11 @@ import BreedPicker from './BreedPicker'
 interface PointScheduleMapProps {
   /** Default breed for this page (e.g. a per-breed SEO landing page). Falls back to the dataset default (Great Danes) on the hub page. Overridden by a `breed` URL query param or a remembered choice in localStorage. */
   initialBreed?: string
+  /** Link to the full breed index — an in-page "#breed-index" anchor on the hub, or "/AKCPointSchedule#breed-index" elsewhere. */
+  breedIndexHref?: string
 }
+
+const DEFAULT_BREED_INDEX_HREF = '/AKCPointSchedule#breed-index'
 
 interface RawStateShape {
   name: string
@@ -80,6 +84,7 @@ function syncUrl(breed: string, divisionId: number, sex: Sex) {
 
 export default function PointScheduleMap({
   initialBreed,
+  breedIndexHref = DEFAULT_BREED_INDEX_HREF,
 }: PointScheduleMapProps) {
   const [sex, setSex] = useState<Sex>('bitches')
   const [scheduleData, setScheduleData] = useState<PointScheduleData | null>(
@@ -279,6 +284,7 @@ export default function PointScheduleMap({
             breeds={scheduleData.breeds}
             value={breed}
             onChange={handleBreedChange}
+            breedIndexHref={breedIndexHref}
           />
         ) : (
           <div className="ps-breed-picker" aria-hidden="true">

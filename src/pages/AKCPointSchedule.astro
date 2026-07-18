@@ -76,7 +76,7 @@ const keywords = [
       </section>
 
       <section aria-label="Interactive point schedule map">
-        <PointScheduleMap client:only="react" />
+        <PointScheduleMap client:only="react" breedIndexHref="#breed-index" />
       </section>
 
       <section style="margin-top: 2.5rem">
@@ -90,7 +90,7 @@ const keywords = [
       </section>
 
       <section style="margin-top: 2.5rem">
-        <details class="ps-breed-index">
+        <details class="ps-breed-index" id="breed-index">
           <summary class="section-title ps-details-summary">
             Browse the schedule for every breed
           </summary>
@@ -131,3 +131,22 @@ const keywords = [
     white-space: nowrap;
   }
 </style>
+
+<script>
+  function openBreedIndexIfTargeted() {
+    if (window.location.hash !== '#breed-index') return
+    const el = document.getElementById('breed-index')
+    if (!(el instanceof HTMLDetailsElement)) return
+    el.open = true
+    const scrollToIt = () => el.scrollIntoView({ block: 'start' })
+    // The browser's native fragment scroll fires before/without accounting for
+    // the details expanding, and on a fresh page load the interactive map
+    // above is still hydrating (async data fetch) and growing taller — so
+    // re-scroll ourselves, retrying until that settles.
+    requestAnimationFrame(scrollToIt)
+    setTimeout(scrollToIt, 400)
+    setTimeout(scrollToIt, 1200)
+  }
+  openBreedIndexIfTargeted()
+  window.addEventListener('hashchange', openBreedIndexIfTargeted)
+</script>
