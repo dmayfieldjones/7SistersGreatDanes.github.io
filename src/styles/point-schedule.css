@@ -1,3 +1,6 @@
+/* Intentionally not dark-mode-aware: the rest of the site has no dark theme,
+   so following the device's prefers-color-scheme here would make this
+   component go dark while everything around it stays light. */
 :root {
   --ps-accent: #bf141c;
   --ps-accent-bg: rgba(191, 20, 28, 0.08);
@@ -8,19 +11,6 @@
   --ps-surface-muted: #f8f8f8;
   --ps-text: #0b0b0b;
   --ps-text-muted: #52514e;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --ps-accent-bg: rgba(215, 60, 66, 0.2);
-    --ps-water: #26261f;
-    --ps-border: rgba(255, 255, 255, 0.3);
-    --ps-border-selected: #ffffff;
-    --ps-surface: #1a1a19;
-    --ps-surface-muted: #232320;
-    --ps-text: #ffffff;
-    --ps-text-muted: #c3c2b7;
-  }
 }
 
 .ps-root {
