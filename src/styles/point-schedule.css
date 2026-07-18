@@ -139,6 +139,25 @@
   color: var(--ps-text-muted);
 }
 
+.ps-details-summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.ps-intro-details {
+  margin: 0.5rem 0 1.75rem;
+}
+
+.ps-intro-details[open] {
+  padding: 0.9rem 1.1rem 1.1rem;
+  border-radius: 10px;
+  background: var(--ps-surface-muted);
+}
+
+.ps-intro-details p {
+  margin-top: 0.75rem;
+}
+
 .ps-map-loading {
   position: absolute;
   inset: 0;
