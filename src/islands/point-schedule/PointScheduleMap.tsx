@@ -5,7 +5,6 @@ import type { Topology, GeometryCollection } from 'topojson-specification'
 import {
   STATE_ABBREVIATIONS,
   MAJOR_POINT_KEYS,
-  BREED_STORAGE_KEY,
   ALL_OTHER_BREEDS,
   breedLabel,
   divisionById,
@@ -32,13 +31,13 @@ interface InitialDivision {
 }
 
 interface PointScheduleMapProps {
-  /** Default breed for this page (e.g. a per-breed SEO landing page). Falls back to the dataset default (Great Danes) on the hub page. Overridden by a `breed` URL query param or a remembered choice in localStorage. */
+  /** Default breed for this page (e.g. a per-breed SEO landing page). Falls back to the dataset default (Great Danes) on the hub page. Overridden by a `breed` URL query param. */
   initialBreed?: string
   /** Link to the full breed index — an in-page "#breed-index" anchor on the hub, or "/AKCPointSchedule#breed-index" elsewhere. */
   breedIndexHref?: string
   /** Render the full all-divisions table below the map, following the selected breed. */
   renderFullTable?: boolean
-  /** Which breed `initialDivisions`/`initialBreedFact` were computed for. Deliberately separate from `initialBreed` — the hub page leaves `initialBreed` unset (so it can fall back to a remembered localStorage breed) but its SSR-seeded table data is always for Great Danes. */
+  /** Which breed `initialDivisions`/`initialBreedFact` were computed for. Deliberately separate from `initialBreed` — the hub page leaves `initialBreed` unset (so it resolves from the dataset default) but its SSR-seeded table data is always for Great Danes. */
   initialFactsBreed?: string
   /** Server-computed table rows for `initialFactsBreed`, used for the first (SSR'd) paint before the client-side dataset fetch resolves — keeps the table's real content in the page's initial HTML for crawlers. Ignored once a different breed is selected. */
   initialDivisions?: InitialDivision[]
@@ -146,17 +145,6 @@ export default function PointScheduleMap({
             ? initialBreed
             : (data.defaultBreed ?? FALLBACK_BREED)
 
-        if (!initialBreed) {
-          try {
-            const stored = window.localStorage.getItem(BREED_STORAGE_KEY)
-            if (stored && data.breeds.includes(stored)) {
-              resolvedBreed = stored
-            }
-          } catch {
-            // localStorage unavailable (private browsing, etc.) — ignore.
-          }
-        }
-
         const params = new URLSearchParams(window.location.search)
         const queryBreed = params.get('breed')
         if (queryBreed && data.breeds.includes(queryBreed)) {
@@ -239,11 +227,6 @@ export default function PointScheduleMap({
   // switching breeds doesn't also reset what you were looking at.
   const goToBreed = (newBreed: string) => {
     if (newBreed === breed) return
-    try {
-      window.localStorage.setItem(BREED_STORAGE_KEY, newBreed)
-    } catch {
-      // localStorage unavailable — the picker still works, it just won't be remembered.
-    }
     const params = new URLSearchParams()
     params.set('sex', sex)
     params.set('division', String(selectedDivisionId))

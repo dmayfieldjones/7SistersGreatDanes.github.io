@@ -73,9 +73,6 @@ export interface BreedFact {
 
 export type BreedFactsData = Record<string, BreedFact>
 
-/** localStorage key for remembering the visitor's last-picked breed on the hub page. */
-export const BREED_STORAGE_KEY = 'ps-last-breed'
-
 export const ALL_OTHER_BREEDS = 'ALL OTHER BREEDS AND VARIETIES'
 
 /** Friendlier, non-shouting display label for a breed name (only differs for the catch-all entry). */
