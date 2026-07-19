@@ -1,0 +1,89 @@
+---
+import type { BreedFact } from '../lib/pointSchedule2026'
+
+interface Props {
+  breed: string
+  pageUrl: string
+  effectiveDate: string
+  sourceUrl: string
+  sourceCheckedDate: string
+  breedFact?: BreedFact
+}
+
+const {
+  breed,
+  pageUrl,
+  effectiveDate,
+  sourceUrl,
+  sourceCheckedDate,
+  breedFact,
+} = Astro.props
+
+const SITE_URL = 'https://7sistersgreatdanes.com'
+
+const datasetSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Dataset',
+  name: `2026 AKC ${breed} Point Schedule`,
+  description: `How many ${breed} must be entered to reach a major (3, 4, or 5-point win) in each of the AKC's 15 conformation divisions, effective ${effectiveDate}.`,
+  url: pageUrl,
+  temporalCoverage: '2026',
+  spatialCoverage: {
+    '@type': 'Place',
+    name: 'United States',
+  },
+  variableMeasured: [
+    'Dogs needed for a 1 through 5-point win, by AKC division',
+    'Bitches needed for a 1 through 5-point win, by AKC division',
+  ],
+  creator: {
+    '@type': 'Organization',
+    name: 'American Kennel Club',
+    url: 'https://www.akc.org',
+  },
+  isBasedOn: sourceUrl,
+  dateModified: sourceCheckedDate,
+  distribution: [
+    {
+      '@type': 'DataDownload',
+      encodingFormat: 'application/json',
+      contentUrl: `${SITE_URL}/data/point-schedule-2026.json`,
+    },
+  ],
+  publisher: {
+    '@type': 'Organization',
+    name: '7Sisters Farm',
+    url: SITE_URL,
+  },
+}
+
+const faqEntities = [
+  breedFact?.recognitionYear
+    ? {
+        '@type': 'Question',
+        name: `When did the AKC recognize ${breed}?`,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: `The AKC recognized ${breed} in ${breedFact.recognitionYear}. ${breedFact.description}`,
+        },
+      }
+    : null,
+  {
+    '@type': 'Question',
+    name: `What counts as a major for ${breed} in the AKC point schedule?`,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: `A major is a win worth 3, 4, or 5 points. How many ${breed} need to be entered to reach a major varies by AKC division — see the full division-by-division breakdown on this page, effective ${effectiveDate}. AKC point schedules are revised periodically, so always confirm current numbers at akc.org before entering a show.`,
+    },
+  },
+].filter((entity): entity is NonNullable<typeof entity> => entity !== null)
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqEntities,
+}
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(datasetSchema)} />
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />

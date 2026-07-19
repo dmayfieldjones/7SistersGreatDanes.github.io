@@ -1,10 +1,11 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro'
 import PointScheduleMap from '../../../islands/point-schedule/PointScheduleMap'
-import PointScheduleTable from '../../../components/PointScheduleTable.astro'
+import PointScheduleSchema from '../../../components/PointScheduleSchema.astro'
 import '../../../styles/point-schedule.css'
 import { pointsForBreed, slugifyBreed, ALL_OTHER_BREEDS, breedLabel } from '../../../lib/pointSchedule2026'
 import { loadPointScheduleData } from '../../../lib/pointScheduleServer'
+import { loadBreedFacts } from '../../../lib/breedFactsServer'
 
 export function getStaticPaths() {
   const scheduleData = loadPointScheduleData()
@@ -27,6 +28,14 @@ const BREED_DIVISIONS = scheduleData.divisions.map(division => ({
 }))
 
 const displayName = breedLabel(breed)
+const breedFact = loadBreedFacts()[breed]
+
+const breedLinks = scheduleData.breeds
+  .filter(b => b !== breed)
+  .map(b => ({
+    name: b,
+    slug: slugifyBreed(b),
+  }))
 
 const keywords = [
   'AKC point schedule',
@@ -48,6 +57,15 @@ const keywords = [
     { name: displayName, path: `/AKCPointSchedule/breed/${slug}` },
   ]}
 >
+  <PointScheduleSchema
+    slot="head"
+    breed={displayName}
+    pageUrl={`https://7sistersgreatdanes.com/AKCPointSchedule/breed/${slug}`}
+    effectiveDate={EFFECTIVE_DATE}
+    sourceUrl={scheduleData.sourceUrl}
+    sourceCheckedDate={scheduleData.sourceCheckedDate}
+    breedFact={breedFact}
+  />
   <div class="content">
     <div class="post-title">
       <h1>2026 AKC {displayName} Point Schedule</h1>
@@ -93,9 +111,7 @@ const keywords = [
           <p>
             Looking for a different breed? The breed field above the map
             searches all {scheduleData.breeds.length} AKC breeds and
-            varieties, or see the <a href="/AKCPointSchedule#breed-index"
-              >full breed index</a
-            >.
+            varieties, or see the <a href="#breed-index">full breed index</a>.
           </p>
           <p>
             <em
@@ -115,16 +131,56 @@ const keywords = [
 
       <section aria-label="Interactive point schedule map">
         <PointScheduleMap
-          client:only="react"
+          client:load
           initialBreed={breed}
-          breedIndexHref="/AKCPointSchedule#breed-index"
+          breedIndexHref="#breed-index"
+          renderFullTable
+          initialFactsBreed={breed}
+          initialDivisions={BREED_DIVISIONS}
+          initialBreedFact={breedFact}
         />
       </section>
 
       <section style="margin-top: 2.5rem">
-        <h2 class="section-title">Full {displayName} schedule, all divisions</h2>
-        <PointScheduleTable breed={displayName} divisions={BREED_DIVISIONS} />
+        <details class="ps-breed-index" id="breed-index">
+          <summary class="section-title ps-details-summary">
+            Browse the schedule for every breed
+          </summary>
+          <p>
+            Every other AKC breed and variety ({breedLinks.length} in total)
+            has its own page with the full 2026 schedule and the same
+            interactive map, defaulted to that breed.
+          </p>
+          <ul class="ps-breed-index-list">
+            {
+              breedLinks.map(({ name, slug: breedSlug }) => (
+                <li>
+                  <a href={`/AKCPointSchedule/breed/${breedSlug}`}>{name}</a>
+                </li>
+              ))
+            }
+          </ul>
+        </details>
       </section>
     </main>
   </div>
 </BaseLayout>
+
+<script>
+  function openBreedIndexIfTargeted() {
+    if (window.location.hash !== '#breed-index') return
+    const el = document.getElementById('breed-index')
+    if (!(el instanceof HTMLDetailsElement)) return
+    el.open = true
+    const scrollToIt = () => el.scrollIntoView({ block: 'start' })
+    // The browser's native fragment scroll fires before/without accounting for
+    // the details expanding, and on a fresh page load the interactive map
+    // above is still hydrating (async data fetch) and growing taller — so
+    // re-scroll ourselves, retrying until that settles.
+    requestAnimationFrame(scrollToIt)
+    setTimeout(scrollToIt, 400)
+    setTimeout(scrollToIt, 1200)
+  }
+  openBreedIndexIfTargeted()
+  window.addEventListener('hashchange', openBreedIndexIfTargeted)
+</script>

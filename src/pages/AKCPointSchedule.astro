@@ -1,19 +1,21 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
 import PointScheduleMap from '../islands/point-schedule/PointScheduleMap'
-import PointScheduleTable from '../components/PointScheduleTable.astro'
+import PointScheduleSchema from '../components/PointScheduleSchema.astro'
 import '../styles/point-schedule.css'
 import { pointsForBreed, slugifyBreed } from '../lib/pointSchedule2026'
 import { loadPointScheduleData } from '../lib/pointScheduleServer'
+import { loadBreedFacts } from '../lib/breedFactsServer'
 
 const scheduleData = loadPointScheduleData()
-
-const EFFECTIVE_DATE = scheduleData.effectiveDate
-const GREAT_DANE_DIVISIONS = scheduleData.divisions.map(division => ({
+const greatDaneFact = loadBreedFacts()['Great Danes']
+const greatDaneDivisions = scheduleData.divisions.map(division => ({
   id: division.id,
   states: division.states,
-  points: pointsForBreed(division, 'Great Danes')!,
+  points: pointsForBreed(division, 'Great Danes'),
 }))
+
+const EFFECTIVE_DATE = scheduleData.effectiveDate
 
 const breedLinks = scheduleData.breeds.map(breed => ({
   name: breed,
@@ -39,6 +41,15 @@ const keywords = [
     { name: 'AKC Point Schedule', path: '/AKCPointSchedule' },
   ]}
 >
+  <PointScheduleSchema
+    slot="head"
+    breed="Great Danes"
+    pageUrl="https://7sistersgreatdanes.com/AKCPointSchedule"
+    effectiveDate={EFFECTIVE_DATE}
+    sourceUrl={scheduleData.sourceUrl}
+    sourceCheckedDate={scheduleData.sourceCheckedDate}
+    breedFact={greatDaneFact}
+  />
   <div class="content">
     <div class="post-title">
       <h1>2026 AKC Point Schedule</h1>
@@ -76,17 +87,14 @@ const keywords = [
       </section>
 
       <section aria-label="Interactive point schedule map">
-        <PointScheduleMap client:only="react" breedIndexHref="#breed-index" />
-      </section>
-
-      <section style="margin-top: 2.5rem">
-        <h2 class="section-title">Full Great Dane schedule, all divisions</h2>
-        <p>
-          For other breeds, use the breed field in the map above — it
-          updates the map, the division detail, and the tooltips, but this
-          reference table below stays Great Dane-specific.
-        </p>
-        <PointScheduleTable breed="Great Danes" divisions={GREAT_DANE_DIVISIONS} />
+        <PointScheduleMap
+          client:load
+          breedIndexHref="#breed-index"
+          renderFullTable
+          initialFactsBreed="Great Danes"
+          initialDivisions={greatDaneDivisions}
+          initialBreedFact={greatDaneFact}
+        />
       </section>
 
       <section style="margin-top: 2.5rem">
@@ -113,24 +121,6 @@ const keywords = [
     </main>
   </div>
 </BaseLayout>
-
-<style>
-  .ps-breed-index-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 0.35rem 1rem;
-    margin: 1rem 0 0;
-    padding: 0;
-    list-style: none;
-    font-size: 0.9rem;
-  }
-
-  .ps-breed-index-list li {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-</style>
 
 <script>
   function openBreedIndexIfTargeted() {
