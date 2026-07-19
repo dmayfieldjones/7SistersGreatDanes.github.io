@@ -232,24 +232,32 @@ export default function PointScheduleMap({
 
   const isLoading = !scheduleData
 
-  const handleBreedChange = (newBreed: string) => {
-    // Already on this breed (e.g. re-confirming the current selection) — nothing to navigate to.
+  // Every breed has its own dedicated page (title, H1, and reference table
+  // all matching it) — navigate there instead of swapping the breed in
+  // place, so nothing on the page can ever end up describing a breed other
+  // than the one actually shown. Carries the current sex/division along so
+  // switching breeds doesn't also reset what you were looking at.
+  const goToBreed = (newBreed: string) => {
     if (newBreed === breed) return
-
     try {
       window.localStorage.setItem(BREED_STORAGE_KEY, newBreed)
     } catch {
       // localStorage unavailable — the picker still works, it just won't be remembered.
     }
-
-    // Every breed has its own dedicated page (title, H1, and reference table
-    // all matching it) — navigate there instead of swapping the breed in
-    // place, so nothing on the page can ever end up describing a breed
-    // other than the one actually shown.
     const params = new URLSearchParams()
     params.set('sex', sex)
     params.set('division', String(selectedDivisionId))
     window.location.href = `/AKCPointSchedule/breed/${slugifyBreed(newBreed)}?${params}`
+  }
+
+  const handleBreedChange = (newBreed: string) => goToBreed(newBreed)
+
+  const handleNextBreed = () => {
+    if (!scheduleData) return
+    const breeds = scheduleData.breeds
+    const currentIndex = breeds.indexOf(breed)
+    const nextBreed = breeds[(currentIndex + 1) % breeds.length]
+    goToBreed(nextBreed)
   }
 
   const handleSexChange = (newSex: Sex) => {
@@ -362,6 +370,15 @@ export default function PointScheduleMap({
               {option === 'dogs' ? 'Dogs' : 'Bitches'}
             </button>
           ))}
+          <button
+            type="button"
+            className="ps-toggle ps-next-breed"
+            onClick={handleNextBreed}
+            disabled={!scheduleData}
+            aria-label={`Next breed after ${displayBreed}`}
+          >
+            Next breed →
+          </button>
         </div>
       </div>
 

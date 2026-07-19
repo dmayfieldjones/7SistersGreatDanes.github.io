@@ -195,6 +195,13 @@
   color: #fff;
 }
 
+.ps-toggle:disabled {
+  cursor: default;
+  opacity: 0.5;
+  border-color: var(--ps-border);
+  color: var(--ps-text-muted);
+}
+
 .ps-map-wrap {
   position: relative;
   background: var(--ps-surface-muted);
