@@ -10,6 +10,7 @@ import {
   breedLabel,
   divisionById,
   pointsForBreed,
+  slugifyBreed,
   stateToDivision,
   POINT_SCHEDULE_DATA_URL,
   BREED_FACTS_DATA_URL,
@@ -232,13 +233,23 @@ export default function PointScheduleMap({
   const isLoading = !scheduleData
 
   const handleBreedChange = (newBreed: string) => {
-    setBreed(newBreed)
+    // Already on this breed (e.g. re-confirming the current selection) — nothing to navigate to.
+    if (newBreed === breed) return
+
     try {
       window.localStorage.setItem(BREED_STORAGE_KEY, newBreed)
     } catch {
       // localStorage unavailable — the picker still works, it just won't be remembered.
     }
-    syncUrl(newBreed, selectedDivisionId, sex)
+
+    // Every breed has its own dedicated page (title, H1, and reference table
+    // all matching it) — navigate there instead of swapping the breed in
+    // place, so nothing on the page can ever end up describing a breed
+    // other than the one actually shown.
+    const params = new URLSearchParams()
+    params.set('sex', sex)
+    params.set('division', String(selectedDivisionId))
+    window.location.href = `/AKCPointSchedule/breed/${slugifyBreed(newBreed)}?${params}`
   }
 
   const handleSexChange = (newSex: Sex) => {
