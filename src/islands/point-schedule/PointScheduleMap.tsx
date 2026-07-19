@@ -12,19 +12,37 @@ import {
   pointsForBreed,
   stateToDivision,
   POINT_SCHEDULE_DATA_URL,
+  BREED_FACTS_DATA_URL,
   type Sex,
   type PointLevels,
   type PointScheduleData,
   type Division,
+  type BreedFactsData,
+  type BreedFact,
+  type BreedPoints,
 } from '../../lib/pointSchedule2026'
 import { sequentialRed } from '../../lib/sequentialColor'
 import BreedPicker from './BreedPicker'
+
+interface InitialDivision {
+  id: number
+  states: string[]
+  points: BreedPoints | undefined
+}
 
 interface PointScheduleMapProps {
   /** Default breed for this page (e.g. a per-breed SEO landing page). Falls back to the dataset default (Great Danes) on the hub page. Overridden by a `breed` URL query param or a remembered choice in localStorage. */
   initialBreed?: string
   /** Link to the full breed index — an in-page "#breed-index" anchor on the hub, or "/AKCPointSchedule#breed-index" elsewhere. */
   breedIndexHref?: string
+  /** Render the full all-divisions table below the map, following the selected breed. */
+  renderFullTable?: boolean
+  /** Which breed `initialDivisions`/`initialBreedFact` were computed for. Deliberately separate from `initialBreed` — the hub page leaves `initialBreed` unset (so it can fall back to a remembered localStorage breed) but its SSR-seeded table data is always for Great Danes. */
+  initialFactsBreed?: string
+  /** Server-computed table rows for `initialFactsBreed`, used for the first (SSR'd) paint before the client-side dataset fetch resolves — keeps the table's real content in the page's initial HTML for crawlers. Ignored once a different breed is selected. */
+  initialDivisions?: InitialDivision[]
+  /** Server-computed breed fact for `initialFactsBreed`, same SSR purpose as `initialDivisions`. */
+  initialBreedFact?: BreedFact
 }
 
 const DEFAULT_BREED_INDEX_HREF = '/AKCPointSchedule#breed-index'
@@ -72,11 +90,16 @@ function syncUrl(breed: string, divisionId: number, sex: Sex) {
 export default function PointScheduleMap({
   initialBreed,
   breedIndexHref = DEFAULT_BREED_INDEX_HREF,
+  renderFullTable = false,
+  initialFactsBreed,
+  initialDivisions,
+  initialBreedFact,
 }: PointScheduleMapProps) {
   const [sex, setSex] = useState<Sex>('bitches')
   const [scheduleData, setScheduleData] = useState<PointScheduleData | null>(
     null,
   )
+  const [breedFacts, setBreedFacts] = useState<BreedFactsData | null>(null)
   const [breed, setBreed] = useState<string>(initialBreed ?? FALLBACK_BREED)
   const [selectedDivisionId, setSelectedDivisionId] = useState<number>(
     DEFAULT_DIVISION_ID,
@@ -161,6 +184,20 @@ export default function PointScheduleMap({
     // something that changes during the component's lifetime.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    if (!renderFullTable) return
+    let cancelled = false
+    fetch(BREED_FACTS_DATA_URL)
+      .then(res => res.json())
+      .then((data: BreedFactsData) => {
+        if (!cancelled) setBreedFacts(data)
+      })
+      .catch(() => setBreedFacts(null))
+    return () => {
+      cancelled = true
+    }
+  }, [renderFullTable])
 
   useEffect(() => {
     let cancelled = false
@@ -261,6 +298,27 @@ export default function PointScheduleMap({
     ? pointsForBreed(selectedDivision, breed)
     : undefined
   const displayBreed = breedLabel(breed)
+
+  // Before the client-side dataset fetch resolves (including during SSR),
+  // fall back to the server-computed initial props so the page's own breed
+  // still has real table content in the first paint / crawlable HTML. Once
+  // the dataset loads, or the visitor picks a different breed, this always
+  // switches to computing fresh from `scheduleData`.
+  const fullTableDivisions: InitialDivision[] | undefined = scheduleData
+    ? scheduleData.divisions.map(division => ({
+        id: division.id,
+        states: division.states,
+        points: pointsForBreed(division, breed),
+      }))
+    : breed === initialFactsBreed
+      ? initialDivisions
+      : undefined
+
+  const fullTableFact: BreedFact | undefined = breedFacts
+    ? breedFacts[breed]
+    : breed === initialFactsBreed
+      ? initialBreedFact
+      : undefined
 
   return (
     <div className="ps-root">
@@ -501,6 +559,105 @@ export default function PointScheduleMap({
             </tbody>
           </table>
         </div>
+      )}
+
+      {renderFullTable && fullTableDivisions && (
+        <section style={{ marginTop: '2.5rem' }}>
+          <h2 className="section-title">
+            Full {displayBreed} schedule, all divisions
+          </h2>
+          {fullTableFact && (
+            <p className="ps-breed-byline">
+              {fullTableFact.recognitionYear && (
+                <>AKC recognized in {fullTableFact.recognitionYear}. </>
+              )}
+              {fullTableFact.description}
+            </p>
+          )}
+          <div style={{ overflowX: 'auto' }}>
+            <table className="ps-full-table">
+              <caption className="ps-visually-hidden">
+                2026 AKC {displayBreed} point schedule, points needed for a
+                major by division, dogs and bitches
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col" rowSpan={2}>
+                    Division
+                  </th>
+                  <th scope="col" rowSpan={2}>
+                    States
+                  </th>
+                  <th scope="col" colSpan={5}>
+                    Dogs
+                  </th>
+                  <th scope="col" colSpan={5}>
+                    Bitches
+                  </th>
+                </tr>
+                <tr>
+                  {POINT_ROWS.map(row => (
+                    <th scope="col" key={`dogs-${row.key}`}>
+                      {row.label}
+                    </th>
+                  ))}
+                  {POINT_ROWS.map(row => (
+                    <th scope="col" key={`bitches-${row.key}`}>
+                      {row.label}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {fullTableDivisions.map(division => {
+                  const points = division.points
+                  if (!points) return null
+                  return (
+                    <tr key={division.id}>
+                      <th scope="row">{division.id}</th>
+                      <td>
+                        {division.states
+                          .map(s => STATE_ABBREVIATIONS[s] ?? s)
+                          .join(', ')}
+                      </td>
+                      {POINT_ROWS.map(row => (
+                        <td
+                          key={`dogs-${row.key}`}
+                          className={
+                            (MAJOR_POINT_KEYS as readonly string[]).includes(
+                              row.key,
+                            )
+                              ? 'ps-major-cell'
+                              : ''
+                          }
+                        >
+                          {points.dogs[row.key]}
+                        </td>
+                      ))}
+                      {POINT_ROWS.map(row => (
+                        <td
+                          key={`bitches-${row.key}`}
+                          className={
+                            (MAJOR_POINT_KEYS as readonly string[]).includes(
+                              row.key,
+                            )
+                              ? 'ps-major-cell'
+                              : ''
+                          }
+                        >
+                          {points.bitches[row.key]}
+                        </td>
+                      ))}
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+          <p className="ps-legend-caption">
+            Bold columns (3, 4, 5 pt) are majors.
+          </p>
+        </section>
       )}
     </div>
   )

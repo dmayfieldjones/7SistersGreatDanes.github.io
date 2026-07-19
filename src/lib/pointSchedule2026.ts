@@ -64,6 +64,15 @@ export const MAJOR_POINT_KEYS = ['threePoint', 'fourPoint', 'fivePoint'] as cons
 
 export const POINT_SCHEDULE_DATA_URL = '/data/point-schedule-2026.json'
 
+export const BREED_FACTS_DATA_URL = '/data/breed-facts-2026.json'
+
+export interface BreedFact {
+  recognitionYear: number | null
+  description: string
+}
+
+export type BreedFactsData = Record<string, BreedFact>
+
 /** localStorage key for remembering the visitor's last-picked breed on the hub page. */
 export const BREED_STORAGE_KEY = 'ps-last-breed'
 

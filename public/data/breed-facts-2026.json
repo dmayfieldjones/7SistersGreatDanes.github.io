@@ -1,0 +1,874 @@
+{
+  "Affenpinschers": {
+    "recognitionYear": 1936,
+    "description": "A wiry, monkey-faced German ratter once kept in kitchens and stables to hunt down rodents by the fistful."
+  },
+  "Afghan Hounds": {
+    "recognitionYear": 1926,
+    "description": "An ancient Afghan mountain sighthound built to run down gazelle over brutal terrain, wrapped in a coat thick enough to survive winter there."
+  },
+  "Airedale Terriers": {
+    "recognitionYear": 1888,
+    "description": "The largest terrier breed, a Yorkshire river-hunter nicknamed the 'King of Terriers' that later served as a messenger dog in WWI trenches."
+  },
+  "Akitas": {
+    "recognitionYear": 1972,
+    "description": "A powerful Japanese mountain dog bred to hold bear and boar at bay, later immortalized worldwide as a symbol of loyalty."
+  },
+  "Alaskan Malamutes": {
+    "recognitionYear": 1935,
+    "description": "An Arctic freight-hauling breed built by the Mahlemut people for raw pulling power over long distances, not sprint speed."
+  },
+  "American English Coonhounds": {
+    "recognitionYear": 2011,
+    "description": "A fast, loud-voiced American hound developed for chasing raccoons up trees through the night on nothing but scent and nerve."
+  },
+  "American Eskimo Dogs": {
+    "recognitionYear": 1994,
+    "description": "A crisp white Spitz-type dog that toured Depression-era America as a circus tightrope performer before becoming a family companion."
+  },
+  "American Foxhounds": {
+    "recognitionYear": 1886,
+    "description": "A Colonial-era scent hound refined in part by George Washington's own kennels for mounted fox hunts across open country."
+  },
+  "American Hairless Terriers": {
+    "recognitionYear": 2016,
+    "description": "A rat terrier line that went hairless through a single spontaneous mutation on a Louisiana farm in the 1970s, then bred true from there."
+  },
+  "American Staffordshire Terriers": {
+    "recognitionYear": 1936,
+    "description": "A muscular, big-hearted American original, refined for a stocky build and a people-first temperament that belies its athletic strength."
+  },
+  "Anatolian Shepherd Dogs": {
+    "recognitionYear": 1996,
+    "description": "A Turkish livestock guardian bred for millennia to think for itself on the steppe, bonding to the flock as much as to its handler."
+  },
+  "Australian Cattle Dogs": {
+    "recognitionYear": 1980,
+    "description": "Bred by crossing herding dogs with the dingo to produce a tireless, low-nipping drover that could push cattle across the Outback."
+  },
+  "Australian Shepherds": {
+    "recognitionYear": 1991,
+    "description": "Despite the name, a herding breed shaped on American ranches to work sheep with an intense, independent eye."
+  },
+  "Australian Terriers": {
+    "recognitionYear": 1960,
+    "description": "A scrappy, rough-coated Australian terrier bred small enough to go down a burrow after vermin — and snakes — on remote farms."
+  },
+  "Azawakhs": {
+    "recognitionYear": 2019,
+    "description": "A whip-thin Sahelian sighthound kept by West African nomads to run down game and guard camp in brutal desert heat."
+  },
+  "Barbets": {
+    "recognitionYear": 2020,
+    "description": "A curly-coated French water retriever considered an ancestor breed behind several other European water dogs, built to work marshes and duck blinds."
+  },
+  "Basenjis": {
+    "recognitionYear": 1944,
+    "description": "A Central African hunting dog that doesn't bark, prized for driving game silently into nets with its curled tail held high."
+  },
+  "Basset Fauve de Bretagnes": {
+    "recognitionYear": 2026,
+    "description": "A short-legged, wiry-coated French scenthound bred to push rabbits out of the thick Breton undergrowth other hounds couldn't get through."
+  },
+  "Basset Hounds": {
+    "recognitionYear": 1885,
+    "description": "A short-legged scenthound with a nose second only to the Bloodhound's, deliberately built low and slow enough for hunters on foot to keep up."
+  },
+  "Beagles (13 in. and under)": {
+    "recognitionYear": 1885,
+    "description": "The smaller of the two AKC Beagle sizes — a compact English scenthound bred to pack-hunt rabbits by nose."
+  },
+  "Beagles (over 13 in.)": {
+    "recognitionYear": 1885,
+    "description": "The larger AKC Beagle size, with more leg for keeping pace over rough ground on a rabbit's scent trail."
+  },
+  "Bearded Collies": {
+    "recognitionYear": 1976,
+    "description": "A shaggy Scottish drover's dog bred to push cattle and sheep across the Highlands in all weather, coat and all."
+  },
+  "Beaucerons": {
+    "recognitionYear": 2007,
+    "description": "One of France's oldest sheepdog breeds, a large, powerful herder distinguished by double dewclaws on each hind leg."
+  },
+  "Bedlington Terriers": {
+    "recognitionYear": 1886,
+    "description": "A lamb-shaped terrier from England's coal country, crossed with sighthound blood for a rare mix of a placid look with real terrier speed and grit."
+  },
+  "Belgian Laekenois": {
+    "recognitionYear": 2020,
+    "description": "The rarest of Belgium's four shepherd varieties, a rough-coated herder once trusted to guard drying linen out in open fields."
+  },
+  "Belgian Malinois": {
+    "recognitionYear": 1959,
+    "description": "A short-coated Belgian shepherd variety that became the dog of choice for military and police units worldwide."
+  },
+  "Belgian Sheepdogs": {
+    "recognitionYear": 1912,
+    "description": "A solid-black, long-coated Belgian shepherd variety that carried messages and pulled machine-gun carts for the Belgian army in WWI."
+  },
+  "Belgian Tervuren": {
+    "recognitionYear": 1959,
+    "description": "A mahogany-and-black long-coated Belgian shepherd variety, bred from the same herding stock as its Malinois and Sheepdog cousins."
+  },
+  "Bergamasco Sheepdogs": {
+    "recognitionYear": 2015,
+    "description": "An Italian Alpine flock guardian whose coat felts into thick wool mats over its lifetime, doubling as armor against cold and predators."
+  },
+  "Berger Picards": {
+    "recognitionYear": 2015,
+    "description": "One of France's oldest and most rustic herding breeds, twice nearly wiped out by the World Wars fought across its home region."
+  },
+  "Bernese Mountain Dogs": {
+    "recognitionYear": 1937,
+    "description": "A tricolor Swiss farm dog bred to haul milk carts and drive cattle through Alpine passes, sturdy enough for real farm work."
+  },
+  "Bichons Frises": {
+    "recognitionYear": 1972,
+    "description": "A small white Mediterranean lapdog that swung between the courts of French nobility and the ropes of traveling street performers."
+  },
+  "Biewer Terriers": {
+    "recognitionYear": 2021,
+    "description": "A German offshoot of the Yorkshire Terrier, bred starting in the 1980s around a striking black, white, and tan piebald coat pattern."
+  },
+  "Black and Tan Coonhounds": {
+    "recognitionYear": 1945,
+    "description": "An American night hunter's hound, built from Bloodhound and Foxhound stock specifically to tree raccoons in the dark."
+  },
+  "Black Russian Terriers": {
+    "recognitionYear": 2004,
+    "description": "A Soviet military creation, engineered at the Red Star Kennel to guard installations through brutal winters other breeds couldn't handle."
+  },
+  "Bloodhounds": {
+    "recognitionYear": 1885,
+    "description": "An ancient tracking breed with a nose so reliable its trail evidence has been accepted in courts of law."
+  },
+  "Bluetick Coonhounds": {
+    "recognitionYear": 2009,
+    "description": "A mottled blue-coated Southern hound valued for its 'cold nose' — the ability to pick up a scent trail hours old."
+  },
+  "Boerboels": {
+    "recognitionYear": 2015,
+    "description": "A massive South African farm guardian bred to stand between a homestead and predators as large as leopards."
+  },
+  "Border Collies": {
+    "recognitionYear": 1995,
+    "description": "A border-country herding dog that controls sheep with a hypnotic stare rather than force, often called the most trainable breed there is."
+  },
+  "Border Terriers": {
+    "recognitionYear": 1930,
+    "description": "A wiry little terrier bred to run alongside mounted foxhounds all day, then squeeze underground to finish the job."
+  },
+  "Borzois": {
+    "recognitionYear": 1891,
+    "description": "A Russian aristocrats' sighthound, historically loosed in pairs to run down and hold wolves on the open steppe."
+  },
+  "Boston Terriers": {
+    "recognitionYear": 1893,
+    "description": "One of the first breeds developed entirely in the United States, refined in Boston from bull-and-terrier stock into a tuxedoed 'American Gentleman.'"
+  },
+  "Bouviers des Flandres": {
+    "recognitionYear": 1931,
+    "description": "A rugged Belgian farm dog built to drive cattle and haul carts through Flanders weather, coat included."
+  },
+  "Boxers": {
+    "recognitionYear": 1904,
+    "description": "Descended from German boar- and bear-hunting mastiffs bred to grab and hold, later reshaped into a guard and military dog."
+  },
+  "Bracchi Italiani": {
+    "recognitionYear": 2022,
+    "description": "One of the oldest pointing breeds in Europe, the Bracco Italiano hunts with a loping, tireless gait and turns into a devoted homebody once the field work is done."
+  },
+  "Briards": {
+    "recognitionYear": 1928,
+    "description": "Bred to herd and guard French flocks unsupervised for days, the Briard carries a shaggy, weatherproof coat over a fiercely loyal, independent-minded heart."
+  },
+  "Brittanys": {
+    "recognitionYear": 1934,
+    "description": "Compact and endlessly eager, the Brittany was built by French sportsmen to point and retrieve all day without ever seeming to tire."
+  },
+  "Brussels Griffons": {
+    "recognitionYear": 1910,
+    "description": "Barely a foot tall, the Brussels Griffon descends from Belgian stable ratting dogs and still carries himself like the biggest personality in the room."
+  },
+  "Bull Terriers (Colored)": {
+    "recognitionYear": 1885,
+    "description": "The Colored Bull Terrier carries the same egg-shaped head and mischievous, clownish personality as its white cousin, bred in patched and brindle coats for extra hardiness."
+  },
+  "Bull Terriers (White)": {
+    "recognitionYear": 1885,
+    "description": "The original Bull Terrier line, bred pure white by Victorian fanciers chasing an almost sculptural silhouette, still carries the breed's mischievous streak."
+  },
+  "Bulldogs": {
+    "recognitionYear": 1886,
+    "description": "The Bulldog's wrinkled, determined face made it Britain's unofficial national mascot — and belongs today to one of the gentlest, most easygoing companions in the show ring."
+  },
+  "Bullmastiffs": {
+    "recognitionYear": 1934,
+    "description": "An English gamekeeper's watchful companion, bred to pair serious size and protective instinct with an unusually calm, steady nature at home."
+  },
+  "Cairn Terriers": {
+    "recognitionYear": 1913,
+    "description": "Small enough to squeeze into a Highland cairn after a fox, this terrier's whole body was engineered for digging, chasing, and never backing down."
+  },
+  "Canaan Dogs": {
+    "recognitionYear": 1997,
+    "description": "Israel's native pariah dog, once a self-sufficient desert survivor, still herds and guards with the sharp instincts of a breed that answered to no one."
+  },
+  "Cane Corso": {
+    "recognitionYear": 2010,
+    "description": "An Italian farm guardian whose name translates to 'bodyguard dog' — an athletic, watchful protector that's deeply loyal to its own family."
+  },
+  "Cardigan Welsh Corgis": {
+    "recognitionYear": 1935,
+    "description": "The older of the two Corgi breeds, the Cardigan drove cattle by nipping at heels and dodging kicks, and kept the long, fox-like tail its cousin lacks."
+  },
+  "Cavalier King Charles Spaniels": {
+    "recognitionYear": 1995,
+    "description": "Named for the British king rarely seen without one underfoot, the Cavalier has spent centuries perfecting the art of being an irresistible lap companion."
+  },
+  "Cesky Terriers": {
+    "recognitionYear": 2011,
+    "description": "Bred behind the Iron Curtain by a Czech geneticist who wanted a quieter, silkier earthdog, the Cesky hunts vermin with none of the usual terrier racket."
+  },
+  "Chihuahuas (Long Coat)": {
+    "recognitionYear": 1904,
+    "description": "The flowing-coated Chihuahua carries the same outsized confidence as its smooth cousin, tracing back to a small companion dog of Mexico."
+  },
+  "Chihuahuas (Smooth Coat)": {
+    "recognitionYear": 1904,
+    "description": "The world's smallest breed by AKC standard, the Smooth Coat Chihuahua descends from a Mexican companion dog and never got the memo about its size."
+  },
+  "Chinese Crested": {
+    "recognitionYear": 1991,
+    "description": "Bred as a hairless companion and ratter aboard trading ships, the Chinese Crested comes in two coats, bare-skinned and 'powderpuff,' from the very same litters."
+  },
+  "Chinese Shar-Pei": {
+    "recognitionYear": 1992,
+    "description": "One of China's oldest breeds, known for a dignified, independent temperament and the loose, sandpaper-textured wrinkles that make it instantly recognizable."
+  },
+  "Chinooks": {
+    "recognitionYear": 2013,
+    "description": "New Hampshire's official state dog, developed by a single 20th-century musher to pull sleds with a freight breed's power and a family dog's temperament."
+  },
+  "Chow Chows": {
+    "recognitionYear": 1903,
+    "description": "An ancient Chinese breed used for hunting, herding, and pulling carts, the Chow Chow is one of the few dogs with a naturally blue-black tongue."
+  },
+  "Cirnechi dell’Etna": {
+    "recognitionYear": 2015,
+    "description": "Bred for millennia on the slopes of Sicily's Mount Etna to course rabbits over volcanic rock, the Cirneco hunts by sight, scent, and sound at once."
+  },
+  "Collies (Rough)": {
+    "recognitionYear": 1885,
+    "description": "Made famous by Lassie, the Rough Collie's flowing double coat sits over a Scottish sheepdog's brain built for reading a flock's every move."
+  },
+  "Collies (Smooth)": {
+    "recognitionYear": 1885,
+    "description": "Bred from the same working stock as its long-coated cousin, the Smooth Collie herded cattle to market over distances the fancier coat wasn't suited for."
+  },
+  "Coton de Tulear": {
+    "recognitionYear": 2014,
+    "description": "Marooned on Madagascar for centuries, this cotton-soft companion breed developed in near-isolation until French colonists carried it home in the 20th century."
+  },
+  "Dachshunds (Longhaired)": {
+    "recognitionYear": 1885,
+    "description": "The Longhaired Dachshund likely picked up its silky coat from spaniel crosses, softening the breed's badger-hunting bravado with a bit of elegance."
+  },
+  "Dachshunds (Smooth)": {
+    "recognitionYear": 1885,
+    "description": "Built low and long to follow badgers straight into their own tunnels, the Smooth Dachshund is still, pound for pound, one of the boldest hunters in the AKC."
+  },
+  "Dachshunds (Wirehaired)": {
+    "recognitionYear": 1885,
+    "description": "The wiriest of the three Dachshund coats came from terrier crosses, giving this variety a scruffier face and an extra dash of terrier boldness underground."
+  },
+  "Dalmatians": {
+    "recognitionYear": 1888,
+    "description": "Bred to trot for miles alongside carriages and fire wagons, the Dalmatian's spotted coat and boundless endurance made it a natural coaching-dog escort."
+  },
+  "Dandie Dinmont Terriers": {
+    "recognitionYear": 1886,
+    "description": "Named after a fictional farmer in a Walter Scott novel, this long-backed terrier was bred to go to ground after otter and badger in the Scottish borders."
+  },
+  "Danish-Swedish Farmdogs": {
+    "recognitionYear": 2025,
+    "description": "A hardy Scandinavian all-purpose farm dog, part ratter, part herder, part watchdog, that spent over a decade in the AKC's Foundation Stock Service before earning full recognition."
+  },
+  "Doberman Pinschers": {
+    "recognitionYear": 1908,
+    "description": "A German tax collector bred the Doberman specifically as a personal protection dog, and the breed has never lost its sharp, all-business edge."
+  },
+  "Dogo Argentinos": {
+    "recognitionYear": 2020,
+    "description": "Bred in Argentina to hunt wild boar and puma in packs, the all-white Dogo Argentino combines a big-game hunter's courage with a surprisingly affectionate home temperament."
+  },
+  "Dogues de Bordeaux": {
+    "recognitionYear": 2008,
+    "description": "France's oldest mastiff-type breed, the Dogue de Bordeaux was once a cart-puller and estate guardian, recognizable by the largest head, proportionally, of any dog breed."
+  },
+  "English Foxhounds": {
+    "recognitionYear": 1909,
+    "description": "Bred for centuries to run and give voice in a pack across the English countryside, the Foxhound was built for stamina alongside other hounds, not solo companionship."
+  },
+  "English Toy Spaniels (Blenheim & Prince Charles)": {
+    "recognitionYear": 1886,
+    "description": "Named for the Duke of Marlborough's Blenheim Palace, this red-and-white variety of England's royal lapdog has been a court favorite since the 17th century."
+  },
+  "English Toy Spaniels (King Charles & Ruby)": {
+    "recognitionYear": 1886,
+    "description": "Bred down from the same royal spaniel line, the black-and-tan King Charles and solid red Ruby varieties trade the Blenheim's markings for richer, solid coloring."
+  },
+  "Entlebucher Mountain Dogs": {
+    "recognitionYear": 2011,
+    "description": "The smallest and rarest of Switzerland's four sennenhund breeds, the Entlebucher was bred to drive cattle down alpine trails with a fearless, low-to-the-ground tenacity."
+  },
+  "Finnish Lapphunds": {
+    "recognitionYear": 2011,
+    "description": "Bred by the Sámi people to herd reindeer across the Arctic Circle, the Finnish Lapphund carries a weatherproof double coat built for temperatures most breeds couldn't survive."
+  },
+  "Finnish Spitz": {
+    "recognitionYear": 1991,
+    "description": "Finland's national dog was bred to 'bark-point,' treeing game birds and barking steadily until the hunter arrives, a trait still bred into every litter today."
+  },
+  "Fox Terriers (Smooth)": {
+    "recognitionYear": 1885,
+    "description": "Bred to bolt foxes from their dens for mounted hunts, the Smooth Fox Terrier was shown as one breed with its wirehaired cousin until the AKC split them in 1985."
+  },
+  "Fox Terriers (Wire)": {
+    "recognitionYear": 1885,
+    "description": "Sharing the same fox-bolting job and pedigree as its smooth-coated cousin, the Wire Fox Terrier wasn't split into its own AKC breed until 1985."
+  },
+  "French Bulldogs": {
+    "recognitionYear": 1898,
+    "description": "Descended from English toy bulldogs carried to France by lacemakers, the Frenchie's bat ears and compact build were refined entirely on the other side of the Channel."
+  },
+  "German Pinschers": {
+    "recognitionYear": 2003,
+    "description": "The direct ancestor of both the Doberman and the Miniature Pinscher, the German Pinscher itself nearly vanished after World War II before being rebuilt from a handful of survivors."
+  },
+  "German Shepherd Dogs": {
+    "recognitionYear": 1908,
+    "description": "Developed in a single decade by one German cavalry officer unifying regional herding dogs, the GSD became the template for nearly every modern working-dog program that followed."
+  },
+  "Giant Schnauzers": {
+    "recognitionYear": 1930,
+    "description": "Originally cattle drovers and brewery guards in Bavaria, the Giant Schnauzer is the largest and most serious-minded of the three schnauzer sizes."
+  },
+  "Glen of Imaal Terriers": {
+    "recognitionYear": 2004,
+    "description": "Bred to work Irish badger and fox dens in near silence, the Glen of Imaal Terrier is famously the quietest and most low-slung of the terriers."
+  },
+  "Grand Basset Griffon Vendeens": {
+    "recognitionYear": 2018,
+    "description": "A big voice on short legs, the Grand Basset Griffon Vendeen was built in France's Vendee region to trail hare across rough terrain all day."
+  },
+  "Great Danes": {
+    "recognitionYear": 1887,
+    "description": "Bred to run down wild boar at full gallop, the Great Dane earned its \"Apollo of Dogs\" nickname for a build that pairs raw power with unlikely elegance."
+  },
+  "Great Pyrenees": {
+    "recognitionYear": 1933,
+    "description": "Raised for centuries among Pyrenean flocks, this breed guards sheep not by herding but by simply outsizing and outlasting anything that threatens them."
+  },
+  "Greater Swiss Mountain Dogs": {
+    "recognitionYear": 1995,
+    "description": "The oldest and largest of the Swiss Sennenhund breeds, historically pulling carts of milk, cheese, and meat to market for Swiss farmers and butchers."
+  },
+  "Greyhounds": {
+    "recognitionYear": 1885,
+    "description": "Built purely for a flat-out sprint, the Greyhound remains one of the fastest land animals on earth despite millennia bred mainly as a companion of nobility."
+  },
+  "Harriers": {
+    "recognitionYear": 1885,
+    "description": "A scent hound sized between the Beagle and the Foxhound, the Harrier was built for mounted hare hunts that could run all day at a steady pack trot."
+  },
+  "Havanese": {
+    "recognitionYear": 1996,
+    "description": "Cuba's only native breed, the Havanese descends from shipboard lapdogs that became the pampered companion of colonial Havana's aristocracy."
+  },
+  "Ibizan Hounds": {
+    "recognitionYear": 1978,
+    "description": "An ancient sighthound from Spain's Balearic Islands, the Ibizan Hound hunts as much by ear and nose as by its famous vertical leap over garden walls."
+  },
+  "Icelandic Sheepdogs": {
+    "recognitionYear": 2010,
+    "description": "Iceland's only native breed, this spitz-type herder has driven sheep and ponies across the island's terrain since the Vikings' ships first brought its ancestors ashore."
+  },
+  "Irish Terriers": {
+    "recognitionYear": 1885,
+    "description": "Nicknamed the \"Daredevil\" by fanciers, the Irish Terrier served as a WWI messenger dog, pairing a fearless streak with real loyalty to its handler."
+  },
+  "Irish Wolfhounds": {
+    "recognitionYear": 1897,
+    "description": "The tallest of all AKC breeds, the Irish Wolfhound was bred to course wolves and Irish elk on the open plain, pairing a sighthound's speed with real mass."
+  },
+  "Italian Greyhounds": {
+    "recognitionYear": 1886,
+    "description": "A miniaturized sighthound favored by Italian nobility and painted into Renaissance courts, the Italian Greyhound keeps a full sprinter's stride at a fraction of the size."
+  },
+  "Japanese Chin": {
+    "recognitionYear": 1888,
+    "description": "Bred purely as a palace companion for Japanese royalty, the Japanese Chin carries a cat-like independence suited to lap life rather than the field."
+  },
+  "Keeshonden": {
+    "recognitionYear": 1930,
+    "description": "The Netherlands' barge dog, the Keeshond rode Dutch canal boats as a watchful companion, recognizable by the dramatic silver-and-black \"spectacles\" marking its face."
+  },
+  "Kerry Blue Terriers": {
+    "recognitionYear": 1922,
+    "description": "An Irish farm all-rounder that herded, guarded, and hunted vermin, the Kerry Blue Terrier is born black before fading to its signature blue-gray coat."
+  },
+  "Komondorok": {
+    "recognitionYear": 1937,
+    "description": "Hungary's corded livestock guardian, the Komondor's mop-like coat evolved to mimic a sheep at a glance while still shrugging off a wolf's bite on the range."
+  },
+  "Kuvaszok": {
+    "recognitionYear": 1931,
+    "description": "A Hungarian flock guardian with roots in royal kennels, the Kuvasz pairs an imposing white coat with an independent streak bred for working alone, far from any shepherd."
+  },
+  "Lagotto Romagnolo": {
+    "recognitionYear": 2015,
+    "description": "Italy's water retriever turned truffle hunter, the Lagotto Romagnolo shifted from marsh work to sniffing out prized fungi once Romagna's wetlands were drained."
+  },
+  "Lakeland Terriers": {
+    "recognitionYear": 1934,
+    "description": "Bred in England's rugged Lake District to bolt foxes from rock dens other terriers couldn't reach, the Lakeland Terrier is built narrow, wiry, and fearless."
+  },
+  "Lancashire Heelers": {
+    "recognitionYear": 2024,
+    "description": "A small Welsh Corgi-descended herder from Lancashire, England, this breed nipped at cattle's heels while staying low enough to the ground to dodge a kick."
+  },
+  "Leonbergers": {
+    "recognitionYear": 2010,
+    "description": "Bred in 19th-century Germany to resemble the lion on the town of Leonberg's crest, this giant breed pairs Newfoundland-style water instincts with Saint Bernard-scale mass."
+  },
+  "Lhasa Apsos": {
+    "recognitionYear": 1935,
+    "description": "Raised as sentinel dogs inside Tibetan monasteries, the Lhasa Apso relied on sharp hearing rather than size, alerting monks to visitors long before anyone reached the door."
+  },
+  "Lowchen": {
+    "recognitionYear": 1996,
+    "description": "Once called the \"Little Lion Dog\" for its traditional lion clip, the Lowchen was a European lapdog whose trim was originally meant to look fierce, not fashionable."
+  },
+  "Maltese": {
+    "recognitionYear": 1888,
+    "description": "One of the oldest toy breeds, the Maltese was bred on the island of Malta purely for companionship, prized by Mediterranean nobility for over two thousand years."
+  },
+  "Manchester Terriers (Standard)": {
+    "recognitionYear": 1887,
+    "description": "Bred in industrial Manchester, England to course rats in the pits and rabbits in the field, the Standard Manchester Terrier is a sleek, black-and-tan ratting specialist."
+  },
+  "Manchester Terriers (Toy)": {
+    "recognitionYear": 1886,
+    "description": "A scaled-down version of the ratting Manchester Terrier, recognized by the AKC a full year before its Standard-sized counterpart and bred purely as a lap companion."
+  },
+  "Mastiffs": {
+    "recognitionYear": 1885,
+    "description": "Descended from war and guard dogs recorded in ancient Britain, the Mastiff's sheer mass made it one of history's most formidable estate and property guardians."
+  },
+  "Miniature American Shepherds": {
+    "recognitionYear": 2015,
+    "description": "Developed in the U.S. from small working-line herding stock, the Miniature American Shepherd keeps full ranch-dog drive and intelligence in a compact frame."
+  },
+  "Miniature Bull Terriers": {
+    "recognitionYear": 1991,
+    "description": "A scaled-down Bull Terrier with the same egg-shaped head and famously clownish, full-of-personality charm packed into a smaller frame."
+  },
+  "Miniature Pinschers": {
+    "recognitionYear": 1925,
+    "description": "Often mistaken for a small Doberman, the Miniature Pinscher actually predates it, bred in Germany as a barn ratter with its own high-stepping \"hackney\" gait."
+  },
+  "Miniature Schnauzers": {
+    "recognitionYear": 1926,
+    "description": "Bred down from the Standard Schnauzer as a German farm ratter, the Miniature Schnauzer is the only schnauzer size developed without terrier crosses."
+  },
+  "Mudik": {
+    "recognitionYear": 2022,
+    "description": "A Hungarian herding breed as comfortable driving cattle as chasing off wolves, the Mudi is prized at home for an all-purpose versatility American fanciers are only now discovering."
+  },
+  "Neapolitan Mastiffs": {
+    "recognitionYear": 2004,
+    "description": "An imposing Italian guardian breed whose heavy, wrinkled hide and calm, devoted temperament have made it a beloved, if enormous, family companion."
+  },
+  "Nederlandse Kooikerhondjes": {
+    "recognitionYear": 2018,
+    "description": "Dutch duck hunters, Kooikerhondjes lured waterfowl within net range by wagging their plumed, black-tipped tails along a canal-side blind, a technique called \"kooiker.\""
+  },
+  "Newfoundlands": {
+    "recognitionYear": 1886,
+    "description": "Bred by Canadian fishermen to haul nets and pull swimmers from icy North Atlantic water, the Newfoundland's webbed feet and oily coat still make it a natural lifeguard."
+  },
+  "Norfolk Terriers": {
+    "recognitionYear": 1979,
+    "description": "Nearly identical in origin to the Norwich Terrier but for drop ears instead of prick ears, the Norfolk Terrier was bred as an East Anglian barn and stable ratter."
+  },
+  "Norwegian Buhunds": {
+    "recognitionYear": 2009,
+    "description": "A Viking-era farm dog still carved into Norwegian burial ship relics, the Buhund herded sheep and cattle and guarded the homestead in equal measure."
+  },
+  "Norwegian Elkhounds": {
+    "recognitionYear": 1913,
+    "description": "Norway's ancient hunting spitz, the Elkhound tracked and held moose at bay with sharp barking, giving hunters time to close in, a job it has done for millennia."
+  },
+  "Norwegian Lundehunds": {
+    "recognitionYear": 2011,
+    "description": "Bred on remote Norwegian cliffs to squeeze into puffin burrows, the Lundehund has six working toes per foot and joints flexible enough to fold its head back along its spine."
+  },
+  "Norwich Terriers": {
+    "recognitionYear": 1936,
+    "description": "One of the smallest working terriers, the prick-eared Norwich Terrier hunted rats around Cambridge stable yards and rode along in saddlebags between jobs."
+  },
+  "Old English Sheepdogs": {
+    "recognitionYear": 1888,
+    "description": "Despite the name, the Old English Sheepdog was bred more for droving cattle to market than tending sheep, with a shaggy coat built for outdoor English winters."
+  },
+  "Otterhounds": {
+    "recognitionYear": 1909,
+    "description": "Bred with a rough, oily, waterproof coat and webbed feet built to swim down otters in British rivers, the Otterhound remains one of the AKC's rarest breeds — and one of its most devoted fan bases."
+  },
+  "Papillons": {
+    "recognitionYear": 1915,
+    "description": "Named for their butterfly-shaped ears, Papillons descend from the toy spaniels painted into royal European portraits for four centuries."
+  },
+  "Parson Russell Terriers": {
+    "recognitionYear": 1997,
+    "description": "Bred by an English parson to go to ground after foxes, these terriers pack fearless, tireless energy into a compact frame."
+  },
+  "Pekingese": {
+    "recognitionYear": 1906,
+    "description": "Once so revered in the Chinese imperial court that stealing one was punishable by death, Pekingese carry themselves like small lions."
+  },
+  "Pembroke Welsh Corgis": {
+    "recognitionYear": 1934,
+    "description": "Low enough to duck a cow's kick, Pembroke Welsh Corgis drove cattle by nipping at heels and became a British royal fixture."
+  },
+  "Petits Bassets Griffons Vendeens": {
+    "recognitionYear": 1990,
+    "description": "Built with a wiry, weatherproof coat for crashing through the thorny Vendée brush of western France while trailing rabbits by scent."
+  },
+  "Pharaoh Hounds": {
+    "recognitionYear": 1983,
+    "description": "One of the few dogs that visibly blushes, its nose and ears flushing pink with excitement, the Pharaoh Hound has hunted rabbit on Malta for centuries."
+  },
+  "Plott Hounds": {
+    "recognitionYear": 2006,
+    "description": "Descended from German boar hounds brought to the Carolina mountains, Plott Hounds are the only AKC scent hound with no British ancestry."
+  },
+  "Pointers": {
+    "recognitionYear": 1878,
+    "description": "Among the AKC's original breeds, Pointers freeze mid-stride into a statuesque point the instant they wind game in the field."
+  },
+  "Pointers (German Shorthaired)": {
+    "recognitionYear": 1930,
+    "description": "Bred in Germany as an all-purpose gun dog, German Shorthaired Pointers point, track, and retrieve equally well on land or in water."
+  },
+  "Pointers (German Wirehaired)": {
+    "recognitionYear": 1959,
+    "description": "A harsh, wiry coat lets German Wirehaired Pointers push through thorny cover and cold water that would stop a shorthaired hunter cold."
+  },
+  "Polish Lowland Sheepdogs": {
+    "recognitionYear": 2001,
+    "description": "Hidden behind a shaggy fringe of hair, Polish Lowland Sheepdogs have herded livestock across the flatlands of Poland for over a thousand years."
+  },
+  "Pomeranians": {
+    "recognitionYear": 1888,
+    "description": "Shrunk down from sled-pulling spitz stock under Queen Victoria's breeding program, the fox-faced Pomeranian is a big dog's personality in miniature."
+  },
+  "Poodles (Miniature)": {
+    "recognitionYear": 1887,
+    "description": "Bred down from the water-retrieving Standard Poodle, the Miniature keeps the same sharp intelligence in a more compact, apartment-friendly frame."
+  },
+  "Poodles (Standard)": {
+    "recognitionYear": 1887,
+    "description": "Standard Poodles were bred as water retrievers in Germany and France, and their trademark clipped coat was originally functional, not fashion."
+  },
+  "Poodles (Toy)": {
+    "recognitionYear": 1887,
+    "description": "The smallest of the three Poodle sizes, the Toy was bred down from the water-retrieving Standard into a lapdog with the same sharp mind."
+  },
+  "Portuguese Podengo Pequenos": {
+    "recognitionYear": 2013,
+    "description": "One of Portugal's oldest breeds, the small Podengo Pequeno hunts rabbits in packs using sight, scent, and hearing all at once."
+  },
+  "Portuguese Water Dogs": {
+    "recognitionYear": 1983,
+    "description": "Portuguese fishermen once relied on this breed to herd fish into nets and swim messages between boats, a true working retriever of the sea."
+  },
+  "Pugs": {
+    "recognitionYear": 1885,
+    "description": "Bred purely for companionship in the palaces of ancient China, the Pug's wrinkled face and curled tail later made it the mascot of Dutch royalty."
+  },
+  "Pulik": {
+    "recognitionYear": 1936,
+    "description": "The Puli's dense, corded coat looks like dreadlocks but functions as all-weather armor for a dog built to herd sheep across the Hungarian plains."
+  },
+  "Pumik": {
+    "recognitionYear": 2016,
+    "description": "A Hungarian herder with corkscrew ears and a springy, curly coat, the Pumi is famously vocal, bred to bark livestock into line."
+  },
+  "Pyrenean Shepherds": {
+    "recognitionYear": 2009,
+    "description": "The tiny counterpart to the massive Great Pyrenees, this quick, wiry French herder moved flocks through the same mountain passes for centuries."
+  },
+  "Rat Terriers": {
+    "recognitionYear": 2013,
+    "description": "An all-American farm dog built for vermin control, the Rat Terrier's name is credited to Theodore Roosevelt after one cleared a White House rat problem."
+  },
+  "Redbone Coonhounds": {
+    "recognitionYear": 2009,
+    "description": "Immortalized in 'Where the Red Fern Grows,' the solid-red Redbone Coonhound was bred in the American South to trail and tree raccoons at night."
+  },
+  "Retrievers (Chesapeake Bay)": {
+    "recognitionYear": 1878,
+    "description": "Descended from shipwrecked Newfoundland-type pups rescued off Maryland, the Chesapeake Bay Retriever's oily, waterproof coat was bred for icy bay waters."
+  },
+  "Retrievers (Curly-Coated)": {
+    "recognitionYear": 1924,
+    "description": "The oldest of the retriever breeds, its tight, curly coat sheds water and thorns alike, built for English gamekeepers working rough cover."
+  },
+  "Retrievers (Flat-Coated)": {
+    "recognitionYear": 1915,
+    "description": "Developed as a Victorian gentleman's do-it-all gun dog, the Flat-Coated Retriever is famous for staying puppyishly cheerful well into old age."
+  },
+  "Retrievers (Golden)": {
+    "recognitionYear": 1925,
+    "description": "Bred on a Scottish Highland estate by a lord chasing the perfect gun dog, the Golden Retriever's soft mouth can carry an egg without cracking it."
+  },
+  "Retrievers (Labrador)": {
+    "recognitionYear": 1917,
+    "description": "Despite the name, Labrador Retrievers originated in Newfoundland, where they hauled nets and retrieved escaped fish alongside working fishermen."
+  },
+  "Retrievers (Nova Scotia Duck Tolling)": {
+    "recognitionYear": 2003,
+    "description": "Nicknamed the 'little river duck dog,' this fox-colored retriever lures curious ducks into range by playing fetch along the shoreline."
+  },
+  "Rhodesian Ridgebacks": {
+    "recognitionYear": 1955,
+    "description": "Bred in southern Africa to track lions and hold them at bay until hunters arrived, marked by a ridge of backward-growing hair down its spine."
+  },
+  "Rottweilers": {
+    "recognitionYear": 1931,
+    "description": "Descended from Roman drover dogs, Rottweilers later pulled butchers' meat carts through the German town that gave the breed its name."
+  },
+  "Russell Terriers": {
+    "recognitionYear": 2012,
+    "description": "A shorter-legged cousin of the Parson Russell, this terrier was bred to squeeze underground and bolt foxes straight into the hunt."
+  },
+  "Russian Toys": {
+    "recognitionYear": 2022,
+    "description": "Descended from English Toy Terriers gifted to Russian nobility, the breed nearly vanished behind the Iron Curtain before Soviet-era breeders revived it."
+  },
+  "Russian Tsvetnaya Bolonkas": {
+    "recognitionYear": 2026,
+    "description": "Developed in the Soviet Union from small Bichon-type companions, the Tsvetnaya Bolonka ('colored lapdog') is among the AKC's newest recognized breeds."
+  },
+  "Salukis": {
+    "recognitionYear": 1927,
+    "description": "Bred by Bedouin nomads to run down gazelle across the desert, Salukis were traditionally considered too sacred to sell, only given as gifts."
+  },
+  "Samoyeds": {
+    "recognitionYear": 1906,
+    "description": "Bred by Siberia's nomadic Samoyede people to herd reindeer and sleep curled against the family for warmth, hence its trademark upturned 'smile.'"
+  },
+  "Schipperkes": {
+    "recognitionYear": 1904,
+    "description": "Belgian bargemen kept these small, foxy dogs aboard canal boats as fearless ratters and watchdogs, hence the name 'little captain.'"
+  },
+  "Scottish Deerhounds": {
+    "recognitionYear": 1886,
+    "description": "Once restricted by law to Scottish nobility, the Deerhound's rough, wiry coat let it course red stags across the Highlands in any weather."
+  },
+  "Scottish Terriers": {
+    "recognitionYear": 1885,
+    "description": "A tenacious Highland earth-dog built to dig fox and badger from their burrows, later made a White House fixture by FDR's terrier Fala."
+  },
+  "Sealyham Terriers": {
+    "recognitionYear": 1911,
+    "description": "Bred all-white by a Welsh captain so hunters could tell dog from quarry underground, Sealyhams went to ground after badger, otter, and fox alike."
+  },
+  "Setters (English)": {
+    "recognitionYear": 1878,
+    "description": "One of the oldest sporting breeds, English Setters get their name from the low crouch, or 'set,' they froze into for hunters working with nets."
+  },
+  "Setters (Gordon)": {
+    "recognitionYear": 1878,
+    "description": "Developed on the Duke of Gordon's Scottish estate, the black-and-tan Gordon is the only setter breed with roots north of the English border."
+  },
+  "Setters (Irish Red and White)": {
+    "recognitionYear": 2009,
+    "description": "The older, piebald ancestor of the solid-red Irish Setter, this breed nearly disappeared in the 20th century before a dedicated few revived it."
+  },
+  "Setters (Irish)": {
+    "recognitionYear": 1878,
+    "description": "Bred in Ireland to range wide and fast across open moorland hunting birds, the Irish Setter's mahogany coat became as famous as its speed."
+  },
+  "Shetland Sheepdogs": {
+    "recognitionYear": 1911,
+    "description": "Bred down from working Collies on Scotland's remote Shetland Islands to herd sheep and ponies through brutal weather on scant rations."
+  },
+  "Shiba Inu": {
+    "recognitionYear": 1992,
+    "description": "Japan's oldest native breed, once flushing small game through dense brush, with an independent, almost cat-like self-possession still intact today."
+  },
+  "Shih Tzu": {
+    "recognitionYear": 1969,
+    "description": "Bred for centuries purely as a companion inside the Chinese imperial court — the entire job description was to be adored underfoot."
+  },
+  "Siberian Huskies": {
+    "recognitionYear": 1930,
+    "description": "Bred by Siberia's Chukchi people to haul light loads efficiently across vast distances, running on cooperation rather than dominance."
+  },
+  "Silky Terriers": {
+    "recognitionYear": 1959,
+    "description": "An Australian cross of Yorkshire and native terrier stock — lap-sized, but with a real terrier's nose for vermin underneath the silk."
+  },
+  "Skye Terriers": {
+    "recognitionYear": 1887,
+    "description": "Bred low and long to go to ground after otters and foxes on Scotland's Isle of Skye, coated for the weather it's named for."
+  },
+  "Sloughis": {
+    "recognitionYear": 2016,
+    "description": "An ancient short-haired sighthound of North Africa's Berber tribes, built for endurance coursing where a heavy coat would only slow it down."
+  },
+  "Soft Coated Wheaten Terriers": {
+    "recognitionYear": 1973,
+    "description": "An Irish farm all-rounder expected to herd, guard, and hunt vermin — without the hard edge bred into most other terriers."
+  },
+  "Spaniels (American Water)": {
+    "recognitionYear": 1940,
+    "description": "Developed along the upper Midwest's rivers to retrieve from a small boat without swamping it — one of the few sporting breeds that's genuinely American."
+  },
+  "Spaniels (Boykin)": {
+    "recognitionYear": 2009,
+    "description": "Bred in South Carolina to fit in a small johnboat for turkey and duck hunting in the swamp, and still rarely seen far outside it."
+  },
+  "Spaniels (Clumber)": {
+    "recognitionYear": 1878,
+    "description": "The heaviest-boned spaniel, bred to move deliberately through thick cover, favoring thoroughness over speed."
+  },
+  "Spaniels (Cocker) ASCOB": {
+    "recognitionYear": 1878,
+    "description": "The solid-color division (any color but black) of a spaniel originally bred to flush woodcock from thick brush."
+  },
+  "Spaniels (Cocker) Black": {
+    "recognitionYear": 1878,
+    "description": "The solid-black division of the Cocker Spaniel, smallest of the sporting spaniels but built with the same flushing drive as its taller cousins."
+  },
+  "Spaniels (Cocker) Parti": {
+    "recognitionYear": 1878,
+    "description": "The parti-color division of the Cocker Spaniel, judged separately purely on coat pattern rather than any difference in build or work."
+  },
+  "Spaniels (English Cocker)": {
+    "recognitionYear": 1946,
+    "description": "The taller original from which the American Cocker was bred down, still worked in Britain as an all-day upland flushing dog."
+  },
+  "Spaniels (English Springer)": {
+    "recognitionYear": 1910,
+    "description": "Bred to \"spring\" game into the air for the gun — built for stamina across a full day's shooting, not one flush."
+  },
+  "Spaniels (Field)": {
+    "recognitionYear": 1894,
+    "description": "A low, long-bodied spaniel bred to push through dense, thorny cover that would stop a shorter-legged dog cold."
+  },
+  "Spaniels (Irish Water)": {
+    "recognitionYear": 1878,
+    "description": "The tallest spaniel, with a tight curling coat built for cold-water retrieving and a distinctive rat-like tail unlike any other."
+  },
+  "Spaniels (Sussex)": {
+    "recognitionYear": 1878,
+    "description": "Bred to hunt at a slow, deliberate pace and bark on the trail, so a hunter on foot could actually keep up."
+  },
+  "Spaniels (Welsh Springer)": {
+    "recognitionYear": 1914,
+    "description": "A distinct Welsh breed, not a springer variant despite the name, shaped by generations of isolation in the Welsh hills."
+  },
+  "Spanish Water Dogs": {
+    "recognitionYear": 2015,
+    "description": "A Spanish herding and retrieving all-rounder whose curly, cord-forming coat was deliberately left unbrushed to shed water working alongside fishermen."
+  },
+  "Spinoni Italiani": {
+    "recognitionYear": 2000,
+    "description": "An Italian pointing breed with a rough, wiry coat and a deliberately unhurried gait, built for a full day over rough ground."
+  },
+  "St. Bernards": {
+    "recognitionYear": 1885,
+    "description": "Bred by monks at the Alps' Great St. Bernard Hospice to find travelers buried in snow — built for endurance, not speed."
+  },
+  "Staffordshire Bull Terriers": {
+    "recognitionYear": 1974,
+    "description": "Bred down from old bull-and-terrier stock in England's Black Country, compact and muscular but prized as much for gentleness as toughness."
+  },
+  "Standard Schnauzers": {
+    "recognitionYear": 1904,
+    "description": "The original, medium-sized Schnauzer from which the Giant and Miniature were later bred — a German farm ratter and guard, not a lapdog."
+  },
+  "Swedish Vallhunds": {
+    "recognitionYear": 2007,
+    "description": "A low, Viking-era Scandinavian cattle-herder built to nip at heels and duck the kick, sharing surprising ancestry with the Welsh Corgi."
+  },
+  "Teddy Roosevelt Terriers": {
+    "recognitionYear": 2026,
+    "description": "A small American ratting and small-game terrier bred on farms in the country's midsection, among the AKC's newest recognized breeds."
+  },
+  "Tibetan Mastiffs": {
+    "recognitionYear": 2006,
+    "description": "Bred by nomadic herders on the Tibetan Plateau to guard flocks against wolves and leopards at altitude — a true livestock guardian, not a companion."
+  },
+  "Tibetan Spaniels": {
+    "recognitionYear": 1983,
+    "description": "Kept in Tibetan monasteries less as lapdogs than as small watchdogs perched on walls, alert to anyone approaching below."
+  },
+  "Tibetan Terriers": {
+    "recognitionYear": 1973,
+    "description": "Not a terrier by function at all — a Tibetan herding and companion breed that earned its very Western name purely from its shaggy, terrier-like look."
+  },
+  "Toy Fox Terriers": {
+    "recognitionYear": 2003,
+    "description": "Bred down in size from the Smooth Fox Terrier while keeping the full ratting instinct — a working terrier at lapdog scale."
+  },
+  "Treeing Walker Coonhounds": {
+    "recognitionYear": 2012,
+    "description": "A fast, cold-nosed American scent hound bred to run raccoons to ground, prized above all for a distinctive, far-carrying voice."
+  },
+  "Vizslas": {
+    "recognitionYear": 1960,
+    "description": "A Hungarian pointer-retriever bred to hunt close to a single gun rather than range wide — part of why they rarely leave a person's side."
+  },
+  "Weimaraners": {
+    "recognitionYear": 1943,
+    "description": "Bred by German nobility to hunt boar and deer, then repurposed as an all-around bird dog once big-game hunts declined."
+  },
+  "Welsh Terriers": {
+    "recognitionYear": 1888,
+    "description": "One of Britain's oldest terrier breeds, bred to go to ground after fox and badger in the Welsh hills, coated hard for the work."
+  },
+  "West Highland White Terriers": {
+    "recognitionYear": 1908,
+    "description": "Bred deliberately white so hunters in Scotland could tell the dog from the fox or badger it was chasing underground."
+  },
+  "Whippets": {
+    "recognitionYear": 1888,
+    "description": "Bred by English mill workers as an affordable small-scale sighthound for informal straight-line racing — a working-class Greyhound."
+  },
+  "Wirehaired Pointing Griffons": {
+    "recognitionYear": 1887,
+    "description": "A Dutch-bred all-around gundog with a coarse, weatherproof coat made specifically for hunting cold marshland that punished a smooth coat."
+  },
+  "Wirehaired Vizslas": {
+    "recognitionYear": 2014,
+    "description": "Bred later than the smooth Vizsla specifically to add a heavier, weatherproof coat for cold-weather and water work."
+  },
+  "Xoloitzcuintli": {
+    "recognitionYear": 2011,
+    "description": "One of the oldest breeds in the Americas, kept by pre-Columbian civilizations in three sizes, most famously a hairless variety."
+  },
+  "Yorkshire Terriers": {
+    "recognitionYear": 1885,
+    "description": "Bred by English mill workers to hunt rats in cramped textile-mill conditions — a world away from today's tiny show coat."
+  },
+  "ALL OTHER BREEDS AND VARIETIES": {
+    "recognitionYear": null,
+    "description": "The AKC's catch-all points bucket for breeds and varieties not individually broken out in the point schedule, typically newly recognized or lower-entry breeds."
+  }
+}
