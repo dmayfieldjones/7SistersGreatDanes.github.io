@@ -13,6 +13,13 @@
   color: var(--ds-text);
 }
 
+.ds-division-note {
+  margin: 0.75rem 0 1rem;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--ds-text-muted);
+}
+
 .ds-details-summary {
   cursor: pointer;
   font-weight: 600;

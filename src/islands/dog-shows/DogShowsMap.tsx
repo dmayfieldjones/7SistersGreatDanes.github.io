@@ -326,7 +326,7 @@ export default function DogShowsMap({
           const division = divisionById.get(selectedDivisionId)
           if (!division) return null
           return (
-            <p className="ps-breed-note" aria-live="polite">
+            <p className="ds-division-note" aria-live="polite">
               Showing Division {division.id} —{' '}
               {division.trackedStates
                 .map(s => STATE_ABBREVIATIONS[s] ?? s)
