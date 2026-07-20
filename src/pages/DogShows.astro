@@ -4,7 +4,7 @@ import '../styles/point-schedule.css'
 import '../styles/dog-shows.css'
 import { loadDogShowsData } from '../lib/dogShowsServer'
 import { loadPointScheduleData } from '../lib/pointScheduleServer'
-import { stateToDivision } from '../lib/pointSchedule2026'
+import { stateToDivision, STATE_ABBREVIATIONS } from '../lib/pointSchedule2026'
 import DogShowsMap, {
   type DivisionSummary,
 } from '../islands/dog-shows/DogShowsMap'
@@ -13,28 +13,23 @@ const data = loadDogShowsData()
 const scheduleData = loadPointScheduleData()
 const stateDivision = stateToDivision(scheduleData)
 
-const STATE_NAMES: Record<string, string> = {
-  IL: 'Illinois',
-  IN: 'Indiana',
-  IA: 'Iowa',
-  KY: 'Kentucky',
-  MI: 'Michigan',
-  MN: 'Minnesota',
-  MO: 'Missouri',
-  OH: 'Ohio',
-  TN: 'Tennessee',
-  WI: 'Wisconsin',
-}
+const ABBREVIATION_TO_STATE: Record<string, string> = Object.fromEntries(
+  Object.entries(STATE_ABBREVIATIONS).map(([full, abbr]) => [abbr, full]),
+)
+
+// Illinois's division — 7Sisters is Illinois-based, so default the map to
+// the region that matters most here; visitors can pick any other division.
+const DEFAULT_DIVISION_ID = stateDivision.get('Illinois')?.id ?? null
 
 const eventsWithDivision = data.events.map(event => {
-  const fullName = STATE_NAMES[event.state] ?? event.state
+  const fullName = ABBREVIATION_TO_STATE[event.state] ?? event.state
   const divisionId = stateDivision.get(fullName)?.id ?? null
   return { ...event, divisionId }
 })
 
 const divisionSummaries = new Map<number, DivisionSummary>()
 for (const state of data.states) {
-  const fullName = STATE_NAMES[state] ?? state
+  const fullName = ABBREVIATION_TO_STATE[state] ?? state
   const division = stateDivision.get(fullName)
   if (!division) continue
   const existing = divisionSummaries.get(division.id)
@@ -97,16 +92,16 @@ const generatedDisplay = new Date(data.generatedAt).toLocaleDateString(
 
 const keywords = [
   'Great Dane dog shows',
-  'AKC dog shows Illinois',
+  'AKC dog shows by division',
   'upcoming dog shows near me',
   'Great Dane specialty shows',
-  'AKC conformation shows Midwest',
+  'AKC point schedule division shows',
 ]
 ---
 
 <BaseLayout
-  title="Upcoming Great Dane Dog Shows Near Illinois | 7Sisters Farm"
-  description={`Upcoming AKC Great Dane conformation shows in Illinois and neighboring states (${data.states.join(', ')}), pulled from AKC's official event search.`}
+  title="Upcoming Great Dane Dog Shows by AKC Division | 7Sisters Farm"
+  description="Upcoming AKC Great Dane conformation shows nationwide, organized by AKC point-schedule division on an interactive map — pulled from AKC's official event search."
   keywords={keywords}
   canonical="https://7sistersgreatdanes.com/DogShows"
   breadcrumbs={[{ name: 'Upcoming Dog Shows', path: '/DogShows' }]}
@@ -118,8 +113,8 @@ const keywords = [
     <main class="content-wrapper">
       <section>
         <p>
-          AKC-licensed Great Dane conformation shows in Illinois and nearby
-          states, pulled directly from{' '}
+          AKC-licensed Great Dane conformation shows nationwide, pulled directly
+          from{' '}
           <a
             href="https://webapps.akc.org/event-search/#/search"
             target="_blank"
@@ -132,19 +127,18 @@ const keywords = [
             >Where this data comes from</summary
           >
           <p>
-            This list covers <strong
-              >{data.states.map(s => STATE_NAMES[s] ?? s).join(', ')}</strong
-            >
-            and includes All-Breed, Group, and Specialty conformation events for Great
-            Danes, from <strong>{data.dateRange.from}</strong> through
+            This list covers all 50 states and DC and includes All-Breed, Group,
+            and Specialty conformation events for Great Danes, from
+            <strong>{data.dateRange.from}</strong> through
             <strong>{data.dateRange.to}</strong>.
           </p>
           <p>
-            The map below groups those states by AKC point-schedule division —
-            the same regions used to figure majors on the
-            <a href="/AKCPointSchedule">point schedule page</a>. Hover a state
-            to see how many shows its division has coming up; click to filter
-            the list to just that division.
+            The map below groups states by AKC point-schedule division — the
+            same regions used to figure majors on the
+            <a href="/AKCPointSchedule">point schedule page</a>. It defaults to
+            Illinois's division; hover any state to see how many shows its
+            division has coming up, and click to filter the list to just that
+            division.
           </p>
           <p>
             <em
@@ -159,7 +153,11 @@ const keywords = [
       </section>
 
       <section aria-label="Filter by division">
-        <DogShowsMap client:load divisions={divisionsForMap} />
+        <DogShowsMap
+          client:load
+          divisions={divisionsForMap}
+          initialSelectedDivisionId={DEFAULT_DIVISION_ID}
+        />
       </section>
 
       <section class="ds-root" id="ds-results" aria-label="Upcoming shows">
