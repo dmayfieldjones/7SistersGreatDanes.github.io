@@ -148,6 +148,29 @@
   background: transparent;
 }
 
+/* Only visible when "also show closed" is checked — otherwise these rows
+   are ds-hidden entirely. Grayscale + dimming reads as "inactive" at a
+   glance, distinct from the badge text alone. */
+.ds-subshow[data-closed='true'] {
+  filter: grayscale(85%);
+  opacity: 0.6;
+}
+
+/* A cluster with zero open shows only appears at all when "also show
+   closed" is checked — dim its header line too, so the whole card reads
+   as inactive rather than just its (already-dimmed) sub-rows. */
+.ds-card[data-has-open='false'] .ds-card-date,
+.ds-card[data-has-open='false'] .ds-card-location,
+.ds-card[data-has-open='false'] .ds-cluster-count {
+  opacity: 0.6;
+}
+
+.ds-subshow[data-closed='true'] .ds-card-club,
+.ds-subshow[data-closed='true'] .ds-subshow-date {
+  text-decoration: line-through;
+  text-decoration-color: var(--ds-text-muted);
+}
+
 .ds-subshow-date {
   display: block;
   font-size: 0.75rem;
@@ -161,12 +184,12 @@
   margin-left: 0.5rem;
   font-size: 0.7rem;
   font-weight: 700;
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.02em;
-  color: var(--ds-text-muted);
-  border: 1px solid var(--ds-border);
+  color: #fff;
+  background: var(--ds-text-muted);
   border-radius: 999px;
-  padding: 0.1rem 0.5rem;
+  padding: 0.1rem 0.55rem;
 }
 
 .ds-zip-search {
