@@ -1,0 +1,161 @@
+/* Intentionally not dark-mode-aware, matching point-schedule.css: the rest
+   of the site has no dark theme, so this stays light to match. */
+:root {
+  --ds-accent: #bf141c;
+  --ds-border: rgba(0, 0, 0, 0.35);
+  --ds-surface: #ffffff;
+  --ds-surface-muted: #f8f8f8;
+  --ds-text: #0b0b0b;
+  --ds-text-muted: #52514e;
+}
+
+.ds-root {
+  color: var(--ds-text);
+}
+
+.ds-details-summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.ds-intro-details {
+  margin: 0.5rem 0 1.75rem;
+}
+
+.ds-intro-details[open] {
+  padding: 0.9rem 1.1rem 1.1rem;
+  border-radius: 10px;
+  background: var(--ds-surface-muted);
+}
+
+.ds-intro-details p {
+  margin-top: 0.75rem;
+}
+
+.ds-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.ds-state-toggle {
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  border: 2px solid var(--ds-border);
+  background: transparent;
+  color: var(--ds-text-muted);
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.ds-state-toggle:hover {
+  border-color: var(--ds-accent);
+  color: var(--ds-accent);
+}
+
+.ds-state-toggle[aria-pressed='true'] {
+  border-color: var(--ds-accent);
+  background: var(--ds-accent);
+  color: #fff;
+}
+
+.ds-month-group {
+  margin-bottom: 2rem;
+}
+
+.ds-month-heading {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ds-accent);
+  border-bottom: 2px solid var(--ds-accent);
+  padding-bottom: 0.35rem;
+  margin-bottom: 0.75rem;
+}
+
+.ds-card {
+  background: var(--ds-surface-muted);
+  border: 1px solid var(--ds-border);
+  border-radius: 10px;
+  padding: 0.9rem 1.1rem;
+  margin-bottom: 0.75rem;
+}
+
+.ds-card-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.ds-card-date {
+  font-weight: 700;
+  color: var(--ds-text);
+  white-space: nowrap;
+}
+
+.ds-card-state {
+  font-weight: 700;
+  color: var(--ds-accent);
+}
+
+.ds-card-club {
+  font-weight: 600;
+  margin: 0.25rem 0 0.35rem;
+}
+
+.ds-card-event-number {
+  font-weight: 400;
+  color: var(--ds-text-muted);
+  font-size: 0.8rem;
+}
+
+.ds-card-location {
+  color: var(--ds-text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.4rem;
+}
+
+.ds-card-groups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.4rem;
+}
+
+.ds-group-badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--ds-text-muted);
+  background: var(--ds-surface);
+  border: 1px solid var(--ds-border);
+  border-radius: 999px;
+  padding: 0.15rem 0.6rem;
+}
+
+.ds-card-meta {
+  font-size: 0.85rem;
+  color: var(--ds-text-muted);
+}
+
+.ds-card-meta strong {
+  color: var(--ds-text);
+}
+
+.ds-empty {
+  color: var(--ds-text-muted);
+  font-style: italic;
+  padding: 1rem 0;
+}
+
+.ds-hidden {
+  display: none !important;
+}

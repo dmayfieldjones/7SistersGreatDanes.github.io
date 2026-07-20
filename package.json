@@ -9,6 +9,7 @@
     "preview": "astro preview",
     "start": "astro dev",
     "lint": "eslint --report-unused-disable-directives --max-warnings 0",
+    "fetch:dog-shows": "node scripts/fetch-dog-shows.mjs",
     "predeploy": "astro build",
     "deploy": "gh-pages -d out --nojekyll",
     "postdeploy": "git push --follow-tags"

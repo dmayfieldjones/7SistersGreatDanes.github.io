@@ -1,0 +1,36 @@
+name: Refresh upcoming dog shows
+
+on:
+  schedule:
+    - cron: '23 11 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Fetch AKC event data
+        run: node scripts/fetch-dog-shows.mjs
+
+      - name: Commit and push if changed
+        run: |
+          if git diff --quiet -- public/data/dog-shows.json; then
+            echo "No changes to dog show data."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/data/dog-shows.json
+          git commit -m "Refresh upcoming dog show data"
+          git push

@@ -1,0 +1,249 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import '../styles/dog-shows.css'
+import { loadDogShowsData } from '../lib/dogShowsServer'
+
+const data = loadDogShowsData()
+
+const STATE_NAMES: Record<string, string> = {
+  IL: 'Illinois',
+  IN: 'Indiana',
+  IA: 'Iowa',
+  KY: 'Kentucky',
+  MI: 'Michigan',
+  MN: 'Minnesota',
+  MO: 'Missouri',
+  OH: 'Ohio',
+  TN: 'Tennessee',
+  WI: 'Wisconsin',
+}
+
+function formatDisplayDate(iso: string) {
+  return new Date(`${iso}T00:00:00Z`).toLocaleDateString('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+    timeZone: 'UTC',
+  })
+}
+
+function monthKey(iso: string) {
+  return new Date(`${iso}T00:00:00Z`).toLocaleDateString('en-US', {
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC',
+  })
+}
+
+const groups: { month: string; events: typeof data.events }[] = []
+for (const event of data.events) {
+  const key = monthKey(event.startDate)
+  const existing = groups.find(g => g.month === key)
+  if (existing) {
+    existing.events.push(event)
+  } else {
+    groups.push({ month: key, events: [event] })
+  }
+}
+
+const generatedDisplay = new Date(data.generatedAt).toLocaleDateString(
+  'en-US',
+  {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  },
+)
+
+const keywords = [
+  'Great Dane dog shows',
+  'AKC dog shows Illinois',
+  'upcoming dog shows near me',
+  'Great Dane specialty shows',
+  'AKC conformation shows Midwest',
+]
+---
+
+<BaseLayout
+  title="Upcoming Great Dane Dog Shows Near Illinois | 7Sisters Farm"
+  description={`Upcoming AKC Great Dane conformation shows in Illinois and neighboring states (${data.states.join(', ')}), pulled from AKC's official event search.`}
+  keywords={keywords}
+  canonical="https://7sistersgreatdanes.com/DogShows"
+  breadcrumbs={[{ name: 'Upcoming Dog Shows', path: '/DogShows' }]}
+>
+  <div class="content">
+    <div class="post-title">
+      <h1>Upcoming Great Dane Dog Shows</h1>
+    </div>
+    <main class="content-wrapper">
+      <section>
+        <p>
+          AKC-licensed Great Dane conformation shows in Illinois and nearby
+          states, pulled directly from{' '}
+          <a
+            href="https://webapps.akc.org/event-search/#/search"
+            target="_blank"
+            rel="noopener noreferrer">AKC's official event search</a
+          >{' '}— the authoritative listing every superintendent's shows have to
+          be registered in.
+        </p>
+        <details class="ds-intro-details">
+          <summary class="ds-details-summary"
+            >Where this data comes from</summary
+          >
+          <p>
+            This list covers <strong
+              >{data.states.map(s => STATE_NAMES[s] ?? s).join(', ')}</strong
+            >
+            and includes All-Breed, Group, and Specialty conformation events for Great
+            Danes, from <strong>{data.dateRange.from}</strong> through
+            <strong>{data.dateRange.to}</strong>.
+          </p>
+          <p>
+            <em
+              >Entry closing dates, judges, and even whether a show happens at
+              all can change — always confirm directly with the superintendent
+              or club before making travel plans. Last pulled from AKC on <strong
+                >{generatedDisplay}</strong
+              >.</em
+            >
+          </p>
+        </details>
+      </section>
+
+      <section aria-label="Filter by state">
+        <div
+          class="ds-filters"
+          id="ds-filters"
+          role="group"
+          aria-label="Filter by state"
+        >
+          {
+            data.states.map(state => (
+              <button
+                type="button"
+                class="ds-state-toggle"
+                data-state={state}
+                aria-pressed="true"
+              >
+                {state}
+              </button>
+            ))
+          }
+        </div>
+      </section>
+
+      <section class="ds-root" aria-label="Upcoming shows">
+        {
+          groups.length === 0 && (
+            <p class="ds-empty">
+              No upcoming Great Dane shows found in this window.
+            </p>
+          )
+        }
+        {
+          groups.map(group => (
+            <div class="ds-month-group" data-month-group>
+              <h2 class="ds-month-heading">{group.month}</h2>
+              {group.events.map(event => (
+                <div class="ds-card" data-state={event.state}>
+                  <div class="ds-card-top">
+                    <span class="ds-card-date">
+                      {formatDisplayDate(event.startDate)}
+                    </span>
+                    <span class="ds-card-state">{event.state}</span>
+                  </div>
+                  <p class="ds-card-club">
+                    {event.clubName}
+                    {event.eventNumber && (
+                      <span class="ds-card-event-number">
+                        {' '}
+                        · #{event.eventNumber}
+                      </span>
+                    )}
+                  </p>
+                  <p class="ds-card-location">
+                    {event.venue ? `${event.venue}, ` : ''}
+                    {event.city}, {event.state}
+                    {event.postalCode ? ` ${event.postalCode}` : ''}
+                  </p>
+                  {event.competitionGroups.length > 0 && (
+                    <div class="ds-card-groups">
+                      {event.competitionGroups.map(g => (
+                        <span class="ds-group-badge">{g}</span>
+                      ))}
+                    </div>
+                  )}
+                  <p class="ds-card-meta">
+                    {event.closingDate && (
+                      <>
+                        Entries close <strong>{event.closingDate}</strong>
+                        {event.superintendent?.name ? ' · ' : ''}
+                      </>
+                    )}
+                    {event.superintendent?.name && (
+                      <>
+                        {event.superintendent.name}
+                        {event.superintendent.email
+                          ? ` (${event.superintendent.email})`
+                          : ''}
+                      </>
+                    )}
+                  </p>
+                </div>
+              ))}
+            </div>
+          ))
+        }
+        <p class="ds-empty ds-hidden" id="ds-no-matches">
+          No shows match the selected states.
+        </p>
+      </section>
+    </main>
+  </div>
+</BaseLayout>
+
+<script>
+  function initStateFilters() {
+    const buttons =
+      document.querySelectorAll<HTMLButtonElement>('.ds-state-toggle')
+    const cards = document.querySelectorAll<HTMLElement>('.ds-card[data-state]')
+    const monthGroups =
+      document.querySelectorAll<HTMLElement>('[data-month-group]')
+    const noMatches = document.getElementById('ds-no-matches')
+
+    function activeStates(): Set<string> {
+      const active = new Set<string>()
+      buttons.forEach(btn => {
+        if (btn.getAttribute('aria-pressed') === 'true' && btn.dataset.state) {
+          active.add(btn.dataset.state)
+        }
+      })
+      return active
+    }
+
+    function applyFilter() {
+      const active = activeStates()
+      let anyVisible = false
+      cards.forEach(card => {
+        const visible = active.has(card.dataset.state ?? '')
+        card.classList.toggle('ds-hidden', !visible)
+        if (visible) anyVisible = true
+      })
+      monthGroups.forEach(group => {
+        const visibleCards = group.querySelectorAll('.ds-card:not(.ds-hidden)')
+        group.classList.toggle('ds-hidden', visibleCards.length === 0)
+      })
+      noMatches?.classList.toggle('ds-hidden', anyVisible)
+    }
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const pressed = btn.getAttribute('aria-pressed') === 'true'
+        btn.setAttribute('aria-pressed', String(!pressed))
+        applyFilter()
+      })
+    })
+  }
+  initStateFilters()
+</script>
