@@ -39,21 +39,105 @@ export const GET = () => {
   const now = new Date()
 
   const staticPages: SitemapEntry[] = [
-    { url: BASE_URL, lastModified: lastCommitDate('src/pages/index.astro', now), changeFrequency: 'monthly', priority: 1.0 },
-    { url: `${BASE_URL}/about`, lastModified: lastCommitDate('src/pages/about.astro', now), changeFrequency: 'monthly', priority: 0.9 },
-    { url: `${BASE_URL}/7Sisters`, lastModified: lastCommitDate('src/pages/7Sisters.astro', now), changeFrequency: 'monthly', priority: 0.9 },
-    { url: `${BASE_URL}/Litters`, lastModified: lastCommitDate('src/pages/Litters.astro', now), changeFrequency: 'monthly', priority: 0.9 },
-    { url: `${BASE_URL}/Farm`, lastModified: lastCommitDate('src/pages/Farm.astro', now), changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${BASE_URL}/BreedingPhilosophy`, lastModified: lastCommitDate('src/pages/BreedingPhilosophy.astro', now), changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${BASE_URL}/CommonQuestions`, lastModified: lastCommitDate('src/lib/faqData.ts', now), changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${BASE_URL}/archive`, lastModified: lastCommitDate('src/pages/archive.astro', now), changeFrequency: 'weekly', priority: 0.7 },
-    { url: `${BASE_URL}/GreatDaneGenomeBrowser`, lastModified: lastCommitDate('src/pages/GreatDaneGenomeBrowser.astro', now), changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${BASE_URL}/AKCPointSchedule`, lastModified: lastCommitDate('src/pages/AKCPointSchedule.astro', now), changeFrequency: 'yearly', priority: 0.6 },
-    { url: `${BASE_URL}/PlacementProcess`, lastModified: lastCommitDate('src/pages/PlacementProcess.astro', now), changeFrequency: 'monthly', priority: 0.85 },
-    { url: `${BASE_URL}/EzraxPiper`, lastModified: lastCommitDate('src/pages/EzraxPiper.astro', now), changeFrequency: 'monthly', priority: 0.85 },
-    { url: `${BASE_URL}/contact`, lastModified: lastCommitDate('src/pages/contact.astro', now), changeFrequency: 'yearly', priority: 0.6 },
-    { url: `${BASE_URL}/SeanXPiper`, lastModified: lastCommitDate('src/pages/SeanXPiper.astro', now), changeFrequency: 'yearly', priority: 0.6 },
-    { url: `${BASE_URL}/RolexXPiper`, lastModified: lastCommitDate('src/pages/RolexXPiper.astro', now), changeFrequency: 'yearly', priority: 0.6 },
+    {
+      url: BASE_URL,
+      lastModified: lastCommitDate('src/pages/index.astro', now),
+      changeFrequency: 'monthly',
+      priority: 1.0,
+    },
+    {
+      url: `${BASE_URL}/about`,
+      lastModified: lastCommitDate('src/pages/about.astro', now),
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
+    {
+      url: `${BASE_URL}/7Sisters`,
+      lastModified: lastCommitDate('src/pages/7Sisters.astro', now),
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
+    {
+      url: `${BASE_URL}/Litters`,
+      lastModified: lastCommitDate('src/pages/Litters.astro', now),
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
+    {
+      url: `${BASE_URL}/Farm`,
+      lastModified: lastCommitDate('src/pages/Farm.astro', now),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/BreedingPhilosophy`,
+      lastModified: lastCommitDate('src/pages/BreedingPhilosophy.astro', now),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/CommonQuestions`,
+      lastModified: lastCommitDate('src/lib/faqData.ts', now),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/archive`,
+      lastModified: lastCommitDate('src/pages/archive.astro', now),
+      changeFrequency: 'weekly',
+      priority: 0.7,
+    },
+    {
+      url: `${BASE_URL}/GreatDaneGenomeBrowser`,
+      lastModified: lastCommitDate(
+        'src/pages/GreatDaneGenomeBrowser.astro',
+        now,
+      ),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
+      url: `${BASE_URL}/AKCPointSchedule`,
+      lastModified: lastCommitDate('src/pages/AKCPointSchedule.astro', now),
+      changeFrequency: 'yearly',
+      priority: 0.6,
+    },
+    {
+      url: `${BASE_URL}/DogShows`,
+      lastModified: lastCommitDate('public/data/dog-shows.json', now),
+      changeFrequency: 'weekly',
+      priority: 0.6,
+    },
+    {
+      url: `${BASE_URL}/PlacementProcess`,
+      lastModified: lastCommitDate('src/pages/PlacementProcess.astro', now),
+      changeFrequency: 'monthly',
+      priority: 0.85,
+    },
+    {
+      url: `${BASE_URL}/EzraxPiper`,
+      lastModified: lastCommitDate('src/pages/EzraxPiper.astro', now),
+      changeFrequency: 'monthly',
+      priority: 0.85,
+    },
+    {
+      url: `${BASE_URL}/contact`,
+      lastModified: lastCommitDate('src/pages/contact.astro', now),
+      changeFrequency: 'yearly',
+      priority: 0.6,
+    },
+    {
+      url: `${BASE_URL}/SeanXPiper`,
+      lastModified: lastCommitDate('src/pages/SeanXPiper.astro', now),
+      changeFrequency: 'yearly',
+      priority: 0.6,
+    },
+    {
+      url: `${BASE_URL}/RolexXPiper`,
+      lastModified: lastCommitDate('src/pages/RolexXPiper.astro', now),
+      changeFrequency: 'yearly',
+      priority: 0.6,
+    },
   ]
 
   const blogPosts: SitemapEntry[] = getAllPosts().map(post => ({
