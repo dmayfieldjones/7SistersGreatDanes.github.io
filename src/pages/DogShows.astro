@@ -290,15 +290,8 @@ const keywords = [
                     ))}
                   </div>
                 )
-                return (
-                  <div
-                    class="ds-card"
-                    data-state={cluster.state}
-                    data-division={cluster.divisionId ?? ''}
-                    data-has-open={cluster.hasOpenEntry ? 'true' : 'false'}
-                    data-lat={cluster.coordinates?.lat ?? ''}
-                    data-lon={cluster.coordinates?.lon ?? ''}
-                  >
+                const header = (
+                  <>
                     <div class="ds-card-top">
                       <span class="ds-card-date">
                         {formatDateRange(cluster.startDate, cluster.endDate)}
@@ -311,16 +304,32 @@ const keywords = [
                       {cluster.postalCode ? ` ${cluster.postalCode}` : ''}
                       <span class="ds-card-distance" hidden />
                     </p>
+                  </>
+                )
+                return (
+                  <div
+                    class="ds-card"
+                    data-state={cluster.state}
+                    data-division={cluster.divisionId ?? ''}
+                    data-has-open={cluster.hasOpenEntry ? 'true' : 'false'}
+                    data-lat={cluster.coordinates?.lat ?? ''}
+                    data-lon={cluster.coordinates?.lon ?? ''}
+                  >
                     {isMulti ? (
                       <details class="ds-cluster-details">
                         <summary class="ds-cluster-summary">
-                          {cluster.events.length} shows in this cluster — tap to
-                          view
+                          {header}
+                          <p class="ds-cluster-badge">
+                            {cluster.events.length} shows in this cluster
+                          </p>
                         </summary>
                         {subshows}
                       </details>
                     ) : (
-                      subshows
+                      <>
+                        {header}
+                        {subshows}
+                      </>
                     )}
                   </div>
                 )

@@ -129,20 +129,28 @@
   font-weight: 600;
 }
 
-.ds-cluster-details {
-  margin-top: 0.25rem;
-}
-
 .ds-cluster-summary {
   cursor: pointer;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--ds-accent);
-  padding: 0.2rem 0;
+  border-radius: 8px;
+  margin: -0.3rem -0.4rem 0;
+  padding: 0.3rem 0.4rem;
+  transition: background-color 0.15s ease;
+}
+
+.ds-cluster-summary:hover,
+.ds-cluster-summary:focus-visible {
+  background: rgba(191, 20, 28, 0.07);
 }
 
 .ds-cluster-summary::marker {
   color: var(--ds-accent);
+}
+
+.ds-cluster-badge {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ds-accent);
+  margin: 0.35rem 0 0;
 }
 
 .ds-cluster-details[open] > .ds-cluster-summary {
@@ -178,9 +186,12 @@
 
 /* A cluster with zero open shows only appears at all when "also show
    closed" is checked — dim its header line too, so the whole card reads
-   as inactive rather than just its (already-dimmed) sub-rows. */
-.ds-card[data-has-open='false'] .ds-card-date,
-.ds-card[data-has-open='false'] .ds-card-location,
+   as inactive rather than just its (already-dimmed) sub-rows. Direct-child
+   selectors target the singleton layout (header is a direct ds-card child);
+   .ds-cluster-summary covers the multi-show layout, where the header lives
+   inside <summary> instead — targeting both would double-dim it there. */
+.ds-card[data-has-open='false'] > .ds-card-top,
+.ds-card[data-has-open='false'] > .ds-card-location,
 .ds-card[data-has-open='false'] .ds-cluster-summary {
   opacity: 0.6;
 }
