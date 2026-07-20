@@ -16,6 +16,7 @@ export interface DivisionSummary {
 
 interface DogShowsMapProps {
   divisions: DivisionSummary[]
+  initialSelectedDivisionId?: number | null
 }
 
 interface RawStateShape {
@@ -36,7 +37,10 @@ const TOOLTIP_HEIGHT = 90
 const TOOLTIP_GAP = 12
 const DIVISION_CHANGE_EVENT = 'ds:division-change'
 
-export default function DogShowsMap({ divisions }: DogShowsMapProps) {
+export default function DogShowsMap({
+  divisions,
+  initialSelectedDivisionId = null,
+}: DogShowsMapProps) {
   const [rawStates, setRawStates] = useState<RawStateShape[] | null>(null)
   const [viewBox, setViewBox] = useState('0 0 975 610')
   const [tooltip, setTooltip] = useState<TooltipState | null>(null)
@@ -44,9 +48,10 @@ export default function DogShowsMap({ divisions }: DogShowsMapProps) {
     null,
   )
   const [selectedDivisionId, setSelectedDivisionId] = useState<number | null>(
-    null,
+    initialSelectedDivisionId,
   )
   const mapWrapRef = useRef<HTMLDivElement>(null)
+  const isFirstRender = useRef(true)
 
   useEffect(() => {
     let cancelled = false
@@ -134,6 +139,12 @@ export default function DogShowsMap({ divisions }: DogShowsMapProps) {
         detail: { id: selectedDivisionId },
       }),
     )
+    // Don't scroll on the initial paint — only when the visitor actively
+    // changes the selection (the default division shouldn't yank the page).
+    if (isFirstRender.current) {
+      isFirstRender.current = false
+      return
+    }
     if (selectedDivisionId !== null) {
       document
         .getElementById('ds-results')
