@@ -117,6 +117,106 @@
   color: var(--ds-text);
 }
 
+.ds-card-distance {
+  color: var(--ds-accent);
+  font-weight: 600;
+}
+
+.ds-cluster-count {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ds-accent);
+  margin: 0 0 0.5rem;
+}
+
+.ds-cluster-shows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.ds-subshow {
+  padding: 0.5rem 0.7rem;
+  border-radius: 8px;
+  background: var(--ds-surface);
+  border: 1px solid var(--ds-border);
+}
+
+.ds-subshow-solo {
+  padding: 0;
+  border: none;
+  background: transparent;
+}
+
+.ds-subshow-date {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--ds-text-muted);
+  margin-bottom: 0.15rem;
+}
+
+.ds-closed-badge {
+  display: inline-block;
+  margin-left: 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--ds-text-muted);
+  border: 1px solid var(--ds-border);
+  border-radius: 999px;
+  padding: 0.1rem 0.5rem;
+}
+
+.ds-zip-search {
+  margin: 1.5rem 0 1rem;
+}
+
+.ds-zip-search form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ds-zip-search label {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.ds-zip-search input[type='text'],
+.ds-zip-search select {
+  padding: 0.45rem 0.65rem;
+  border-radius: 8px;
+  border: 2px solid var(--ds-border);
+  background: var(--ds-surface);
+  color: var(--ds-text);
+  font-size: 0.9rem;
+}
+
+.ds-zip-search input[type='text'] {
+  width: 6rem;
+}
+
+.ds-zip-status {
+  margin: 0.5rem 0 0;
+  font-size: 0.85rem;
+  color: var(--ds-text-muted);
+}
+
+.ds-closed-toggle {
+  margin-bottom: 1.25rem;
+  font-size: 0.9rem;
+}
+
+.ds-closed-toggle label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+}
+
 .ds-empty {
   color: var(--ds-text-muted);
   font-style: italic;

@@ -10,6 +10,8 @@ export interface DogShowEvent {
   endDate: string
   city: string
   state: string
+  /** AKC site/venue id — the reliable key for grouping shows into a cluster (same physical venue, adjacent dates). */
+  siteId: number | null
   venue: string | null
   address: string
   postalCode: string | null

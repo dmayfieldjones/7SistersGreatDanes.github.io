@@ -160,6 +160,7 @@ function normalizeEvent(raw) {
     endDate: raw.endDate,
     city: raw.city,
     state: raw.state,
+    siteId: raw.site?.id ?? null,
     venue: raw.site?.name ?? null,
     address: [raw.site?.location1, raw.site?.location2, raw.site?.location3]
       .filter(Boolean)

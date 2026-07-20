@@ -11,7 +11,10 @@ export interface DivisionSummary {
   trackedStates: string[]
   /** Full state names in the AKC's division (may include states this tool doesn't track). */
   allStates: string[]
-  count: number
+  /** Shows still open for entry — this is what drives the map color, since that's what's actionable. */
+  openCount: number
+  /** Shows whose entries have already closed — shown for context, hidden from the list by default. */
+  closedCount: number
 }
 
 interface DogShowsMapProps {
@@ -97,7 +100,7 @@ export default function DogShowsMap({
   )
 
   const maxCount = useMemo(
-    () => Math.max(1, ...divisions.map(d => d.count)),
+    () => Math.max(1, ...divisions.map(d => d.openCount)),
     [divisions],
   )
 
@@ -105,7 +108,7 @@ export default function DogShowsMap({
     if (divisionId === null) return 'var(--ps-water)'
     const division = divisionById.get(divisionId)
     if (!division) return 'var(--ps-water)'
-    const t = division.count / maxCount
+    const t = division.openCount / maxCount
     return sequentialRed(t, 'light')
   }
 
@@ -165,7 +168,7 @@ export default function DogShowsMap({
           viewBox={viewBox}
           className="ps-map"
           role="img"
-          aria-label="Map of tracked states, colored by how many upcoming Great Dane shows are in each AKC division. Hover, focus, or tap a state to see its division's show count; click or tap to filter the list below to that division."
+          aria-label="Map of tracked states, colored by how many Great Dane shows are still open for entry in each AKC division. Hover, focus, or tap a state to see its division's open and closed entry counts; click or tap to filter the list below to that division."
           onClick={e => {
             if (e.target === e.currentTarget) setTooltip(null)
           }}
@@ -190,7 +193,7 @@ export default function DogShowsMap({
                 role={s.divisionId ? 'button' : undefined}
                 aria-label={
                   s.divisionId && division
-                    ? `${s.name}: Division ${s.divisionId}, ${division.count} upcoming Great Dane show${division.count === 1 ? '' : 's'}`
+                    ? `${s.name}: Division ${s.divisionId}, ${division.openCount} show${division.openCount === 1 ? '' : 's'} open for entry, ${division.closedCount} closed`
                     : undefined
                 }
                 onMouseEnter={e => {
@@ -261,8 +264,10 @@ export default function DogShowsMap({
                   {tooltip.stateName} · Division {tooltip.divisionId}
                 </div>
                 <div className="ps-tooltip-row">
-                  <strong>{division.count}</strong> upcoming show
-                  {division.count === 1 ? '' : 's'}
+                  Entries open: <strong>{division.openCount}</strong>
+                </div>
+                <div className="ps-tooltip-row">
+                  Entries closed: <strong>{division.closedCount}</strong>
                   {isPartial ? ' (tracked states only)' : ''}
                 </div>
                 <div className="ps-tooltip-row">
@@ -273,7 +278,7 @@ export default function DogShowsMap({
           })()}
 
         <div className="ps-legend">
-          <span className="ps-legend-label">0 shows</span>
+          <span className="ps-legend-label">0 open</span>
           <span
             className="ps-legend-bar"
             style={{
@@ -281,11 +286,11 @@ export default function DogShowsMap({
             }}
             aria-hidden="true"
           />
-          <span className="ps-legend-label">{maxCount} shows</span>
+          <span className="ps-legend-label">{maxCount} open</span>
         </div>
         <p className="ps-legend-caption">
-          Color shows how many upcoming Great Dane shows are tracked in each
-          division. Darker means more shows.
+          Color shows how many shows in each division are still open for entry.
+          Darker means more shows you can still enter.
         </p>
       </div>
 
@@ -311,7 +316,7 @@ export default function DogShowsMap({
             aria-pressed={selectedDivisionId === division.id}
             onClick={() => selectDivision(division.id)}
           >
-            Division {division.id} ({division.count})
+            Division {division.id} ({division.openCount})
           </button>
         ))}
       </div>

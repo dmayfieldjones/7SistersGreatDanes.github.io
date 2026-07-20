@@ -5,6 +5,7 @@ import '../styles/dog-shows.css'
 import { loadDogShowsData } from '../lib/dogShowsServer'
 import { loadPointScheduleData } from '../lib/pointScheduleServer'
 import { stateToDivision, STATE_ABBREVIATIONS } from '../lib/pointSchedule2026'
+import { clusterEvents } from '../lib/dogShowClusters'
 import DogShowsMap, {
   type DivisionSummary,
 } from '../islands/dog-shows/DogShowsMap'
@@ -21,10 +22,14 @@ const ABBREVIATION_TO_STATE: Record<string, string> = Object.fromEntries(
 // the region that matters most here; visitors can pick any other division.
 const DEFAULT_DIVISION_ID = stateDivision.get('Illinois')?.id ?? null
 
+const todayStr = new Date().toISOString().slice(0, 10)
+
 const eventsWithDivision = data.events.map(event => {
   const fullName = ABBREVIATION_TO_STATE[event.state] ?? event.state
   const divisionId = stateDivision.get(fullName)?.id ?? null
-  return { ...event, divisionId }
+  const isEntryClosed =
+    event.closingDate !== null && event.closingDate < todayStr
+  return { ...event, divisionId, isEntryClosed }
 })
 
 const divisionSummaries = new Map<number, DivisionSummary>()
@@ -40,18 +45,26 @@ for (const state of data.states) {
       id: division.id,
       trackedStates: [fullName],
       allStates: division.states,
-      count: 0,
+      openCount: 0,
+      closedCount: 0,
     })
   }
 }
 for (const event of eventsWithDivision) {
-  if (event.divisionId !== null && divisionSummaries.has(event.divisionId)) {
-    divisionSummaries.get(event.divisionId)!.count++
-  }
+  if (event.divisionId === null) continue
+  const summary = divisionSummaries.get(event.divisionId)
+  if (!summary) continue
+  if (event.isEntryClosed) summary.closedCount++
+  else summary.openCount++
 }
 const divisionsForMap = [...divisionSummaries.values()].sort(
   (a, b) => a.id - b.id,
 )
+
+const clusters = clusterEvents(eventsWithDivision).map(cluster => ({
+  ...cluster,
+  hasOpenEntry: cluster.events.some(e => !e.isEntryClosed),
+}))
 
 function formatDisplayDate(iso: string) {
   return new Date(`${iso}T00:00:00Z`).toLocaleDateString('en-US', {
@@ -62,6 +75,11 @@ function formatDisplayDate(iso: string) {
   })
 }
 
+function formatDateRange(start: string, end: string) {
+  if (start === end) return formatDisplayDate(start)
+  return `${formatDisplayDate(start)} – ${formatDisplayDate(end)}`
+}
+
 function monthKey(iso: string) {
   return new Date(`${iso}T00:00:00Z`).toLocaleDateString('en-US', {
     month: 'long',
@@ -70,16 +88,19 @@ function monthKey(iso: string) {
   })
 }
 
-const groups: { month: string; events: typeof eventsWithDivision }[] = []
-for (const event of eventsWithDivision) {
-  const key = monthKey(event.startDate)
+const groups: { month: string; clusters: typeof clusters }[] = []
+for (const cluster of clusters) {
+  const key = monthKey(cluster.startDate)
   const existing = groups.find(g => g.month === key)
   if (existing) {
-    existing.events.push(event)
+    existing.clusters.push(cluster)
   } else {
-    groups.push({ month: key, events: [event] })
+    groups.push({ month: key, clusters: [cluster] })
   }
 }
+
+const totalOpen = eventsWithDivision.filter(e => !e.isEntryClosed).length
+const totalClosed = eventsWithDivision.length - totalOpen
 
 const generatedDisplay = new Date(data.generatedAt).toLocaleDateString(
   'en-US',
@@ -101,7 +122,7 @@ const keywords = [
 
 <BaseLayout
   title="Upcoming Great Dane Dog Shows by AKC Division | 7Sisters Farm"
-  description="Upcoming AKC Great Dane conformation shows nationwide, organized by AKC point-schedule division on an interactive map — pulled from AKC's official event search."
+  description="Upcoming AKC Great Dane conformation shows nationwide, organized by AKC point-schedule division on an interactive map, groupable by venue cluster and searchable by zip code — pulled from AKC's official event search."
   keywords={keywords}
   canonical="https://7sistersgreatdanes.com/DogShows"
   breadcrumbs={[{ name: 'Upcoming Dog Shows', path: '/DogShows' }]}
@@ -130,15 +151,21 @@ const keywords = [
             This list covers all 50 states and DC and includes All-Breed, Group,
             and Specialty conformation events for Great Danes, from
             <strong>{data.dateRange.from}</strong> through
-            <strong>{data.dateRange.to}</strong>.
+            <strong>{data.dateRange.to}</strong> ({totalOpen} still open for entry,
+            {totalClosed} closed).
+          </p>
+          <p>
+            Shows at the same venue on consecutive or overlapping days — common
+            when several clubs share a multi-day cluster — are grouped into one
+            card together.
           </p>
           <p>
             The map below groups states by AKC point-schedule division — the
             same regions used to figure majors on the
             <a href="/AKCPointSchedule">point schedule page</a>. It defaults to
-            Illinois's division; hover any state to see how many shows its
-            division has coming up, and click to filter the list to just that
-            division.
+            Illinois's division; hover any state to see its division's open and
+            closed entry counts, and click to filter the list to just that
+            division. You can also search by zip code below the map.
           </p>
           <p>
             <em
@@ -160,6 +187,42 @@ const keywords = [
         />
       </section>
 
+      <section class="ds-zip-search" aria-label="Search by zip code">
+        <form id="ds-zip-form">
+          <label for="ds-zip-input">Zip code</label>
+          <input
+            type="text"
+            id="ds-zip-input"
+            inputmode="numeric"
+            pattern="[0-9]{5}"
+            maxlength="5"
+            placeholder="61820"
+            autocomplete="postal-code"
+          />
+          <label for="ds-radius-select">within</label>
+          <select id="ds-radius-select">
+            <option value="50">50 miles</option>
+            <option value="100" selected>100 miles</option>
+            <option value="150">150 miles</option>
+            <option value="200">200 miles</option>
+            <option value="300">300 miles</option>
+            <option value="500">500 miles</option>
+          </select>
+          <button type="submit" class="ps-toggle">Search</button>
+          <button type="button" class="ps-toggle" id="ds-zip-clear" hidden
+            >Clear</button
+          >
+        </form>
+        <p id="ds-zip-status" class="ds-zip-status" role="status"></p>
+      </section>
+
+      <section aria-label="Show entries-closed toggle" class="ds-closed-toggle">
+        <label>
+          <input type="checkbox" id="ds-show-closed" />
+          Also show shows with entries already closed
+        </label>
+      </section>
+
       <section class="ds-root" id="ds-results" aria-label="Upcoming shows">
         {
           groups.length === 0 && (
@@ -172,62 +235,93 @@ const keywords = [
           groups.map(group => (
             <div class="ds-month-group" data-month-group>
               <h2 class="ds-month-heading">{group.month}</h2>
-              {group.events.map(event => (
+              {group.clusters.map(cluster => (
                 <div
                   class="ds-card"
-                  data-state={event.state}
-                  data-division={event.divisionId ?? ''}
+                  data-state={cluster.state}
+                  data-division={cluster.divisionId ?? ''}
+                  data-has-open={cluster.hasOpenEntry ? 'true' : 'false'}
+                  data-lat={cluster.coordinates?.lat ?? ''}
+                  data-lon={cluster.coordinates?.lon ?? ''}
                 >
                   <div class="ds-card-top">
                     <span class="ds-card-date">
-                      {formatDisplayDate(event.startDate)}
+                      {formatDateRange(cluster.startDate, cluster.endDate)}
                     </span>
-                    <span class="ds-card-state">{event.state}</span>
+                    <span class="ds-card-state">{cluster.state}</span>
                   </div>
-                  <p class="ds-card-club">
-                    {event.clubName}
-                    {event.eventNumber && (
-                      <span class="ds-card-event-number">
-                        {' '}
-                        · #{event.eventNumber}
-                      </span>
-                    )}
-                  </p>
                   <p class="ds-card-location">
-                    {event.venue ? `${event.venue}, ` : ''}
-                    {event.city}, {event.state}
-                    {event.postalCode ? ` ${event.postalCode}` : ''}
+                    {cluster.venue ? `${cluster.venue}, ` : ''}
+                    {cluster.city}, {cluster.state}
+                    {cluster.postalCode ? ` ${cluster.postalCode}` : ''}
+                    <span class="ds-card-distance" hidden />
                   </p>
-                  {event.competitionGroups.length > 0 && (
-                    <div class="ds-card-groups">
-                      {event.competitionGroups.map(g => (
-                        <span class="ds-group-badge">{g}</span>
-                      ))}
-                    </div>
+                  {cluster.events.length > 1 && (
+                    <p class="ds-cluster-count">
+                      {cluster.events.length} shows in this cluster
+                    </p>
                   )}
-                  <p class="ds-card-meta">
-                    {event.closingDate && (
-                      <>
-                        Entries close <strong>{event.closingDate}</strong>
-                        {event.superintendent?.name ? ' · ' : ''}
-                      </>
-                    )}
-                    {event.superintendent?.name && (
-                      <>
-                        {event.superintendent.name}
-                        {event.superintendent.email
-                          ? ` (${event.superintendent.email})`
-                          : ''}
-                      </>
-                    )}
-                  </p>
+                  <div class="ds-cluster-shows">
+                    {cluster.events.map(event => (
+                      <div
+                        class={
+                          'ds-subshow' +
+                          (cluster.events.length === 1
+                            ? ' ds-subshow-solo'
+                            : '')
+                        }
+                        data-closed={event.isEntryClosed ? 'true' : 'false'}
+                      >
+                        {cluster.events.length > 1 && (
+                          <span class="ds-subshow-date">
+                            {formatDisplayDate(event.startDate)}
+                          </span>
+                        )}
+                        <p class="ds-card-club">
+                          {event.clubName}
+                          {event.eventNumber && (
+                            <span class="ds-card-event-number">
+                              {' '}
+                              · #{event.eventNumber}
+                            </span>
+                          )}
+                          {event.isEntryClosed && (
+                            <span class="ds-closed-badge">Entries closed</span>
+                          )}
+                        </p>
+                        {event.competitionGroups.length > 0 && (
+                          <div class="ds-card-groups">
+                            {event.competitionGroups.map(g => (
+                              <span class="ds-group-badge">{g}</span>
+                            ))}
+                          </div>
+                        )}
+                        <p class="ds-card-meta">
+                          {event.closingDate && (
+                            <>
+                              Entries close <strong>{event.closingDate}</strong>
+                              {event.superintendent?.name ? ' · ' : ''}
+                            </>
+                          )}
+                          {event.superintendent?.name && (
+                            <>
+                              {event.superintendent.name}
+                              {event.superintendent.email
+                                ? ` (${event.superintendent.email})`
+                                : ''}
+                            </>
+                          )}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               ))}
             </div>
           ))
         }
         <p class="ds-empty ds-hidden" id="ds-no-matches">
-          No shows match the selected division.
+          No shows match the current filters.
         </p>
       </section>
     </main>
@@ -235,21 +329,101 @@ const keywords = [
 </BaseLayout>
 
 <script>
-  function initDivisionFilter() {
+  interface ZipCoordinates {
+    [zip: string]: [number, number]
+  }
+
+  function haversineMiles(
+    lat1: number,
+    lon1: number,
+    lat2: number,
+    lon2: number,
+  ): number {
+    const R = 3958.8
+    const toRad = (d: number) => (d * Math.PI) / 180
+    const dLat = toRad(lat2 - lat1)
+    const dLon = toRad(lon2 - lon1)
+    const a =
+      Math.sin(dLat / 2) ** 2 +
+      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+  }
+
+  function initFilters() {
     const cards = document.querySelectorAll<HTMLElement>(
       '.ds-card[data-division]',
     )
     const monthGroups =
       document.querySelectorAll<HTMLElement>('[data-month-group]')
     const noMatches = document.getElementById('ds-no-matches')
+    const showClosedCheckbox = document.getElementById(
+      'ds-show-closed',
+    ) as HTMLInputElement | null
+    const zipForm = document.getElementById(
+      'ds-zip-form',
+    ) as HTMLFormElement | null
+    const zipInput = document.getElementById(
+      'ds-zip-input',
+    ) as HTMLInputElement | null
+    const radiusSelect = document.getElementById(
+      'ds-radius-select',
+    ) as HTMLSelectElement | null
+    const zipClearBtn = document.getElementById('ds-zip-clear')
+    const zipStatus = document.getElementById('ds-zip-status')
 
-    function applyFilter(id: number | null) {
+    let selectedDivisionId: number | null = null
+    let distanceFilter: { lat: number; lon: number; radius: number } | null =
+      null
+    let zipCoordinates: ZipCoordinates | null = null
+
+    function applyFilters() {
+      const showClosed = showClosedCheckbox?.checked ?? false
       let anyVisible = false
+
       cards.forEach(card => {
-        const visible = id === null || card.dataset.division === String(id)
+        const divisionOk =
+          selectedDivisionId === null ||
+          card.dataset.division === String(selectedDivisionId)
+
+        let distanceOk = true
+        const distanceEl = card.querySelector<HTMLElement>('.ds-card-distance')
+        if (distanceFilter) {
+          const lat = Number.parseFloat(card.dataset.lat ?? '')
+          const lon = Number.parseFloat(card.dataset.lon ?? '')
+          if (Number.isNaN(lat) || Number.isNaN(lon)) {
+            distanceOk = false
+          } else {
+            const miles = haversineMiles(
+              distanceFilter.lat,
+              distanceFilter.lon,
+              lat,
+              lon,
+            )
+            distanceOk = miles <= distanceFilter.radius
+            if (distanceOk && distanceEl) {
+              distanceEl.textContent = ` · ${Math.round(miles)} mi away`
+              distanceEl.hidden = false
+            }
+          }
+        } else if (distanceEl) {
+          distanceEl.hidden = true
+        }
+
+        const subshows = card.querySelectorAll<HTMLElement>('.ds-subshow')
+        let anyOpenSubshow = false
+        subshows.forEach(sub => {
+          const closed = sub.dataset.closed === 'true'
+          const subVisible = showClosed || !closed
+          sub.classList.toggle('ds-hidden', !subVisible)
+          if (!closed) anyOpenSubshow = true
+        })
+
+        const closedOk = showClosed || anyOpenSubshow
+        const visible = divisionOk && distanceOk && closedOk
         card.classList.toggle('ds-hidden', !visible)
         if (visible) anyVisible = true
       })
+
       monthGroups.forEach(group => {
         const visibleCards = group.querySelectorAll('.ds-card:not(.ds-hidden)')
         group.classList.toggle('ds-hidden', visibleCards.length === 0)
@@ -260,8 +434,57 @@ const keywords = [
     window.addEventListener('ds:division-change', ((
       e: CustomEvent<{ id: number | null }>,
     ) => {
-      applyFilter(e.detail.id)
+      selectedDivisionId = e.detail.id
+      applyFilters()
     }) as EventListener)
+
+    showClosedCheckbox?.addEventListener('change', applyFilters)
+
+    zipForm?.addEventListener('submit', async e => {
+      e.preventDefault()
+      const zip = zipInput?.value.trim() ?? ''
+      const radius = Number.parseInt(radiusSelect?.value ?? '100', 10)
+      if (!/^\d{5}$/.test(zip)) {
+        if (zipStatus) zipStatus.textContent = 'Enter a 5-digit zip code.'
+        return
+      }
+      if (zipStatus) zipStatus.textContent = 'Searching…'
+      if (!zipCoordinates) {
+        try {
+          const res = await fetch('/data/zip-coordinates.json')
+          zipCoordinates = (await res.json()) as ZipCoordinates
+        } catch {
+          if (zipStatus)
+            zipStatus.textContent = "Couldn't load zip code data. Try again."
+          return
+        }
+      }
+      const coords = zipCoordinates[zip]
+      if (!coords) {
+        if (zipStatus) zipStatus.textContent = `Zip code ${zip} not found.`
+        distanceFilter = null
+        applyFilters()
+        return
+      }
+      distanceFilter = { lat: coords[0], lon: coords[1], radius }
+      if (zipStatus)
+        zipStatus.textContent = `Showing shows within ${radius} miles of ${zip}.`
+      zipClearBtn?.removeAttribute('hidden')
+      applyFilters()
+      document
+        .getElementById('ds-results')
+        ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    })
+
+    zipClearBtn?.addEventListener('click', () => {
+      distanceFilter = null
+      if (zipInput) zipInput.value = ''
+      if (zipStatus) zipStatus.textContent = ''
+      zipClearBtn.setAttribute('hidden', '')
+      applyFilters()
+    })
+
+    applyFilters()
   }
-  initDivisionFilter()
+  initFilters()
 </script>
