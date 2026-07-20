@@ -129,11 +129,24 @@
   font-weight: 600;
 }
 
-.ds-cluster-count {
-  font-size: 0.8rem;
+.ds-cluster-details {
+  margin-top: 0.25rem;
+}
+
+.ds-cluster-summary {
+  cursor: pointer;
+  font-size: 0.85rem;
   font-weight: 600;
   color: var(--ds-accent);
-  margin: 0 0 0.5rem;
+  padding: 0.2rem 0;
+}
+
+.ds-cluster-summary::marker {
+  color: var(--ds-accent);
+}
+
+.ds-cluster-details[open] > .ds-cluster-summary {
+  margin-bottom: 0.6rem;
 }
 
 .ds-cluster-shows {
@@ -168,7 +181,7 @@
    as inactive rather than just its (already-dimmed) sub-rows. */
 .ds-card[data-has-open='false'] .ds-card-date,
 .ds-card[data-has-open='false'] .ds-card-location,
-.ds-card[data-has-open='false'] .ds-cluster-count {
+.ds-card[data-has-open='false'] .ds-cluster-summary {
   opacity: 0.6;
 }
 

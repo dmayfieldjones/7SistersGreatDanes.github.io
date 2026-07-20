@@ -235,44 +235,18 @@ const keywords = [
           groups.map(group => (
             <div class="ds-month-group" data-month-group>
               <h2 class="ds-month-heading">{group.month}</h2>
-              {group.clusters.map(cluster => (
-                <div
-                  class="ds-card"
-                  data-state={cluster.state}
-                  data-division={cluster.divisionId ?? ''}
-                  data-has-open={cluster.hasOpenEntry ? 'true' : 'false'}
-                  data-lat={cluster.coordinates?.lat ?? ''}
-                  data-lon={cluster.coordinates?.lon ?? ''}
-                >
-                  <div class="ds-card-top">
-                    <span class="ds-card-date">
-                      {formatDateRange(cluster.startDate, cluster.endDate)}
-                    </span>
-                    <span class="ds-card-state">{cluster.state}</span>
-                  </div>
-                  <p class="ds-card-location">
-                    {cluster.venue ? `${cluster.venue}, ` : ''}
-                    {cluster.city}, {cluster.state}
-                    {cluster.postalCode ? ` ${cluster.postalCode}` : ''}
-                    <span class="ds-card-distance" hidden />
-                  </p>
-                  {cluster.events.length > 1 && (
-                    <p class="ds-cluster-count">
-                      {cluster.events.length} shows in this cluster
-                    </p>
-                  )}
+              {group.clusters.map(cluster => {
+                const isMulti = cluster.events.length > 1
+                const subshows = (
                   <div class="ds-cluster-shows">
                     {cluster.events.map(event => (
                       <div
                         class={
-                          'ds-subshow' +
-                          (cluster.events.length === 1
-                            ? ' ds-subshow-solo'
-                            : '')
+                          'ds-subshow' + (isMulti ? '' : ' ds-subshow-solo')
                         }
                         data-closed={event.isEntryClosed ? 'true' : 'false'}
                       >
-                        {cluster.events.length > 1 && (
+                        {isMulti && (
                           <span class="ds-subshow-date">
                             {formatDisplayDate(event.startDate)}
                           </span>
@@ -315,8 +289,42 @@ const keywords = [
                       </div>
                     ))}
                   </div>
-                </div>
-              ))}
+                )
+                return (
+                  <div
+                    class="ds-card"
+                    data-state={cluster.state}
+                    data-division={cluster.divisionId ?? ''}
+                    data-has-open={cluster.hasOpenEntry ? 'true' : 'false'}
+                    data-lat={cluster.coordinates?.lat ?? ''}
+                    data-lon={cluster.coordinates?.lon ?? ''}
+                  >
+                    <div class="ds-card-top">
+                      <span class="ds-card-date">
+                        {formatDateRange(cluster.startDate, cluster.endDate)}
+                      </span>
+                      <span class="ds-card-state">{cluster.state}</span>
+                    </div>
+                    <p class="ds-card-location">
+                      {cluster.venue ? `${cluster.venue}, ` : ''}
+                      {cluster.city}, {cluster.state}
+                      {cluster.postalCode ? ` ${cluster.postalCode}` : ''}
+                      <span class="ds-card-distance" hidden />
+                    </p>
+                    {isMulti ? (
+                      <details class="ds-cluster-details">
+                        <summary class="ds-cluster-summary">
+                          {cluster.events.length} shows in this cluster — tap to
+                          view
+                        </summary>
+                        {subshows}
+                      </details>
+                    ) : (
+                      subshows
+                    )}
+                  </div>
+                )
+              })}
             </div>
           ))
         }
