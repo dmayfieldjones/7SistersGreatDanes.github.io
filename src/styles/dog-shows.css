@@ -32,39 +32,6 @@
   margin-top: 0.75rem;
 }
 
-.ds-filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.ds-state-toggle {
-  padding: 0.4rem 1rem;
-  border-radius: 999px;
-  border: 2px solid var(--ds-border);
-  background: transparent;
-  color: var(--ds-text-muted);
-  font-weight: 600;
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition:
-    background-color 0.15s ease,
-    color 0.15s ease,
-    border-color 0.15s ease;
-}
-
-.ds-state-toggle:hover {
-  border-color: var(--ds-accent);
-  color: var(--ds-accent);
-}
-
-.ds-state-toggle[aria-pressed='true'] {
-  border-color: var(--ds-accent);
-  background: var(--ds-accent);
-  color: #fff;
-}
-
 .ds-month-group {
   margin-bottom: 2rem;
 }
