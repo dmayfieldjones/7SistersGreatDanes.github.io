@@ -377,7 +377,6 @@ const keywords = [
   // access control.
   function initGate() {
     const CODE = '1887'
-    const STORAGE_KEY = 'ds-unlocked'
     const gate = document.getElementById('ds-gate')
     const content = document.getElementById('ds-content')
     const form = document.getElementById(
@@ -393,15 +392,11 @@ const keywords = [
       content?.classList.remove('ds-hidden')
     }
 
-    if (localStorage.getItem(STORAGE_KEY) === '1') {
-      unlock()
-      return
-    }
-
+    // Intentionally not remembered across visits (no localStorage/cookie) —
+    // the code is asked for every time the page loads.
     form?.addEventListener('submit', e => {
       e.preventDefault()
       if (input?.value.trim() === CODE) {
-        localStorage.setItem(STORAGE_KEY, '1')
         unlock()
       } else {
         error?.removeAttribute('hidden')
