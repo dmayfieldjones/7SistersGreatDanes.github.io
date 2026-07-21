@@ -63,6 +63,15 @@
   margin: 0.75rem 0 0;
 }
 
+/* Bare day-count, no label — a personal reminder of how stale the data is,
+   not a public-facing explanation. */
+.ds-gate-box p.ds-gate-counter {
+  margin: 1rem 0 0;
+  font-size: 0.75rem;
+  color: var(--ds-text-muted);
+  opacity: 0.6;
+}
+
 .ds-division-note {
   margin: 0.75rem 0 1rem;
   font-size: 0.85rem;
@@ -260,8 +269,11 @@
   margin-bottom: 0.15rem;
 }
 
+/* Always rendered in markup now (open/closed is corrected client-side
+   against the visitor's real current date) — hidden unless the parent
+   subshow's data-closed attribute says otherwise. */
 .ds-closed-badge {
-  display: inline-block;
+  display: none;
   margin-left: 0.5rem;
   font-size: 0.7rem;
   font-weight: 700;
@@ -271,6 +283,10 @@
   background: var(--ds-text-muted);
   border-radius: 999px;
   padding: 0.1rem 0.55rem;
+}
+
+.ds-subshow[data-closed='true'] .ds-closed-badge {
+  display: inline-block;
 }
 
 .ds-zip-search {
