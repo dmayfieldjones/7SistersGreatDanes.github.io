@@ -325,6 +325,95 @@
   cursor: pointer;
 }
 
+.ds-calendar {
+  max-width: 22rem;
+  margin: 0 0 1.5rem;
+  background: var(--ds-surface-muted);
+  border: 1px solid var(--ds-border);
+  border-radius: 12px;
+  padding: 1rem 1.1rem;
+}
+
+.ds-calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+}
+
+.ds-calendar-label {
+  font-weight: 700;
+  color: var(--ds-text);
+}
+
+.ds-calendar-weekdays,
+.ds-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.25rem;
+}
+
+.ds-calendar-weekdays {
+  margin-bottom: 0.3rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--ds-text-muted);
+  text-align: center;
+}
+
+.ds-cal-cell {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: none;
+  background: var(--ds-surface);
+  color: var(--ds-text);
+  font-size: 0.8rem;
+  padding: 0;
+}
+
+.ds-cal-cell-empty {
+  background: transparent;
+}
+
+.ds-cal-cell:disabled {
+  color: var(--ds-text-muted);
+  opacity: 0.5;
+}
+
+.ds-cal-has-show {
+  background: var(--ds-accent);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ds-cal-has-show:hover,
+.ds-cal-has-show:focus-visible {
+  filter: brightness(1.15);
+}
+
+.ds-cal-today {
+  outline: 2px solid var(--ds-text);
+  outline-offset: -2px;
+}
+
+.ds-card-flash {
+  animation: ds-card-flash 1.5s ease;
+}
+
+@keyframes ds-card-flash {
+  0%,
+  100% {
+    box-shadow: none;
+  }
+  20% {
+    box-shadow: 0 0 0 3px var(--ds-accent);
+  }
+}
+
 .ds-empty {
   color: var(--ds-text-muted);
   font-style: italic;
