@@ -99,9 +99,6 @@ for (const cluster of clusters) {
   }
 }
 
-const totalOpen = eventsWithDivision.filter(e => !e.isEntryClosed).length
-const totalClosed = eventsWithDivision.length - totalOpen
-
 const generatedDisplay = new Date(data.generatedAt).toLocaleDateString(
   'en-US',
   {
@@ -160,40 +157,6 @@ const keywords = [
       <h1>Upcoming Great Dane Dog Shows</h1>
     </div>
     <main class="content-wrapper">
-      <section>
-        <details class="ds-intro-details">
-          <summary class="ds-details-summary">How this works</summary>
-          <p>
-            Covers all 50 states and DC, {data.dateRange.from} through{' '}
-            {data.dateRange.to} (<span id="ds-total-open">{totalOpen}</span>{
-              ' '
-            }
-            still open for entry, <span id="ds-total-closed">{totalClosed}</span
-            > closed).
-          </p>
-          <p>
-            Shows at the same venue on consecutive or overlapping days — common
-            when several clubs share a multi-day cluster — are grouped into one
-            card together.
-          </p>
-          <p>
-            The map below groups states by AKC point-schedule division — the
-            same regions used to figure majors on the{' '}
-            <a href="/AKCPointSchedule">point schedule page</a>. It defaults to
-            Illinois's division; hover any state to see its division's open and
-            closed entry counts, and click to filter the list to just that
-            division. You can also search by zip code below the map.
-          </p>
-          <p>
-            <em
-              >Entry closing dates, judges, and even whether a show happens at
-              all can change — always confirm directly with the superintendent
-              or club before making travel plans.</em
-            >
-          </p>
-        </details>
-      </section>
-
       <section aria-label="Filter by division">
         <DogShowsMap
           client:load
@@ -426,12 +389,9 @@ const keywords = [
   // schedule) — recompute every show's open/closed status against the
   // visitor's actual current date on every page load, rather than trusting
   // whatever was true when the data was last pulled. Corrects data-closed
-  // (badges + grayscale styling react to this via CSS) and data-has-open,
-  // and updates the total counts in the "How this works" panel.
+  // (badges + grayscale styling react to this via CSS) and data-has-open.
   function recomputeFreshness() {
     const todayStr = new Date().toISOString().slice(0, 10)
-    let totalOpen = 0
-    let totalClosed = 0
 
     document.querySelectorAll<HTMLElement>('.ds-card').forEach(card => {
       let anyOpen = false
@@ -441,19 +401,10 @@ const keywords = [
           const closingDate = sub.dataset.closingDate ?? ''
           const isClosed = closingDate !== '' && closingDate < todayStr
           sub.dataset.closed = isClosed ? 'true' : 'false'
-          if (isClosed) totalClosed += 1
-          else {
-            totalOpen += 1
-            anyOpen = true
-          }
+          if (!isClosed) anyOpen = true
         })
       card.dataset.hasOpen = anyOpen ? 'true' : 'false'
     })
-
-    const openEl = document.getElementById('ds-total-open')
-    const closedEl = document.getElementById('ds-total-closed')
-    if (openEl) openEl.textContent = String(totalOpen)
-    if (closedEl) closedEl.textContent = String(totalClosed)
   }
 
   function initFilters() {

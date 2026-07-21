@@ -19,6 +19,13 @@
   padding: 3rem 1.25rem;
 }
 
+/* The [hidden] attribute alone loses to the display:flex rule above (equal
+   specificity, author origin beats the UA default either way) — force it
+   explicitly so unlocking actually hides the gate. */
+.ds-gate[hidden] {
+  display: none;
+}
+
 .ds-gate-box {
   max-width: 22rem;
   text-align: center;
@@ -77,25 +84,6 @@
   font-size: 0.85rem;
   font-style: italic;
   color: var(--ds-text-muted);
-}
-
-.ds-details-summary {
-  cursor: pointer;
-  font-weight: 600;
-}
-
-.ds-intro-details {
-  margin: 0.5rem 0 1.75rem;
-}
-
-.ds-intro-details[open] {
-  padding: 0.9rem 1.1rem 1.1rem;
-  border-radius: 10px;
-  background: var(--ds-surface-muted);
-}
-
-.ds-intro-details p {
-  margin-top: 0.75rem;
 }
 
 .ds-month-group {
