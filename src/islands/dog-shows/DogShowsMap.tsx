@@ -192,7 +192,7 @@ export default function DogShowsMap({
     }
     if (selectedDivisionId !== null) {
       document
-        .getElementById('ds-results')
+        .getElementById('ds-calendar')
         ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
   }, [selectedDivisionId])
