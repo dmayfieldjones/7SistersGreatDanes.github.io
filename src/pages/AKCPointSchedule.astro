@@ -37,9 +37,7 @@ const keywords = [
   description="Interactive map of the AKC's 2026 point schedule by division for every breed — defaults to Great Danes, search any breed to see dogs and bitches needed for a major, effective May 12, 2026."
   keywords={keywords}
   canonical="https://7sistersgreatdanes.com/AKCPointSchedule"
-  breadcrumbs={[
-    { name: 'AKC Point Schedule', path: '/AKCPointSchedule' },
-  ]}
+  breadcrumbs={[{ name: 'AKC Point Schedule', path: '/AKCPointSchedule' }]}
 >
   <PointScheduleSchema
     slot="head"
@@ -57,30 +55,28 @@ const keywords = [
     <main class="content-wrapper">
       <section>
         <p>
-          Tap a state below to see what it takes for a major there —
-          defaults to Great Danes, search any breed to switch.
+          Tap a state below to see what it takes for a major there — defaults to
+          Great Danes, search any breed to switch.
         </p>
         <details class="ps-intro-details">
           <summary class="ps-details-summary">What am I looking at?</summary>
           <p>
-            The AKC redraws how many dogs you need to beat for a major
-            every year, division by division. This map covers the schedule
-            effective <strong>{EFFECTIVE_DATE}</strong>. Hover or focus a
-            state to see the minimum dogs and bitches needed for a 3-point
-            major there; click or tap it for that division's full
+            The AKC redraws how many dogs you need to beat for a major every
+            year, division by division. This map covers the schedule effective <strong
+              >{EFFECTIVE_DATE}</strong
+            >. Hover or focus a state to see the minimum dogs and bitches needed
+            for a 3-point major there; click or tap it for that division's full
             1-through-5-point breakdown (3, 4, and 5-point wins are majors).
           </p>
           <p>
             <em
-              >AKC point schedules can be revised — always confirm the
-              current numbers at <a
+              >AKC point schedules can be revised — always confirm the current
+              numbers at <a
                 href={scheduleData.sourceUrl}
                 target="_blank"
                 rel="noopener noreferrer">akc.org</a
-              > before entering a show. Last pulled from the AKC's
-              all-divisions schedule on <strong
-                >{scheduleData.sourceCheckedDate}</strong
-              >.</em
+              > before entering a show. Information last accessed from the AKC's all-divisions
+              schedule on <strong>{scheduleData.sourceCheckedDate}</strong>.</em
             >
           </p>
         </details>
@@ -103,9 +99,9 @@ const keywords = [
             Browse the schedule for every breed
           </summary>
           <p>
-            Each of the AKC's {breedLinks.length} breeds and varieties has its
-            own page with the full 2026 schedule and the same interactive map,
-            defaulted to that breed.
+            Each of the AKC's {breedLinks.length} breeds and varieties has its own
+            page with the full 2026 schedule and the same interactive map, defaulted
+            to that breed.
           </p>
           <ul class="ps-breed-index-list">
             {

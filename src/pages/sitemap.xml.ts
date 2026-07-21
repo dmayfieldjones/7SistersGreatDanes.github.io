@@ -103,12 +103,6 @@ export const GET = () => {
       priority: 0.6,
     },
     {
-      url: `${BASE_URL}/DogShows`,
-      lastModified: lastCommitDate('public/data/dog-shows.json', now),
-      changeFrequency: 'weekly',
-      priority: 0.6,
-    },
-    {
       url: `${BASE_URL}/PlacementProcess`,
       lastModified: lastCommitDate('src/pages/PlacementProcess.astro', now),
       changeFrequency: 'monthly',

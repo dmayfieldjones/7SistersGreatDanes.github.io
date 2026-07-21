@@ -13,6 +13,56 @@
   color: var(--ds-text);
 }
 
+.ds-gate {
+  display: flex;
+  justify-content: center;
+  padding: 3rem 1.25rem;
+}
+
+.ds-gate-box {
+  max-width: 22rem;
+  text-align: center;
+  background: var(--ds-surface-muted);
+  border: 1px solid var(--ds-border);
+  border-radius: 12px;
+  padding: 1.75rem 1.5rem;
+}
+
+.ds-gate-box h1 {
+  font-size: 1.3rem;
+  margin: 0 0 0.6rem;
+}
+
+.ds-gate-box p {
+  color: var(--ds-text-muted);
+  font-size: 0.9rem;
+  margin: 0 0 1rem;
+}
+
+.ds-gate-box form {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.ds-gate-box input[type='password'] {
+  width: 7rem;
+  padding: 0.45rem 0.65rem;
+  border-radius: 8px;
+  border: 2px solid var(--ds-border);
+  background: var(--ds-surface);
+  color: var(--ds-text);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.ds-gate-error {
+  color: var(--ds-accent);
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin: 0.75rem 0 0;
+}
+
 .ds-division-note {
   margin: 0.75rem 0 1rem;
   font-size: 0.85rem;

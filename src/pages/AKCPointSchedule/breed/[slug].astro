@@ -3,7 +3,12 @@ import BaseLayout from '../../../layouts/BaseLayout.astro'
 import PointScheduleMap from '../../../islands/point-schedule/PointScheduleMap'
 import PointScheduleSchema from '../../../components/PointScheduleSchema.astro'
 import '../../../styles/point-schedule.css'
-import { pointsForBreed, slugifyBreed, ALL_OTHER_BREEDS, breedLabel } from '../../../lib/pointSchedule2026'
+import {
+  pointsForBreed,
+  slugifyBreed,
+  ALL_OTHER_BREEDS,
+  breedLabel,
+} from '../../../lib/pointSchedule2026'
 import { loadPointScheduleData } from '../../../lib/pointScheduleServer'
 import { loadBreedFacts } from '../../../lib/breedFactsServer'
 
@@ -92,41 +97,37 @@ const keywords = [
               <p>
                 "All other breeds and varieties" is the AKC's catch-all
                 division-points bucket for breeds and varieties that aren't
-                individually broken out in the point schedule. This covers
-                the schedule effective <strong>{EFFECTIVE_DATE}</strong>.
-                Hover or focus a state to see the minimum dogs and bitches
-                needed for a 3-point major there; click or tap it for that
-                division's full 1-through-5-point breakdown (3, 4, and
-                5-point wins are majors).
+                individually broken out in the point schedule. This covers the
+                schedule effective <strong>{EFFECTIVE_DATE}</strong>. Hover or
+                focus a state to see the minimum dogs and bitches needed for a
+                3-point major there; click or tap it for that division's full
+                1-through-5-point breakdown (3, 4, and 5-point wins are majors).
               </p>
             ) : (
               <p>
-                The AKC redraws how many dogs you need to beat for a major
-                every year, division by division. This covers the schedule
-                effective <strong>{EFFECTIVE_DATE}</strong>. Hover or focus a
-                state to see the minimum dogs and bitches needed for a
-                3-point major there; click or tap it for that division's
-                full 1-through-5-point breakdown (3, 4, and 5-point wins
-                are majors).
+                The AKC redraws how many dogs you need to beat for a major every
+                year, division by division. This covers the schedule effective{' '}
+                <strong>{EFFECTIVE_DATE}</strong>. Hover or focus a state to see
+                the minimum dogs and bitches needed for a 3-point major there;
+                click or tap it for that division's full 1-through-5-point
+                breakdown (3, 4, and 5-point wins are majors).
               </p>
             )
           }
           <p>
             Looking for a different breed? The breed field above the map
-            searches all {scheduleData.breeds.length} AKC breeds and
-            varieties, or see the <a href="#breed-index">full breed index</a>.
+            searches all {scheduleData.breeds.length} AKC breeds and varieties, or
+            see the <a href="#breed-index">full breed index</a>.
           </p>
           <p>
             <em
-              >AKC point schedules can be revised — always confirm the
-              current numbers at <a
+              >AKC point schedules can be revised — always confirm the current
+              numbers at <a
                 href={scheduleData.sourceUrl}
                 target="_blank"
                 rel="noopener noreferrer">akc.org</a
-              > before entering a show. Last pulled from the AKC's
-              all-divisions schedule on <strong
-                >{scheduleData.sourceCheckedDate}</strong
-              >.</em
+              > before entering a show. Information last accessed from the AKC's all-divisions
+              schedule on <strong>{scheduleData.sourceCheckedDate}</strong>.</em
             >
           </p>
         </details>
@@ -150,9 +151,9 @@ const keywords = [
             Browse the schedule for every breed
           </summary>
           <p>
-            Every other AKC breed and variety ({breedLinks.length} in total)
-            has its own page with the full 2026 schedule and the same
-            interactive map, defaulted to that breed.
+            Every other AKC breed and variety ({breedLinks.length} in total) has its
+            own page with the full 2026 schedule and the same interactive map, defaulted
+            to that breed.
           </p>
           <ul class="ps-breed-index-list">
             {
