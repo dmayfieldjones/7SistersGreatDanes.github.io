@@ -122,7 +122,7 @@ const keywords = [
 
 <BaseLayout
   title="Upcoming Great Dane Dog Shows by AKC Division | 7Sisters Farm"
-  description="Upcoming AKC Great Dane conformation shows nationwide, organized by AKC point-schedule division on an interactive map, groupable by venue cluster and searchable by zip code — pulled from AKC's official event search."
+  description="Upcoming Great Dane conformation shows nationwide, organized by AKC point-schedule division on an interactive map, groupable by venue cluster and searchable by zip code."
   keywords={keywords}
   canonical="https://7sistersgreatdanes.com/DogShows"
   breadcrumbs={[{ name: 'Upcoming Dog Shows', path: '/DogShows' }]}
@@ -149,6 +149,9 @@ const keywords = [
       <p id="ds-gate-error" class="ds-gate-error" hidden>
         That code isn't right — try again.
       </p>
+      <p class="ds-gate-counter" title={`Data as of ${generatedDisplay}`}>
+        {data.dateRange.from} – {data.dateRange.to}
+      </p>
     </div>
   </div>
 
@@ -158,26 +161,15 @@ const keywords = [
     </div>
     <main class="content-wrapper">
       <section>
-        <p>
-          AKC-licensed Great Dane conformation shows nationwide, pulled directly
-          from{' '}
-          <a
-            href="https://webapps.akc.org/event-search/#/search"
-            target="_blank"
-            rel="noopener noreferrer">AKC's official event search</a
-          >{' '}— the authoritative listing every superintendent's shows have to
-          be registered in.
-        </p>
         <details class="ds-intro-details">
-          <summary class="ds-details-summary"
-            >Where this data comes from</summary
-          >
+          <summary class="ds-details-summary">How this works</summary>
           <p>
-            This list covers all 50 states and DC and includes All-Breed, Group,
-            and Specialty conformation events for Great Danes, from{' '}
-            <strong>{data.dateRange.from}</strong> through{' '}
-            <strong>{data.dateRange.to}</strong> ({totalOpen} still open for entry,
-            {totalClosed} closed).
+            Covers all 50 states and DC, {data.dateRange.from} through{' '}
+            {data.dateRange.to} (<span id="ds-total-open">{totalOpen}</span>{
+              ' '
+            }
+            still open for entry, <span id="ds-total-closed">{totalClosed}</span
+            > closed).
           </p>
           <p>
             Shows at the same venue on consecutive or overlapping days — common
@@ -196,9 +188,7 @@ const keywords = [
             <em
               >Entry closing dates, judges, and even whether a show happens at
               all can change — always confirm directly with the superintendent
-              or club before making travel plans. Last pulled from AKC on <strong
-                >{generatedDisplay}</strong
-              >.</em
+              or club before making travel plans.</em
             >
           </p>
         </details>
@@ -208,6 +198,10 @@ const keywords = [
         <DogShowsMap
           client:load
           divisions={divisionsForMap}
+          rawEvents={eventsWithDivision.map(e => ({
+            divisionId: e.divisionId,
+            closingDate: e.closingDate,
+          }))}
           initialSelectedDivisionId={DEFAULT_DIVISION_ID}
         />
       </section>
@@ -270,6 +264,7 @@ const keywords = [
                           'ds-subshow' + (isMulti ? '' : ' ds-subshow-solo')
                         }
                         data-closed={event.isEntryClosed ? 'true' : 'false'}
+                        data-closing-date={event.closingDate ?? ''}
                       >
                         {isMulti && (
                           <span class="ds-subshow-date">
@@ -284,9 +279,7 @@ const keywords = [
                               · #{event.eventNumber}
                             </span>
                           )}
-                          {event.isEntryClosed && (
-                            <span class="ds-closed-badge">Entries closed</span>
-                          )}
+                          <span class="ds-closed-badge">Entries closed</span>
                         </p>
                         {event.competitionGroups.length > 0 && (
                           <div class="ds-card-groups">
@@ -429,7 +422,43 @@ const keywords = [
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
   }
 
+  // The data can be days or weeks old (refreshed manually now, not on a
+  // schedule) — recompute every show's open/closed status against the
+  // visitor's actual current date on every page load, rather than trusting
+  // whatever was true when the data was last pulled. Corrects data-closed
+  // (badges + grayscale styling react to this via CSS) and data-has-open,
+  // and updates the total counts in the "How this works" panel.
+  function recomputeFreshness() {
+    const todayStr = new Date().toISOString().slice(0, 10)
+    let totalOpen = 0
+    let totalClosed = 0
+
+    document.querySelectorAll<HTMLElement>('.ds-card').forEach(card => {
+      let anyOpen = false
+      card
+        .querySelectorAll<HTMLElement>('.ds-subshow[data-closing-date]')
+        .forEach(sub => {
+          const closingDate = sub.dataset.closingDate ?? ''
+          const isClosed = closingDate !== '' && closingDate < todayStr
+          sub.dataset.closed = isClosed ? 'true' : 'false'
+          if (isClosed) totalClosed += 1
+          else {
+            totalOpen += 1
+            anyOpen = true
+          }
+        })
+      card.dataset.hasOpen = anyOpen ? 'true' : 'false'
+    })
+
+    const openEl = document.getElementById('ds-total-open')
+    const closedEl = document.getElementById('ds-total-closed')
+    if (openEl) openEl.textContent = String(totalOpen)
+    if (closedEl) closedEl.textContent = String(totalClosed)
+  }
+
   function initFilters() {
+    recomputeFreshness()
+
     const cards = document.querySelectorAll<HTMLElement>(
       '.ds-card[data-division]',
     )

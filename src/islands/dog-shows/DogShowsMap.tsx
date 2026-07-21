@@ -17,8 +17,16 @@ export interface DivisionSummary {
   closedCount: number
 }
 
+interface RawEventForCounting {
+  divisionId: number | null
+  closingDate: string | null
+}
+
 interface DogShowsMapProps {
+  /** Build-time counts — used only for the very first paint, before the mount effect recomputes against the visitor's actual current date. */
   divisions: DivisionSummary[]
+  /** Per-event division + closing date, for recomputing open/closed counts against "now" rather than whenever the data was last fetched. */
+  rawEvents: RawEventForCounting[]
   initialSelectedDivisionId?: number | null
 }
 
@@ -41,9 +49,12 @@ const TOOLTIP_GAP = 12
 const DIVISION_CHANGE_EVENT = 'ds:division-change'
 
 export default function DogShowsMap({
-  divisions,
+  divisions: initialDivisions,
+  rawEvents,
   initialSelectedDivisionId = null,
 }: DogShowsMapProps) {
+  const [divisions, setDivisions] =
+    useState<DivisionSummary[]>(initialDivisions)
   const [rawStates, setRawStates] = useState<RawStateShape[] | null>(null)
   const [viewBox, setViewBox] = useState('0 0 975 610')
   const [tooltip, setTooltip] = useState<TooltipState | null>(null)
@@ -84,6 +95,37 @@ export default function DogShowsMap({
     return () => {
       cancelled = true
     }
+  }, [])
+
+  // The fetched data can be days or weeks old (refreshed manually now, not
+  // on a schedule) — recompute open/closed against the visitor's actual
+  // current date every time the page loads, rather than trusting whatever
+  // was true when the data was last pulled. Runs once against the rawEvents
+  // snapshot passed in as props; nothing here needs to react to updates.
+  useEffect(() => {
+    const todayStr = new Date().toISOString().slice(0, 10)
+    const counts = new Map<number, { open: number; closed: number }>()
+    for (const event of rawEvents) {
+      if (event.divisionId === null) continue
+      const entry = counts.get(event.divisionId) ?? { open: 0, closed: 0 }
+      const isClosed =
+        event.closingDate !== null && event.closingDate < todayStr
+      if (isClosed) entry.closed += 1
+      else entry.open += 1
+      counts.set(event.divisionId, entry)
+    }
+    setDivisions(prev =>
+      prev.map(division => {
+        const counted = counts.get(division.id)
+        return counted
+          ? {
+              ...division,
+              openCount: counted.open,
+              closedCount: counted.closed,
+            }
+          : division
+      }),
+    )
   }, [])
 
   const stateDivisionId = useMemo(() => {
