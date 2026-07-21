@@ -99,6 +99,14 @@ for (const cluster of clusters) {
   }
 }
 
+const calendarRangeStart = clusters.length ? clusters[0].startDate : todayStr
+const calendarRangeEnd = clusters.length
+  ? clusters.reduce(
+      (max, c) => (c.endDate > max ? c.endDate : max),
+      clusters[0].endDate,
+    )
+  : todayStr
+
 const generatedDisplay = new Date(data.generatedAt).toLocaleDateString(
   'en-US',
   {
@@ -205,6 +213,36 @@ const keywords = [
         </label>
       </section>
 
+      <section
+        class="ds-calendar"
+        id="ds-calendar"
+        aria-label="Calendar of show dates"
+        data-range-start={calendarRangeStart}
+        data-range-end={calendarRangeEnd}
+      >
+        <div class="ds-calendar-header">
+          <button
+            type="button"
+            id="ds-cal-prev"
+            class="ps-toggle"
+            aria-label="Previous month">‹</button
+          >
+          <span id="ds-cal-label" class="ds-calendar-label"></span>
+          <button
+            type="button"
+            id="ds-cal-next"
+            class="ps-toggle"
+            aria-label="Next month">›</button
+          >
+        </div>
+        <div class="ds-calendar-weekdays" aria-hidden="true">
+          <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span
+            >Thu</span
+          ><span>Fri</span><span>Sat</span>
+        </div>
+        <div id="ds-cal-grid" class="ds-calendar-grid"></div>
+      </section>
+
       <section class="ds-root" id="ds-results" aria-label="Upcoming shows">
         {
           groups.length === 0 && (
@@ -295,6 +333,8 @@ const keywords = [
                     data-has-open={cluster.hasOpenEntry ? 'true' : 'false'}
                     data-lat={cluster.coordinates?.lat ?? ''}
                     data-lon={cluster.coordinates?.lon ?? ''}
+                    data-start-date={cluster.startDate}
+                    data-end-date={cluster.endDate}
                   >
                     {isMulti ? (
                       <details class="ds-cluster-details">
@@ -489,6 +529,7 @@ const keywords = [
         group.classList.toggle('ds-hidden', visibleCards.length === 0)
       })
       noMatches?.classList.toggle('ds-hidden', anyVisible)
+      window.dispatchEvent(new CustomEvent('ds:filters-applied'))
     }
 
     window.addEventListener('ds:division-change', ((
@@ -547,4 +588,123 @@ const keywords = [
     applyFilters()
   }
   initFilters()
+</script>
+
+<script>
+  // Highlights days with at least one currently-visible (i.e. passing the
+  // division/distance/closed filters) show. Re-renders on the same
+  // ds:filters-applied event the filter script fires, so it always reflects
+  // whatever's currently selected above it.
+  function initCalendar() {
+    const section = document.getElementById('ds-calendar')
+    const grid = document.getElementById('ds-cal-grid')
+    const label = document.getElementById('ds-cal-label')
+    const prevBtn = document.getElementById(
+      'ds-cal-prev',
+    ) as HTMLButtonElement | null
+    const nextBtn = document.getElementById(
+      'ds-cal-next',
+    ) as HTMLButtonElement | null
+    if (!section || !grid || !label || !prevBtn || !nextBtn) return
+
+    const rangeStart = section.dataset.rangeStart ?? ''
+    const rangeEnd = section.dataset.rangeEnd ?? ''
+    if (!rangeStart || !rangeEnd) return
+
+    function monthStart(iso: string): Date {
+      const d = new Date(`${iso}T00:00:00Z`)
+      return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1))
+    }
+
+    const minMonth = monthStart(rangeStart)
+    const maxMonth = monthStart(rangeEnd)
+    const todayIso = new Date().toISOString().slice(0, 10)
+    let current =
+      todayIso >= rangeStart && todayIso <= rangeEnd
+        ? monthStart(todayIso)
+        : minMonth
+
+    function render() {
+      label!.textContent = current.toLocaleDateString('en-US', {
+        month: 'long',
+        year: 'numeric',
+        timeZone: 'UTC',
+      })
+      prevBtn!.disabled = current.getTime() <= minMonth.getTime()
+      nextBtn!.disabled = current.getTime() >= maxMonth.getTime()
+
+      const ranges: { start: string; end: string; state: string }[] = []
+      document
+        .querySelectorAll<HTMLElement>('.ds-card:not(.ds-hidden)')
+        .forEach(card => {
+          const start = card.dataset.startDate
+          const end = card.dataset.endDate
+          if (start && end) {
+            ranges.push({ start, end, state: card.dataset.state ?? '' })
+          }
+        })
+
+      const year = current.getUTCFullYear()
+      const month = current.getUTCMonth()
+      const firstWeekday = new Date(Date.UTC(year, month, 1)).getUTCDay()
+      const daysInMonth = new Date(Date.UTC(year, month + 1, 0)).getUTCDate()
+
+      grid!.innerHTML = ''
+      for (let i = 0; i < firstWeekday; i++) {
+        const empty = document.createElement('span')
+        empty.className = 'ds-cal-cell ds-cal-cell-empty'
+        grid!.appendChild(empty)
+      }
+      for (let day = 1; day <= daysInMonth; day++) {
+        const iso = `${year}-${String(month + 1).padStart(2, '0')}-${String(
+          day,
+        ).padStart(2, '0')}`
+        const matches = ranges.filter(r => iso >= r.start && iso <= r.end)
+        const cell = document.createElement('button')
+        cell.type = 'button'
+        cell.className =
+          'ds-cal-cell' + (matches.length > 0 ? ' ds-cal-has-show' : '')
+        if (iso === todayIso) cell.classList.add('ds-cal-today')
+        cell.textContent = String(day)
+        if (matches.length > 0) {
+          const states = [...new Set(matches.map(m => m.state))].join(', ')
+          cell.title = `${matches.length} show${matches.length === 1 ? '' : 's'} (${states})`
+          cell.addEventListener('click', () => {
+            const target = [
+              ...document.querySelectorAll<HTMLElement>(
+                '.ds-card:not(.ds-hidden)',
+              ),
+            ].find(card => {
+              const start = card.dataset.startDate
+              const end = card.dataset.endDate
+              return start && end && iso >= start && iso <= end
+            })
+            target?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+            target?.classList.add('ds-card-flash')
+            setTimeout(() => target?.classList.remove('ds-card-flash'), 1500)
+          })
+        } else {
+          cell.disabled = true
+        }
+        grid!.appendChild(cell)
+      }
+    }
+
+    prevBtn.addEventListener('click', () => {
+      current = new Date(
+        Date.UTC(current.getUTCFullYear(), current.getUTCMonth() - 1, 1),
+      )
+      render()
+    })
+    nextBtn.addEventListener('click', () => {
+      current = new Date(
+        Date.UTC(current.getUTCFullYear(), current.getUTCMonth() + 1, 1),
+      )
+      render()
+    })
+
+    window.addEventListener('ds:filters-applied', render)
+    render()
+  }
+  initCalendar()
 </script>
