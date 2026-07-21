@@ -341,9 +341,46 @@
   margin-bottom: 0.6rem;
 }
 
+.ds-calendar-labels {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  gap: 2rem;
+}
+
 .ds-calendar-label {
   font-weight: 700;
   color: var(--ds-text);
+}
+
+.ds-calendar-months {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.ds-calendar-month {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Single month on narrow (mobile) viewports — plenty of room for two side
+   by side once the page is wide enough. */
+.ds-calendar-month-second {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .ds-calendar {
+    max-width: 46rem;
+  }
+
+  .ds-calendar-month-second {
+    display: block;
+  }
+
+  .ds-calendar-month-second.ds-cal-second-empty {
+    visibility: hidden;
+  }
 }
 
 .ds-calendar-weekdays,
