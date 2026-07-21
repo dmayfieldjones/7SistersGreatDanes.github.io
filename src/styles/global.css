@@ -838,23 +838,28 @@ body:has(.homepage-container) {
   text-decoration: underline;
 }
 
+/* Homepage forces a black background (for the video hero) — this sits below
+   that, on black, so it needs a light color, not "inherit" (which resolves
+   dark here and was invisible against it). */
 .home-quiet-link {
   text-align: center;
   margin: 0.5rem 0 0;
+  background: #000;
+  padding-bottom: 1rem;
 }
 
 .home-quiet-link a {
   display: inline-block;
   padding: 0.5rem;
-  color: inherit;
-  opacity: 0.25;
-  font-size: 1rem;
+  color: #fff;
+  opacity: 0.4;
+  font-size: 1.2rem;
   text-decoration: none;
 }
 
 .home-quiet-link a:hover,
 .home-quiet-link a:focus-visible {
-  opacity: 0.6;
+  opacity: 0.85;
 }
 
 .home-intro-logo {
