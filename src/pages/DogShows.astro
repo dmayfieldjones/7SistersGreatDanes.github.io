@@ -127,7 +127,32 @@ const keywords = [
   canonical="https://7sistersgreatdanes.com/DogShows"
   breadcrumbs={[{ name: 'Upcoming Dog Shows', path: '/DogShows' }]}
 >
-  <div class="content">
+  <meta name="robots" content="noindex, nofollow" slot="head" />
+
+  <div class="ds-gate" id="ds-gate">
+    <div class="ds-gate-box">
+      <h1>Personal reference tool</h1>
+      <p>
+        This page isn't intended for public use — it's a personal, educational
+        reference. Enter the access code to continue.
+      </p>
+      <form id="ds-gate-form">
+        <input
+          type="password"
+          id="ds-gate-code"
+          inputmode="numeric"
+          autocomplete="off"
+          placeholder="Code"
+        />
+        <button type="submit" class="ps-toggle">Enter</button>
+      </form>
+      <p id="ds-gate-error" class="ds-gate-error" hidden>
+        That code isn't right — try again.
+      </p>
+    </div>
+  </div>
+
+  <div class="content ds-hidden" id="ds-content">
     <div class="post-title">
       <h1>Upcoming Great Dane Dog Shows</h1>
     </div>
@@ -344,6 +369,49 @@ const keywords = [
     </main>
   </div>
 </BaseLayout>
+
+<script>
+  // Soft gate only — this is a static site with no backend, so the code and
+  // the gated markup are both visible to anyone who reads the page source.
+  // It's meant to keep casual/incidental visitors out, not provide real
+  // access control.
+  function initGate() {
+    const CODE = '1887'
+    const STORAGE_KEY = 'ds-unlocked'
+    const gate = document.getElementById('ds-gate')
+    const content = document.getElementById('ds-content')
+    const form = document.getElementById(
+      'ds-gate-form',
+    ) as HTMLFormElement | null
+    const input = document.getElementById(
+      'ds-gate-code',
+    ) as HTMLInputElement | null
+    const error = document.getElementById('ds-gate-error')
+
+    function unlock() {
+      gate?.setAttribute('hidden', '')
+      content?.classList.remove('ds-hidden')
+    }
+
+    if (localStorage.getItem(STORAGE_KEY) === '1') {
+      unlock()
+      return
+    }
+
+    form?.addEventListener('submit', e => {
+      e.preventDefault()
+      if (input?.value.trim() === CODE) {
+        localStorage.setItem(STORAGE_KEY, '1')
+        unlock()
+      } else {
+        error?.removeAttribute('hidden')
+        if (input) input.value = ''
+        input?.focus()
+      }
+    })
+  }
+  initGate()
+</script>
 
 <script>
   interface ZipCoordinates {

@@ -2,5 +2,6 @@ User-agent: *
 Allow: /
 Disallow: /private/
 Disallow: /admin/
+Disallow: /DogShows
 
 Sitemap: https://7sistersgreatdanes.com/sitemap.xml
