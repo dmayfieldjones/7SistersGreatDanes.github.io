@@ -188,10 +188,13 @@ const keywords = [
     // (data-saver modes, low-power mode, flaky cellular buffering) — rather
     // than leaving mobile visitors stuck on a frozen poster indefinitely,
     // fall back to a guaranteed-good static photo if the video genuinely
-    // hasn't started playing after a few seconds. Note: video.paused goes
-    // false the instant play() is called, regardless of whether any frame
-    // has actually rendered — the 'playing' event is the real signal that
-    // decoded video is on screen.
+    // hasn't started playing after a while. Note: video.paused goes false
+    // the instant play() is called, regardless of whether any frame has
+    // actually rendered — the 'playing' event is the real signal that
+    // decoded video is on screen. The video's own poster is already
+    // visible during this wait (not a black box), so there's no rush —
+    // give a real cellular connection a fair chance to buffer 44MB before
+    // giving up on it.
     let hasStartedPlaying = false
     video.addEventListener('playing', function () {
       hasStartedPlaying = true
@@ -207,7 +210,7 @@ const keywords = [
           img.setAttribute('aria-hidden', 'true')
           swapIn(img)
         }
-      }, 2500)
+      }, 8000)
     }
 
     // Scroll indicator: click/keyboard scrolls past the hero; hide once hero leaves view
