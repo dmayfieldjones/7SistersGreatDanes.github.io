@@ -164,6 +164,18 @@ const keywords = [
     video.setAttribute('aria-hidden', 'true')
     swapIn(video)
 
+    // iOS Safari is unreliable about honoring the declarative `autoplay`
+    // property alone on a <video> created and inserted via JS after initial
+    // page load — explicitly calling play() is the more robust pattern
+    // there. Retry once metadata is available in case the first attempt
+    // fires before the browser has enough data to start.
+    function tryPlay() {
+      const p = video.play()
+      if (p && typeof p.catch === 'function') p.catch(() => {})
+    }
+    tryPlay()
+    video.addEventListener('loadedmetadata', tryPlay, { once: true })
+
     // Scroll indicator: click/keyboard scrolls past the hero; hide once hero leaves view
     const heroSection = document.querySelector('.video-hero-section')
     const indicator = document.getElementById('scroll-indicator')
