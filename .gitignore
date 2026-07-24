@@ -25,3 +25,6 @@ yarn-error.log*
 .idea/
 
 pedigree_db.csv
+
+# Heritage intro build scaffolding (see .claude plan: 7Sisters intro)
+.tmp-intro-build/

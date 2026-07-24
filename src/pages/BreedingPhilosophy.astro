@@ -44,6 +44,24 @@ const keywords = [
           aspirational dog companion.
         </p>
       </section>
+      <section class="heritage-video-section" aria-label="150 years of Great Dane history">
+        <div class="heritage-video-wrap" id="heritage-video-wrap">
+          <video
+            id="heritage-video"
+            class="heritage-video"
+            muted
+            loop
+            playsinline
+            preload="none"
+            width="1080"
+            height="1350"
+            aria-label="Historical photos of Great Danes from our family's pedigree records, spanning 150 years, resolving into the 7Sisters logo"
+          >
+          </video>
+        </div>
+        <p class="heritage-video-caption">Celebrating 150 years: 1876–2026.</p>
+      </section>
+
       <section class="philosophy-section">
         <h2 class="section-title">Our Approach</h2>
         <div class="philosophy-content">
@@ -160,3 +178,22 @@ const keywords = [
     </main>
   </div>
 </BaseLayout>
+
+<script is:inline>
+  ;(function () {
+    const wrap = document.getElementById('heritage-video-wrap')
+    const video = document.getElementById('heritage-video')
+    if (!wrap || !video || !('IntersectionObserver' in window)) return
+
+    const io = new IntersectionObserver(
+      function (entries) {
+        if (!entries[0].isIntersecting) return
+        video.src = '/video/heritage-intro.mp4'
+        video.play().catch(function () {})
+        io.disconnect()
+      },
+      { threshold: 0, rootMargin: '200px 0px' },
+    )
+    io.observe(wrap)
+  })()
+</script>

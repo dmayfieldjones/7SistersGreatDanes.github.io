@@ -44,6 +44,33 @@
   background-color: rgba(191, 20, 28, 0.05);
 }
 
+.heritage-video-section {
+  text-align: center;
+  margin-bottom: calc(var(--spacing-unit) * 3);
+}
+
+.heritage-video-wrap {
+  max-width: 420px;
+  margin: 0 auto;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.18);
+  background-color: #0b0b0c;
+}
+
+.heritage-video {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.heritage-video-caption {
+  margin-top: var(--spacing-unit);
+  font-size: 1rem;
+  font-style: italic;
+  color: #444;
+}
+
 .philosophy-section,
 .values-section {
   margin-bottom: calc(var(--spacing-unit) * 3);
