@@ -236,7 +236,8 @@ body:has(.homepage-container) {
 }
 
 .video-background iframe,
-.video-background video {
+.video-background video,
+.video-background img.hero-mobile-photo {
   pointer-events: none;
   touch-action: none;
 }
@@ -263,6 +264,11 @@ body:has(.homepage-container) {
 .video-iframe.video-iframe-placeholder {
   background: #0a0a0a;
   pointer-events: none;
+}
+
+.hero-mobile-photo {
+  object-fit: cover;
+  object-position: center 40%;
 }
 
 /* On mobile, adjust video to fill better and reduce black space */
