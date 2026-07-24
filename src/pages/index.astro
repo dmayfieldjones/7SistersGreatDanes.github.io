@@ -152,6 +152,7 @@ const keywords = [
       '(max-width: 768px), (pointer: coarse)',
     ).matches
     const background = document.getElementById('video-background')
+    const heroSection = document.querySelector('.video-hero-section')
     let current = background?.querySelector('.video-iframe-placeholder')
 
     function swapIn(el) {
@@ -184,6 +185,18 @@ const keywords = [
     tryPlay()
     video.addEventListener('loadedmetadata', tryPlay, { once: true })
 
+    // The video and its .video-background container both have
+    // pointer-events: none (so taps pass through for scrolling), but some
+    // mobile browsers render their own "tap to play" affordance over a
+    // video that didn't autoplay — with pointer-events: none underneath,
+    // that tap lands on nothing, so it visibly does nothing. .video-hero-
+    // section is the ancestor that actually receives pointer events
+    // (pointer-events: auto, for scroll handling) — a real click/touch
+    // anywhere in it is always a valid user gesture browsers will honor
+    // for play(), so catch it there and retry.
+    heroSection?.addEventListener('click', tryPlay)
+    heroSection?.addEventListener('touchend', tryPlay)
+
     // Mobile autoplay is still unreliable in practice even with the above
     // (data-saver modes, low-power mode, flaky cellular buffering) — rather
     // than leaving mobile visitors stuck on a frozen poster indefinitely,
@@ -214,7 +227,6 @@ const keywords = [
     }
 
     // Scroll indicator: click/keyboard scrolls past the hero; hide once hero leaves view
-    const heroSection = document.querySelector('.video-hero-section')
     const indicator = document.getElementById('scroll-indicator')
     function scrollDown() {
       const y = heroSection
