@@ -107,6 +107,18 @@
   margin-bottom: 0.75rem;
 }
 
+/* Clusters of 6 shows read as silver, 7+ as gold — a step up from the
+   default card treatment, tinting the whole card rather than just a label. */
+.ds-card[data-tier='silver'] {
+  background: #e7e9eb;
+  border-color: #9199a1;
+}
+
+.ds-card[data-tier='gold'] {
+  background: #faf1d7;
+  border-color: #c9971f;
+}
+
 .ds-card-top {
   display: flex;
   flex-wrap: wrap;
@@ -200,12 +212,12 @@
   margin: 0.35rem 0 0;
 }
 
-.ds-cluster-badge[data-tier='silver'] {
-  color: #71797e;
+.ds-card[data-tier='silver'] .ds-cluster-badge {
+  color: #5b6167;
 }
 
-.ds-cluster-badge[data-tier='gold'] {
-  color: #a8791a;
+.ds-card[data-tier='gold'] .ds-cluster-badge {
+  color: #8a6414;
 }
 
 .ds-cluster-details[open] > .ds-cluster-summary {
@@ -438,6 +450,16 @@
 .ds-cal-has-show:hover,
 .ds-cal-has-show:focus-visible {
   filter: brightness(1.15);
+}
+
+.ds-cal-has-show[data-tier='silver'] {
+  background: #9199a1;
+  color: #fff;
+}
+
+.ds-cal-has-show[data-tier='gold'] {
+  background: #c9971f;
+  color: #fff;
 }
 
 .ds-cal-today {
