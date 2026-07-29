@@ -272,6 +272,12 @@ const keywords = [
               <h2 class="ds-month-heading">{group.month}</h2>
               {group.clusters.map(cluster => {
                 const isMulti = cluster.events.length > 1
+                const tier =
+                  cluster.events.length >= 7
+                    ? 'gold'
+                    : cluster.events.length === 6
+                      ? 'silver'
+                      : ''
                 const subshows = (
                   <div class="ds-cluster-shows">
                     {cluster.events.map(event => (
@@ -350,21 +356,13 @@ const keywords = [
                     data-lon={cluster.coordinates?.lon ?? ''}
                     data-start-date={cluster.startDate}
                     data-end-date={cluster.endDate}
+                    data-tier={tier}
                   >
                     {isMulti ? (
                       <details class="ds-cluster-details">
                         <summary class="ds-cluster-summary">
                           {header}
-                          <p
-                            class="ds-cluster-badge"
-                            data-tier={
-                              cluster.events.length >= 7
-                                ? 'gold'
-                                : cluster.events.length === 6
-                                  ? 'silver'
-                                  : ''
-                            }
-                          >
+                          <p class="ds-cluster-badge">
                             {cluster.events.length} shows in this cluster
                           </p>
                         </summary>
@@ -682,10 +680,18 @@ const keywords = [
       setTimeout(() => target?.classList.remove('ds-card-flash'), 1500)
     }
 
+    // Gold beats silver beats the plain has-show color when a day falls in
+    // more than one visible cluster's range (rare, but possible across states).
+    function highestTier(tiers: string[]): string {
+      if (tiers.includes('gold')) return 'gold'
+      if (tiers.includes('silver')) return 'silver'
+      return ''
+    }
+
     function buildGrid(
       month: Date,
       gridEl: HTMLElement,
-      ranges: { start: string; end: string; state: string }[],
+      ranges: { start: string; end: string; state: string; tier: string }[],
     ) {
       const year = month.getUTCFullYear()
       const monthIndex = month.getUTCMonth()
@@ -710,6 +716,8 @@ const keywords = [
         cell.className =
           'ds-cal-cell' + (matches.length > 0 ? ' ds-cal-has-show' : '')
         if (iso === todayIso) cell.classList.add('ds-cal-today')
+        const tier = highestTier(matches.map(m => m.tier))
+        if (tier) cell.dataset.tier = tier
         cell.textContent = String(day)
         if (matches.length > 0) {
           const states = [...new Set(matches.map(m => m.state))].join(', ')
@@ -726,14 +734,24 @@ const keywords = [
       prevBtn!.disabled = current.getTime() <= minMonth.getTime()
       nextBtn!.disabled = current.getTime() >= maxMonth.getTime()
 
-      const ranges: { start: string; end: string; state: string }[] = []
+      const ranges: {
+        start: string
+        end: string
+        state: string
+        tier: string
+      }[] = []
       document
         .querySelectorAll<HTMLElement>('.ds-card:not(.ds-hidden)')
         .forEach(card => {
           const start = card.dataset.startDate
           const end = card.dataset.endDate
           if (start && end) {
-            ranges.push({ start, end, state: card.dataset.state ?? '' })
+            ranges.push({
+              start,
+              end,
+              state: card.dataset.state ?? '',
+              tier: card.dataset.tier ?? '',
+            })
           }
         })
 
