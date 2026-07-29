@@ -355,7 +355,16 @@ const keywords = [
                       <details class="ds-cluster-details">
                         <summary class="ds-cluster-summary">
                           {header}
-                          <p class="ds-cluster-badge">
+                          <p
+                            class="ds-cluster-badge"
+                            data-tier={
+                              cluster.events.length >= 7
+                                ? 'gold'
+                                : cluster.events.length === 6
+                                  ? 'silver'
+                                  : ''
+                            }
+                          >
                             {cluster.events.length} shows in this cluster
                           </p>
                         </summary>
