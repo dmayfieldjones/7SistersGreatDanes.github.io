@@ -200,6 +200,14 @@
   margin: 0.35rem 0 0;
 }
 
+.ds-cluster-badge[data-tier='silver'] {
+  color: #71797e;
+}
+
+.ds-cluster-badge[data-tier='gold'] {
+  color: #a8791a;
+}
+
 .ds-cluster-details[open] > .ds-cluster-summary {
   margin-bottom: 0.6rem;
 }
