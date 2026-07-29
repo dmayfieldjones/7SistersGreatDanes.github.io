@@ -108,15 +108,18 @@
 }
 
 /* Clusters of 6 shows read as silver, 7+ as gold — a step up from the
-   default card treatment, tinting the whole card rather than just a label. */
+   default card treatment, tinting the whole card rather than just a label.
+   A plain flat tint reads too close to the default off-white card, so these
+   lean on a stronger metallic gradient plus a heavier, saturated border to
+   stand out at a glance against the un-tiered gray cards around them. */
 .ds-card[data-tier='silver'] {
-  background: #e7e9eb;
-  border-color: #9199a1;
+  background: linear-gradient(135deg, #eef0f2, #c3c9d1);
+  border: 2px solid #6b7280;
 }
 
 .ds-card[data-tier='gold'] {
-  background: #faf1d7;
-  border-color: #c9971f;
+  background: linear-gradient(135deg, #fff2c6, #e8c766);
+  border: 2px solid #b8860b;
 }
 
 .ds-card-top {
