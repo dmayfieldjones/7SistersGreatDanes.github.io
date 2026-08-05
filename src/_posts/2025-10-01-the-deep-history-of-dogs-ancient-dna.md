@@ -21,6 +21,9 @@ Understanding this deep history provides real insights into genetic diversity, b
 
 I had the pleasure of attending the Marine Biological Laboratory Workshop on Molecular Evolution at Woods Hole, MA with Laurent Frantz in 2012. At the time, I was studying what my advisor called "The Dogs of the Plant World" primarily because just one species—*Brassica oleracea*—the wild cabbage species that humans have selectively bred into cabbage, broccoli, cauliflower, kale, Brussels sprouts, collard greens, and kohlrabi—demonstrates the same remarkable diversity through artificial selection that we see in dogs. The parallels between our work highlight how human selection has shaped both plants and animals.
 
+<img src="/img/woods-hole-2012-felsenstein-frantz-mayfield-jones.jpg" alt="Dustin Mayfield-Jones in a lecture hall at the 2012 MBL Workshop on Molecular Evolution, Woods Hole, with Joseph Felsenstein raising a hand in question behind him and Laurent Frantz seated alongside." style="max-width: 100%; border-radius: 8px; margin: 1rem 0;" />
+<em style="display: block; font-size: 0.9rem; opacity: 0.75; margin-top: -0.5rem;">Woods Hole, 2012 — mid-lecture, with Joseph Felsenstein (raising his hand) and Laurent Frantz beside me.</em>
+
 This background in evolutionary biology and domestication has given me a deep appreciation for the research that continues to uncover the complex history of our relationship with dogs. I love reading what Laurent is up to—he's first author on the 2016 study and a key contributor to the 2020 study, plus an author on several other studies cited in this post, including the 2018 Ní Leathlobhair et al. study on American dogs, the 2021 Perri et al. study, and the 2025 Manin et al. study on dog dispersal in the Americas. Learn more about Laurent's research at [https://www.animal-palaeogenomics.com/](https://www.animal-palaeogenomics.com/).
 
 </div>
