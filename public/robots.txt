@@ -3,5 +3,6 @@ Allow: /
 Disallow: /private/
 Disallow: /admin/
 Disallow: /DogShows
+Disallow: /ezra-mia-pedigree.html
 
 Sitemap: https://7sistersgreatdanes.com/sitemap.xml

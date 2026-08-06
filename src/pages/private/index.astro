@@ -1,0 +1,209 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+
+const links = [
+  {
+    href: '/ezra-mia-pedigree.html',
+    icon: '🐾',
+    title: 'Ezra × Mia — Pedigree Explorer',
+    desc: 'Exploratory 10-generation pedigree analysis, not an announced litter.',
+  },
+  {
+    href: '/DogShows',
+    icon: '📅',
+    title: 'Dog Show Finder',
+    desc: 'Upcoming Great Dane shows by AKC division, searchable by zip code.',
+  },
+]
+---
+
+<BaseLayout
+  title="Private | 7Sisters Farm"
+  canonical="https://7sistersgreatdanes.com/private"
+>
+  <meta name="robots" content="noindex, nofollow" slot="head" />
+
+  <div class="pv-gate" id="pv-gate">
+    <div class="pv-gate-box">
+      <h1>Personal reference index</h1>
+      <p>
+        This page isn't intended for public use — it's a personal index of
+        in-progress or non-public tools. Enter the access code to continue.
+      </p>
+      <form id="pv-gate-form">
+        <input
+          type="password"
+          id="pv-gate-code"
+          inputmode="numeric"
+          autocomplete="off"
+          placeholder="Code"
+        />
+        <button type="submit">Enter</button>
+      </form>
+      <p id="pv-gate-error" class="pv-gate-error" hidden>
+        That code isn't right — try again.
+      </p>
+    </div>
+  </div>
+
+  <div class="pv-content pv-hidden" id="pv-content">
+    <div class="pv-wrap">
+      <h1>Private</h1>
+      <div class="pv-links">
+        {
+          links.map(link => (
+            <a class="pv-card" href={link.href}>
+              <span class="pv-icon" aria-hidden="true">
+                {link.icon}
+              </span>
+              <span class="pv-card-title">{link.title}</span>
+              <span class="pv-card-desc">{link.desc}</span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .pv-gate {
+    display: flex;
+    justify-content: center;
+    padding: 3rem 1.25rem;
+  }
+  .pv-gate[hidden] {
+    display: none;
+  }
+  .pv-gate-box {
+    max-width: 22rem;
+    text-align: center;
+    background: #f8f8f8;
+    border: 1px solid rgba(0, 0, 0, 0.35);
+    border-radius: 12px;
+    padding: 1.75rem 1.5rem;
+  }
+  .pv-gate-box h1 {
+    font-size: 1.3rem;
+    margin: 0 0 0.6rem;
+  }
+  .pv-gate-box p {
+    color: #52514e;
+    font-size: 0.9rem;
+    margin: 0 0 1rem;
+  }
+  .pv-gate-box form {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  .pv-gate-box input[type='password'] {
+    width: 7rem;
+    padding: 0.45rem 0.65rem;
+    border-radius: 8px;
+    border: 2px solid rgba(0, 0, 0, 0.35);
+    background: #ffffff;
+    color: #0b0b0b;
+    font-size: 0.9rem;
+    text-align: center;
+  }
+  .pv-gate-box button {
+    font-weight: 600;
+    background: #bf141c;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.45rem 1rem;
+    cursor: pointer;
+  }
+  .pv-gate-error {
+    color: #bf141c;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin: 0.75rem 0 0;
+  }
+
+  .pv-hidden {
+    display: none !important;
+  }
+  .pv-wrap {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 2.5rem 1.25rem 4rem;
+  }
+  .pv-wrap h1 {
+    text-align: center;
+    margin-bottom: 1.75rem;
+  }
+  .pv-links {
+    display: grid;
+    gap: 1rem;
+  }
+  .pv-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    text-decoration: none;
+    color: inherit;
+    background: #f8f8f8;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    transition:
+      border-color 0.15s,
+      background 0.15s;
+  }
+  .pv-card:hover {
+    border-color: #bf141c;
+    background: #fdf2f2;
+  }
+  .pv-icon {
+    font-size: 1.5rem;
+  }
+  .pv-card-title {
+    font-weight: 700;
+    font-size: 1.05rem;
+  }
+  .pv-card-desc {
+    color: #52514e;
+    font-size: 0.9rem;
+  }
+</style>
+
+<script>
+  // Soft gate only — this is a static site with no backend, so the code and
+  // the gated markup are both visible to anyone who reads the page source.
+  // It's meant to keep casual/incidental visitors out, not provide real
+  // access control.
+  function initGate() {
+    const CODE = '1887'
+    const gate = document.getElementById('pv-gate')
+    const content = document.getElementById('pv-content')
+    const form = document.getElementById(
+      'pv-gate-form',
+    ) as HTMLFormElement | null
+    const input = document.getElementById(
+      'pv-gate-code',
+    ) as HTMLInputElement | null
+    const error = document.getElementById('pv-gate-error')
+
+    function unlock() {
+      gate?.setAttribute('hidden', '')
+      content?.classList.remove('pv-hidden')
+    }
+
+    // Intentionally not remembered across visits (no localStorage/cookie) —
+    // the code is asked for every time the page loads.
+    form?.addEventListener('submit', e => {
+      e.preventDefault()
+      if (input?.value.trim() === CODE) {
+        unlock()
+      } else {
+        error?.removeAttribute('hidden')
+        if (input) input.value = ''
+        input?.focus()
+      }
+    })
+  }
+  initGate()
+</script>
