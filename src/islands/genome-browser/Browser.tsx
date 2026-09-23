@@ -1,6 +1,11 @@
-import { useState } from 'react'
+import { lazy, Suspense, useMemo, useState } from 'react'
 
 import GenomeIdeogram, { type ChromosomeInfo } from './GenomeIdeogram'
+import type { CuratedGeneFeature } from './JBrowseEmbed'
+
+const JBrowseEmbed = lazy(() => import('./JBrowseEmbed'))
+
+const DEFAULT_LOCATION = 'chr18:48,769,443-48,973,311'
 
 interface DescriptionComponentProps {
   geneEntry: Record<string, string>
@@ -10,13 +15,11 @@ function DescriptionComponent({ geneEntry }: DescriptionComponentProps) {
   return (
     <div className="genome-description">
       <strong>{geneEntry.name}</strong> - {geneEntry.summary}{' '}
-      {geneEntry.citations
-        ?.split(';')
-        .map((citation, idx) => (
-          <a key={citation} target="_blank" href={geneEntry[`doi${idx + 1}`]}>
-            {citation}
-          </a>
-        ))}
+      {geneEntry.citations?.split(';').map((citation, idx) => (
+        <a key={citation} target="_blank" href={geneEntry[`doi${idx + 1}`]}>
+          {citation}
+        </a>
+      ))}
       {geneEntry.location ? (
         <ul className="genome-description-links">
           <li>
@@ -44,6 +47,7 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
   const [searchQuery, setSearchQuery] = useState('')
   const [searchOpen, setSearchOpen] = useState(false)
   const [infoOpen, setInfoOpen] = useState(false)
+  const [liveBrowserOpen, setLiveBrowserOpen] = useState(false)
 
   // Treat 'all' and empty string the same - show all genes
   const effectiveType = type === '' ? 'all' : type
@@ -71,6 +75,22 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
       },
     ]
   })
+
+  const curatedGenes: CuratedGeneFeature[] = useMemo(
+    () =>
+      annotations.map(({ chr, start, stop, name, category }) => ({
+        refName: chr.startsWith('chr') ? chr : `chr${chr}`,
+        start: start - 1,
+        end: stop,
+        name,
+        category,
+      })),
+    [annotations],
+  )
+
+  const liveLocation = geneEntry?.location
+    ? geneEntry.location.replaceAll(',', '')
+    : DEFAULT_LOCATION
 
   const categoryGenes =
     effectiveType !== 'all'
@@ -118,8 +138,8 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
           (CanFam4)
           <br />
           <br />
-          Search for a gene, or filter by category, then explore its position
-          on the genome below.
+          Search for a gene, or filter by category, then explore its position on
+          the genome below.
           <div className="genome-info">
             <button
               type="button"
@@ -128,9 +148,7 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
               onClick={() => setInfoOpen(open => !open)}
             >
               What am I looking at?{' '}
-              <span className="genome-info-caret">
-                {infoOpen ? '▾' : '▸'}
-              </span>
+              <span className="genome-info-caret">{infoOpen ? '▾' : '▸'}</span>
             </button>
             {infoOpen ? (
               <div className="genome-info-panel">
@@ -141,11 +159,10 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
                   chromosome into its p (short) and q (long) arms.
                 </p>
                 <p>
-                  Colored dots mark genes we&rsquo;ve placed at a known
-                  position &mdash; hover one for details, or click it (or a
-                  gene name above) to read more about that gene. Use the
-                  search box or category buttons to filter which genes are
-                  highlighted.
+                  Colored dots mark genes we&rsquo;ve placed at a known position
+                  &mdash; hover one for details, or click it (or a gene name
+                  above) to read more about that gene. Use the search box or
+                  category buttons to filter which genes are highlighted.
                 </p>
               </div>
             ) : null}
@@ -247,6 +264,40 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
         activeCategory={effectiveType}
         onSelectGene={selectGene}
       />
+      <div className="content">
+        <main className="content-wrapper">
+          <div className="genome-live-section">
+            <button
+              type="button"
+              className="genome-live-toggle"
+              onClick={() => setLiveBrowserOpen(open => !open)}
+            >
+              {liveBrowserOpen ? 'Hide' : 'Open'} live genome browser
+              {geneEntry ? ` — ${geneEntry.name}` : ''}
+            </button>
+            <p className="genome-live-caption">
+              A real, in-page JBrowse view of the CanFam4 assembly: our curated
+              gene catalog above, plus a structural-variant track genotyped
+              across 12 long-read dog genomes &mdash; including a Great Dane.
+              Select a gene above, then open the browser to jump there.
+            </p>
+            {liveBrowserOpen ? (
+              <Suspense
+                fallback={
+                  <div className="genome-live-loading">
+                    Loading genome browser&hellip;
+                  </div>
+                }
+              >
+                <JBrowseEmbed
+                  curatedGenes={curatedGenes}
+                  location={liveLocation}
+                />
+              </Suspense>
+            ) : null}
+          </div>
+        </main>
+      </div>
       {unplacedGenes.length ? (
         <div className="genome-unplaced">
           <div className="genome-unplaced-title">
