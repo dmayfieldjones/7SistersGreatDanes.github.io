@@ -1,4 +1,4 @@
-import { lazy, Suspense, useMemo, useState } from 'react'
+import { lazy, Suspense, useMemo, useRef, useState } from 'react'
 
 import GenomeIdeogram, { type ChromosomeInfo } from './GenomeIdeogram'
 import type { CuratedGeneFeature } from './JBrowseEmbed'
@@ -6,6 +6,50 @@ import type { CuratedGeneFeature } from './JBrowseEmbed'
 const JBrowseEmbed = lazy(() => import('./JBrowseEmbed'))
 
 const DEFAULT_LOCATION = 'chr18:48,769,443-48,973,311'
+
+interface TourStop {
+  label: string
+  gene: string
+  hook: string
+}
+
+// Three loci with a real, tellable story — each an exact-match `name` from
+// categories2.tsv, so a click reuses the same lookup as the search box.
+const TOUR_STOPS: TourStop[] = [
+  {
+    label: 'Coat pattern',
+    gene: 'H Locus Harlequin proteasome 20S subunit beta 7 (PSMB7)',
+    hook: 'Why do some Great Danes look like a black-and-white patchwork?',
+  },
+  {
+    label: 'Height',
+    gene: 'FGF4',
+    hook: "Why are Great Danes so tall? It's what they DON'T carry.",
+  },
+  {
+    label: 'Health',
+    gene: 'PRKCZ',
+    hook: 'The health scare every Great Dane owner knows, found in the genome.',
+  },
+]
+
+// The 12 long-read dog genomes in the Dog10K structural-variant track, and
+// which breed each one is — mirrors public/data/dog10k-svs-samples.tsv,
+// which the live browser uses to group and label the same 12 rows by breed.
+const DOG10K_SV_SAMPLES = [
+  { sample: 'Zoey', breed: 'Great Dane' },
+  { sample: 'BD', breed: 'Bernese Mountain Dog' },
+  { sample: 'OD', breed: 'Bernese Mountain Dog' },
+  { sample: 'Mischka', breed: 'German Shepherd' },
+  { sample: 'Nala', breed: 'German Shepherd' },
+  { sample: 'China', breed: 'Basenji' },
+  { sample: 'Wags', breed: 'Basenji' },
+  { sample: 'Tasha', breed: 'Boxer' },
+  { sample: 'Yella', breed: 'Labrador Retriever' },
+  { sample: 'CA611', breed: 'Cairn Terrier' },
+  { sample: 'Sandy', breed: 'Dingo' },
+  { sample: 'mCanLor', breed: 'Greenland Wolf' },
+]
 
 interface DescriptionComponentProps {
   geneEntry: Record<string, string>
@@ -48,6 +92,8 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
   const [searchOpen, setSearchOpen] = useState(false)
   const [infoOpen, setInfoOpen] = useState(false)
   const [liveBrowserOpen, setLiveBrowserOpen] = useState(false)
+  const [buildInfoOpen, setBuildInfoOpen] = useState(false)
+  const liveSectionRef = useRef<HTMLDivElement>(null)
 
   // Treat 'all' and empty string the same - show all genes
   const effectiveType = type === '' ? 'all' : type
@@ -118,6 +164,17 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
     setGene('')
   }
 
+  function openTourStop(stop: TourStop) {
+    selectGene(stop.gene)
+    setLiveBrowserOpen(true)
+    requestAnimationFrame(() => {
+      liveSectionRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      })
+    })
+  }
+
   return (
     <div>
       <div className="content">
@@ -138,8 +195,37 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
           (CanFam4)
           <br />
           <br />
-          Search for a gene, or filter by category, then explore its position on
-          the genome below.
+          <section className="genome-tour">
+            <img
+              src="/img/close-up-puppy-faces-cart-illinois-corn-field-sunset.jpg"
+              alt="Great Dane puppies in a wagon at 7Sisters Farm"
+              className="genome-tour-photo"
+              loading="lazy"
+            />
+            <div className="genome-tour-body">
+              <h2 className="genome-tour-title">Take the tour</h2>
+              <p className="genome-tour-intro">
+                Three real places in a Great Dane&rsquo;s genome, each with a
+                story worth telling.
+              </p>
+              <div className="genome-tour-cards">
+                {TOUR_STOPS.map(stop => (
+                  <button
+                    key={stop.gene}
+                    type="button"
+                    className="genome-tour-card"
+                    onClick={() => openTourStop(stop)}
+                  >
+                    <span className="genome-tour-card-label">{stop.label}</span>
+                    <span className="genome-tour-card-hook">{stop.hook}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </section>
+          <p />
+          Or search for a gene, or filter by category, then explore its position
+          on the genome below.
           <div className="genome-info">
             <button
               type="button"
@@ -266,7 +352,7 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
       />
       <div className="content">
         <main className="content-wrapper">
-          <div className="genome-live-section">
+          <div className="genome-live-section" ref={liveSectionRef}>
             <button
               type="button"
               className="genome-live-toggle"
@@ -277,9 +363,10 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
             </button>
             <p className="genome-live-caption">
               A real, in-page JBrowse view of the CanFam4 assembly: our curated
-              gene catalog above, plus a structural-variant track genotyped
-              across 12 long-read dog genomes &mdash; including a Great Dane.
-              Select a gene above, then open the browser to jump there.
+              gene catalog and the full NCBI RefSeq annotation above, plus a
+              structural-variant track genotyped across 12 real, named dogs
+              &mdash; one row per breed, including a Great Dane. Select a gene
+              above, then open the browser to jump there.
             </p>
             {liveBrowserOpen ? (
               <Suspense
@@ -295,6 +382,84 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
                 />
               </Suspense>
             ) : null}
+            <div className="genome-sv-samples">
+              <div className="genome-sv-samples-title">
+                Who&rsquo;s in the structural-variant track
+              </div>
+              <table className="genome-sv-samples-table">
+                <tbody>
+                  {DOG10K_SV_SAMPLES.map(({ sample, breed }) => (
+                    <tr key={sample}>
+                      <td>{sample}</td>
+                      <td>{breed}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="genome-info">
+              <button
+                type="button"
+                className="genome-info-toggle"
+                aria-expanded={buildInfoOpen}
+                onClick={() => setBuildInfoOpen(open => !open)}
+              >
+                How this browser is built{' '}
+                <span className="genome-info-caret">
+                  {buildInfoOpen ? '▾' : '▸'}
+                </span>
+              </button>
+              {buildInfoOpen ? (
+                <div className="genome-info-panel">
+                  <ul>
+                    <li>
+                      Reference sequence: UCSC canFam4 / UU_Cfam_GSD_1.0, read
+                      directly from{' '}
+                      <a
+                        href="https://hgdownload.soe.ucsc.edu/goldenPath/canFam4/"
+                        target="_blank"
+                      >
+                        hgdownload.soe.ucsc.edu
+                      </a>
+                      .
+                    </li>
+                    <li>
+                      Gene annotation: the full NCBI RefSeq set for canFam4,
+                      from JBrowse&rsquo;s own hosted UCSC mirror.
+                    </li>
+                    <li>
+                      Structural variants: 12 long-read dog genomes, including
+                      the Great Dane reference assembly &ldquo;Zoey&rdquo; (
+                      <a
+                        href="https://doi.org/10.1073/pnas.2016274118"
+                        target="_blank"
+                      >
+                        Halo et al., 2021, PNAS
+                      </a>
+                      ), genotyped by{' '}
+                      <a
+                        href="https://doi.org/10.5281/zenodo.14968874"
+                        target="_blank"
+                      >
+                        Schall &amp; Kidd, 2025
+                      </a>
+                      .
+                    </li>
+                    <li>
+                      Curated gene catalog: our own, {geneCategories.length}{' '}
+                      genes, each cited to primary literature above.
+                    </li>
+                    <li>
+                      Built with{' '}
+                      <a href="https://jbrowse.org" target="_blank">
+                        JBrowse 2
+                      </a>
+                      , the open-source genome browser platform.
+                    </li>
+                  </ul>
+                </div>
+              ) : null}
+            </div>
           </div>
         </main>
       </div>
