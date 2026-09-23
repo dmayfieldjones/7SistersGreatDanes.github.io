@@ -241,6 +241,42 @@
   gap: 0.4rem;
 }
 
+.genome-live-section {
+  margin: 1.5rem 0;
+}
+
+.genome-live-toggle {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--genome-accent);
+  border: none;
+  border-radius: 6px;
+  padding: 0.55rem 1rem;
+  cursor: pointer;
+}
+
+.genome-live-caption {
+  margin: 0.6rem 0 0;
+  font-size: 0.85rem;
+  color: var(--genome-muted);
+  max-width: 62ch;
+}
+
+.genome-live-loading {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: var(--genome-muted);
+}
+
+.genome-jbrowse-embed {
+  margin-top: 1rem;
+  height: 600px;
+  border: 1px solid var(--genome-border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
 .genome-unplaced {
   margin: 1.5rem 0;
 }
