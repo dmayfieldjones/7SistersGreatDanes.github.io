@@ -16,6 +16,10 @@ interface TourStop {
   // one half of it.
   companionGene?: string
   intro?: string
+  // Overrides the gene's own catalog coordinates for the live browser's
+  // default view — for a story about a variant near, not inside, the gene
+  // body (e.g. a duplication whose breakpoints sit outside it).
+  location?: string
 }
 
 // Three loci with a real, tellable story — each an exact-match `name` from
@@ -38,6 +42,26 @@ const TOUR_STOPS: TourStop[] = [
     label: 'Health',
     gene: 'PRKCZ',
     hook: 'The health scare every Great Dane owner knows, found in the genome.',
+  },
+]
+
+interface MoreStory extends TourStop {
+  theme: string
+}
+
+// A second, deliberately separate tier: the flagship tour above stays fixed
+// at three stops so it never dilutes into a browsable catalog, and this is
+// where additional stories go instead as the collection grows — grouped by
+// theme rather than appended to one flat, ever-longer list.
+const MORE_STORIES: MoreStory[] = [
+  {
+    theme: 'Origins',
+    label: 'The starch gene',
+    gene: 'AMY2B',
+    hook: 'Why can dogs eat kibble but wolves can barely digest a potato?',
+    location: 'chr6:47,370,000-47,398,000',
+    intro:
+      "Somewhere in this window, most dogs carry a duplication wolves don't have — one of the clearest fingerprints of domestication in the entire genome. Extra copies of this gene meant more of the enzyme that digests starch, letting early dogs thrive on grain and food scraps around human settlements in a way wolves never could. Below, watch the duplication show up in most of the 12 dogs in our structural-variant track, including the Great Dane — but not in the Greenland Wolf sample sitting right next to them.",
   },
 ]
 
@@ -113,8 +137,12 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
 
   const placedGenes = geneCategories.filter(entry => !!entry.location)
   const unplacedGenes = geneCategories.filter(entry => !entry.location)
+  const moreStoryThemes = [...new Set(MORE_STORIES.map(story => story.theme))]
+
   const geneEntry = geneCategories.find(entry => entry.name === gene)
-  const activeTourStop = TOUR_STOPS.find(stop => stop.gene === gene)
+  const activeTourStop = [...TOUR_STOPS, ...MORE_STORIES].find(
+    stop => stop.gene === gene,
+  )
   const companionEntry = geneCategories.find(
     entry => entry.name === activeTourStop?.companionGene,
   )
@@ -147,9 +175,11 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
     [annotations],
   )
 
-  const liveLocation = geneEntry?.location
-    ? geneEntry.location.replaceAll(',', '')
-    : DEFAULT_LOCATION
+  const liveLocation = (
+    activeTourStop?.location ??
+    geneEntry?.location ??
+    DEFAULT_LOCATION
+  ).replaceAll(',', '')
 
   const categoryGenes =
     effectiveType !== 'all'
@@ -240,6 +270,35 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
               </div>
             </div>
           </section>
+          {MORE_STORIES.length ? (
+            <section className="genome-more-stories">
+              <h3 className="genome-more-stories-title">More stories</h3>
+              {moreStoryThemes.map(theme => (
+                <div key={theme} className="genome-more-stories-theme">
+                  <div className="genome-more-stories-theme-label">{theme}</div>
+                  <div className="genome-more-stories-list">
+                    {MORE_STORIES.filter(story => story.theme === theme).map(
+                      story => (
+                        <button
+                          key={story.gene}
+                          type="button"
+                          className="genome-more-stories-item"
+                          onClick={() => openTourStop(story)}
+                        >
+                          <span className="genome-more-stories-item-label">
+                            {story.label}
+                          </span>
+                          <span className="genome-more-stories-item-hook">
+                            {story.hook}
+                          </span>
+                        </button>
+                      ),
+                    )}
+                  </div>
+                </div>
+              ))}
+            </section>
+          ) : null}
           <p />
           Or search for a gene, or filter by category, then explore its position
           on the genome below.
