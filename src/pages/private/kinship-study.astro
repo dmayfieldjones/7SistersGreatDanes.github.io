@@ -1,0 +1,1389 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import study from '../../lib/kinship-study.json'
+
+// Aggregate results only. The underlying pedigrees belong to the Quintessa
+// database (Glen, quintessa.net.au) and are not republished here: no dog
+// names, ids or dog-level lists appear on this page.
+
+const fmt = (n: number) => n.toLocaleString('en-US')
+const pct = (n: number) => `${n.toFixed(0)}%`
+
+const FAMILY: Record<string, { label: string; cls: string }> = {
+  fawn: { label: 'Fawn / brindle', cls: 'f-fawn' },
+  harl: { label: 'Harlequin / mantle', cls: 'f-harl' },
+  blue: { label: 'Blue / black', cls: 'f-blue' },
+  other: { label: 'Unassigned', cls: 'f-other' },
+}
+
+const at = (k: number) => study.curve[k - 1]
+const years = Object.entries(study.by_year)
+const registryLabel = (r: string) => (r === 'none' ? 'unregistered' : r.replace(' (US)', ''))
+const colorLabel: Record<string, string> = {
+  fawn: 'fawn',
+  brindle: 'brindle',
+  'harlequin/mantle/merle': 'harl./mantle/merle',
+  blue: 'blue',
+  black: 'black',
+  unknown: 'colour unrecorded',
+  other: 'other',
+}
+const topColors = (c: [string, number][], n: number) =>
+  c
+    .filter(([k]) => k !== 'unknown')
+    .slice(0, 2)
+    .map(([k, v]) => `${colorLabel[k] ?? k} ${Math.round((100 * v) / n)}%`)
+    .join(', ')
+const topRegs = (r: [string, number][], n: number) =>
+  r
+    .slice(0, 1)
+    .map(([k, v]) => `${registryLabel(k)} ${Math.round((100 * v) / n)}%`)
+    .join(', ')
+const assigned = study.clusters.filter(c => c.cluster !== 0)
+const within = assigned.map(c => c.within_kinship)
+const between = assigned.map(c => c.to_rest_kinship)
+const H = study.history
+const coiPeak = H.coi.reduce((a, b) => (b.good > a.good ? b : a))
+const coiAt = (y: number) => H.coi.find(r => r.y === y)!
+const colAt = (y: number) => H.colour.find(r => r.y === y)!
+const winLabel = (y: number) => `${y - H.window / 2 + 1}–${y + H.window / 2}`
+const cnt = (y: number) => (H.counts as Record<string, number>)[String(y)] ?? 0
+const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).toFixed(2)}`
+---
+
+<BaseLayout
+  title="Great Dane Kinship Study | 7Sisters Farm"
+  canonical="https://7sistersgreatdanes.com/private/kinship-study"
+>
+  <meta name="robots" content="noindex, nofollow" slot="head" />
+
+  <article class="ks-root">
+    <header class="ks-head">
+      <p class="ks-kicker">Research draft · private</p>
+      <h1>How related are Great Danes, and which few dogs would represent them?</h1>
+      <p class="ks-lede">
+        A pedigree kinship analysis of {fmt(study.reference)} Great Danes born
+        2012–2020, using {fmt(study.dogs_loaded)} pedigree records from the
+        Quintessa Great Dane database. The goal: cluster the breed by
+        relatedness and pick a small set of dogs whose DNA sequencing would
+        tell us the most about the whole population.
+      </p>
+      <p class="ks-byline">
+        Dustin Mayfield-Jones, 7 Sisters Great Danes · data courtesy of
+        Glen, <a href="https://www.quintessa.net.au/" rel="noopener">Quintessa</a>
+      </p>
+    </header>
+
+    <section class="ks-tiles" aria-label="Headline numbers">
+      <div class="ks-tile">
+        <span class="ks-tile-value">{study.mean_F.toFixed(3)}</span>
+        <span class="ks-tile-label">average inbreeding (F), about a half-sib mating</span>
+      </div>
+      <div class="ks-tile">
+        <span class="ks-tile-value">≈ {study.Ne}</span>
+        <span class="ks-tile-label">effective population size</span>
+      </div>
+      <div class="ks-tile">
+        <span class="ks-tile-value">{assigned.length}</span>
+        <span class="ks-tile-label">lines, which follow colour families</span>
+      </div>
+      <div class="ks-tile">
+        <span class="ks-tile-value">{pct(at(10).all)}</span>
+        <span class="ks-tile-label">of dogs have a half-sib or closer relative among the top 10 sequencing picks</span>
+      </div>
+    </section>
+
+    <section>
+      <h2>Key findings</h2>
+      <ol class="ks-findings">
+        <li>
+          <strong>The breed is several populations, not one.</strong> Kinship
+          inside a cluster is {range(within)}, against {range(between)}{' '}
+          between a cluster and everyone else, a 3–4× gap. The clusters line
+          up with colour families: fawn/brindle, harlequin/mantle, and
+          blue/black are largely bred as separate lines.
+        </li>
+        <li>
+          <strong>Inbreeding is high and flat.</strong> Mean F is{' '}
+          {study.mean_F.toFixed(3)}, it sits between{' '}
+          {Math.min(...years.map(([, v]) => v.F)).toFixed(3)} and{' '}
+          {Math.max(...years.map(([, v]) => v.F)).toFixed(3)} every year from 2012 to 2020,
+          and {study.frac_F_over_quarter}% of dogs are at or above 0.25 (the
+          level of a full-sib or parent–offspring mating). Average kinship
+          across the whole population is only {study.mean_kinship.toFixed(3)},
+          so most of that inbreeding comes from breeding within lines.
+        </li>
+        <li>
+          <strong>A few dogs cover a lot, but not evenly.</strong> Two
+          well-chosen dogs give {pct(at(2).all)} of the population a
+          half-sib-or-closer relative in the sequenced set; forty reach{' '}
+          {pct(at(40).all)}. The greedy picks favour the big fawn/brindle line:
+          after ten picks, {pct(at(10).fawn)} of fawn/brindle dogs are covered
+          but only {pct(at(10).blue)} of blue/black dogs.
+        </li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>1. Population structure</h2>
+      <p>
+        Each dot is one dog, placed by the two strongest axes of the
+        relationship matrix (principal coordinates; they explain{' '}
+        {study.pca_var[0]}% and {study.pca_var[1]}% of the variation). Dogs
+        close together share more ancestry. Colour is the cluster's colour
+        family, found by clustering the kinship matrix, not from the coat
+        colour field.
+      </p>
+      <figure class="ks-figure">
+        <div class="ks-legend" id="pca-legend"></div>
+        <div class="ks-plot" id="pca-wrap">
+          <canvas id="pca" role="img" aria-label="Scatter plot of dogs by the first two principal coordinates of pedigree relationship, coloured by colour-family cluster; the fawn/brindle, harlequin/mantle and blue/black groups occupy separate regions."></canvas>
+          <div class="ks-tip" id="pca-tip" hidden></div>
+        </div>
+        <figcaption>
+          Principal coordinates of the additive relationship matrix,{' '}
+          {fmt(study.reference)} dogs born 2012–2020. Hover a region to see its cluster.
+        </figcaption>
+      </figure>
+
+      <div class="ks-table-wrap">
+        <table class="ks-table">
+          <caption>Clusters from average-linkage clustering of pedigree kinship</caption>
+          <thead>
+            <tr>
+              <th scope="col">Cluster</th>
+              <th scope="col">Colour family</th>
+              <th scope="col" class="num">Dogs</th>
+              <th scope="col" class="num">Mean F</th>
+              <th scope="col" class="num">Kinship within</th>
+              <th scope="col" class="num">Kinship to rest</th>
+              <th scope="col">Recorded colours</th>
+              <th scope="col">Main registry</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              study.clusters
+                .filter(c => c.cluster !== 0)
+                .concat(study.clusters.filter(c => c.cluster === 0))
+                .map(c => (
+                  <tr>
+                    <td>{c.cluster === 0 ? '—' : c.cluster}</td>
+                    <td class="nowrap">
+                      <span class={`ks-swatch ${FAMILY[c.family].cls}`} aria-hidden="true" />
+                      {FAMILY[c.family].label}
+                    </td>
+                    <td class="num">{fmt(c.n)}</td>
+                    <td class="num">{c.mean_F.toFixed(3)}</td>
+                    <td class="num">{c.within_kinship.toFixed(3)}</td>
+                    <td class="num">{c.to_rest_kinship.toFixed(3)}</td>
+                    <td>{topColors(c.colors as [string, number][], c.n)}</td>
+                    <td class="nowrap">{topRegs(c.registries as [string, number][], c.n)}</td>
+                  </tr>
+                ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <p class="ks-note">
+        "Unassigned" is {fmt(study.clusters.find(c => c.cluster === 0)!.n)} dogs in
+        groups smaller than 30. Most have shallow recorded pedigrees (about{' '}
+        {study.clusters.find(c => c.cluster === 0)!.ecg} equivalent generations
+        against about 25 for everyone else), so they look unrelated because
+        their ancestry is missing, not because it is different.
+      </p>
+    </section>
+
+    <section>
+      <h2>2. Inbreeding</h2>
+      <p>
+        F is the probability that a dog's two copies of a gene come from the
+        same ancestor. Half of the dogs sit between{' '}
+        {study.F_quantiles[1].toFixed(2)} and {study.F_quantiles[3].toFixed(2)}.
+      </p>
+      <figure class="ks-figure">
+        <div class="ks-plot" id="hist-wrap">
+          <svg id="hist" role="img" aria-label="Histogram of inbreeding coefficients. Most dogs fall between 0.075 and 0.175."></svg>
+          <div class="ks-tip" id="hist-tip" hidden></div>
+        </div>
+        <figcaption>Number of dogs by inbreeding coefficient (bins of 0.025).</figcaption>
+      </figure>
+      <div class="ks-table-wrap">
+        <table class="ks-table ks-compact">
+          <caption>By birth year</caption>
+          <thead>
+            <tr>
+              <th scope="col">Born</th>
+              {years.map(([y]) => <th scope="col" class="num">{y}</th>)}
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Dogs</th>
+              {years.map(([, v]) => <td class="num">{fmt(v.n)}</td>)}
+            </tr>
+            <tr>
+              <th scope="row">Mean F</th>
+              {years.map(([, v]) => <td class="num">{v.F.toFixed(3)}</td>)}
+            </tr>
+            <tr>
+              <th scope="row">Pedigree depth</th>
+              {years.map(([, v]) => <td class="num">{v.ecg.toFixed(1)}</td>)}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="ks-note">
+        Pedigree depth is equivalent complete generations: about 25 on
+        average, which is very deep for a dog breed, so these estimates rest
+        on well-documented ancestry. Effective population size (≈ {study.Ne})
+        comes from each dog's individual rate of inbreeding per generation
+        (Gutiérrez et al. 2008). Values under 100 are generally treated as a
+        conservation concern.
+      </p>
+    </section>
+
+    <section>
+      <h2>3. Choosing dogs to sequence</h2>
+      <p>
+        Dogs are added one at a time, each time taking the dog that most
+        raises the average relationship between every dog in the population
+        and its closest sequenced relative. A sequenced half-sib (relationship
+        0.25) or closer is the benchmark for "covered", since that is roughly
+        where a sequenced relative becomes useful for imputing another dog's
+        genome from a cheap SNP panel. Candidates were limited to dogs born
+        2016 or later.
+      </p>
+      <figure class="ks-figure">
+        <div class="ks-legend" id="cov-legend"></div>
+        <div class="ks-plot" id="cov-wrap">
+          <svg id="cov" role="img" aria-label="Line chart of the share of dogs with a half-sib or closer sequenced relative as picks are added. Fawn/brindle coverage rises fastest, blue/black slowest."></svg>
+          <div class="ks-tip" id="cov-tip" hidden></div>
+        </div>
+        <figcaption>
+          Share of dogs with a half-sib-or-closer relative among the first{' '}
+          <em>n</em> picks, overall and by colour family.
+        </figcaption>
+      </figure>
+      <div class="ks-table-wrap">
+        <table class="ks-table ks-compact">
+          <caption>Coverage at selected pick counts</caption>
+          <thead>
+            <tr>
+              <th scope="col">Picks</th>
+              <th scope="col" class="num">All dogs</th>
+              <th scope="col" class="num">Fawn / brindle</th>
+              <th scope="col" class="num">Harlequin / mantle</th>
+              <th scope="col" class="num">Blue / black</th>
+              <th scope="col" class="num">Full-sib or closer</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              [1, 2, 3, 5, 10, 20, 40].map(k => (
+                <tr>
+                  <th scope="row">{k}</th>
+                  <td class="num">{pct(at(k).all)}</td>
+                  <td class="num">{pct(at(k).fawn)}</td>
+                  <td class="num">{pct(at(k).harl)}</td>
+                  <td class="num">{pct(at(k).blue)}</td>
+                  <td class="num">{pct(at(k).full)}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <p class="ks-note">
+        Of the 40 picks, {study.curve.filter(r => r.cluster === 1).length} come
+        from the fawn/brindle main line and{' '}
+        {study.curve.filter(r => r.cluster === 2).length} from the US
+        harlequin/mantle line. The blue/black lines get their first pick at
+        number {study.curve.findIndex(r => [4, 5, 6, 7, 11, 12].includes(r.cluster)) + 1}.
+        A stratified design (a fixed budget per colour family) would cover the
+        smaller lines far sooner. The individual picks are not listed here.
+      </p>
+    </section>
+
+    <section>
+      <h2>4. Data quality</h2>
+      <p>
+        The pedigree is remarkably complete: about{' '}
+        {pct((100 * 99500) / study.dogs_loaded)} of dogs have both parents on
+        record. Before the analysis, {study.links_dropped} parent links that
+        can't be correct (about 0.15% of all links) were set aside:
+      </p>
+      <ul>
+        <li>{study.issues['parent born after child']} where the parent's recorded birth date is after the offspring's;</li>
+        <li>{study.issues['bridged']} where climbing through undated ancestors leads to a dog born after its supposed descendant, often ids one or two apart, which suggests an entry slip;</li>
+        <li>{study.issues['pedigree loop']} loops in which a dog would be its own ancestor.</li>
+      </ul>
+      <p>
+        Without these fixes the longest ancestral chain was 157 generations;
+        with them it is {study.generations}, running in date order back to the
+        early 1900s. The full list is available to the database maintainer.
+      </p>
+    </section>
+
+    <section>
+      <h2>5. Breeding choices through history</h2>
+      <p>
+        The same database reaches back to the 1880s, so we can ask how
+        breeders' choices changed. Everything here uses {fmt(H.dated)} dogs
+        with a recorded birth year and {fmt(H.litters)} litters, summarised
+        over a rolling {H.window}-year window.
+      </p>
+
+      <h3>How many dogs, and from where</h3>
+      <p>
+        Registration numbers show which registry each dog came from: AKC
+        numbers for the United States, state-prefixed and ANKC numbers for
+        Australia, and stud books such as VDH, LOF, LOI and NHSB for
+        continental Europe.
+      </p>
+      <figure class="ks-figure">
+        <div class="ks-legend" id="region-legend"></div>
+        <div class="ks-plot" id="count-wrap">
+          <svg id="count" role="img" aria-label="Dogs recorded per birth year by registry region, 1880 to 2020. European dogs dominate until the Second World War; American dogs dominate from the late 1940s, with an Australian share from the 1970s. Totals dip in both world wars and peak in the late 1990s."></svg>
+          <div class="ks-tip" id="count-tip" hidden></div>
+        </div>
+        <figcaption>
+          Dogs in the database by birth year and registry region. Shaded: 1914–1918 and 1939–1945.
+        </figcaption>
+      </figure>
+      <figure class="ks-figure">
+        <div class="ks-plot" id="share-wrap">
+          <svg id="share" role="img" aria-label="Share of each birth cohort by registry region in five-year bins. Continental Europe falls from over 80 percent before 1930 to under 20 percent after 1960, as the United States rises to a majority."></svg>
+          <div class="ks-tip" id="share-tip" hidden></div>
+        </div>
+        <figcaption>The same dogs as shares of each five-year birth cohort.</figcaption>
+      </figure>
+      <p>
+        The breed's centre of gravity crossed the Atlantic during the Second
+        World War. Until the 1930s the record is almost entirely European,
+        mostly German stud-book dogs. American dogs appear in the 1930s, and
+        in 1945–49 they outnumber European dogs for the first time, more
+        than doubling in five years while European numbers stayed flat.
+        From then on the United States supplies most of the record,
+        peaking at {fmt(cnt(1996))} dogs recorded for 1996 alone. Australia
+        joins in the 1960s and holds a steady 10–16% share from the 1970s to
+        the 2000s. Both wars cut total numbers too: from {cnt(1914)} dogs in
+        1914 to {cnt(1917)} in 1917, and from {cnt(1938)} in 1938 to{' '}
+        {cnt(1940)} in 1940, rebounding to {cnt(1947)} by 1947.
+      </p>
+      <div class="ks-table-wrap">
+        <table class="ks-table ks-compact">
+          <caption>Share of dogs by registry region and birth decade</caption>
+          <thead>
+            <tr>
+              <th scope="col">Born</th>
+              <th scope="col" class="num">Dogs</th>
+              <th scope="col" class="num">United States</th>
+              <th scope="col" class="num">Continental Europe</th>
+              <th scope="col" class="num">Australia</th>
+              <th scope="col" class="num">Other</th>
+              <th scope="col" class="num">No reg. no.</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              H.regions.map(r => (
+                <tr>
+                  <th scope="row">{r.decade}s</th>
+                  <td class="num">{fmt(r.n)}</td>
+                  <td class="num">{pct(r['United States'])}</td>
+                  <td class="num">{pct(r['Continental Europe'])}</td>
+                  <td class="num">{pct(r.Australia)}</td>
+                  <td class="num">{pct(r.Other + r['United Kingdom'])}</td>
+                  <td class="num">{pct(r.Unrecorded)}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <p class="ks-note">
+        These are dogs in this database, not national registrations, so the
+        counts also reflect how completely each era and country was entered.
+        "Other" includes UK and Scandinavian numbers, which don't have a
+        distinctive format. Because the shift happens right at the Second
+        World War, the post-war inbreeding peak below reflects both wartime
+        losses and a breed being rebuilt on a new continent.
+      </p>
+
+      <h3>How closely breeders inbred</h3>
+      <p>
+        Full-depth inbreeding climbs over time partly because older pedigrees
+        are shorter. To compare eras fairly, this uses <strong>10-generation
+        COI</strong>, which counts only ancestors within ten generations, and
+        limits the main line to dogs whose ten generations are mostly known
+        (at least 7 equivalent complete generations).
+      </p>
+      <figure class="ks-figure">
+        <div class="ks-legend" id="coi-legend"></div>
+        <div class="ks-plot" id="coi-wrap">
+          <svg id="coi" role="img" aria-label="Mean 10-generation COI over time. It rises to a peak just after the Second World War and declines steadily from the 1950s to 2020."></svg>
+          <div class="ks-tip" id="coi-tip" hidden></div>
+        </div>
+        <figcaption>Mean 10-generation COI, rolling {H.window}-year window.</figcaption>
+      </figure>
+      <figure class="ks-figure">
+        <div class="ks-plot" id="close-wrap">
+          <svg id="close" role="img" aria-label="Share of well-documented dogs with 10-generation COI of 0.25 or more. It peaks near 13 percent after the Second World War and falls to about 1 percent by 2020."></svg>
+          <div class="ks-tip" id="close-tip" hidden></div>
+        </div>
+        <figcaption>
+          Share of well-documented dogs with 10-generation COI ≥ 0.25, the
+          level of a full-sib or parent–offspring mating.
+        </figcaption>
+      </figure>
+      <p>
+        Close inbreeding peaked right after the Second World War: dogs born{' '}
+        {winLabel(coiPeak.y)} averaged {coiPeak.good.toFixed(3)}, and{' '}
+        {coiPeak.close.toFixed(0)}% were at or above 0.25, consistent with
+        rebuilding the breed from the few dogs left after the war. Since then
+        it has fallen steadily, to {coiAt(2020).good.toFixed(3)} with{' '}
+        {coiAt(2020).close.toFixed(1)}% at 0.25 or above by the end of the
+        record. Breeders now avoid close matings much more than they used to.
+        Full-depth inbreeding is still about {study.mean_F.toFixed(2)},
+        roughly double the 10-generation figure, so most of today's
+        inbreeding is inherited from distant shared ancestors rather than
+        created by recent matings.
+      </p>
+
+      <h3>Colour pairings</h3>
+      <p>
+        Breed clubs have long asked breeders to keep three colour families
+        apart: fawn/brindle, harlequin/mantle (with black), and blue (with
+        black). The documented milestones:
+      </p>
+      <ol class="ks-timeline">
+        <li><strong>1880–1891.</strong> Germany fixes the name Deutsche Dogge (1880), founds the Deutscher Doggen-Club (1888) and issues the first standard (1891). The club notes that early breeders were "much more liberal" about separating colours than later ones.</li>
+        <li><strong>1959.</strong> A fawn from a fawn × black litter, CH Honey Hollow Stormi Rudio, wins the Working Group at Westminster. The resulting backlash is described as the start of the US "colour code wars".</li>
+        <li><strong>GDCA colour code.</strong> Part of the GDCA Code of Ethics for decades (the adoption year isn't published online). Blue may not be bred to fawn/brindle, or to harlequin or black-from-harlequin; fawn/brindle may not be bred into harlequin lines; and dogs had to be clear of other colours for four generations. It does not forbid black × fawn, and black has long been crossed with fawn and brindle to improve blacks.</li>
+        <li><strong>UK Breed Council colour code.</strong> Its list of approved matings pairs black only with blue, black, harlequin and mantle; fawn/brindle × harlequin/mantle is not recommended. Under revision since 2021.</li>
+        <li><strong>2012.</strong> The FCI (European) standard drops grey merle as a disqualifying fault.</li>
+        <li><strong>2019.</strong> The AKC recognises merle on 1 January; the GDCA takes its colour code down for revision around DNA colour testing.</li>
+      </ol>
+      <p>
+        Using the recorded colour of both parents
+        ({fmt(H.litters_with_colour)} litters), each litter is classed as within
+        a family (fawn × fawn/brindle, harlequin × harlequin/mantle,
+        blue × blue, and black with harlequin, blue or black) or as a
+        cross between families. The dashed lines mark 1959, 2012 and 2019.
+      </p>
+      <figure class="ks-figure">
+        <div class="ks-plot" id="cross-wrap">
+          <svg id="cross" role="img" aria-label="Share of litters from cross-family colour pairings over time."></svg>
+          <div class="ks-tip" id="cross-tip" hidden></div>
+        </div>
+        <figcaption>All cross-family pairings, share of litters with both parents' colours recorded.</figcaption>
+      </figure>
+      <div class="ks-multiples" id="pairs"></div>
+      <p>
+        Early breeders crossed freely: {colAt(1895).blue_fawn.toFixed(0)}% of
+        litters around {winLabel(1895)} were blue × fawn. Those crosses had
+        almost disappeared by the 1930s, and fawn × harlequin and blue ×
+        fawn have stayed around 1% ever since. The exception is{' '}
+        <strong>black × fawn</strong>, which has grown from about{' '}
+        {colAt(1945).black_fawn.toFixed(0)}% of litters after the war to{' '}
+        {colAt(2015).black_fawn.toFixed(0)}% around {winLabel(2015)}. That
+        growth is why cross-family litters overall went from{' '}
+        {colAt(2000).cross.toFixed(0)}% around {winLabel(2000)} to{' '}
+        {colAt(2020).cross.toFixed(0)}% in the last years of the record.
+      </p>
+      <p>
+        That fits the codes. The crosses the GDCA code forbids outright
+        (blue × fawn, blue × harlequin, fawn × harlequin) stay rare. Black ×
+        fawn, the pairing the US code leaves open and the UK code leaves off
+        its approved list, is the one that grew. It more than doubled through
+        the 1950s, the decade of the Stormi Rudio controversy, held near 2%
+        for forty years, then climbed again from the mid-2000s.
+      </p>
+      <p class="ks-note">
+        Colour is recorded for about half of dogs, and a litter counts only
+        when both parents have a colour. Black is shared by the harlequin and
+        blue families, so black × harlequin and black × blue count as within
+        family.
+      </p>
+    </section>
+
+    <section>
+      <h2>Limitations and next steps</h2>
+      <ul>
+        <li>
+          <strong>The data effectively stop in 2020.</strong> Dogs born
+          2012–2020 stand in for the living population, so many picks are no
+          longer available to sample. An updated database would move the
+          analysis to living dogs.
+        </li>
+        <li>
+          <strong>Pedigree kinship is an expectation.</strong> Real shared DNA
+          varies around it, which is exactly what sequencing measures;
+          genotyped dogs would let us check these estimates.
+        </li>
+        <li>
+          <strong>Colour family is inferred.</strong> Clusters were found from
+          relatedness alone; the colour labels describe what most dogs in
+          each cluster are recorded as. About a fifth of dogs have no colour
+          on record.
+        </li>
+        <li>
+          <strong>Next:</strong> add post-2020 litters, rerun with a
+          per-colour-family sequencing budget, and pair the picks with
+          low-cost SNP genotyping of the wider population.
+        </li>
+      </ul>
+    </section>
+
+    <details class="ks-methods">
+      <summary>Sources for the colour-code history</summary>
+      <ul>
+        <li><a href="https://www.doggen.de/der-club/die-historie-der-deutschen-dogge" rel="noopener">Deutscher Doggen Club 1888 e.V., Die Historie der Deutschen Dogge</a></li>
+        <li><a href="https://greatdanegnosis.wordpress.com/2016/03/06/the-ignominious-beginning-of-the-great-dane-color-code-of-ethics/" rel="noopener">Great Dane Gnosis, The "Ignominious Beginning of the Great Dane Color Code of Ethics"</a></li>
+        <li><a href="https://www.greatdanerescueinc.com/events/genetics.html/title/the-gdca-color-code" rel="noopener">Great Dane Rescue, The GDCA Color Code</a></li>
+        <li><a href="https://www.purinaproclub.com/pro-resources/learning-hub/breeding/merle-great-danes-coat-color-genetics" rel="noopener">Purina Pro Club, Merle Great Danes Change Coat Color Genetics</a></li>
+        <li><a href="https://gdca.org/breeders/breeders-color-code/" rel="noopener">GDCA, Breeder's Color Code (under revision)</a> and <a href="https://gdca.org/events/akc-welcomes-the-merle-great-dane/" rel="noopener">AKC welcomes the Merle Great Dane</a></li>
+        <li><a href="https://danecouncil.org.uk/health/colour-code-of-ethics/" rel="noopener">Great Dane Breed Council (UK), Colour Code of Ethics</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Great_Dane" rel="noopener">Wikipedia, Great Dane</a> (2012 FCI merle change)</li>
+      </ul>
+    </details>
+
+    <details class="ks-methods">
+      <summary>Methods</summary>
+      <p>
+        Pedigree records were parsed from a Quintessa database export and
+        cleaned as described above. The pedigree was trimmed to the{' '}
+        {fmt(study.trimmed)} ancestors of the reference population
+        ({fmt(study.reference)} dogs born 2012–2020 with both parents
+        recorded). Inbreeding coefficients were computed generation by
+        generation as half the relationship between each dog's parents, using
+        the decomposition A = TDT′ (T = (I − P)⁻¹, D the Mendelian sampling
+        variances), with sparse triangular solves so the full matrix is never
+        formed. The {fmt(study.reference)} × {fmt(study.reference)}{' '}
+        relationship matrix was then computed the same way.
+      </p>
+      <p>
+        Clustering: average-linkage hierarchical clustering on 1 − normalised
+        relationship, cut to give twelve clusters of at least 30 dogs.
+        Sequencing picks: greedy maximisation of the mean, over the reference
+        population, of each dog's relationship to its closest selected dog.
+        Effective population size: from individual increase in inbreeding,
+        ΔFᵢ = 1 − (1 − Fᵢ)^(1/(tᵢ − 1)), with tᵢ the equivalent complete
+        generations. Methods were checked against textbook cases (full-sib and
+        parent–offspring matings).
+      </p>
+      <p>
+        History: 10-generation COI for every dog with a birth year, computed
+        with the tabular method on each dog's own pedigree cut at ten
+        generations (ancestors further back by their shortest path are treated
+        as unrelated founders). It is never higher than the full-depth value
+        and correlates with it at 0.95 for 2012–2020 dogs. Litters are unique
+        sire–dam–birth-year combinations. Rolling windows are ten birth years
+        wide and shown only where they hold at least 50 well-documented dogs
+        (COI) or 60 litters with both parents' colours (pairings).
+      </p>
+    </details>
+  </article>
+
+  <script type="application/json" id="ks-data" set:html={JSON.stringify({
+    pca: study.pca,
+    hist: study.F_hist,
+    curve: study.curve,
+    clusterFamily: Object.fromEntries(study.clusters.map(c => [c.cluster, c.family])),
+    history: { counts: study.history.counts, coi: study.history.coi, colour: study.history.colour, regions: study.history.region_years },
+  })} />
+</BaseLayout>
+
+<script>
+  type Row = { k: number; all: number; fawn: number; harl: number; blue: number; full: number }
+  const data = JSON.parse(document.getElementById('ks-data')!.textContent!) as {
+    pca: [number, number, number][]
+    hist: number[]
+    curve: Row[]
+    clusterFamily: Record<string, string>
+    history: {
+      counts: Record<string, number>
+      coi: { y: number; good: number; all: number; close: number; n: number }[]
+      colour: Record<string, number>[]
+      regions: { y: number; us: number; eu: number; au: number; rest: number }[]
+    }
+  }
+  const FAMILIES = [
+    { key: 'fawn', label: 'Fawn / brindle', token: '--series-2' },
+    { key: 'harl', label: 'Harlequin / mantle', token: '--series-3' },
+    { key: 'blue', label: 'Blue / black', token: '--series-1' },
+    { key: 'other', label: 'Unassigned', token: '--muted' },
+  ]
+  const root = document.querySelector('.ks-root') as HTMLElement
+  const css = (t: string) => getComputedStyle(root).getPropertyValue(t).trim()
+  const NS = 'http://www.w3.org/2000/svg'
+  const el = (tag: string, attrs: Record<string, string | number>, parent?: Element) => {
+    const e = document.createElementNS(NS, tag)
+    for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, String(v))
+    parent?.appendChild(e)
+    return e
+  }
+
+  function legend(id: string, items: { label: string; token: string; dash?: boolean }[]) {
+    const box = document.getElementById(id)!
+    box.innerHTML = ''
+    for (const it of items) {
+      const s = document.createElement('span')
+      s.className = 'ks-legend-item'
+      const k = document.createElement('i')
+      k.className = it.dash ? 'ks-key ks-key-dash' : 'ks-key'
+      k.style.setProperty('--key', `var(${it.token})`)
+      s.append(k, it.label)
+      box.appendChild(s)
+    }
+  }
+
+  function placeTip(tip: HTMLElement, wrap: HTMLElement, x: number, y: number) {
+    tip.hidden = false
+    const w = wrap.clientWidth
+    const tw = tip.offsetWidth
+    tip.style.left = `${Math.min(Math.max(x - tw / 2, 0), w - tw)}px`
+    tip.style.top = `${Math.max(y - tip.offsetHeight - 12, 0)}px`
+  }
+
+  // --- Population structure scatter (canvas: ~7,400 points) ---
+  function drawPca() {
+    const wrap = document.getElementById('pca-wrap')!
+    const canvas = document.getElementById('pca') as HTMLCanvasElement
+    const tip = document.getElementById('pca-tip')!
+    const W = wrap.clientWidth
+    const H = Math.round(Math.min(W * 0.75, 460))
+    const dpr = window.devicePixelRatio || 1
+    canvas.width = W * dpr
+    canvas.height = H * dpr
+    canvas.style.height = `${H}px`
+    const ctx = canvas.getContext('2d')!
+    ctx.scale(dpr, dpr)
+    const xs = data.pca.map(p => p[0])
+    const ys = data.pca.map(p => p[1])
+    const pad = 12
+    const [x0, x1] = [Math.min(...xs), Math.max(...xs)]
+    const [y0, y1] = [Math.min(...ys), Math.max(...ys)]
+    const sx = (v: number) => pad + ((v - x0) / (x1 - x0)) * (W - 2 * pad)
+    const sy = (v: number) => H - pad - ((v - y0) / (y1 - y0)) * (H - 2 * pad)
+    const colors = Object.fromEntries(FAMILIES.map(f => [f.key, css(f.token)]))
+    const surface = css('--surface')
+    ctx.fillStyle = surface
+    ctx.fillRect(0, 0, W, H)
+    // big groups first so the smaller lines stay visible on top
+    const order = ['fawn', 'harl', 'other', 'blue']
+    const pts = data.pca.map(([x, y, c]) => ({ x: sx(x), y: sy(y), fam: data.clusterFamily[c], c }))
+    for (const fam of order) {
+      ctx.fillStyle = colors[fam]
+      ctx.globalAlpha = fam === 'other' ? 0.5 : 0.75
+      for (const p of pts) {
+        if (p.fam !== fam) continue
+        ctx.beginPath()
+        ctx.arc(p.x, p.y, 2.2, 0, Math.PI * 2)
+        ctx.fill()
+      }
+    }
+    ctx.globalAlpha = 1
+    canvas.onmousemove = e => {
+      const r = canvas.getBoundingClientRect()
+      const mx = e.clientX - r.left
+      const my = e.clientY - r.top
+      let best = null as null | (typeof pts)[number]
+      let bd = 144
+      for (const p of pts) {
+        const d = (p.x - mx) ** 2 + (p.y - my) ** 2
+        if (d < bd) {
+          bd = d
+          best = p
+        }
+      }
+      if (!best) {
+        tip.hidden = true
+        return
+      }
+      const f = FAMILIES.find(f => f.key === best!.fam)!
+      tip.innerHTML = `<b>${best.c === 0 ? 'Unassigned' : `Cluster ${best.c}`}</b><br>${f.label}`
+      placeTip(tip, wrap, best.x, best.y)
+    }
+    canvas.onmouseleave = () => (tip.hidden = true)
+  }
+
+  // --- Inbreeding histogram ---
+  function drawHist() {
+    const wrap = document.getElementById('hist-wrap')!
+    const svg = document.getElementById('hist')!
+    const tip = document.getElementById('hist-tip')!
+    svg.innerHTML = ''
+    const W = wrap.clientWidth
+    const H = 220
+    const m = { t: 10, r: 8, b: 30, l: 44 }
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`)
+    svg.setAttribute('height', String(H))
+    const n = data.hist.length
+    const max = Math.max(...data.hist)
+    const yMax = Math.ceil(max / 250) * 250
+    const bw = (W - m.l - m.r) / n
+    const sy = (v: number) => H - m.b - (v / yMax) * (H - m.t - m.b)
+    for (let v = 0; v <= yMax; v += 250) {
+      el('line', { x1: m.l, x2: W - m.r, y1: sy(v), y2: sy(v), class: v ? 'ks-grid' : 'ks-axis' }, svg)
+      el('text', { x: m.l - 6, y: sy(v) + 4, 'text-anchor': 'end', class: 'ks-tick' }, svg).textContent = v.toLocaleString()
+    }
+    data.hist.forEach((v, i) => {
+      const x = m.l + i * bw
+      const h = H - m.b - sy(v)
+      const r = Math.min(4, h / 2, (bw - 2) / 2)
+      const w = bw - 2
+      const y = sy(v)
+      el('path', {
+        d: `M${x + 1},${H - m.b} v${-(h - r)} q0,${-r} ${r},${-r} h${w - 2 * r} q${r},0 ${r},${r} v${h - r} z`,
+        class: 'ks-bar',
+      }, svg)
+      const hit = el('rect', { x, y: m.t, width: bw, height: H - m.t - m.b, fill: 'transparent' }, svg)
+      hit.addEventListener('mousemove', () => {
+        tip.innerHTML = `<b>F ${(i * 0.025).toFixed(3)}–${((i + 1) * 0.025).toFixed(3)}</b><br>${v.toLocaleString()} dogs`
+        placeTip(tip, wrap, x + bw / 2, y)
+      })
+      hit.addEventListener('mouseleave', () => (tip.hidden = true))
+    })
+    for (let i = 0; i <= n; i += 4) {
+      el('text', { x: m.l + i * bw, y: H - m.b + 18, 'text-anchor': 'middle', class: 'ks-tick' }, svg).textContent = (i * 0.025).toFixed(1)
+    }
+  }
+
+  // --- Sequencing coverage lines ---
+  const SERIES = [
+    { key: 'fawn', label: 'Fawn / brindle', token: '--series-2' },
+    { key: 'harl', label: 'Harlequin / mantle', token: '--series-3' },
+    { key: 'blue', label: 'Blue / black', token: '--series-1' },
+    { key: 'all', label: 'All dogs', token: '--ink-2', dash: true },
+  ] as const
+  function drawCoverage() {
+    const wrap = document.getElementById('cov-wrap')!
+    const svg = document.getElementById('cov')!
+    const tip = document.getElementById('cov-tip')!
+    svg.innerHTML = ''
+    const W = wrap.clientWidth
+    const H = 280
+    const narrow = W < 480
+    const m = { t: 12, r: narrow ? 12 : 120, b: 32, l: 40 }
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`)
+    svg.setAttribute('height', String(H))
+    const rows = data.curve
+    const K = rows.length
+    const sx = (k: number) => m.l + ((k - 1) / (K - 1)) * (W - m.l - m.r)
+    const sy = (v: number) => H - m.b - (v / 100) * (H - m.t - m.b)
+    for (let v = 0; v <= 100; v += 25) {
+      el('line', { x1: m.l, x2: W - m.r, y1: sy(v), y2: sy(v), class: v ? 'ks-grid' : 'ks-axis' }, svg)
+      el('text', { x: m.l - 6, y: sy(v) + 4, 'text-anchor': 'end', class: 'ks-tick' }, svg).textContent = `${v}%`
+    }
+    for (const k of [1, 10, 20, 30, 40]) {
+      el('text', { x: sx(k), y: H - m.b + 18, 'text-anchor': 'middle', class: 'ks-tick' }, svg).textContent = String(k)
+    }
+    el('text', { x: W - m.r, y: H - 2, 'text-anchor': 'end', class: 'ks-tick' }, svg).textContent = 'dogs sequenced'
+    const labels: { y: number; text: string; token: string }[] = []
+    for (const s of SERIES) {
+      const d = rows.map((r, i) => `${i ? 'L' : 'M'}${sx(r.k)},${sy(r[s.key])}`).join('')
+      el('path', {
+        d,
+        fill: 'none',
+        stroke: `var(${s.token})`,
+        'stroke-width': 2,
+        'stroke-dasharray': 'dash' in s ? '5 4' : 'none',
+        'stroke-linejoin': 'round',
+      }, svg)
+      labels.push({ y: sy(rows[K - 1][s.key]), text: s.label, token: s.token })
+    }
+    if (!narrow) {
+      labels.sort((a, b) => a.y - b.y)
+      for (let i = 1; i < labels.length; i++) labels[i].y = Math.max(labels[i].y, labels[i - 1].y + 14)
+      for (const l of labels) {
+        el('text', { x: W - m.r + 8, y: l.y + 4, class: 'ks-direct' }, svg).textContent = l.text
+      }
+    }
+    const cross = el('line', { y1: m.t, y2: H - m.b, class: 'ks-cross', visibility: 'hidden' }, svg)
+    const dots = SERIES.map(s => el('circle', { r: 4, fill: `var(${s.token})`, class: 'ks-dot', visibility: 'hidden' }, svg))
+    const hit = el('rect', { x: m.l, y: m.t, width: W - m.l - m.r, height: H - m.t - m.b, fill: 'transparent' }, svg)
+    hit.addEventListener('mousemove', (e: Event) => {
+      const me = e as MouseEvent
+      const r = svg.getBoundingClientRect()
+      const k = Math.min(K, Math.max(1, Math.round(1 + ((me.clientX - r.left - m.l) / (W - m.l - m.r)) * (K - 1))))
+      const row = rows[k - 1]
+      cross.setAttribute('x1', String(sx(k)))
+      cross.setAttribute('x2', String(sx(k)))
+      cross.setAttribute('visibility', 'visible')
+      SERIES.forEach((s, i) => {
+        dots[i].setAttribute('cx', String(sx(k)))
+        dots[i].setAttribute('cy', String(sy(row[s.key])))
+        dots[i].setAttribute('visibility', 'visible')
+      })
+      tip.innerHTML =
+        `<b>${k} dog${k > 1 ? 's' : ''} sequenced</b>` +
+        SERIES.map(s => `<br><i class="ks-key" style="--key:var(${s.token})"></i>${s.label} ${row[s.key].toFixed(0)}%`).join('')
+      placeTip(tip, wrap, sx(k), m.t + 20)
+    })
+    hit.addEventListener('mouseleave', () => {
+      tip.hidden = true
+      cross.setAttribute('visibility', 'hidden')
+      dots.forEach(d => d.setAttribute('visibility', 'hidden'))
+    })
+  }
+
+
+  // --- History: generic year-axis charts ---
+  type Line = { key: string; label: string; token: string; dash?: boolean }
+  function yearChart(
+    id: string,
+    rows: Record<string, number>[],
+    lines: Line[],
+    opt: { yMax: number; yStep: number; fmt: (v: number) => string; height?: number; bars?: boolean; bands?: [number, number][]; x0?: number; x1?: number; mini?: boolean; marks?: number[] },
+  ) {
+    const wrap = document.getElementById(`${id}-wrap`) ?? document.getElementById(id)!.parentElement!
+    const svg = document.getElementById(id)!
+    const tip = document.getElementById(`${id}-tip`)
+    svg.innerHTML = ''
+    const W = wrap.clientWidth
+    const H = opt.height ?? 240
+    const m = { t: 10, r: opt.mini ? 6 : 12, b: 26, l: opt.mini ? 34 : 44 }
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`)
+    svg.setAttribute('height', String(H))
+    const x0 = opt.x0 ?? 1880
+    const x1 = opt.x1 ?? 2020
+    const sx = (y: number) => m.l + ((y - x0) / (x1 - x0)) * (W - m.l - m.r)
+    const sy = (v: number) => H - m.b - (Math.min(v, opt.yMax) / opt.yMax) * (H - m.t - m.b)
+    for (const [a, b] of opt.bands ?? []) {
+      el('rect', { x: sx(a), y: m.t, width: sx(b + 1) - sx(a), height: H - m.t - m.b, class: 'ks-band' }, svg)
+    }
+    for (let v = 0; v <= opt.yMax + 1e-9; v += opt.yStep) {
+      el('line', { x1: m.l, x2: W - m.r, y1: sy(v), y2: sy(v), class: v ? 'ks-grid' : 'ks-axis' }, svg)
+      el('text', { x: m.l - 6, y: sy(v) + 4, 'text-anchor': 'end', class: 'ks-tick' }, svg).textContent = opt.fmt(v)
+    }
+    for (const y of opt.marks ?? []) {
+      el('line', { x1: sx(y), x2: sx(y), y1: m.t, y2: H - m.b, class: 'ks-mark' }, svg)
+      if (!opt.mini) {
+        el('text', { x: sx(y) - 4, y: m.t + 10, 'text-anchor': 'end', class: 'ks-tick' }, svg).textContent = String(y)
+      }
+    }
+    const step = W < 420 || opt.mini ? 40 : 20
+    for (let y = Math.ceil(x0 / step) * step; y <= x1; y += step) {
+      el('text', { x: sx(y), y: H - m.b + 16, 'text-anchor': 'middle', class: 'ks-tick' }, svg).textContent = String(y)
+    }
+    if (opt.bars) {
+      const bw = Math.max(1, (W - m.l - m.r) / (x1 - x0 + 1) - 1)
+      for (const r of rows) {
+        el('rect', { x: sx(r.y) - bw / 2, y: sy(r.v), width: bw, height: H - m.b - sy(r.v), class: 'ks-bar' }, svg)
+      }
+    } else {
+      for (const s of lines) {
+        const d = rows.map((r, i) => `${i ? 'L' : 'M'}${sx(r.y)},${sy(r[s.key])}`).join('')
+        el('path', { d, fill: 'none', stroke: `var(${s.token})`, 'stroke-width': 2, 'stroke-dasharray': s.dash ? '5 4' : 'none', 'stroke-linejoin': 'round' }, svg)
+      }
+    }
+    if (!tip) return
+    const cross = el('line', { y1: m.t, y2: H - m.b, class: 'ks-cross', visibility: 'hidden' }, svg)
+    const dots = lines.map(s => el('circle', { r: 4, fill: `var(${s.token})`, class: 'ks-dot', visibility: 'hidden' }, svg))
+    const hit = el('rect', { x: m.l, y: m.t, width: W - m.l - m.r, height: H - m.t - m.b, fill: 'transparent' }, svg)
+    hit.addEventListener('mousemove', (e: Event) => {
+      const r = svg.getBoundingClientRect()
+      const y = x0 + (((e as MouseEvent).clientX - r.left - m.l) / (W - m.l - m.r)) * (x1 - x0)
+      let row = rows[0]
+      for (const q of rows) if (Math.abs(q.y - y) < Math.abs(row.y - y)) row = q
+      cross.setAttribute('x1', String(sx(row.y)))
+      cross.setAttribute('x2', String(sx(row.y)))
+      cross.setAttribute('visibility', 'visible')
+      lines.forEach((s, i) => {
+        if (opt.bars) return
+        dots[i].setAttribute('cx', String(sx(row.y)))
+        dots[i].setAttribute('cy', String(sy(row[s.key])))
+        dots[i].setAttribute('visibility', 'visible')
+      })
+      const label = opt.bars ? String(row.y) : `${row.y - 4}–${row.y + 5}`
+      tip.innerHTML = `<b>${label}</b>` + lines.map(s => `<br>${lines.length > 1 ? `<i class="ks-key" style="--key:var(${s.token})"></i>` : ''}${s.label} ${opt.fmt(row[s.key])}`).join('')
+      placeTip(tip, wrap, sx(row.y), m.t + 20)
+    })
+    hit.addEventListener('mouseleave', () => {
+      tip.hidden = true
+      cross.setAttribute('visibility', 'hidden')
+      dots.forEach(d => d.setAttribute('visibility', 'hidden'))
+    })
+  }
+
+  const REGIONS = [
+    { key: 'eu', label: 'Continental Europe', token: '--region-eu' },
+    { key: 'us', label: 'United States', token: '--region-us' },
+    { key: 'au', label: 'Australia', token: '--region-au' },
+    { key: 'rest', label: 'Other / no reg. no.', token: '--region-rest' },
+  ] as const
+  // Stacked bars (counts per year) or a 100% stacked area (shares per bin).
+  function stackedYears(id: string, rows: Record<string, number>[], share: boolean) {
+    const wrap = document.getElementById(`${id}-wrap`)!
+    const svg = document.getElementById(id)!
+    const tip = document.getElementById(`${id}-tip`)!
+    svg.innerHTML = ''
+    const W = wrap.clientWidth
+    const H = share ? 200 : 260
+    const m = { t: 10, r: W < 480 ? 12 : 128, b: 26, l: 44 }
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`)
+    svg.setAttribute('height', String(H))
+    const x0 = 1880
+    const x1 = 2020
+    const sx = (y: number) => m.l + ((y - x0) / (x1 - x0 + 1)) * (W - m.l - m.r)
+    const yMax = share ? 100 : 3000
+    const sy = (v: number) => H - m.b - (v / yMax) * (H - m.t - m.b)
+    if (!share) {
+      for (const [a, b] of WARS) el('rect', { x: sx(a), y: m.t, width: sx(b + 1) - sx(a), height: H - m.t - m.b, class: 'ks-band' }, svg)
+    }
+    for (let v = 0; v <= yMax; v += share ? 25 : 1000) {
+      el('line', { x1: m.l, x2: W - m.r, y1: sy(v), y2: sy(v), class: v ? 'ks-grid' : 'ks-axis' }, svg)
+      el('text', { x: m.l - 6, y: sy(v) + 4, 'text-anchor': 'end', class: 'ks-tick' }, svg).textContent = share ? `${v}%` : v.toLocaleString()
+    }
+    for (let y = 1880; y <= 2020; y += W < 420 ? 40 : 20) {
+      el('text', { x: sx(y), y: H - m.b + 16, 'text-anchor': 'middle', class: 'ks-tick' }, svg).textContent = String(y)
+    }
+    const total = (r: Record<string, number>) => REGIONS.reduce((a, g) => a + r[g.key], 0)
+    const val = (r: Record<string, number>, k: string) => (share ? (100 * r[k]) / Math.max(1, total(r)) : r[k])
+    const bw = share ? 0 : Math.max(1, (W - m.l - m.r) / (x1 - x0 + 1) - 0.6)
+    if (share) {
+      // stacked areas from the bottom series up, with a surface-coloured seam between them
+      let lower = rows.map(() => 0)
+      for (const g of REGIONS) {
+        const upper = rows.map((r, i) => lower[i] + val(r, g.key))
+        const top = rows.map((r, i) => `${i ? 'L' : 'M'}${sx(r.y + 2.5)},${sy(upper[i])}`).join('')
+        const bottom = rows.map((r, i) => `L${sx(r.y + 2.5)},${sy(lower[i])}`).reverse().join('')
+        el('path', { d: `${top}${bottom}Z`, fill: `var(${g.token})`, class: 'ks-stack' }, svg)
+        lower = upper
+      }
+    } else {
+      for (const r of rows) {
+        let acc = 0
+        for (const g of REGIONS) {
+          const v = r[g.key]
+          if (!v) continue
+          el('rect', { x: sx(r.y), y: sy(acc + v), width: bw, height: sy(acc) - sy(acc + v), fill: `var(${g.token})` }, svg)
+          acc += v
+        }
+      }
+    }
+    if (W >= 480) {
+      // direct labels at the right edge, placed at each band's latest midpoint
+      const last = rows[rows.length - (share ? 1 : 6)]
+      let acc = 0
+      const labels = REGIONS.map(g => {
+        const v = val(last, g.key)
+        const y = sy(acc + v / 2)
+        acc += v
+        return { y, text: g.label }
+      }).reverse()
+      for (let i = 1; i < labels.length; i++) labels[i].y = Math.max(labels[i].y, labels[i - 1].y + 14)
+      for (const l of labels) el('text', { x: W - m.r + 8, y: l.y + 4, class: 'ks-direct' }, svg).textContent = l.text
+    }
+    const cross = el('line', { y1: m.t, y2: H - m.b, class: 'ks-cross', visibility: 'hidden' }, svg)
+    const hit = el('rect', { x: m.l, y: m.t, width: W - m.l - m.r, height: H - m.t - m.b, fill: 'transparent' }, svg)
+    hit.addEventListener('mousemove', (e: Event) => {
+      const rr = svg.getBoundingClientRect()
+      const y = x0 + (((e as MouseEvent).clientX - rr.left - m.l) / (W - m.l - m.r)) * (x1 - x0 + 1)
+      let row = rows[0]
+      for (const q of rows) if (q.y <= y) row = q
+      const cx = sx(row.y) + (share ? sx(row.y + 2.5) - sx(row.y) : bw / 2)
+      cross.setAttribute('x1', String(cx))
+      cross.setAttribute('x2', String(cx))
+      cross.setAttribute('visibility', 'visible')
+      const label = share ? `${row.y}–${row.y + 4}` : String(row.y)
+      tip.innerHTML = `<b>${label}</b> · ${total(row).toLocaleString()} dogs` + [...REGIONS].reverse().map(g => `<br><i class="ks-key" style="--key:var(${g.token})"></i>${g.label} ${share ? `${val(row, g.key).toFixed(0)}%` : row[g.key].toLocaleString()}`).join('')
+      placeTip(tip, wrap, cx, m.t + 20)
+    })
+    hit.addEventListener('mouseleave', () => {
+      tip.hidden = true
+      cross.setAttribute('visibility', 'hidden')
+    })
+  }
+  function fiveYearBins(rows: Record<string, number>[]) {
+    const bins = new Map<number, Record<string, number>>()
+    for (const r of rows) {
+      const b = Math.floor(r.y / 5) * 5
+      const o = bins.get(b) ?? { y: b, us: 0, eu: 0, au: 0, rest: 0 }
+      for (const g of REGIONS) o[g.key] += r[g.key]
+      bins.set(b, o)
+    }
+    return [...bins.values()].filter(r => r.y <= 2015)
+  }
+
+  const WARS: [number, number][] = [[1914, 1918], [1939, 1945]]
+  const CODE_MARKS = [1959, 2012, 2019]
+  const PAIRS = [
+    { key: 'black_fawn', label: 'Black × fawn/brindle' },
+    { key: 'blue_fawn', label: 'Blue × fawn/brindle' },
+    { key: 'fawn_harlequin', label: 'Fawn/brindle × harlequin' },
+    { key: 'blue_harlequin', label: 'Blue × harlequin' },
+  ]
+  function drawHistory() {
+    const h = data.history
+    stackedYears('count', h.regions, false)
+    stackedYears('share', fiveYearBins(h.regions), true)
+    yearChart('coi', h.coi, [
+      { key: 'good', label: 'Well-documented dogs', token: '--ink' },
+      { key: 'all', label: 'All dated dogs', token: '--muted', dash: true },
+    ], { yMax: 0.15, yStep: 0.05, fmt: v => v.toFixed(v === 0 ? 0 : 3), bands: WARS, x0: 1900 })
+    yearChart('close', h.coi, [{ key: 'close', label: 'COI10 ≥ 0.25', token: '--ink' }], {
+      yMax: 15, yStep: 5, fmt: v => `${v.toFixed(v < 10 && v % 1 ? 1 : 0)}%`, height: 180, bands: WARS, x0: 1900,
+    })
+    yearChart('cross', h.colour, [{ key: 'cross', label: 'Cross-family', token: '--ink' }], {
+      yMax: 20, yStep: 5, fmt: v => `${v.toFixed(v % 1 ? 1 : 0)}%`, height: 200, bands: WARS, x0: 1890, marks: CODE_MARKS,
+    })
+    const box = document.getElementById('pairs')!
+    box.innerHTML = ''
+    for (const p of PAIRS) {
+      const fig = document.createElement('figure')
+      fig.className = 'ks-mini'
+      fig.innerHTML = `<figcaption>${p.label}</figcaption><div class="ks-plot" id="pair-${p.key}-wrap"><svg id="pair-${p.key}" role="img" aria-label="${p.label} share of litters over time"></svg><div class="ks-tip" id="pair-${p.key}-tip" hidden></div></div>`
+      box.appendChild(fig)
+    }
+    // draw after every panel is in the grid, so each measures its final width
+    for (const p of PAIRS) {
+      yearChart(`pair-${p.key}`, h.colour, [{ key: p.key, label: p.label, token: '--ink' }], {
+        yMax: 15, yStep: 5, fmt: v => `${v.toFixed(v % 1 ? 1 : 0)}%`, height: 140, bands: WARS, x0: 1890, mini: true, marks: CODE_MARKS,
+      })
+    }
+  }
+
+  legend('pca-legend', FAMILIES)
+  legend('region-legend', [...REGIONS])
+  legend('coi-legend', [
+    { label: 'Well-documented dogs (≥ 7 generations known)', token: '--ink' },
+    { label: 'All dated dogs', token: '--muted', dash: true },
+  ])
+  legend('cov-legend', SERIES.map(s => ({ label: s.label, token: s.token, dash: 'dash' in s })))
+  const drawAll = () => {
+    drawPca()
+    drawHist()
+    drawCoverage()
+    drawHistory()
+  }
+  drawAll()
+  let t: number | undefined
+  window.addEventListener('resize', () => {
+    clearTimeout(t)
+    t = window.setTimeout(drawAll, 150)
+  })
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', drawAll)
+</script>
+
+<style>
+  .ks-root {
+    --surface: #fcfcfb;
+    --plane: #f9f9f7;
+    --ink: #0b0b0b;
+    --ink-2: #52514e;
+    --muted: #898781;
+    --grid: #e1e0d9;
+    --axis: #c3c2b7;
+    --border: rgba(11, 11, 11, 0.1);
+    --accent: #bf141c;
+    --series-1: #2a78d6;
+    --series-2: #eb6834;
+    --series-3: #1baf7a;
+    --region-eu: #4a3aa7;
+    --region-us: #e87ba4;
+    --region-au: #eda100;
+    --region-rest: #c3c2b7;
+    color-scheme: light;
+    max-width: 52rem;
+    margin: 1.5rem auto 3rem;
+    padding: 1.75rem clamp(1rem, 4vw, 2.5rem) 2.5rem;
+    background: var(--surface);
+    color: var(--ink);
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(40, 40, 40, 0.25);
+    font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+  }
+  @media (prefers-color-scheme: dark) {
+    .ks-root {
+      --surface: #1a1a19;
+      --plane: #0d0d0d;
+      --ink: #ffffff;
+      --ink-2: #c3c2b7;
+      --muted: #898781;
+      --grid: #2c2c2a;
+      --axis: #383835;
+      --border: rgba(255, 255, 255, 0.1);
+      --accent: #e66767;
+      --series-1: #3987e5;
+      --series-2: #d95926;
+      --series-3: #199e70;
+      --region-eu: #9085e9;
+      --region-us: #d55181;
+      --region-au: #c98500;
+      --region-rest: #52514e;
+      color-scheme: dark;
+    }
+  }
+  @media (max-width: 640px) {
+    .ks-root {
+      margin: 0.75rem;
+    }
+  }
+  .ks-root h1 {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    line-height: 1.2;
+    margin: 0.25rem 0 0.75rem;
+    text-wrap: balance;
+  }
+  .ks-root h2 {
+    font-size: 1.25rem;
+    margin: 2.25rem 0 0.5rem;
+  }
+  .ks-root a {
+    color: var(--accent);
+  }
+  .ks-kicker {
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+  .ks-lede {
+    font-size: 1.05rem;
+    color: var(--ink-2);
+    margin: 0 0 0.5rem;
+  }
+  .ks-byline {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin: 0;
+  }
+  .ks-tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    gap: 0.75rem;
+    margin: 1.75rem 0 0.5rem;
+  }
+  .ks-tile {
+    background: var(--plane);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.9rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+  .ks-tile-value {
+    font-size: 1.75rem;
+    font-weight: 650;
+    line-height: 1.1;
+  }
+  .ks-tile-label {
+    font-size: 0.82rem;
+    color: var(--ink-2);
+    line-height: 1.35;
+  }
+  .ks-findings li {
+    margin-bottom: 0.6rem;
+  }
+  .ks-note {
+    font-size: 0.9rem;
+    color: var(--ink-2);
+  }
+  .ks-figure {
+    margin: 1rem 0 1.25rem;
+  }
+  .ks-figure figcaption {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-top: 0.4rem;
+  }
+  .ks-plot {
+    position: relative;
+    width: 100%;
+  }
+  .ks-plot canvas,
+  .ks-plot svg {
+    display: block;
+    width: 100%;
+  }
+  .ks-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 1rem;
+    font-size: 0.82rem;
+    color: var(--ink-2);
+    margin-bottom: 0.5rem;
+  }
+  .ks-root :global(.ks-legend-item) {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .ks-root :global(.ks-key) {
+    display: inline-block;
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 3px;
+    background: var(--key);
+    margin-right: 0.35rem;
+    vertical-align: -1px;
+  }
+  .ks-legend :global(.ks-legend-item .ks-key) {
+    margin-right: 0;
+  }
+  .ks-root :global(.ks-key-dash) {
+    height: 0;
+    width: 1rem;
+    border-radius: 0;
+    background: none;
+    border-top: 2px dashed var(--key);
+  }
+  .ks-tip {
+    position: absolute;
+    pointer-events: none;
+    background: var(--surface);
+    color: var(--ink);
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8rem;
+    line-height: 1.45;
+    white-space: nowrap;
+    z-index: 2;
+  }
+  .ks-root :global(.ks-grid) {
+    stroke: var(--grid);
+    stroke-width: 1;
+  }
+  .ks-root :global(.ks-axis) {
+    stroke: var(--axis);
+    stroke-width: 1;
+  }
+  .ks-root :global(.ks-tick) {
+    fill: var(--muted);
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+  }
+  .ks-root :global(.ks-direct) {
+    fill: var(--ink-2);
+    font-size: 12px;
+  }
+  .ks-root :global(.ks-bar) {
+    fill: var(--ink-2);
+  }
+  .ks-root :global(.ks-cross) {
+    stroke: var(--axis);
+    stroke-width: 1;
+  }
+  .ks-root :global(.ks-dot) {
+    stroke: var(--surface);
+    stroke-width: 2;
+  }
+  .ks-root h3 {
+    font-size: 1.02rem;
+    margin: 1.5rem 0 0.25rem;
+  }
+  .ks-root :global(.ks-mark) {
+    stroke: var(--muted);
+    stroke-width: 1;
+    stroke-dasharray: 3 3;
+  }
+  .ks-timeline {
+    font-size: 0.92rem;
+    padding-left: 1.2rem;
+  }
+  .ks-timeline li {
+    margin-bottom: 0.4rem;
+  }
+  .ks-root :global(.ks-stack) {
+    stroke: var(--surface);
+    stroke-width: 1;
+  }
+  .ks-root :global(.ks-band) {
+    fill: var(--grid);
+    opacity: 0.6;
+  }
+  .ks-multiples {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 0.5rem 1.25rem;
+    margin: 0.5rem 0 1rem;
+  }
+  .ks-root :global(.ks-mini) {
+    margin: 0;
+  }
+  .ks-root :global(.ks-mini figcaption) {
+    font-size: 0.82rem;
+    color: var(--ink-2);
+    font-weight: 600;
+  }
+  .ks-table-wrap {
+    overflow-x: auto;
+    margin: 0.75rem 0;
+  }
+  .ks-table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.85rem;
+  }
+  .ks-table caption {
+    text-align: left;
+    font-weight: 600;
+    padding-bottom: 0.4rem;
+  }
+  .ks-table th,
+  .ks-table td {
+    padding: 0.4rem 0.55rem;
+    border-bottom: 1px solid var(--grid);
+    text-align: left;
+    vertical-align: top;
+  }
+  .ks-table thead th {
+    color: var(--ink-2);
+    font-weight: 600;
+    border-bottom-color: var(--axis);
+  }
+  .ks-table .num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .ks-table .nowrap {
+    white-space: nowrap;
+  }
+  .ks-compact th,
+  .ks-compact td {
+    padding: 0.3rem 0.45rem;
+  }
+  .ks-swatch {
+    display: inline-block;
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: 3px;
+    margin-right: 0.4rem;
+    vertical-align: -1px;
+  }
+  .f-fawn {
+    background: var(--series-2);
+  }
+  .f-harl {
+    background: var(--series-3);
+  }
+  .f-blue {
+    background: var(--series-1);
+  }
+  .f-other {
+    background: var(--muted);
+  }
+  .ks-methods {
+    margin-top: 2rem;
+    border-top: 1px solid var(--grid);
+    padding-top: 1rem;
+    font-size: 0.9rem;
+    color: var(--ink-2);
+  }
+  .ks-methods summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--ink);
+  }
+</style>
