@@ -4,6 +4,8 @@ import {
   JBrowseLinearGenomeView,
 } from '@jbrowse/react-linear-genome-view2'
 
+import { DOG10K_SV_TBI_URL, DOG10K_SV_VCF_URL } from './dog10kSvSource'
+
 // UCSC's canFam4 (UU_Cfam_GSD_1.0) reference sequence, straight off hgdownload.
 const CANFAM4_TWOBIT_URL =
   'https://hgdownload.soe.ucsc.edu/goldenPath/canFam4/bigZips/canFam4.2bit'
@@ -18,32 +20,7 @@ const NCBI_REFSEQ_GFF_URL = 'https://jbrowse.org/ucsc/canFam4/ncbiRefSeq.gff.gz'
 const NCBI_REFSEQ_CSI_URL =
   'https://jbrowse.org/ucsc/canFam4/ncbiRefSeq.gff.gz.csi'
 
-// Structural variants genotyped (long-read + short-read + assembly + Paragraph)
-// across 12 long-read dog genomes, including the Great Dane "Zoey" assembly.
-// Schall & Kidd 2025, Zenodo record 14968874.
-//
-// Re-hosted rather than read live from Zenodo: the original 45-column,
-// 388 MB VCF names samples by opaque code ("Zoey_PA") with no way to relabel
-// a canvas-rendered row from config alone, and duplicates the full ref/alt
-// sequence per sample on top of the record-level REF/ALT (FORMAT/RAL,
-// FORMAT/AAL). This derived copy keeps one genotyped column per dog (the
-// Paragraph call, or long-read for Basenji "China", which Paragraph wasn't
-// run for), renamed to "Breed (code)" so the row label reads as a breed
-// without needing a hover, drops the redundant per-sample sequence fields,
-// and swaps sequence >40bp for standard symbolic <DEL>/<INS> notation
-// (SVTYPE/SVLEN/computed END already carry the size) — 388 MB down to 44 MB.
-// Built with pysam from the original file; original sample/genotype/INFO
-// data otherwise untouched. See public/data/dog10k-svs-samples.tsv for the
-// breed lookup used for row coloring/grouping below.
-// `.bgz` rather than `.vcf.gz`: several static file servers (including
-// Astro's own dev/preview server) auto-add `Content-Encoding: gzip` for a
-// `.gz` extension, transparently decompressing the response — which breaks
-// range requests entirely, since JBrowse needs the raw bgzip bytes to
-// decompress its own blocks on demand. `.bgz` isn't recognized, so it's
-// served as opaque binary instead.
-const DOG10K_SV_VCF_URL = '/data/dog10k-svs-12breeds.vcf.bgz'
-const DOG10K_SV_TBI_URL = '/data/dog10k-svs-12breeds.vcf.bgz.tbi'
-
+// See dog10kSvSource.ts for what this VCF is, how it was built, and why.
 const DOG10K_SAMPLES_TSV_URL = '/data/dog10k-svs-samples.tsv'
 
 export interface CuratedGeneFeature {
