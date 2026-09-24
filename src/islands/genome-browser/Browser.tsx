@@ -11,6 +11,7 @@ interface TourStop {
   label: string
   gene: string
   hook: string
+  seeAlso?: { gene: string; note: string }
 }
 
 // Three loci with a real, tellable story — each an exact-match `name` from
@@ -19,7 +20,11 @@ const TOUR_STOPS: TourStop[] = [
   {
     label: 'Coat pattern',
     gene: 'H Locus Harlequin proteasome 20S subunit beta 7 (PSMB7)',
-    hook: 'Why do some Great Danes look like a black-and-white patchwork?',
+    hook: 'Why do some Great Danes look like a black-and-white patchwork? It takes two genes working together.',
+    seeAlso: {
+      gene: 'M Locus Merle premelanosome protein (PMEL17/SILV)',
+      note: 'Harlequin only shows up on top of merle — see the merle gene too',
+    },
   },
   {
     label: 'Height',
@@ -105,6 +110,7 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
   const placedGenes = geneCategories.filter(entry => !!entry.location)
   const unplacedGenes = geneCategories.filter(entry => !entry.location)
   const geneEntry = geneCategories.find(entry => entry.name === gene)
+  const seeAlso = TOUR_STOPS.find(stop => stop.gene === gene)?.seeAlso
 
   const annotations = placedGenes.flatMap(entry => {
     const { location, name, type: category } = entry
@@ -341,6 +347,18 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
             </div>
           ) : null}
           {geneEntry ? <DescriptionComponent geneEntry={geneEntry} /> : null}
+          {seeAlso ? (
+            <p className="genome-seealso">
+              {seeAlso.note}:{' '}
+              <button
+                type="button"
+                className="genome-seealso-link"
+                onClick={() => selectGene(seeAlso.gene)}
+              >
+                {seeAlso.gene}
+              </button>
+            </p>
+          ) : null}
         </main>
       </div>
       <GenomeIdeogram
