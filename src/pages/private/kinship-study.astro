@@ -559,6 +559,127 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
     </section>
 
     <section>
+      <h2>6. What sequencing could tell us</h2>
+      <p>
+        The pedigree records who bred to whom for 140 years; genomes record
+        what those choices did. Great Danes are unusual in having both a deep,
+        dated pedigree and a documented set of breeding rules (the colour
+        codes), which makes the breed a natural experiment in how human
+        decisions reshape a genome. Below are the questions we find most
+        interesting, ranked by the science rather than by cost, with the
+        figures each paper would be built around. Novelty is judged against a
+        literature search in September 2026 and would need a fuller review
+        before publication.
+      </p>
+
+      <h3>What has already been done</h3>
+      <ul class="ks-prior">
+        <li><strong>German Shepherds, 120 years of genomes (PNAS 2025).</strong> Nine museum specimens (1906–1993) against modern dogs: heterozygosity fell about 25%, runs of homozygosity roughly doubled (from about 19% to 36% of the genome), bottlenecks line up with popular sires and WWII, and harmful-variant load rose. The study had no pedigree and no health outcomes, and its authors call for time series from other breeds.</li>
+        <li><strong>New mutations across 43 breeds (Genome Biology 2025).</strong> 390 parent–offspring trios: larger breeds carry more mutations arising early in development, and fathers' age matters 1.5× more than in humans.</li>
+        <li><strong>Balto (Science 2023).</strong> One historic sled dog's genome captured diversity since lost from modern breeds.</li>
+        <li><strong>Great Danes specifically:</strong> one long-read reference genome (Zoey, 2021); 83 low-pass genomes for a megaesophagus study (2023); immune-gene variants linked to bloat (2017); population structure only from small marker panels (10 microsatellites in 88 dogs, which separated American from European Danes; 33 markers in 43 dogs at UC Davis); giant size partly mapped to loci on the X chromosome in a study of 19 giant breeds; merle and harlequin genes known down to merle insertion length.</li>
+      </ul>
+      <p>
+        Two gaps stand out. Nobody has looked at Great Dane colour lines
+        genome-wide, and no historical genome series, in any breed, has had a
+        full pedigree to test against.
+      </p>
+
+      <h3>The questions, most interesting first</h3>
+      <div class="ks-papers">
+        <article class="ks-paper">
+          <p class="ks-paper-rank">1 · start here</p>
+          <h4>Can a breed club's rulebook split a population? Colour codes as a natural experiment</h4>
+          <p><strong>Question.</strong> For decades, breeders kept fawn/brindle, harlequin/mantle and blue/black apart by agreement, not geography. Did that written rule create genetically distinct subpopulations, as a river or a mountain range would? Did it work at the colour genes it targeted: do fawn lines still hide blue alleles, and solid lines cryptic merle? And does the growing black × fawn crossing show up as gene flow?</p>
+          <p><strong>Figures.</strong></p>
+          <ul>
+            <li>Genomic PCA beside the pedigree PCA in section 1, for the same dogs, aligned so each dog can be compared.</li>
+            <li>Genetic differentiation (F<sub>ST</sub>) between the {assigned.length} lines, set against how many generations the pedigree says they have been apart.</li>
+            <li>Colour-gene allele frequencies by line, including the length spectrum of merle insertions.</li>
+            <li>Ancestry bars with black × fawn offspring highlighted.</li>
+          </ul>
+          <p><strong>Why first.</strong> It is the question only Great Danes can answer cleanly: several colour families under written rules with a documented history, including exactly when the rules bent. It asks something general, how cultural rules shape genomes. And it defines the lines, the unit every later question is measured on. It needs only living dogs.</p>
+        </article>
+
+        <article class="ks-paper">
+          <p class="ks-paper-rank">2 · the flagship</p>
+          <h4>140 years of Great Dane genomes, read against the pedigree that made them</h4>
+          <p><strong>Question.</strong> Sequence historical Great Danes (museum skeletons, teeth, taxidermy and dated hair from about 1880 onward) alongside modern dogs. Did diversity fall the way the pedigree predicts? When did the colour lines actually diverge: before the codes, or because of them? What did WWII and the move from Germany to America do to the genome? Which popular sires left the deepest marks?</p>
+          <p><strong>Figures.</strong></p>
+          <ul>
+            <li>The headline: heterozygosity and runs of homozygosity by birth year, with each historical genome plotted against the pedigree's prediction for that same year.</li>
+            <li>Historical dogs placed on the modern genomic map, showing the path from German to American Danes and the colour lines branching apart.</li>
+            <li>Bottleneck dating from the genome, checked against the war years and popular sires named in the pedigree.</li>
+          </ul>
+          <p><strong>Why it could be a first.</strong> It would be the first historical genome series for Great Danes, and the first in any breed tested against a full, dated pedigree. That pedigree is exactly what the German Shepherd study lacked. Natural history museums hold breed collections (the German Shepherd specimens came from Bern), so finding dated Great Danes is the first practical step, and worth starting now.</p>
+        </article>
+
+        <article class="ks-paper">
+          <p class="ks-paper-rank">3</p>
+          <h4>Ground truth for genomic dating: a century of pedigree meets the genome</h4>
+          <p><strong>Question.</strong> Geneticists date inbreeding from the lengths of runs of homozygosity: long runs mean recent inbreeding, short runs mean old. That method is rarely checked against a known history. Here we know the history: the post-WWII peak, the fall in close matings since, and which matings were close. How well does the genome recover it, and how well does pedigree relatedness predict real shared DNA?</p>
+          <p><strong>Figures.</strong></p>
+          <ul>
+            <li>Pedigree F against genomic inbreeding (F<sub>ROH</sub>) for each dog.</li>
+            <li>Runs of homozygosity split by length, by birth cohort, against the pedigree's timeline.</li>
+            <li>Realised against expected relatedness for relatives of each degree.</li>
+          </ul>
+          <p><strong>Why it matters.</strong> It checks a method used across conservation and livestock genetics, using a population whose history is written down. It comes from the same genomes as questions 1 and 2.</p>
+        </article>
+
+        <article class="ks-paper">
+          <p class="ks-paper-rank">4</p>
+          <h4>Built big, aging fast: mutation in a giant breed</h4>
+          <p><strong>Question.</strong> Great Danes are among the largest and shortest-lived dogs. The 2025 trio study found larger breeds gain more new mutations early in development. Does the giant extreme push this further? The pedigree identifies parent–offspring trios and parents' ages at mating from birth dates; lifespans aren't in the database and would have to come from owners.</p>
+          <p><strong>Figures.</strong></p>
+          <ul>
+            <li>New mutations per offspring against sire and dam age, for Great Danes over the published curve for 43 breeds.</li>
+            <li>The share of mutations arising early in development, by breed size.</li>
+            <li>Size-locus genotypes (IGF1 and the X-chromosome giant loci) across the lines.</li>
+          </ul>
+          <p><strong>Why it matters.</strong> It connects the breed's defining trait, size, to its hardest problem, a short life, at the level of the germline.</p>
+        </article>
+
+        <article class="ks-paper">
+          <p class="ks-paper-rank">5</p>
+          <h4>Did the bottleneck purge or concentrate harmful variants, line by line?</h4>
+          <p><strong>Question.</strong> Every recorded case of inherited myopathy of Great Danes (IMGD) was fawn or brindle, a hint that colour-line structure also decides where disease alleles sit. Did the post-war bottleneck purge harmful variants or pile them up, and does that differ between lines?</p>
+          <p><strong>Figures.</strong></p>
+          <ul>
+            <li>Homozygous harmful variants per dog, by line and birth year, historical dogs included.</li>
+            <li>Known disease alleles (IMGD, the bloat-associated immune alleles and others) by line.</li>
+          </ul>
+          <p><strong>Why it matters.</strong> It would link genetic load to the breed's history and structure, the connection the German Shepherd study said it could not make. It also gives breeders a line-aware picture of risk.</p>
+        </article>
+
+        <article class="ks-paper">
+          <p class="ks-paper-rank">6</p>
+          <h4>Choosing which dogs to sequence</h4>
+          <p><strong>Question.</strong> Does a reference panel chosen from the pedigree (section 3), with a set share per colour family, impute the breed better than one chosen at random or by convenience?</p>
+          <p><strong>Figures.</strong> Imputation accuracy against panel size, for pedigree-selected, stratified and random panels, by colour family.</p>
+          <p><strong>Why it matters.</strong> Standard in cattle, untested in a dog breed. It is a methods result more than a discovery, which is why it sits here, but it makes every later study cheaper.</p>
+        </article>
+
+        <article class="ks-paper">
+          <p class="ks-paper-rank">7 · longer term</p>
+          <h4>A Great Dane pangenome and health mapping</h4>
+          <p><strong>Question.</strong> What large structural variants does each line carry beyond the single reference genome? With health records, which variants drive bloat, dilated cardiomyopathy, wobbler syndrome and bone cancer?</p>
+          <p><strong>Figures.</strong> A pangenome graph with line-specific structural variants; association plots for each health trait.</p>
+          <p><strong>Why later.</strong> It needs health outcomes on hundreds of dogs, best gathered with an established group, and it is far stronger once the lines from question 1 are known.</p>
+        </article>
+      </div>
+
+      <h3>Why this order</h3>
+      <ol class="ks-why">
+        <li><strong>Question 1 comes first because everything else is measured in its units.</strong> Whether the colour lines are real genetic populations decides how questions 2–7 are sampled and read. It is also the question most specific to Great Danes, and it has a general answer: whether rules alone can split a population.</li>
+        <li><strong>Question 2 is the most exciting, and should start in parallel.</strong> It reuses question 1's modern genomes as its present-day end. The slow part is finding dated historical specimens, so that search should begin now.</li>
+        <li><strong>Question 3 comes almost free with 1 and 2</strong> and tests a widely used method against written history.</li>
+        <li><strong>Questions 4 and 5 turn the history into biology:</strong> what size and bottlenecks did to mutation and genetic load. They are richer once the lines and the time series exist.</li>
+        <li><strong>Questions 6 and 7 are the most practical and the most crowded.</strong> They matter, but they are less distinctive science, and they lean on everything before them.</li>
+      </ol>
+    </section>
+
+    <section>
       <h2>Limitations and next steps</h2>
       <ul>
         <li>
@@ -580,14 +701,32 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
         </li>
         <li>
           <strong>Next:</strong> add post-2020 litters, rerun with a
-          per-colour-family sequencing budget, and pair the picks with
-          low-cost SNP genotyping of the wider population.
+          per-colour-family sequencing budget, and sequence living dogs
+          across the lines for question 1 while searching museum collections
+          for dated historical Great Danes (section 6).
         </li>
       </ul>
     </section>
 
     <details class="ks-methods">
-      <summary>Sources for the colour-code history</summary>
+      <summary>Sources</summary>
+      <p class="ks-src-head">Prior work (section 6)</p>
+      <ul>
+        <li><a href="https://www.pnas.org/doi/10.1073/pnas.2421755122" rel="noopener">A 120-y time series of genomes reveals the consequences of closed breeding in German Shepherd Dogs (PNAS 2025)</a></li>
+        <li><a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-025-03804-2" rel="noopener">Determinants of de novo mutations in extended pedigrees of 43 dog breeds (Genome Biology 2025)</a></li>
+        <li><a href="https://www.science.org/doi/10.1126/science.abn5887" rel="noopener">Comparative genomics of Balto (Science 2023)</a></li>
+        <li><a href="https://journals.plos.org/plosgenetics/article?id=10.1371%2Fjournal.pgen.1006661" rel="noopener">Large versus small dogs: three X-chromosome genes associated with body size (PLOS Genetics 2017)</a></li>
+        <li><a href="https://www.sciencedirect.com/science/article/pii/S0960982221017231" rel="noopener">Natural and human-driven selection of a single non-coding body size variant (IGF1) in ancient and modern canids</a></li>
+        <li><a href="https://www.biorxiv.org/content/10.1101/2020.07.31.231761.full.pdf" rel="noopener">Halo et al., Long-read assembly of a Great Dane genome (Zoey)</a></li>
+        <li><a href="https://pubmed.ncbi.nlm.nih.gov/37041421/" rel="noopener">GWAS using low-pass whole genome sequence reveals a novel locus in canine congenital idiopathic megaesophagus (2023)</a></li>
+        <li><a href="https://pubmed.ncbi.nlm.nih.gov/28738011/" rel="noopener">Associations between GDV in Great Danes and alleles of DLA88, DRB1 and TLR5 (2017)</a></li>
+        <li><a href="https://file.scirp.org/Html/2-1370167_44515.htm" rel="noopener">Genetic Diversity of Great Dane Breed Using Ten Microsatellites</a></li>
+        <li><a href="https://vgl.ucdavis.edu/sites/g/files/dgvnsk15116/files/media/documents/GD_Preliminary_Report_v2.pdf" rel="noopener">UC Davis VGL, Genetic Diversity Testing for Great Dane</a></li>
+        <li><a href="https://mobilednajournal.biomedcentral.com/articles/10.1186/s13100-018-0131-6" rel="noopener">Murphy et al. 2018, Length variations within the Merle retrotransposon of canine PMEL</a></li>
+        <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6325901/" rel="noopener">Sams &amp; Boyko 2019, Fine-scale resolution of runs of homozygosity in domestic dogs</a></li>
+        <li><a href="https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0223995" rel="noopener">True Colors: hidden colour allele variation among dog breeds (2019)</a></li>
+      </ul>
+      <p class="ks-src-head">Colour-code history</p>
       <ul>
         <li><a href="https://www.doggen.de/der-club/die-historie-der-deutschen-dogge" rel="noopener">Deutscher Doggen Club 1888 e.V., Die Historie der Deutschen Dogge</a></li>
         <li><a href="https://greatdanegnosis.wordpress.com/2016/03/06/the-ignominious-beginning-of-the-great-dane-color-code-of-ethics/" rel="noopener">Great Dane Gnosis, The "Ignominious Beginning of the Great Dane Color Code of Ethics"</a></li>
@@ -1501,6 +1640,50 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
     background: var(--ink);
     color: var(--surface);
     border-color: var(--ink);
+  }
+  .ks-prior {
+    font-size: 0.92rem;
+  }
+  .ks-papers {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+    gap: 0.9rem;
+    margin: 0.75rem 0 1rem;
+  }
+  .ks-paper {
+    background: var(--plane);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.9rem 1.05rem;
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+  .ks-paper h4 {
+    font-size: 1rem;
+    line-height: 1.3;
+    margin: 0.15rem 0 0.5rem;
+  }
+  .ks-paper p {
+    margin: 0 0 0.45rem;
+  }
+  .ks-paper ul {
+    margin: 0 0 0.5rem;
+    padding-left: 1.1rem;
+  }
+  .ks-paper-rank {
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .ks-why li {
+    margin-bottom: 0.4rem;
+  }
+  .ks-src-head {
+    font-weight: 600;
+    color: var(--ink);
+    margin: 0.75rem 0 0.25rem;
   }
   .ks-table-wrap {
     overflow-x: auto;
