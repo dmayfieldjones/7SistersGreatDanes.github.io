@@ -102,6 +102,7 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
   const [liveBrowserOpen, setLiveBrowserOpen] = useState(false)
   const [buildInfoOpen, setBuildInfoOpen] = useState(false)
   const liveSectionRef = useRef<HTMLDivElement>(null)
+  const storyRef = useRef<HTMLDivElement>(null)
 
   // Treat 'all' and empty string the same - show all genes
   const effectiveType = type === '' ? 'all' : type
@@ -178,9 +179,13 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
 
   function openTourStop(stop: TourStop) {
     selectGene(stop.gene)
+    // Start the live browser loading now, in the background, but scroll to
+    // the written story first — by the time someone reads it and scrolls
+    // past the karyotype themselves, the browser below is more likely to
+    // have already finished loading its tracks.
     setLiveBrowserOpen(true)
     requestAnimationFrame(() => {
-      liveSectionRef.current?.scrollIntoView({
+      storyRef.current?.scrollIntoView({
         behavior: 'smooth',
         block: 'start',
       })
@@ -352,13 +357,15 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
               </div>
             </div>
           ) : null}
-          {activeTourStop?.intro ? (
-            <p className="genome-tour-story">{activeTourStop.intro}</p>
-          ) : null}
-          {geneEntry ? <DescriptionComponent geneEntry={geneEntry} /> : null}
-          {companionEntry ? (
-            <DescriptionComponent geneEntry={companionEntry} />
-          ) : null}
+          <div ref={storyRef}>
+            {activeTourStop?.intro ? (
+              <p className="genome-tour-story">{activeTourStop.intro}</p>
+            ) : null}
+            {geneEntry ? <DescriptionComponent geneEntry={geneEntry} /> : null}
+            {companionEntry ? (
+              <DescriptionComponent geneEntry={companionEntry} />
+            ) : null}
+          </div>
         </main>
       </div>
       <GenomeIdeogram
