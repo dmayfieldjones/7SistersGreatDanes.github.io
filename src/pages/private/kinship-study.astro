@@ -3,7 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro'
 import study from '../../lib/kinship-study.json'
 
 // Aggregate results only. The underlying pedigrees belong to the Quintessa
-// database (Glen, quintessa.net.au) and are not republished here: no dog
+// database (quintessa.net.au) and are not republished here: no dog
 // names, ids or dog-level lists appear on this page.
 
 const fmt = (n: number) => n.toLocaleString('en-US')
@@ -69,8 +69,8 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
         tell us the most about the whole population.
       </p>
       <p class="ks-byline">
-        Dustin Mayfield-Jones, 7 Sisters Great Danes · data courtesy of
-        Glen, <a href="https://www.quintessa.net.au/" rel="noopener">Quintessa</a>
+        Dustin Mayfield-Jones, 7 Sisters Great Danes · pedigree source: the{' '}
+        <a href="https://www.quintessa.net.au/" rel="noopener">Quintessa Great Dane database</a>
       </p>
     </header>
 
