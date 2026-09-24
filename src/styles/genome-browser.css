@@ -139,20 +139,14 @@
   margin-top: 0.5rem;
 }
 
-.genome-seealso {
-  margin: 0.5rem 0 1rem;
-  font-size: 0.9rem;
-  color: var(--genome-muted);
-}
-
-.genome-seealso-link {
-  background: none;
-  border: none;
-  padding: 0;
-  font: inherit;
-  color: var(--genome-selected);
-  text-decoration: underline;
-  cursor: pointer;
+.genome-tour-story {
+  margin: 1rem 0;
+  padding: 0.85rem 1rem;
+  border-left: 3px solid var(--genome-accent);
+  background: var(--genome-surface);
+  color: var(--genome-text);
+  font-size: 0.95rem;
+  line-height: 1.5;
 }
 
 .genome-ideogram {
