@@ -1,5 +1,6 @@
 import { lazy, Suspense, useMemo, useRef, useState } from 'react'
 
+import { prefetchDog10kSvVcf } from './dog10kSvSource'
 import GenomeIdeogram, { type ChromosomeInfo } from './GenomeIdeogram'
 import type { CuratedGeneFeature } from './JBrowseEmbed'
 
@@ -213,6 +214,7 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
     // the written story first — by the time someone reads it and scrolls
     // past the karyotype themselves, the browser below is more likely to
     // have already finished loading its tracks.
+    prefetchDog10kSvVcf()
     setLiveBrowserOpen(true)
     requestAnimationFrame(() => {
       storyRef.current?.scrollIntoView({
@@ -424,6 +426,12 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
             {companionEntry ? (
               <DescriptionComponent geneEntry={companionEntry} />
             ) : null}
+            {activeTourStop && liveBrowserOpen ? (
+              <p className="genome-live-loading-hint">
+                The live genome browser is already loading below &mdash; keep
+                scrolling when you&rsquo;re ready to see it.
+              </p>
+            ) : null}
           </div>
         </main>
       </div>
@@ -440,7 +448,10 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
             <button
               type="button"
               className="genome-live-toggle"
-              onClick={() => setLiveBrowserOpen(open => !open)}
+              onClick={() => {
+                if (!liveBrowserOpen) prefetchDog10kSvVcf()
+                setLiveBrowserOpen(open => !open)
+              }}
             >
               {liveBrowserOpen ? 'Hide' : 'Open'} live genome browser
               {geneEntry ? ` — ${geneEntry.name}` : ''}
