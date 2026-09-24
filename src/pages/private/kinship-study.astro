@@ -585,6 +585,43 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
         full pedigree to test against.
       </p>
 
+      <h3>Why Great Danes? A comparison with the German Shepherd study</h3>
+      <p>
+        Great Danes aren't a better population across the board. They are
+        better for some questions and worse for others, and the strongest
+        case is as a contrast to German Shepherds, not a replacement.
+      </p>
+      <div class="ks-compare">
+        <div class="ks-compare-col">
+          <p class="ks-compare-head">Where Great Danes are stronger</p>
+          <ul>
+            <li><strong>The rules target known genes.</strong> The colour codes decided which matings to avoid, and those decisions act on genes we can read directly: merle, harlequin, blue, and the fawn/black switch. A rule's effect can be measured twice: at the genes it aimed at, and across the whole genome as a side effect. German Shepherd breeding is also tightly regulated (the German club's breed surveys, and the split into working and show lines), but those rules select on looks and performance, which are spread across many genes.</li>
+            <li><strong>Several populations within one breed.</strong> This analysis finds {assigned.length} lines following the colour families, with 3–4× more kinship within lines than between them. That allows comparisons inside the breed: the same era, different rules. The German Shepherd study followed essentially one population through time.</li>
+            <li><strong>A deep, dated pedigree.</strong> The German Shepherd study had nine museum genomes and no pedigree; it inferred bottlenecks from the DNA and linked them to popular sires afterwards. Here, 140 years of dated pedigree let every genomic estimate be checked against a known history.</li>
+            <li><strong>Two dated events to recover.</strong> WWII, and the move of the breed's centre from Germany to America (American dogs first outnumber European ones in 1945–49), are fixed dates the genome should be able to find.</li>
+            <li><strong>An extreme body.</strong> Giant size and a short life make Danes a natural test of the finding that bigger breeds gain more new mutations early in development. A mid-sized breed can't address that.</li>
+          </ul>
+        </div>
+        <div class="ks-compare-col">
+          <p class="ks-compare-head">Where German Shepherds are stronger</p>
+          <ul>
+            <li><strong>Specimens.</strong> One of the world's most common breeds, with a deep museum collection in Bern. Whether dated historical Great Danes survive in museums is still unknown, and that is the biggest risk to question 2 below.</li>
+            <li><strong>A clean start.</strong> The breed was founded in 1899 around a single dog, Horand von Grafrath. Great Danes merged several regional types around 1880, so there is no single founding moment to anchor the story.</li>
+            <li><strong>Scale and health data.</strong> Far more dogs to sample, and much more health data (hips, degenerative myelopathy), which matters for questions about genetic load.</li>
+            <li><strong>Wolf ancestry.</strong> Documented wolf crosses let that study watch admixture fade under closed breeding. Great Danes have no equivalent.</li>
+          </ul>
+        </div>
+      </div>
+      <p>
+        <strong>The pitch:</strong> two breeds formed in the same country in
+        the same decades and hit by the same war, but bred under different
+        rules. German Shepherds are one population selected for work; Great
+        Danes were divided by colour codes and then moved to a new continent.
+        Running the same methods on both makes each result mean more, and it
+        answers the German Shepherd authors' own call for time series from
+        breeds with different histories.
+      </p>
+
       <h3>The questions, most interesting first</h3>
       <div class="ks-papers">
         <article class="ks-paper">
@@ -1676,6 +1713,31 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
     font-size: 0.75rem;
     letter-spacing: 0.05em;
     text-transform: uppercase;
+  }
+  .ks-compare {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    gap: 0.9rem;
+    margin: 0.75rem 0;
+  }
+  .ks-compare-col {
+    background: var(--plane);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+  .ks-compare-col ul {
+    margin: 0;
+    padding-left: 1.1rem;
+  }
+  .ks-compare-col li {
+    margin-bottom: 0.45rem;
+  }
+  .ks-compare-head {
+    font-weight: 700;
+    margin: 0 0 0.4rem;
   }
   .ks-why li {
     margin-bottom: 0.4rem;
