@@ -396,6 +396,65 @@
   }
 }
 
+.genome-more-stories {
+  margin: 1rem 0 1.5rem;
+}
+
+.genome-more-stories-title {
+  margin: 0 0 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--genome-muted);
+}
+
+.genome-more-stories-theme {
+  margin-bottom: 0.6rem;
+}
+
+.genome-more-stories-theme-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--genome-selected);
+  margin-bottom: 0.35rem;
+}
+
+.genome-more-stories-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.genome-more-stories-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  text-align: left;
+  background: transparent;
+  border: 1px solid var(--genome-border);
+  border-radius: 999px;
+  padding: 0.4rem 0.9rem;
+  cursor: pointer;
+  max-width: 320px;
+}
+
+.genome-more-stories-item:hover {
+  border-color: var(--genome-selected);
+}
+
+.genome-more-stories-item-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--genome-selected);
+}
+
+.genome-more-stories-item-hook {
+  font-size: 0.8rem;
+  color: var(--genome-text);
+  line-height: 1.25;
+}
+
 .genome-unplaced {
   margin: 1.5rem 0;
 }
