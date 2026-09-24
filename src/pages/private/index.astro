@@ -202,20 +202,16 @@ const links = [
       content?.classList.remove('pv-hidden')
     }
 
-    // Remembered only for this browser tab (sessionStorage), so the private
+    // The hub itself asks for the code on every load. A correct code is
+    // remembered for this browser tab (sessionStorage) only so the private
     // pages linked from here, which carry their own gate (/private-gate.js),
-    // don't ask again. A new tab or visit asks for the code again.
+    // don't ask a second time.
     function remember(key: string) {
       try {
         sessionStorage.setItem(key, '1')
       } catch {
         // storage blocked: each page will just ask for the code itself
       }
-    }
-    try {
-      if (sessionStorage.getItem('pv-ok-all') === '1') unlock()
-    } catch {
-      // storage blocked: fall through to the gate
     }
     form?.addEventListener('submit', e => {
       e.preventDefault()
