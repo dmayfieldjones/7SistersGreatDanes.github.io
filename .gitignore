@@ -28,3 +28,5 @@ pedigree_db.csv
 
 # Heritage intro build scaffolding (see .claude plan: 7Sisters intro)
 .tmp-intro-build/
+public/data/dog10k-svs-12breeds.vcf.bgz
+public/data/dog10k-svs-12breeds.vcf.bgz.tbi
