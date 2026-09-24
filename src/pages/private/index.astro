@@ -3,6 +3,12 @@ import BaseLayout from '../../layouts/BaseLayout.astro'
 
 const links = [
   {
+    href: '/private/kinship-study',
+    icon: '🧬',
+    title: 'Great Dane Kinship Study',
+    desc: 'Relatedness, lines, sequencing picks and 140 years of breeding choices. Research draft.',
+  },
+  {
     href: '/ezra-mia-pedigree.html',
     icon: '🐾',
     title: 'Ezra × Mia — Pedigree Explorer',
@@ -177,6 +183,9 @@ const links = [
   // access control.
   function initGate() {
     const CODE = '1887'
+    // A second code for sharing the kinship study on its own: it skips the
+    // hub and goes straight to the study.
+    const STUDY_CODE = '1888'
     const gate = document.getElementById('pv-gate')
     const content = document.getElementById('pv-content')
     const form = document.getElementById(
@@ -196,7 +205,10 @@ const links = [
     // the code is asked for every time the page loads.
     form?.addEventListener('submit', e => {
       e.preventDefault()
-      if (input?.value.trim() === CODE) {
+      const entered = input?.value.trim()
+      if (entered === STUDY_CODE) {
+        window.location.href = '/private/kinship-study'
+      } else if (entered === CODE) {
         unlock()
       } else {
         error?.removeAttribute('hidden')
