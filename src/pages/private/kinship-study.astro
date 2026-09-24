@@ -46,6 +46,9 @@ const H = study.history
 const coiPeak = H.coi.reduce((a, b) => (b.good > a.good ? b : a))
 const coiAt = (y: number) => H.coi.find(r => r.y === y)!
 const colAt = (y: number) => H.colour.find(r => r.y === y)!
+const recAt = (y: number) => H.recording.find(r => r.y === y)!
+const recMaxMerle = H.recording.filter(r => r.y <= 2005).reduce((a, b) => (b.merle > a.merle ? b : a))
+const recMinMerle = H.recording.filter(r => r.y > recMaxMerle.y && r.y <= 2015).reduce((a, b) => (b.merle < a.merle ? b : a))
 const winLabel = (y: number) => `${y - H.window / 2 + 1}–${y + H.window / 2}`
 const cnt = (y: number) => (H.counts as Record<string, number>)[String(y)] ?? 0
 const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).toFixed(2)}`
@@ -468,18 +471,21 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
       </p>
       <ol class="ks-timeline">
         <li><strong>1880–1891.</strong> Germany fixes the name Deutsche Dogge (1880), founds the Deutscher Doggen-Club (1888) and issues the first standard (1891). The club notes that early breeders were "much more liberal" about separating colours than later ones.</li>
-        <li><strong>1959.</strong> A fawn from a fawn × black litter, CH Honey Hollow Stormi Rudio, wins the Working Group at Westminster. The resulting backlash is described as the start of the US "colour code wars".</li>
+        <li><strong>1954–1959.</strong> Lina Basquette shows CH Honey Hollow Stormi Rudio, a fawn from a fawn × black mating. He is the No. 1 Working dog in the US from 1957 to 1959 and wins the 1959 Westminster Working Group. The backlash is described as the start of the US "colour code wars".</li>
         <li><strong>GDCA colour code.</strong> Part of the GDCA Code of Ethics for decades (the adoption year isn't published online). Blue may not be bred to fawn/brindle, or to harlequin or black-from-harlequin; fawn/brindle may not be bred into harlequin lines; and dogs had to be clear of other colours for four generations. It does not forbid black × fawn, and black has long been crossed with fawn and brindle to improve blacks.</li>
         <li><strong>UK Breed Council colour code.</strong> Its list of approved matings pairs black only with blue, black, harlequin and mantle; fawn/brindle × harlequin/mantle is not recommended. Under revision since 2021.</li>
+        <li><strong>1988.</strong> Neil O'Sullivan and Phillip Sponenberg publish evidence in <em>Genetica</em> that harlequin is a modification of merle. DNA work at Texas A&amp;M and Clemson later finds both genes.</li>
+        <li><strong>2000.</strong> The GDCA approves black mantle as a colour.</li>
         <li><strong>2012.</strong> The FCI (European) standard drops grey merle as a disqualifying fault.</li>
-        <li><strong>2019.</strong> The AKC recognises merle on 1 January; the GDCA takes its colour code down for revision around DNA colour testing.</li>
+        <li><strong>2015.</strong> GDCA members vote by a large margin to accept merle.</li>
+        <li><strong>2019.</strong> The AKC recognises merle on 1 January, and the first merle champion finishes that April. The GDCA takes its colour code down for a revision built around DNA colour testing.</li>
       </ol>
       <p>
         Using the recorded colour of both parents
         ({fmt(H.litters_with_colour)} litters), each litter is classed as within
         a family (fawn × fawn/brindle, harlequin × harlequin/mantle,
         blue × blue, and black with harlequin, blue or black) or as a
-        cross between families. The dashed lines mark 1959, 2012 and 2019.
+        cross between families. The dashed lines mark 1959, 2000, 2015 and 2019.
       </p>
       <figure class="ks-figure">
         <div class="ks-plot" id="cross-wrap">
@@ -514,6 +520,40 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
         when both parents have a colour. Black is shared by the harlequin and
         blue families, so black × harlequin and black × blue count as within
         family.
+      </p>
+
+      <h3>Recognition changed the records</h3>
+      <p>
+        When a colour is recognised, breeders record it by name. Among
+        harlequin-family dogs (harlequin, mantle, merle and white, not
+        counting solid blacks), the share recorded as mantle was already
+        rising before the GDCA approved it in 2000, and it kept climbing
+        after: {pct(recAt(1995).mantle)} around {winLabel(1995)},{' '}
+        {pct(recAt(2005).mantle)} around {winLabel(2005)} and{' '}
+        {pct(recAt(2015).mantle)} around {winLabel(2015)}. Merle shows up in
+        the record even while it was a disqualifying fault, peaking near{' '}
+        {pct(recMaxMerle.merle)} around {winLabel(recMaxMerle.y)}. It then
+        fell to {pct(recMinMerle.merle)} around {winLabel(recMinMerle.y)}{' '}
+        and rose again to {pct(recAt(2020).merle)} after the 2015 vote,
+        although the last years hold fewer dogs.
+      </p>
+      <figure class="ks-figure">
+        <div class="ks-legend" id="rec-legend"></div>
+        <div class="ks-plot" id="rec-wrap">
+          <svg id="rec" role="img" aria-label="Share of harlequin-family dogs recorded as mantle and as merle, 1950 to 2020. Mantle rises steadily from under 10 percent to over 30 percent; merle rises to about 10 percent in the 1990s, dips in the late 2000s and rises again after 2015."></svg>
+          <div class="ks-tip" id="rec-tip" hidden></div>
+        </div>
+        <figcaption>
+          Share of harlequin-family dogs recorded as mantle or merle, rolling{' '}
+          {H.window}-year window. Dashed lines: 2000 (mantle approved), 2015
+          (GDCA vote on merle), 2019 (AKC accepts merle).
+        </figcaption>
+      </figure>
+      <p class="ks-note">
+        This matters for reading the pairings above. Some dogs once recorded
+        as black are now recorded as mantle, so part of the fall in
+        black × harlequin litters in the 2010s is a change in labels, not
+        in breeding.
       </p>
     </section>
 
@@ -600,7 +640,7 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
     hist: study.F_hist,
     curve: study.curve,
     clusterFamily: Object.fromEntries(study.clusters.map(c => [c.cluster, c.family])),
-    history: { counts: study.history.counts, coi: study.history.coi, colour: study.history.colour, regions: study.history.region_years },
+    history: { counts: study.history.counts, coi: study.history.coi, colour: study.history.colour, regions: study.history.region_years, recording: study.history.recording },
   })} />
 </BaseLayout>
 
@@ -616,6 +656,7 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
       coi: { y: number; good: number; all: number; close: number; n: number }[]
       colour: Record<string, number>[]
       regions: { y: number; us: number; eu: number; au: number; rest: number }[]
+      recording: { y: number; n: number; mantle: number; merle: number }[]
     }
   }
   const FAMILIES = [
@@ -936,10 +977,19 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
       el('line', { x1: m.l, x2: W - m.r, y1: sy(v), y2: sy(v), class: v ? 'ks-grid' : 'ks-axis' }, svg)
       el('text', { x: m.l - 6, y: sy(v) + 4, 'text-anchor': 'end', class: 'ks-tick' }, svg).textContent = opt.fmt(v)
     }
+    let lastRight = -Infinity
     for (const y of opt.marks ?? []) {
-      el('line', { x1: sx(y), x2: sx(y), y1: m.t, y2: H - m.b, class: 'ks-mark' }, svg)
-      if (!opt.mini) {
-        el('text', { x: sx(y) - 4, y: m.t + 10, 'text-anchor': 'end', class: 'ks-tick' }, svg).textContent = String(y)
+      const x = sx(y)
+      el('line', { x1: x, x2: x, y1: m.t, y2: H - m.b, class: 'ks-mark' }, svg)
+      if (opt.mini) continue
+      // label right of the line, or left of it near the edge; skip it if it
+      // would overlap the previous label
+      const LABEL_W = 28
+      const right = x + 3 + LABEL_W <= W
+      const left = right ? x + 3 : x - 3 - LABEL_W
+      if (left > lastRight + 4) {
+        el('text', { x: right ? x + 3 : x - 3, y: m.t + 10, 'text-anchor': right ? 'start' : 'end', class: 'ks-tick' }, svg).textContent = String(y)
+        lastRight = left + LABEL_W
       }
     }
     const step = W < 420 || opt.mini ? 40 : 20
@@ -1087,7 +1137,7 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
   }
 
   const WARS: [number, number][] = [[1914, 1918], [1939, 1945]]
-  const CODE_MARKS = [1959, 2012, 2019]
+  const CODE_MARKS = [1959, 2000, 2015, 2019]
   const PAIRS = [
     { key: 'black_fawn', label: 'Black × fawn/brindle' },
     { key: 'blue_fawn', label: 'Blue × fawn/brindle' },
@@ -1108,6 +1158,10 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
     yearChart('cross', h.colour, [{ key: 'cross', label: 'Cross-family', token: '--ink' }], {
       yMax: 20, yStep: 5, fmt: v => `${v.toFixed(v % 1 ? 1 : 0)}%`, height: 200, bands: WARS, x0: 1890, marks: CODE_MARKS,
     })
+    yearChart('rec', h.recording, [
+      { key: 'mantle', label: 'Mantle', token: '--ink' },
+      { key: 'merle', label: 'Merle', token: '--ink-2', dash: true },
+    ], { yMax: 40, yStep: 10, fmt: v => `${v.toFixed(v % 1 ? 1 : 0)}%`, height: 220, x0: 1950, marks: [2000, 2015, 2019] })
     const box = document.getElementById('pairs')!
     box.innerHTML = ''
     for (const p of PAIRS) {
@@ -1125,6 +1179,10 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
   }
 
   legend('pca-legend', FAMILIES)
+  legend('rec-legend', [
+    { label: 'Mantle', token: '--ink' },
+    { label: 'Merle', token: '--ink-2', dash: true },
+  ])
   legend('region-legend', [...REGIONS])
   legend('coi-legend', [
     { label: 'Well-documented dogs (≥ 7 generations known)', token: '--ink' },
