@@ -30,3 +30,4 @@ pedigree_db.csv
 .tmp-intro-build/
 public/data/dog10k-svs-12breeds.vcf.bgz
 public/data/dog10k-svs-12breeds.vcf.bgz.tbi
+__pycache__/
