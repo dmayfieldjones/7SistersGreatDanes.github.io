@@ -11,7 +11,11 @@ interface TourStop {
   label: string
   gene: string
   hook: string
-  seeAlso?: { gene: string; note: string }
+  // A second locus this stop's story genuinely depends on — shown alongside
+  // `gene`, not just linked to, since the story doesn't make sense with only
+  // one half of it.
+  companionGene?: string
+  intro?: string
 }
 
 // Three loci with a real, tellable story — each an exact-match `name` from
@@ -19,12 +23,11 @@ interface TourStop {
 const TOUR_STOPS: TourStop[] = [
   {
     label: 'Coat pattern',
-    gene: 'H Locus Harlequin proteasome 20S subunit beta 7 (PSMB7)',
-    hook: 'Why do some Great Danes look like a black-and-white patchwork? It takes two genes working together.',
-    seeAlso: {
-      gene: 'M Locus Merle premelanosome protein (PMEL17/SILV)',
-      note: 'Harlequin only shows up on top of merle — see the merle gene too',
-    },
+    gene: 'M Locus Merle premelanosome protein (PMEL17/SILV)',
+    companionGene: 'H Locus Harlequin proteasome 20S subunit beta 7 (PSMB7)',
+    hook: 'Why do some Great Danes look like a black-and-white patchwork? It takes two genes stacked on top of each other.',
+    intro:
+      'This pattern is two genes, not one: merle (below) lays down random patches of diluted pigment on its own — that alone is a recognized Great Dane pattern. Stack one copy of the Harlequin gene on top of it and it strips the dilution back out, leaving solid black patches on white instead of the softer merle mottling.',
   },
   {
     label: 'Height',
@@ -110,7 +113,10 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
   const placedGenes = geneCategories.filter(entry => !!entry.location)
   const unplacedGenes = geneCategories.filter(entry => !entry.location)
   const geneEntry = geneCategories.find(entry => entry.name === gene)
-  const seeAlso = TOUR_STOPS.find(stop => stop.gene === gene)?.seeAlso
+  const activeTourStop = TOUR_STOPS.find(stop => stop.gene === gene)
+  const companionEntry = geneCategories.find(
+    entry => entry.name === activeTourStop?.companionGene,
+  )
 
   const annotations = placedGenes.flatMap(entry => {
     const { location, name, type: category } = entry
@@ -346,18 +352,12 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
               </div>
             </div>
           ) : null}
+          {activeTourStop?.intro ? (
+            <p className="genome-tour-story">{activeTourStop.intro}</p>
+          ) : null}
           {geneEntry ? <DescriptionComponent geneEntry={geneEntry} /> : null}
-          {seeAlso ? (
-            <p className="genome-seealso">
-              {seeAlso.note}:{' '}
-              <button
-                type="button"
-                className="genome-seealso-link"
-                onClick={() => selectGene(seeAlso.gene)}
-              >
-                {seeAlso.gene}
-              </button>
-            </p>
+          {companionEntry ? (
+            <DescriptionComponent geneEntry={companionEntry} />
           ) : null}
         </main>
       </div>
