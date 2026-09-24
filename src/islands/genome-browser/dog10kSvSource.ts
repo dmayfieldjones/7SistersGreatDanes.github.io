@@ -23,29 +23,36 @@
 // decompress its own blocks on demand. `.bgz` isn't recognized, so it's
 // served as opaque binary instead.
 //
+// Hosted on S3 (bucket `7sistersgreatdanes-genome-data`, us-east-2), not in
+// this repo's own public/ — GitHub Pages' CDN turned out to unreliably
+// ignore Range headers on a freshly-deployed large file until its edge
+// cache warmed up (a real, reproduced bug, not a one-off), which JBrowse
+// treats as a hard error since range support is required for tabix access.
+// S3 serves Range requests directly and consistently, with no such
+// cache-warmup dependency. Public read is scoped to the bucket's `data/*`
+// prefix only (not full public access), with CORS configured for browser
+// fetches.
+//
 // Lives in its own tiny module, not inside JBrowseEmbed.tsx: that whole file
 // is the lazy-loaded JBrowse chunk, and Browser.tsx needs these URLs (for
 // the prefetch below) *before* triggering that load, not as part of it.
-export const DOG10K_SV_VCF_URL = '/data/dog10k-svs-12breeds.vcf.bgz'
-export const DOG10K_SV_TBI_URL = '/data/dog10k-svs-12breeds.vcf.bgz.tbi'
+const S3_BASE =
+  'https://7sistersgreatdanes-genome-data.s3.us-east-2.amazonaws.com/data'
+export const DOG10K_SV_VCF_URL = `${S3_BASE}/dog10k-svs-12breeds.vcf.bgz`
+export const DOG10K_SV_TBI_URL = `${S3_BASE}/dog10k-svs-12breeds.vcf.bgz.tbi`
 
 /**
- * GitHub Pages' CDN can serve a plain 200 that ignores the Range header on
- * the very first request to a freshly-deployed large file, before the edge
- * has it cached — which JBrowse treats as a hard, user-facing error, since
- * range support is required for tabix access. A plain, unranged fetch here
- * warms that same cache entry before JBrowse's own range-fetching logic
- * (triggered moments later, once its lazy chunk and view state finish
- * setting up) ever touches the file, so by the time it does, the object is
- * already cached and serving 206s. Call this as early as possible — right
- * when `liveBrowserOpen` is set, not after. Best-effort only: a failed
- * prefetch here isn't itself a problem, so errors are swallowed.
+ * A plain fetch of the same URLs JBrowse itself will request, fired the
+ * moment `liveBrowserOpen` is set rather than waiting for JBrowse's own lazy
+ * chunk and view state to finish setting up moments later — mainly to get
+ * the TLS handshake to this S3 bucket (a different origin than the rest of
+ * the site) out of the way early, rather than paying for it right when the
+ * first range request needs to go out. Best-effort only: a failed prefetch
+ * here isn't itself a problem, so errors are swallowed.
  */
 export function prefetchDog10kSvVcf() {
-  for (const path of [DOG10K_SV_VCF_URL, DOG10K_SV_TBI_URL]) {
-    fetch(new URL(path, window.location.origin).href, {
-      cache: 'force-cache',
-    }).catch(() => {
+  for (const url of [DOG10K_SV_VCF_URL, DOG10K_SV_TBI_URL]) {
+    fetch(url, { cache: 'force-cache' }).catch(() => {
       /* best-effort warmup; JBrowse's own fetch will surface any real problem */
     })
   }
