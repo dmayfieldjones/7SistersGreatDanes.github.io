@@ -20,19 +20,30 @@ const NCBI_REFSEQ_CSI_URL =
 
 // Structural variants genotyped (long-read + short-read + assembly + Paragraph)
 // across 12 long-read dog genomes, including the Great Dane "Zoey" assembly.
-// Schall & Kidd 2025, Zenodo record 14968874. Confirmed CORS + byte-range
-// support directly from Zenodo's file store.
-const DOG10K_SV_VCF_URL =
-  'https://zenodo.org/api/records/14968874/files/SV_12_samples.all_modalities.vcf.gz/content'
-const DOG10K_SV_TBI_URL =
-  'https://zenodo.org/api/records/14968874/files/SV_12_samples.all_modalities.vcf.gz.tbi/content'
+// Schall & Kidd 2025, Zenodo record 14968874.
+//
+// Re-hosted rather than read live from Zenodo: the original 45-column,
+// 388 MB VCF names samples by opaque code ("Zoey_PA") with no way to relabel
+// a canvas-rendered row from config alone, and duplicates the full ref/alt
+// sequence per sample on top of the record-level REF/ALT (FORMAT/RAL,
+// FORMAT/AAL). This derived copy keeps one genotyped column per dog (the
+// Paragraph call, or long-read for Basenji "China", which Paragraph wasn't
+// run for), renamed to "Breed (code)" so the row label reads as a breed
+// without needing a hover, drops the redundant per-sample sequence fields,
+// and swaps sequence >40bp for standard symbolic <DEL>/<INS> notation
+// (SVTYPE/SVLEN/computed END already carry the size) — 388 MB down to 44 MB.
+// Built with pysam from the original file; original sample/genotype/INFO
+// data otherwise untouched. See public/data/dog10k-svs-samples.tsv for the
+// breed lookup used for row coloring/grouping below.
+// `.bgz` rather than `.vcf.gz`: several static file servers (including
+// Astro's own dev/preview server) auto-add `Content-Encoding: gzip` for a
+// `.gz` extension, transparently decompressing the response — which breaks
+// range requests entirely, since JBrowse needs the raw bgzip bytes to
+// decompress its own blocks on demand. `.bgz` isn't recognized, so it's
+// served as opaque binary instead.
+const DOG10K_SV_VCF_URL = '/data/dog10k-svs-12breeds.vcf.bgz'
+const DOG10K_SV_TBI_URL = '/data/dog10k-svs-12breeds.vcf.bgz.tbi'
 
-// Which VCF sample column is which breed (12 dogs, one column each — the
-// Paragraph-regenotyped call, except Basenji "China", which that modality
-// wasn't run for, so it falls back to its long-read call). Also acts as an
-// allow-list: the multi-sample display only draws rows for VCF samples that
-// appear here, so this hides the other three genotyping-modality columns
-// per dog (_LR/_AS/_SR/_PA) that would otherwise clutter the matrix.
 const DOG10K_SAMPLES_TSV_URL = '/data/dog10k-svs-samples.tsv'
 
 export interface CuratedGeneFeature {
@@ -117,8 +128,14 @@ export default function JBrowseEmbed({
             assemblyNames: ['canFam4'],
             adapter: {
               type: 'VcfTabixAdapter',
-              vcfGzLocation: { uri: DOG10K_SV_VCF_URL },
-              index: { location: { uri: DOG10K_SV_TBI_URL } },
+              vcfGzLocation: {
+                uri: new URL(DOG10K_SV_VCF_URL, window.location.origin).href,
+              },
+              index: {
+                location: {
+                  uri: new URL(DOG10K_SV_TBI_URL, window.location.origin).href,
+                },
+              },
               samplesTsvLocation: {
                 uri: new URL(DOG10K_SAMPLES_TSV_URL, window.location.origin)
                   .href,
@@ -129,9 +146,9 @@ export default function JBrowseEmbed({
                 type: 'LinearMultiSampleVariantDisplay',
                 displayId:
                   'dog10k-longread-svs-LinearMultiSampleVariantDisplay',
-                // Groups and colors the 12 rows by breed instead of by raw
-                // VCF sample code (e.g. "Zoey_PA"), from the breed column in
-                // the samplesTsv above.
+                // Rows are already labeled "Breed (code)" in the VCF itself;
+                // this also bands and colors them by breed so, e.g., both
+                // Bernese Mountain Dog rows group together visually.
                 rowColor: 'breed',
                 facet: 'breed',
               },

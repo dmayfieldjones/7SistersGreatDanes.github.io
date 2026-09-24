@@ -1,3 +1,11 @@
+/*
+ * Deliberately no `prefers-color-scheme: dark` variant here: the rest of the
+ * site (nav, page chrome, every other stylesheet) is light-only, so a dark
+ * surface just for this component looked broken rather than themed —
+ * dark background, but text colors inherited from the light-only page above
+ * it, unreadable on mobile devices with OS dark mode on. Stay light-only to
+ * match everything else on the page instead of half-supporting dark mode.
+ */
 :root {
   --genome-accent: #bf141c;
   --genome-selected: #1d6fa5;
@@ -5,15 +13,7 @@
   --genome-surface: rgba(255, 255, 255, 0.92);
   --genome-border: rgba(0, 0, 0, 0.12);
   --genome-muted: #666;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --genome-bar: #4a4a4a;
-    --genome-surface: rgba(30, 30, 30, 0.95);
-    --genome-border: rgba(255, 255, 255, 0.18);
-    --genome-muted: #aaa;
-  }
+  --genome-text: #1a1a1a;
 }
 
 .genome-controls {
@@ -48,6 +48,7 @@
   border-radius: 8px;
   padding: 0.75rem 1rem;
   background: var(--genome-surface);
+  color: var(--genome-text);
   font-size: 0.9rem;
 }
 
@@ -136,6 +137,22 @@
 
 .genome-description-links {
   margin-top: 0.5rem;
+}
+
+.genome-seealso {
+  margin: 0.5rem 0 1rem;
+  font-size: 0.9rem;
+  color: var(--genome-muted);
+}
+
+.genome-seealso-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: var(--genome-selected);
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 .genome-ideogram {
@@ -312,6 +329,7 @@
   border: 1px solid var(--genome-border);
   border-radius: 12px;
   background: var(--genome-surface);
+  color: var(--genome-text);
 }
 
 .genome-tour-photo {
