@@ -136,19 +136,24 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
       </p>
       <figure class="ks-figure">
         <div class="ks-legend" id="pca-legend"></div>
+        <div class="ks-selection" id="pca-selection" hidden>
+          <span id="pca-selection-text"></span>
+          <button type="button" id="pca-clear">Show all clusters</button>
+        </div>
         <div class="ks-plot" id="pca-wrap">
           <canvas id="pca" role="img" aria-label="Scatter plot of dogs by the first two principal coordinates of pedigree relationship, coloured by colour-family cluster; the fawn/brindle, harlequin/mantle and blue/black groups occupy separate regions."></canvas>
           <div class="ks-tip" id="pca-tip" hidden></div>
         </div>
         <figcaption>
           Principal coordinates of the additive relationship matrix,{' '}
-          {fmt(study.reference)} dogs born 2012–2020. Hover a region to see its cluster.
+          {fmt(study.reference)} dogs born 2012–2020. Hover a dot to see its cluster; click a
+          dot or a row in the table below to highlight that cluster.
         </figcaption>
       </figure>
 
       <div class="ks-table-wrap">
         <table class="ks-table">
-          <caption>Clusters from average-linkage clustering of pedigree kinship</caption>
+          <caption>Clusters from average-linkage clustering of pedigree kinship · click a row to highlight it in the plot</caption>
           <thead>
             <tr>
               <th scope="col">Cluster</th>
@@ -167,8 +172,12 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
                 .filter(c => c.cluster !== 0)
                 .concat(study.clusters.filter(c => c.cluster === 0))
                 .map(c => (
-                  <tr>
-                    <td>{c.cluster === 0 ? '—' : c.cluster}</td>
+                  <tr class="ks-cluster-row" data-cluster={c.cluster}>
+                    <td>
+                      <button type="button" class="ks-row-btn" aria-pressed="false" aria-label={`Highlight ${c.cluster === 0 ? 'unassigned dogs' : `cluster ${c.cluster}`} in the plot`}>
+                        {c.cluster === 0 ? '—' : c.cluster}
+                      </button>
+                    </td>
                     <td class="nowrap">
                       <span class={`ks-swatch ${FAMILY[c.family].cls}`} aria-hidden="true" />
                       {FAMILY[c.family].label}
@@ -671,17 +680,34 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
     const surface = css('--surface')
     ctx.fillStyle = surface
     ctx.fillRect(0, 0, W, H)
-    // big groups first so the smaller lines stay visible on top
-    const order = ['fawn', 'harl', 'other', 'blue']
     const pts = data.pca.map(([x, y, c]) => ({ x: sx(x), y: sy(y), fam: data.clusterFamily[c], c }))
-    for (const fam of order) {
-      ctx.fillStyle = colors[fam]
-      ctx.globalAlpha = fam === 'other' ? 0.5 : 0.75
+    const dot = (p: (typeof pts)[number], r: number) => {
+      ctx.beginPath()
+      ctx.arc(p.x, p.y, r, 0, Math.PI * 2)
+      ctx.fill()
+    }
+    if (selectedCluster === null) {
+      // big groups first so the smaller lines stay visible on top
+      for (const fam of ['fawn', 'harl', 'other', 'blue']) {
+        ctx.fillStyle = colors[fam]
+        ctx.globalAlpha = fam === 'other' ? 0.5 : 0.75
+        for (const p of pts) if (p.fam === fam) dot(p, 2.2)
+      }
+    } else {
+      // everyone else recedes to a faint grey; the chosen cluster sits on top
+      ctx.fillStyle = css('--muted')
+      ctx.globalAlpha = 0.12
+      for (const p of pts) if (p.c !== selectedCluster) dot(p, 2)
+      ctx.globalAlpha = 1
+      ctx.strokeStyle = surface
+      ctx.lineWidth = 1
       for (const p of pts) {
-        if (p.fam !== fam) continue
+        if (p.c !== selectedCluster) continue
+        ctx.fillStyle = colors[p.fam]
         ctx.beginPath()
-        ctx.arc(p.x, p.y, 2.2, 0, Math.PI * 2)
+        ctx.arc(p.x, p.y, 2.8, 0, Math.PI * 2)
         ctx.fill()
+        ctx.stroke()
       }
     }
     ctx.globalAlpha = 1
@@ -707,7 +733,59 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
       placeTip(tip, wrap, best.x, best.y)
     }
     canvas.onmouseleave = () => (tip.hidden = true)
+    canvas.onclick = e => {
+      const r = canvas.getBoundingClientRect()
+      let best = null as null | (typeof pts)[number]
+      let bd = 144
+      for (const p of pts) {
+        const d = (p.x - (e.clientX - r.left)) ** 2 + (p.y - (e.clientY - r.top)) ** 2
+        if (d < bd) {
+          bd = d
+          best = p
+        }
+      }
+      selectCluster(best && best.c !== selectedCluster ? best.c : null, false)
+    }
+    canvas.style.cursor = 'pointer'
   }
+
+  // --- Cluster highlighting: table rows and dots toggle one cluster ---
+  let selectedCluster: number | null = null
+  const clusterRows = [...document.querySelectorAll<HTMLTableRowElement>('.ks-cluster-row')]
+  function selectCluster(c: number | null, fromTable: boolean) {
+    selectedCluster = c
+    for (const row of clusterRows) {
+      const on = Number(row.dataset.cluster) === c
+      row.classList.toggle('is-selected', on)
+      row.querySelector('button')?.setAttribute('aria-pressed', String(on))
+    }
+    const bar = document.getElementById('pca-selection')!
+    const text = document.getElementById('pca-selection-text')!
+    if (c === null) {
+      bar.hidden = true
+    } else {
+      const row = clusterRows.find(r => Number(r.dataset.cluster) === c)!
+      const cells = row.querySelectorAll('td')
+      const family = cells[1].textContent!.trim()
+      const n = cells[2].textContent!.trim()
+      text.textContent = `${c === 0 ? 'Unassigned dogs' : `Cluster ${c}`} · ${family} · ${n} dogs`
+      bar.hidden = false
+    }
+    drawPca()
+    if (fromTable && c !== null) {
+      const plot = document.getElementById('pca-wrap')!.getBoundingClientRect()
+      if (plot.top < 0 || plot.bottom > window.innerHeight) {
+        document.getElementById('pca-legend')!.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
+    }
+  }
+  for (const row of clusterRows) {
+    row.addEventListener('click', () => {
+      const c = Number(row.dataset.cluster)
+      selectCluster(c === selectedCluster ? null : c, true)
+    })
+  }
+  document.getElementById('pca-clear')!.addEventListener('click', () => selectCluster(null, false))
 
   // --- Inbreeding histogram ---
   function drawHist() {
@@ -1315,6 +1393,55 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
     font-size: 0.82rem;
     color: var(--ink-2);
     font-weight: 600;
+  }
+  .ks-selection {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  .ks-selection[hidden] {
+    display: none;
+  }
+  .ks-selection button {
+    font: inherit;
+    font-weight: 500;
+    font-size: 0.8rem;
+    color: var(--ink);
+    background: var(--plane);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.2rem 0.6rem;
+    cursor: pointer;
+  }
+  .ks-cluster-row {
+    cursor: pointer;
+  }
+  .ks-cluster-row:hover td {
+    background: var(--plane);
+  }
+  .ks-cluster-row.is-selected td {
+    background: var(--plane);
+    box-shadow: inset 0 -2px 0 var(--ink-2);
+  }
+  .ks-row-btn {
+    font: inherit;
+    font-weight: 600;
+    color: var(--ink);
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    min-width: 2rem;
+    padding: 0.1rem 0.45rem;
+    cursor: pointer;
+  }
+  .ks-cluster-row.is-selected .ks-row-btn {
+    background: var(--ink);
+    color: var(--surface);
+    border-color: var(--ink);
   }
   .ks-table-wrap {
     overflow-x: auto;
