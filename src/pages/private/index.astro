@@ -202,14 +202,29 @@ const links = [
       content?.classList.remove('pv-hidden')
     }
 
-    // Intentionally not remembered across visits (no localStorage/cookie) —
-    // the code is asked for every time the page loads.
+    // Remembered only for this browser tab (sessionStorage), so the private
+    // pages linked from here, which carry their own gate (/private-gate.js),
+    // don't ask again. A new tab or visit asks for the code again.
+    function remember(key: string) {
+      try {
+        sessionStorage.setItem(key, '1')
+      } catch {
+        // storage blocked: each page will just ask for the code itself
+      }
+    }
+    try {
+      if (sessionStorage.getItem('pv-ok-all') === '1') unlock()
+    } catch {
+      // storage blocked: fall through to the gate
+    }
     form?.addEventListener('submit', e => {
       e.preventDefault()
       const entered = input?.value.trim()
       if (entered === STUDY_CODE) {
+        remember('pv-ok-kinship')
         window.location.href = '/private/kinship-study'
       } else if (entered === CODE) {
+        remember('pv-ok-all')
         unlock()
       } else {
         error?.removeAttribute('hidden')
