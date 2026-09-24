@@ -32,7 +32,7 @@ const TOUR_STOPS: TourStop[] = [
     companionGene: 'H Locus Harlequin proteasome 20S subunit beta 7 (PSMB7)',
     hook: 'Why do some Great Danes look like a black-and-white patchwork? It takes two genes stacked on top of each other.',
     intro:
-      'This pattern is two genes, not one: merle (below) lays down random patches of diluted pigment on its own — that alone is a recognized Great Dane pattern. Stack one copy of the Harlequin gene on top of it and it strips the dilution back out, leaving solid black patches on white instead of the softer merle mottling.',
+      "This pattern is two genes, not one: merle (below) lays down random patches of diluted pigment on its own — that alone is a recognized Great Dane pattern. Stack one copy of the Harlequin gene on top of it and it strips the dilution back out, leaving solid black patches on white instead of the softer merle mottling. Breeders ran harlequin programs for a century before anyone knew this: a 1988 study first argued harlequin was a modified merle, and DNA work later found both genes. Merle itself was a disqualifying fault until the AKC accepted it in 2019. Even the size of the merle mutation matters — the longer a repetitive stretch inside it, the stronger the pattern, from 'cryptic' merles that look solid to the longest versions, found in harlequins.",
   },
   {
     label: 'Height',
