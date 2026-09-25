@@ -46,6 +46,7 @@ const H = study.history
 const coiPeak = H.coi.reduce((a, b) => (b.good > a.good ? b : a))
 const coiAt = (y: number) => H.coi.find(r => r.y === y)!
 const colAt = (y: number) => H.colour.find(r => r.y === y)!
+const L = H.litter
 const recAt = (y: number) => H.recording.find(r => r.y === y)!
 const recMaxMerle = H.recording.filter(r => r.y <= 2005).reduce((a, b) => (b.merle > a.merle ? b : a))
 const recMinMerle = H.recording.filter(r => r.y > recMaxMerle.y && r.y <= 2015).reduce((a, b) => (b.merle < a.merle ? b : a))
@@ -464,6 +465,56 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
         created by recent matings.
       </p>
 
+      <h3>Inbreeding and litter size (exploratory)</h3>
+      <p>
+        Do more inbred litters have fewer puppies? Inbreeding lowers litter
+        size in other breeds (seven French breeds in Leroy et al. 2015, and
+        Golden Retrievers using genomic inbreeding), and the expectation here
+        is a real but small effect. This database can only partly test it: it
+        records the puppies someone entered, not the number born. Two-thirds
+        of litters have a single recorded puppy, against a typical Great Dane
+        litter of about eight. So the analysis uses only litters that look
+        close to fully recorded, with at least five puppies entered, grouping
+        puppies by sire, dam and exact birth date.
+      </p>
+      <figure class="ks-figure">
+        <div class="ks-plot" id="litter-wrap">
+          <svg id="litter" role="img" aria-label="Mean recorded litter size by 10-generation COI of the litter, for litters with at least five recorded puppies, with 95% confidence intervals. Sizes range from about 6.0 to 6.5 with overlapping intervals; the most inbred group is lowest."></svg>
+          <div class="ks-tip" id="litter-tip" hidden></div>
+        </div>
+        <figcaption>
+          Mean recorded litter size by the litter's 10-generation COI, with
+          95% confidence intervals ({fmt(L.models['5'].n)} litters with five or
+          more recorded puppies and well-documented pedigrees).
+        </figcaption>
+      </figure>
+      <p>
+        Controlling for decade and the dam's age, each +0.10 in a litter's
+        10-generation COI goes with {Math.abs(L.models['5'].per01).toFixed(2)}{' '}
+        fewer recorded puppies (95% interval {Math.abs(L.models['5'].hi).toFixed(2)}–{Math.abs(L.models['5'].lo).toFixed(2)},
+        resampling by dam; permutation p = {L.models['5'].p.toFixed(2)}). In
+        litters with seven or more recorded puppies, the likeliest to be
+        complete, the drop is {Math.abs(L.models['7'].per01).toFixed(2)}{' '}
+        puppies, about {((1 - L.models['7'].rr) * 100).toFixed(0)}% of a
+        litter. The dam's own inbreeding shows no effect. That fits the
+        expectation of a real but small cost. It is not conclusive: a
+        count model that treats puppies as Poisson counts gives the same
+        direction without significance, and the pattern across COI groups is
+        not a clean slope.
+      </p>
+      <p>
+        A second hint points the same way. Harlequin × harlequin litters
+        average {L.hh.mean.toFixed(2)} recorded puppies against{' '}
+        {L.hh.mean_other.toFixed(2)} for harlequin × other matings (t ={' '}
+        {L.hh.t.toFixed(1)}), as expected if puppies with two harlequin copies
+        are lost before birth.
+      </p>
+      <p class="ks-note">
+        A firm answer needs litters counted at birth, from registries' litter
+        records or breeders' own records, and genomic inbreeding (question 3
+        in section 6) in place of the pedigree estimate.
+      </p>
+
       <h3>Colour pairings</h3>
       <p>
         Breed clubs have long asked breeders to keep three colour families
@@ -749,6 +800,8 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
       <summary>Sources</summary>
       <p class="ks-src-head">Prior work (section 6)</p>
       <ul>
+        <li><a href="https://www.sciencedirect.com/science/article/abs/pii/S1090023314004559" rel="noopener">Leroy et al. 2015, Inbreeding impact on litter size and survival in selected canine breeds (Veterinary Journal)</a></li>
+        <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6606663/" rel="noopener">Inbreeding depression causes reduced fecundity in Golden Retrievers</a></li>
         <li><a href="https://www.pnas.org/doi/10.1073/pnas.2421755122" rel="noopener">A 120-y time series of genomes reveals the consequences of closed breeding in German Shepherd Dogs (PNAS 2025)</a></li>
         <li><a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-025-03804-2" rel="noopener">Determinants of de novo mutations in extended pedigrees of 43 dog breeds (Genome Biology 2025)</a></li>
         <li><a href="https://www.science.org/doi/10.1126/science.abn5887" rel="noopener">Comparative genomics of Balto (Science 2023)</a></li>
@@ -817,7 +870,7 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
     hist: study.F_hist,
     curve: study.curve,
     clusterFamily: Object.fromEntries(study.clusters.map(c => [c.cluster, c.family])),
-    history: { counts: study.history.counts, coi: study.history.coi, colour: study.history.colour, regions: study.history.region_years, recording: study.history.recording },
+    history: { counts: study.history.counts, coi: study.history.coi, colour: study.history.colour, regions: study.history.region_years, recording: study.history.recording, litter: study.history.litter.bins },
   })} />
 </BaseLayout>
 
@@ -834,6 +887,7 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
       colour: Record<string, number>[]
       regions: { y: number; us: number; eu: number; au: number; rest: number }[]
       recording: { y: number; n: number; mantle: number; merle: number }[]
+      litter: { lo: number; hi: number; n: number; mean: number; ci: number }[]
     }
   }
   const FAMILIES = [
@@ -1355,6 +1409,46 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
     }
   }
 
+  // --- Litter size by COI band: dots with 95% intervals ---
+  function drawLitter() {
+    const wrap = document.getElementById('litter-wrap')!
+    const svg = document.getElementById('litter')!
+    const tip = document.getElementById('litter-tip')!
+    svg.innerHTML = ''
+    const bins = data.history.litter
+    const W = wrap.clientWidth
+    const H = 256
+    const m = { t: 12, r: 12, b: 60, l: 44 }
+    const narrow = W < 520
+    const short = (v: number) => (narrow ? v.toFixed(2).replace(/^0/, '') : v.toFixed(2))
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`)
+    svg.setAttribute('height', String(H))
+    const y0 = 5
+    const y1 = 7
+    const sy = (v: number) => H - m.b - ((v - y0) / (y1 - y0)) * (H - m.t - m.b)
+    const step = (W - m.l - m.r) / bins.length
+    const sx = (i: number) => m.l + step * (i + 0.5)
+    for (let v = y0; v <= y1 + 1e-9; v += 0.5) {
+      el('line', { x1: m.l, x2: W - m.r, y1: sy(v), y2: sy(v), class: v === y0 ? 'ks-axis' : 'ks-grid' }, svg)
+      el('text', { x: m.l - 6, y: sy(v) + 4, 'text-anchor': 'end', class: 'ks-tick' }, svg).textContent = v.toFixed(1)
+    }
+    bins.forEach((b, i) => {
+      const label = b.hi >= 1 ? `≥ ${b.lo.toFixed(2)}` : `${b.lo.toFixed(2)}–${b.hi.toFixed(2)}`
+      const tick = b.hi >= 1 ? `≥ ${short(b.lo)}` : `${short(b.lo)}–${short(b.hi)}`
+      el('text', { x: sx(i), y: H - m.b + 16, 'text-anchor': 'middle', class: 'ks-tick' }, svg).textContent = tick
+      el('text', { x: sx(i), y: H - m.b + 30, 'text-anchor': 'middle', class: 'ks-tick' }, svg).textContent = narrow ? `n=${b.n}` : `${b.n.toLocaleString()} litters`
+      el('line', { x1: sx(i), x2: sx(i), y1: sy(b.mean - b.ci), y2: sy(b.mean + b.ci), stroke: 'var(--ink-2)', 'stroke-width': 2, 'stroke-linecap': 'round' }, svg)
+      el('circle', { cx: sx(i), cy: sy(b.mean), r: 5, fill: 'var(--ink)', class: 'ks-dot' }, svg)
+      const hit = el('rect', { x: sx(i) - step / 2, y: m.t, width: step, height: H - m.t - m.b, fill: 'transparent' }, svg)
+      hit.addEventListener('mousemove', () => {
+        tip.innerHTML = `<b>COI10 ${label}</b><br>${b.mean.toFixed(2)} puppies recorded (95% CI ± ${b.ci.toFixed(2)})<br>${b.n.toLocaleString()} litters`
+        placeTip(tip, wrap, sx(i), sy(b.mean + b.ci))
+      })
+      hit.addEventListener('mouseleave', () => (tip.hidden = true))
+    })
+    el('text', { x: (m.l + W - m.r) / 2, y: H - 6, 'text-anchor': 'middle', class: 'ks-tick' }, svg).textContent = '10-generation COI of the litter'
+  }
+
   legend('pca-legend', FAMILIES)
   legend('rec-legend', [
     { label: 'Mantle', token: '--ink' },
@@ -1371,6 +1465,7 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
     drawHist()
     drawCoverage()
     drawHistory()
+    drawLitter()
   }
   drawAll()
   let t: number | undefined
