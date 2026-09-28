@@ -109,6 +109,12 @@ export const GET = () => {
       priority: 0.85,
     },
     {
+      url: `${BASE_URL}/EzraxMia`,
+      lastModified: lastCommitDate('src/pages/EzraxMia.astro', now),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
       url: `${BASE_URL}/EzraxPiper`,
       lastModified: lastCommitDate('src/pages/EzraxPiper.astro', now),
       changeFrequency: 'monthly',
