@@ -1,0 +1,137 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import '../styles/litter.css'
+import { SITE_TIKTOK_URL } from '../lib/site'
+
+const keywords = [
+  'Ezra Mia Great Dane litter',
+  'Great Dane Futurity nominated litter',
+  '7Sisters Farm litter',
+  'Great Dane puppies Illinois',
+  'Central Illinois Great Dane puppies',
+  'health tested Great Dane puppies',
+  'upcoming Great Dane litter',
+]
+---
+
+<BaseLayout
+  title="Ezra × Mia Litter | 7Sisters Farm — Futurity Nominated Great Dane Litter"
+  description="Ezra × Mia litter at 7Sisters Farm: a 2027 Futurity nominated Great Dane litter due October 16th, 2026. CHIC-certified, health-tested parents. Inquiries welcome. Central Illinois Great Dane breeders."
+  keywords={keywords}
+  image="https://7sistersgreatdanes.com/img/EzraxMia.jpg"
+  canonical="https://7sistersgreatdanes.com/EzraxMia"
+  breadcrumbs={[
+    { name: 'Puppies & Litters', path: '/Litters' },
+    { name: 'Ezra × Mia Litter', path: '/EzraxMia' },
+  ]}
+>
+  <div class="content">
+    <div class="post-title">
+      <h1>
+        Ezra x Mia Litter at <span style="color: #bf141c">7</span>Sisters Farm
+      </h1>
+    </div>
+    <main class="content-wrapper">
+      <section class="hero-section">
+        <img
+          src="/img/Colorlogo_nobackground.png"
+          alt="7Sisters Farm Logo"
+          width="300"
+          height="auto"
+          class="hero-logo"
+          loading="lazy"
+        />
+      </section>
+      <section class="advertisement-section">
+        <a
+          href={SITE_TIKTOK_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="ad-link"
+          aria-label="Follow 7Sisters Great Danes on TikTok"
+        >
+          <img
+            src="/img/EzraxMia.jpg"
+            alt="Ezra X Mia litter advertisement: 2027 Futurity nominated litter due October 16th"
+            class="ad-image"
+            width="1999"
+            height="1500"
+            loading="eager"
+          />
+        </a>
+        <p class="ad-caption">
+          Follow along on TikTok, or <a href="/contact">contact us</a> to ask
+          about a puppy.
+        </p>
+      </section>
+      <section class="litter-info-section">
+        <div class="litter-details">
+          <h2 class="section-title">Litter Information</h2>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="label">Status:</span>
+              <span class="value">Expected — inquiries welcome</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Due:</span>
+              <span class="value">October 16, 2026</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Futurity:</span>
+              <span class="value">Nominated for the 2027 GDCA Futurity</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Breeders:</span>
+              <span class="value"
+                >Dustin Mayfield-Jones, Karen Mayfield-Jones, Francisco
+                Camacho, Karen Martin</span
+              >
+            </div>
+          </div>
+        </div>
+        <div class="parents-info">
+          <div class="parent-card">
+            <h3 class="parent-title">Sire</h3>
+            <p class="parent-name">
+              BISS GCH Sonya Danes N Krisda Our Peace And Harmony Fontana{' '}
+              <span class="call-name">"Ezra"</span>
+            </p>
+            <p class="registration">CHIC #218946</p>
+            <p class="registration">
+              <a
+                href="https://ofa.org/advanced-search/?regnum=WS81479201"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="ofa-link">WS81479201 OFA Results</a
+              >
+            </p>
+            <p class="registration">
+              <a
+                href="/img/EzraPrelimOFA.png"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="ofa-link">Additional Test Results</a
+              >
+            </p>
+          </div>
+          <div class="parent-card">
+            <h3 class="parent-title">Dam</h3>
+            <p class="parent-name">
+              CH <span class="brand-number">7</span>Sisters N Legado's I Wanna
+              Dance, I Wanna Win <span class="call-name">"Mia"</span>
+            </p>
+            <p class="registration">CHIC #215182</p>
+            <p class="registration">
+              <a
+                href="https://ofa.org/advanced-search/?regnum=WS81418801"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="ofa-link">WS81418801 OFA Results</a
+              >
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</BaseLayout>
