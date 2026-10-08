@@ -1,5 +1,5 @@
 ---
-title: "The Deep History of Dogs, Part 2: Palaeolithic Partners"
+title: "The Deep History of Dogs, Part 2: Paleolithic Partners"
 description: "Two companion studies in Nature push genetically confirmed dogs to roughly 15,800 years ago, mapping Ice Age dogs across cultures, the Neolithic transition, and the deep ancestry that still flows into modern European breeds."
 date: 2026-03-28
 categories: ["Breeding", "Research", "Genetics"]
@@ -30,13 +30,13 @@ That just changed. Twice, in the same week.
 
 Two companion studies published together in *Nature* on March 25, 2026: [Marsh *et al.*](https://doi.org/10.1038/s41586-026-10170-x) and [Bergström *et al.*](https://doi.org/10.1038/s41586-026-10112-7) have pushed back the oldest definitive genomic identification of dogs by nearly 5,000 years.
 
-The first, by [Marsh, Scarsbrook, Frantz and colleagues](https://doi.org/10.1038/s41586-026-10170-x), confirmed that a canid from the Epipalaeolithic site of Pınarbaşı in central Türkiye, dated to approximately 15,800 years ago, was unequivocally a dog. The specimen was a female puppy, identified from her teeth, with bone so degraded it [resembled freeze-dried coffee](https://doi.org/10.1038/d41586-026-00900-6), according to co-author Lachie Scarsbrook. A canid from Gough’s Cave in the UK (~14,300 years ago) was also confirmed as a dog. The second study, by [Bergström, Skoglund and colleagues](https://doi.org/10.1038/s41586-026-10112-7), screened 216 canid remains—181 from Palaeolithic and Mesolithic Europe—using a newly developed genome-wide capture approach, enabling confident dog-versus-wolf classification for 141 specimens. Their oldest confirmed dog: a 14,200-year-old individual from Kesslerloch Cave in Switzerland.
+The first, by [Marsh, Scarsbrook, Frantz and colleagues](https://doi.org/10.1038/s41586-026-10170-x), confirmed that a canid from the Epipaleolithic site of Pınarbaşı in central Türkiye, dated to approximately 15,800 years ago, was unequivocally a dog. The specimen was a female puppy, identified from her teeth, with bone so degraded it [resembled freeze-dried coffee](https://doi.org/10.1038/d41586-026-00900-6), according to co-author Lachie Scarsbrook. A canid from Gough’s Cave in the UK (~14,300 years ago) was also confirmed as a dog. The second study, by [Bergström, Skoglund and colleagues](https://doi.org/10.1038/s41586-026-10112-7), screened 216 canid remains—181 from Paleolithic and Mesolithic Europe—using a newly developed genome-wide capture approach, enabling confident dog-versus-wolf classification for 141 specimens. Their oldest confirmed dog: a 14,200-year-old individual from Kesslerloch Cave in Switzerland.
 
 Together, these papers reshape what we know about how dogs spread, how they moved between human cultures, what happened when farming arrived, and how their ancestry flows into modern breeds.
 
 ## Dogs Were Everywhere
 
-Previous claims of Palaeolithic dogs were always contested. Morphological analyses had identified potential dogs at sites across Europe: Goyet in Belgium (~34,000 years ago), Předmostí in Czechia (~28,500 years ago), Razboinichya Cave in the Altai Mountains (~33,000 years ago). But when nuclear genomes were generated, they turned out to be wolves. As William Marsh put it, “A lot of very, very early putative dogs, when you run the DNA on them, they actually come out as wolves.”
+Previous claims of Paleolithic dogs were always contested. Morphological analyses had identified potential dogs at sites across Europe: Goyet in Belgium (~34,000 years ago), Předmostí in Czechia (~28,500 years ago), Razboinichya Cave in the Altai Mountains (~33,000 years ago). But when nuclear genomes were generated, they turned out to be wolves. As William Marsh put it, “A lot of very, very early putative dogs, when you run the DNA on them, they actually come out as wolves.”
 
 The Bergström team’s screening revealed just how careful you have to be. A canid from Goyet Cave, dated to 13,700 years ago and previously proposed as a dog based on its small size and human modification, turned out to have fully wolf-like ancestry. At the Gnirshöhle site in Germany (~15,000 years ago), several specimens showed dog DNA, but with suspiciously low ancient DNA damage and a specific affinity to modern Bernese Mountain Dogs, strongly suggesting modern contamination. Morphology, context, and even radiocarbon dates can mislead without genomic data to back them up.
 
@@ -48,13 +48,13 @@ With rigorous genetic confirmation applied, the picture is striking. By at least
 - **Kesslerloch Cave, Switzerland** (~14,200 years ago) — Magdalenian material culture; Epigravettian-associated human ancestry
 - **Grotta Paglicci, Italy** (~14,100 years ago) — Epigravettian context
 
-That’s a span from central Anatolia to the British Isles, thousands of kilometers, all within a narrow window. And the dogs at all of these sites were genetically very similar, grouped together in a newly defined mitochondrial clade called C5. An unpublished preliminary analysis by Marsh found that the Kesslerloch, Gough’s Cave, and Pınarbaşı dogs share nearly identical mitochondrial DNA. Three dogs spanning from Türkiye to Switzerland to England were probably part of a single ice-age population. As palaeogeneticist Ludovic Orlando of the University of Toulouse put it: “That was unknown. That is a big discovery.”
+That’s a span from central Anatolia to the British Isles, thousands of kilometers, all within a narrow window. And the dogs at all of these sites were genetically very similar, grouped together in a newly defined mitochondrial clade called C5. An unpublished preliminary analysis by Marsh found that the Kesslerloch, Gough’s Cave, and Pınarbaşı dogs share nearly identical mitochondrial DNA. Three dogs spanning from Türkiye to Switzerland to England were probably part of a single ice-age population. As paleogeneticist Ludovic Orlando of the University of Toulouse put it: “That was unknown. That is a big discovery.”
 
 ## Dogs as Cultural Currency
 
-Those five Palaeolithic dog sites span three genetically distinct human populations: the Magdalenian (Gough’s Cave), the Epigravettian (Bonn-Oberkassel, Kesslerloch, Grotta Paglicci), and Anatolian hunter-gatherers (Pınarbaşı). These were populations with different genetic ancestries, different toolmaking traditions, and different ways of life. Yet their dogs were essentially the same population. As Cornell canine geneticist Adam Boyko [told *Nature*](https://doi.org/10.1038/d41586-026-00900-6), “The dogs don’t seem to care too much which culture they’re attached to.” Scarsbrook has a term for this adaptability: “We call it the Swiss army dog.”
+Those five Paleolithic dog sites span three genetically distinct human populations: the Magdalenian (Gough’s Cave), the Epigravettian (Bonn-Oberkassel, Kesslerloch, Grotta Paglicci), and Anatolian hunter-gatherers (Pınarbaşı). These were populations with different genetic ancestries, different toolmaking traditions, and different ways of life. Yet their dogs were essentially the same population. As Cornell canine geneticist Adam Boyko [told *Nature*](https://doi.org/10.1038/d41586-026-00900-6), “The dogs don’t seem to care too much which culture they’re attached to.” Scarsbrook has a term for this adaptability: “We call it the Swiss army dog.”
 
-The Marsh team tested this formally, comparing dog and human genetic similarity from the same sites across 35 locations spanning the Late Upper Palaeolithic to the Medieval period. Human and dog population histories are generally correlated, but the Palaeolithic dogs from Pınarbaşı and Gough’s Cave were far more similar to each other than their associated human populations were. **Genetically distinct human groups were sharing genetically similar dogs.**
+The Marsh team tested this formally, comparing dog and human genetic similarity from the same sites across 35 locations spanning the Late Upper Paleolithic to the Medieval period. Human and dog population histories are generally correlated, but the Paleolithic dogs from Pınarbaşı and Gough’s Cave were far more similar to each other than their associated human populations were. **Genetically distinct human groups were sharing genetically similar dogs.**
 
 Both research teams converge on the same explanation.
 
@@ -64,11 +64,11 @@ Dogs were crossing cultural boundaries that humans themselves maintained.
 
 ## Living Together, Eating Together, Dying Together
 
-The evidence for close human-dog association in the Palaeolithic goes beyond genetics.
+The evidence for close human-dog association in the Paleolithic goes beyond genetics.
 
 At **Gough’s Cave**, the human remains showed evidence of funerary cannibalism (skulls shaped into cups, bones engraved), hallmarks of Magdalenian ritual. The dog remains show similar postmortem modification, most notably a deliberate perforation of the masseteric fossa on the mandible. Humans and dogs were receiving the same ritual treatment in death.
 
-At **Pınarbaşı**, neonatal and juvenile dogs were buried in the same area as contemporaneous human burials. As Marsh noted, “Four thousand kilometres apart, we see these dogs being treated in very similar ways.”
+At **Pınarbaşı**, neonatal and juvenile dogs were buried in the same area as contemporaneous human burials. As Marsh noted, “Four thousand kilometers apart, we see these dogs being treated in very similar ways.”
 
 The isotopic evidence tells us about their lives, not just their deaths. At Gough’s Cave, dogs and humans occupied similar trophic positions—eating similar diets. At Pınarbaşı, the perinatal dogs showed isotopic signatures indicating an aquatic dietary component, consistent with the abundant small freshwater fish found in the human-occupied layers. The dogs were being provisioned with fish by their human companions.
 
@@ -78,7 +78,7 @@ Fifteen thousand eight hundred years ago, on the Anatolian Plateau, people were 
 
 In Part 1, we discussed how dogs can be broadly divided into eastern and western Eurasian lineages. The new studies refine this picture substantially.
 
-The Palaeolithic dogs from Pınarbaşı and Gough’s Cave belong to the western Eurasian *dog* lineage—the same lineage that gives rise to modern European breeds. But these western dogs derive from an *eastern wolf progenitor*, the same ancestral source that gave rise to dogs in Siberia, East Asia, and Australasia. This allows us to reject the hypothesis that Palaeolithic dogs in Europe arose from an independent domestication—a major update to the dual-origin debate we covered in Part 1.
+The Paleolithic dogs from Pınarbaşı and Gough’s Cave belong to the western Eurasian *dog* lineage—the same lineage that gives rise to modern European breeds. But these western dogs derive from an *eastern wolf progenitor*, the same ancestral source that gave rise to dogs in Siberia, East Asia, and Australasia. This allows us to reject the hypothesis that Paleolithic dogs in Europe arose from an independent domestication—a major update to the dual-origin debate we covered in Part 1.
 
 The Bergström team also found that the diversity reduction typical of dogs, roughly one-third lower than in contemporary wolves, was already in place by 14,200 years ago. The domestication bottleneck happened early. This is the baseline the ancient inbreeding studies we discussed in Part 1 built upon. Dogs have been working with reduced diversity from the very beginning, making the subsequent 10,000 years of stable, low inbreeding all the more remarkable, and the modern breed-era spike a sharp statistical contrast.
 
@@ -106,7 +106,7 @@ Dogs crossed the cultural boundary between Magdalenian and Epigravettian peoples
 
 Despite more than 15,000 years of dogs and wolves sharing the same European landscapes, European dogs acquired virtually no wolf ancestry. The Marsh team found limited admixture between dogs and Near Eastern wolves, peaking at ~19% in a 7,000-year-old Israeli dog before declining to less than 5% by 2,300 years ago. In Europe, almost nothing. This stands in sharp contrast to pigs and cattle, which interbred extensively with their wild relatives after being introduced to Europe.
 
-By the Late Upper Palaeolithic, something was already keeping dog and wolf populations reproductively separate. Dogs were already “dogs” in a meaningful biological sense by 15,800 years ago.
+By the Late Upper Paleolithic, something was already keeping dog and wolf populations reproductively separate. Dogs were already “dogs” in a meaningful biological sense by 15,800 years ago.
 
 ## What This Means for Breeders
 
@@ -116,7 +116,7 @@ For those of us who think carefully about genetics and breeding, these studies r
 
 **The domestication bottleneck was real, and early.** Genetic diversity was already reduced by one-third compared to wolves by 14,200 years ago, making the subsequent 10,000 years of stable, low inbreeding remarkable, and the modern breed-era spike a sharp statistical contrast.
 
-**Dogs have always been shaped by human networks.** Palaeolithic exchange, Mesolithic migration, Neolithic adoption. Modern breeding is the latest chapter in a very long story.
+**Dogs have always been shaped by human networks.** Paleolithic exchange, Mesolithic migration, Neolithic adoption. Modern breeding is the latest chapter in a very long story.
 
 **Dog populations are resilient.** Dogs survived the Neolithic replacement when 80–90% of human ancestry was replaced. The genetic diversity in a breed today has often survived far more than we realize.
 
@@ -136,7 +136,7 @@ These two studies answer long-standing questions, but they also open new ones. H
 
 Six months ago, I wrote that “the story written in their DNA is far from complete.” These two companion studies prove that emphatically. In just half a year, the oldest confirmed dogs went from 10,900 to 15,800 years old, and the picture of how dogs spread across the ancient world transformed from a vague outline into a detailed narrative of cultural exchange, shared meals, parallel migrations, and remarkable genetic continuity.
 
-The DNA-capture approach developed by the Bergström team has palaeogeneticists especially hopeful. Ludovic Orlando noted that poorly preserved samples predating these finds may now become amenable to sequencing. The ancestral grey wolf population that gave rise to all dogs has still never been identified. Every new sample has the potential to reshape the story.
+The DNA-capture approach developed by the Bergström team has paleogeneticists especially hopeful. Ludovic Orlando noted that poorly preserved samples predating these finds may now become amenable to sequencing. The ancestral gray wolf population that gave rise to all dogs has still never been identified. Every new sample has the potential to reshape the story.
 
 > What’s becoming increasingly clear is that the human-dog partnership was already deep, widespread, and consequential by the end of the last ice age. Dogs were embedded in human societies from the British Isles to Anatolia, shared between cultures, fed by human hands, and treated with the same ritual practices as humans in death. **And when the world changed, when farming replaced foraging, when new peoples arrived, when civilizations rose and fell, the dogs endured.**
 
