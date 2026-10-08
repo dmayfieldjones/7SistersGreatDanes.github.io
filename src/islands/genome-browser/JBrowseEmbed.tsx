@@ -4,7 +4,12 @@ import {
   JBrowseLinearGenomeView,
 } from '@jbrowse/react-linear-genome-view2'
 
-import { DOG10K_SV_TBI_URL, DOG10K_SV_VCF_URL } from './dog10kSvSource'
+import {
+  DOG10K_FGF4_CSI_URL,
+  DOG10K_FGF4_VCF_URL,
+  DOG10K_SV_TBI_URL,
+  DOG10K_SV_VCF_URL,
+} from './dog10kSvSource'
 
 // UCSC's canFam4 (UU_Cfam_GSD_1.0) reference sequence, straight off hgdownload.
 const CANFAM4_TWOBIT_URL =
@@ -23,11 +28,12 @@ const NCBI_REFSEQ_CSI_URL =
 // See dog10kSvSource.ts for what this VCF is, how it was built, and why.
 const DOG10K_SAMPLES_TSV_URL = '/data/dog10k-svs-samples.tsv'
 
-export type StoryTrackId = 'sv' | 'repeats'
+export type StoryTrackId = 'sv' | 'repeats' | 'fgf4'
 
 const STORY_TRACK_IDS: Record<StoryTrackId, string> = {
   sv: 'dog10k-longread-svs',
   repeats: 'canfam4-rmsk',
+  fgf4: 'dog10k-fgf4-breeds',
 }
 
 export interface CuratedGeneFeature {
@@ -129,6 +135,34 @@ export default function JBrowseEmbed({
                 },
               },
             },
+          },
+          {
+            type: 'VariantTrack',
+            trackId: STORY_TRACK_IDS.fgf4,
+            name: 'FGF4 retrocopy footprint: short-legged vs giant breeds (Dog10K)',
+            assemblyNames: ['canFam4'],
+            adapter: {
+              type: 'VcfTabixAdapter',
+              vcfGzLocation: { uri: DOG10K_FGF4_VCF_URL },
+              index: {
+                indexType: 'CSI',
+                location: { uri: DOG10K_FGF4_CSI_URL },
+              },
+              samplesTsvLocation: {
+                uri: new URL(
+                  '/data/dog10k-fgf4-samples.tsv',
+                  window.location.origin,
+                ).href,
+              },
+            },
+            displays: [
+              {
+                type: 'LinearMultiSampleVariantDisplay',
+                displayId: 'dog10k-fgf4-breeds-LinearMultiSampleVariantDisplay',
+                rowColor: 'group',
+                facet: 'group',
+              },
+            ],
           },
           {
             type: 'VariantTrack',

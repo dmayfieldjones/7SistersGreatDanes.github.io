@@ -42,6 +42,7 @@ const TOUR_STOPS: TourStop[] = [
   {
     label: 'Height',
     gene: 'FGF4',
+    tracks: ['fgf4'],
     hook: "Why are Great Danes so tall? It's what they DON'T carry.",
   },
   {
@@ -89,6 +90,17 @@ const DOG10K_SV_SAMPLES = [
   { sample: 'Sandy', breed: 'Dingo' },
   { sample: 'mCanLor', breed: 'Greenland Wolf' },
 ]
+
+// A gene's own coordinates fill the whole view, which leaves nothing around
+// it to make sense of — pad each side by a few gene-lengths (at least 15 kb)
+// so neighboring genes and repeats are visible for context.
+function padLocation(location?: string) {
+  const match = location?.replaceAll(',', '').match(/^(.+):(\d+)-(\d+)$/)
+  if (!match) return location
+  const [, chr, start, end] = match
+  const flank = Math.max((Number(end) - Number(start)) * 3, 15000)
+  return `${chr}:${Math.max(1, Number(start) - flank)}-${Number(end) + flank}`
+}
 
 interface DescriptionComponentProps {
   geneEntry: Record<string, string>
@@ -182,7 +194,7 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
 
   const liveLocation = (
     activeTourStop?.location ??
-    geneEntry?.location ??
+    padLocation(geneEntry?.location) ??
     DEFAULT_LOCATION
   ).replaceAll(',', '')
 
@@ -401,6 +413,9 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
                     annotation.
                     {storyTracks.includes('repeats')
                       ? ' Below them, RepeatMasker shows the repeated DNA elements (SINEs, LINEs) scattered through the region — merle is one of these, a SINE inserted into the pigment gene.'
+                      : null}
+                    {storyTracks.includes('fgf4')
+                      ? ' Below them, the footprint of the FGF4 retrocopy in 40 dogs from 10 breeds. Each short-legged dog (Dachshund, Basset Hound, Corgi, Cocker Spaniel, Lhasa Apso) carries two deletions marking the FGF4 gene\u2019s introns, a sign of an extra, intron-free copy elsewhere in the genome; the giant breeds (Mastiff, Saint Bernard, Newfoundland, Deerhound, Bullmastiff) carry neither. Great Danes are not in this cohort, so their giant relatives stand in.'
                       : null}
                     {showSvTrack
                       ? ' Below them, a structural-variant track genotyped across 12 real, named dogs — one row per breed, including a Great Dane.'
