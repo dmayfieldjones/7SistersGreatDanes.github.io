@@ -23,6 +23,13 @@ const NCBI_REFSEQ_CSI_URL =
 // See dog10kSvSource.ts for what this VCF is, how it was built, and why.
 const DOG10K_SAMPLES_TSV_URL = '/data/dog10k-svs-samples.tsv'
 
+export type StoryTrackId = 'sv' | 'repeats'
+
+const STORY_TRACK_IDS: Record<StoryTrackId, string> = {
+  sv: 'dog10k-longread-svs',
+  repeats: 'canfam4-rmsk',
+}
+
 export interface CuratedGeneFeature {
   refName: string
   start: number
@@ -34,11 +41,17 @@ export interface CuratedGeneFeature {
 interface JBrowseEmbedProps {
   curatedGenes: CuratedGeneFeature[]
   location: string
+  // Story-specific evidence tracks to show on top of the gene tracks. Each is
+  // only the right evidence for some stories (the SV track for the AMY2B
+  // duplication, repeats for the merle insertion); elsewhere it is unrelated
+  // noise, so the caller opts in per story.
+  storyTracks: StoryTrackId[]
 }
 
 export default function JBrowseEmbed({
   curatedGenes,
   location,
+  storyTracks,
 }: JBrowseEmbedProps) {
   const curatedGenesTrack = useMemo(
     () => ({
@@ -99,6 +112,25 @@ export default function JBrowseEmbed({
             },
           },
           {
+            // Same hosted UCSC mirror (and CORS behavior) as the RefSeq track.
+            type: 'FeatureTrack',
+            trackId: STORY_TRACK_IDS.repeats,
+            name: 'RepeatMasker (SINEs, LINEs and other repeats)',
+            assemblyNames: ['canFam4'],
+            adapter: {
+              type: 'BedTabixAdapter',
+              bedGzLocation: {
+                uri: 'https://jbrowse.org/ucsc/canFam4/rmsk.bed.gz',
+              },
+              index: {
+                indexType: 'CSI',
+                location: {
+                  uri: 'https://jbrowse.org/ucsc/canFam4/rmsk.bed.gz.csi',
+                },
+              },
+            },
+          },
+          {
             type: 'VariantTrack',
             trackId: 'dog10k-longread-svs',
             name: 'Dog10K long-read structural variants (12 breeds incl. Great Dane)',
@@ -137,7 +169,7 @@ export default function JBrowseEmbed({
           tracks: [
             'sevensisters-curated-genes',
             'canfam4-ncbi-refseq',
-            'dog10k-longread-svs',
+            ...storyTracks.map(id => STORY_TRACK_IDS[id]),
           ],
         },
         configuration: {
@@ -162,6 +194,14 @@ export default function JBrowseEmbed({
       /* invalid/out-of-range location string; ignore */
     })
   }, [location, viewState])
+
+  useEffect(() => {
+    const view = viewState.session.view
+    for (const [id, trackId] of Object.entries(STORY_TRACK_IDS)) {
+      if (storyTracks.includes(id as StoryTrackId)) view.showTrack(trackId)
+      else view.hideTrack(trackId)
+    }
+  }, [storyTracks, viewState])
 
   return (
     <div className="genome-jbrowse-embed">
