@@ -24,7 +24,7 @@ const colorLabel: Record<string, string> = {
   'harlequin/mantle/merle': 'harl./mantle/merle',
   blue: 'blue',
   black: 'black',
-  unknown: 'colour unrecorded',
+  unknown: 'color unrecorded',
   other: 'other',
 }
 const topColors = (c: [string, number][], n: number) =>
@@ -44,7 +44,7 @@ const between = assigned.map(c => c.to_rest_kinship)
 const H = study.history
 const coiPeak = H.coi.reduce((a, b) => (b.good > a.good ? b : a))
 const coiAt = (y: number) => H.coi.find(r => r.y === y)!
-const colAt = (y: number) => H.colour.find(r => r.y === y)!
+const colAt = (y: number) => H.color.find(r => r.y === y)!
 const L = H.litter
 const recAt = (y: number) => H.recording.find(r => r.y === y)!
 const recMaxMerle = H.recording.filter(r => r.y <= 2005).reduce((a, b) => (b.merle > a.merle ? b : a))
@@ -58,7 +58,7 @@ const designCols = [DS.coverage.final, DS.diversity.final, DS.combined.final, DS
 const famSplit = (f: Record<string, number>) => `${f.fawn} / ${f.harl} / ${f.blue} / ${f.other}`
 const cohortAt = (y: string) => FO.cohorts.find(c => c.years === y)!
 const cohortPeak = FO.cohorts.reduce((a, b) => (b.fa > a.fa ? b : a))
-const earlyCol = (c: string) => FO.early_colours.find(r => r.colour === c)!
+const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
 ---
 
 <BaseLayout
@@ -94,7 +94,7 @@ const earlyCol = (c: string) => FO.early_colours.find(r => r.colour === c)!
       </div>
       <div class="ks-tile">
         <span class="ks-tile-value">{assigned.length}</span>
-        <span class="ks-tile-label">lines, which follow colour families</span>
+        <span class="ks-tile-label">lines, which follow color families</span>
       </div>
       <div class="ks-tile">
         <span class="ks-tile-value">{pct(at(10).all)}</span>
@@ -122,7 +122,7 @@ const earlyCol = (c: string) => FO.early_colours.find(r => r.colour === c)!
           In everyday terms, two dogs from the same cluster are typically as
           related as first cousins to half siblings, while two dogs from
           different clusters are more distant than first cousins. The clusters line
-          up with colour families: fawn/brindle, harlequin/mantle, and
+          up with color families: fawn/brindle, harlequin/mantle, and
           blue/black are largely bred as separate lines.
         </li>
         <li>
@@ -148,7 +148,7 @@ const earlyCol = (c: string) => FO.early_colours.find(r => r.colour === c)!
           {pct(at(2).all)} of the population; forty reach{' '}
           {pct(at(40).all)}. That is possible because so many dogs share
           the same ancestors several times over. But picking purely
-          for coverage favours the big fawn/brindle line: after ten picks,{' '}
+          for coverage favors the big fawn/brindle line: after ten picks,{' '}
           {pct(at(10).fawn)} of fawn/brindle dogs are covered but only{' '}
           {pct(at(10).blue)} of blue/black dogs.
         </li>
@@ -177,15 +177,15 @@ const earlyCol = (c: string) => FO.early_colours.find(r => r.colour === c)!
     <details class="ks-sec" id="structure">
       <summary>
         <h2>1. Population structure</h2>
-        <span class="ks-gist">{assigned.length} lines that follow the colour families; kinship is 3–4× higher inside a line than between lines.</span>
+        <span class="ks-gist">{assigned.length} lines that follow the color families; kinship is 3–4× higher inside a line than between lines.</span>
       </summary>
       <p>
         Each dot is one dog, placed by the two strongest axes of the
         relationship matrix (principal coordinates; they explain{' '}
         {study.pca_var[0]}% and {study.pca_var[1]}% of the variation). Dogs
-        close together share more ancestry. Colour is the cluster's colour
+        close together share more ancestry. Color is the cluster's color
         family, found by clustering the kinship matrix, not from the coat
-        colour field.
+        color field.
       </p>
       <figure class="ks-figure">
         <div class="ks-legend" id="pca-legend"></div>
@@ -194,7 +194,7 @@ const earlyCol = (c: string) => FO.early_colours.find(r => r.colour === c)!
           <button type="button" id="pca-clear">Show all clusters</button>
         </div>
         <div class="ks-plot" id="pca-wrap">
-          <canvas id="pca" role="img" aria-label="Scatter plot of dogs by the first two principal coordinates of pedigree relationship, coloured by colour-family cluster; the fawn/brindle, harlequin/mantle and blue/black groups occupy separate regions."></canvas>
+          <canvas id="pca" role="img" aria-label="Scatter plot of dogs by the first two principal coordinates of pedigree relationship, colored by color-family cluster; the fawn/brindle, harlequin/mantle and blue/black groups occupy separate regions."></canvas>
           <div class="ks-tip" id="pca-tip" hidden></div>
         </div>
         <figcaption>
@@ -210,12 +210,12 @@ const earlyCol = (c: string) => FO.early_colours.find(r => r.colour === c)!
           <thead>
             <tr>
               <th scope="col">Cluster</th>
-              <th scope="col">Colour family</th>
+              <th scope="col">Color family</th>
               <th scope="col" class="num">Dogs</th>
               <th scope="col" class="num">Mean F</th>
               <th scope="col" class="num">Kinship within</th>
               <th scope="col" class="num">Kinship to rest</th>
-              <th scope="col">Recorded colours</th>
+              <th scope="col">Recorded colors</th>
               <th scope="col">Main registry</th>
             </tr>
           </thead>
@@ -431,7 +431,7 @@ const earlyCol = (c: string) => FO.early_colours.find(r => r.colour === c)!
       </div>
       <p>
         Most early dogs on record still have descendants, but a handful do
-        most of the contributing. The colours fared differently too. Among
+        most of the contributing. The colors fared differently too. Among
         dogs born 1900–1939, fawns and brindles were{' '}
         {earlyCol('fawn/brindle').dogs}% of the dogs recorded but supply{' '}
         {earlyCol('fawn/brindle').contribution}% of what that era contributes
@@ -487,7 +487,7 @@ const earlyCol = (c: string) => FO.early_colours.find(r => r.colour === c)!
         </div>
         <figcaption>
           Share of dogs with a half-sib-or-closer relative among the first{' '}
-          <em>n</em> picks, overall and by colour family.
+          <em>n</em> picks, overall and by color family.
         </figcaption>
       </figure>
       <div class="ks-table-wrap">
@@ -564,8 +564,8 @@ const earlyCol = (c: string) => FO.early_colours.find(r => r.colour === c)!
         to twice the coverage design, and they are far less inbred (mean F{' '}
         {DS.diversity.final.F.toFixed(2)}), so less of each dog's own genome
         is the same copy twice. The picks spread almost evenly over the
-        colour families. This is the right panel for cataloguing the breed's
-        variation and for comparing lines on equal terms: whether the colour
+        color families. This is the right panel for cataloguing the breed's
+        variation and for comparing lines on equal terms: whether the color
         lines are separate populations (question 1), genetic load by line
         (question 5) and a pangenome (question 7).
       </p>
@@ -744,12 +744,12 @@ const earlyCol = (c: string) => FO.early_colours.find(r => r.colour === c)!
     <details class="ks-sec" id="history">
       <summary>
         <h2>6. Breeding choices through history</h2>
-        <span class="ks-gist">140 years of registry growth, inbreeding, litter size and colour pairings.</span>
+        <span class="ks-gist">140 years of registry growth, inbreeding, litter size and color pairings.</span>
       </summary>
       <p>
         The same database reaches back to the 1880s, so we can ask how
         breeders' choices changed. Everything here uses {fmt(H.dated)} dogs
-        with a recorded birth year and {fmt(H.litters)} litters, summarised
+        with a recorded birth year and {fmt(H.litters)} litters, summarized
         over a rolling {H.window}-year window.
       </p>
 
@@ -778,7 +778,7 @@ const earlyCol = (c: string) => FO.early_colours.find(r => r.colour === c)!
         <figcaption>The same dogs as shares of each five-year birth cohort.</figcaption>
       </figure>
       <p>
-        The breed's centre of gravity crossed the Atlantic during the Second
+        The breed's center of gravity crossed the Atlantic during the Second
         World War. Until the 1930s the record is almost entirely European,
         mostly German stud-book dogs. American dogs appear in the 1930s, and
         in 1945–49 they outnumber European dogs for the first time, more
@@ -920,36 +920,36 @@ const earlyCol = (c: string) => FO.early_colours.find(r => r.colour === c)!
         in <a href="#questions">section 7</a>) in place of the pedigree estimate.
       </p>
 
-      <h3>Colour pairings</h3>
+      <h3>Color pairings</h3>
       <p>
-        Breed clubs have long asked breeders to keep three colour families
+        Breed clubs have long asked breeders to keep three color families
         apart: fawn/brindle, harlequin/mantle (with black), and blue (with
         black). The documented milestones:
       </p>
       <ol class="ks-timeline">
-        <li><strong>1880–1891.</strong> Germany fixes the name Deutsche Dogge (1880), founds the Deutscher Doggen-Club (1888) and issues the first standard (1891). The club notes that early breeders were "much more liberal" about separating colours than later ones.</li>
-        <li><strong>1954–1959.</strong> Lina Basquette shows CH Honey Hollow Stormi Rudio, a fawn from a fawn × black mating. He is the No. 1 Working dog in the US from 1957 to 1959 and wins the 1959 Westminster Working Group. The backlash is described as the start of the US "colour code wars".</li>
-        <li><strong>GDCA colour code.</strong> Part of the GDCA Code of Ethics for decades (the adoption year isn't published online). Blue may not be bred to fawn/brindle, or to harlequin or black-from-harlequin; fawn/brindle may not be bred into harlequin lines; and dogs had to be clear of other colours for four generations. It does not forbid black × fawn, and black has long been crossed with fawn and brindle to improve blacks.</li>
-        <li><strong>UK Breed Council colour code.</strong> Its list of approved matings pairs black only with blue, black, harlequin and mantle; fawn/brindle × harlequin/mantle is not recommended. Under revision since 2021.</li>
+        <li><strong>1880–1891.</strong> Germany fixes the name Deutsche Dogge (1880), founds the Deutscher Doggen-Club (1888) and issues the first standard (1891). The club notes that early breeders were "much more liberal" about separating colors than later ones.</li>
+        <li><strong>1954–1959.</strong> Lina Basquette shows CH Honey Hollow Stormi Rudio, a fawn from a fawn × black mating. He is the No. 1 Working dog in the US from 1957 to 1959 and wins the 1959 Westminster Working Group. The backlash is described as the start of the US "color code wars".</li>
+        <li><strong>GDCA color code.</strong> Part of the GDCA Code of Ethics for decades (the adoption year isn't published online). Blue may not be bred to fawn/brindle, or to harlequin or black-from-harlequin; fawn/brindle may not be bred into harlequin lines; and dogs had to be clear of other colors for four generations. It does not forbid black × fawn, and black has long been crossed with fawn and brindle to improve blacks.</li>
+        <li><strong>UK Breed Council color code.</strong> Its list of approved matings pairs black only with blue, black, harlequin and mantle; fawn/brindle × harlequin/mantle is not recommended. Under revision since 2021.</li>
         <li><strong>1988.</strong> Neil O'Sullivan and Phillip Sponenberg publish evidence in <em>Genetica</em> that harlequin is a modification of merle. DNA work at Texas A&amp;M and Clemson later finds both genes.</li>
-        <li><strong>2000.</strong> The GDCA approves black mantle as a colour.</li>
-        <li><strong>2012.</strong> The FCI (European) standard drops grey merle as a disqualifying fault.</li>
+        <li><strong>2000.</strong> The GDCA approves black mantle as a color.</li>
+        <li><strong>2012.</strong> The FCI (European) standard drops gray merle as a disqualifying fault.</li>
         <li><strong>2015.</strong> GDCA members vote by a large margin to accept merle.</li>
-        <li><strong>2019.</strong> The AKC recognises merle on 1 January, and the first merle champion finishes that April. The GDCA takes its colour code down for a revision built around DNA colour testing.</li>
+        <li><strong>2019.</strong> The AKC recognizes merle on 1 January, and the first merle champion finishes that April. The GDCA takes its color code down for a revision built around DNA color testing.</li>
       </ol>
       <p>
-        Using the recorded colour of both parents
-        ({fmt(H.litters_with_colour)} litters), each litter is classed as within
+        Using the recorded color of both parents
+        ({fmt(H.litters_with_color)} litters), each litter is classed as within
         a family (fawn × fawn/brindle, harlequin × harlequin/mantle,
         blue × blue, and black with harlequin, blue or black) or as a
         cross between families. The dashed lines mark 1959, 2000, 2015 and 2019.
       </p>
       <figure class="ks-figure">
         <div class="ks-plot" id="cross-wrap">
-          <svg id="cross" role="img" aria-label="Share of litters from cross-family colour pairings over time."></svg>
+          <svg id="cross" role="img" aria-label="Share of litters from cross-family color pairings over time."></svg>
           <div class="ks-tip" id="cross-tip" hidden></div>
         </div>
-        <figcaption>All cross-family pairings, share of litters with both parents' colours recorded.</figcaption>
+        <figcaption>All cross-family pairings, share of litters with both parents' colors recorded.</figcaption>
       </figure>
       <div class="ks-multiples" id="pairs"></div>
       <p>
@@ -973,15 +973,15 @@ const earlyCol = (c: string) => FO.early_colours.find(r => r.colour === c)!
         for forty years, then climbed again from the mid-2000s.
       </p>
       <p class="ks-note">
-        Colour is recorded for about half of dogs, and a litter counts only
-        when both parents have a colour. Black is shared by the harlequin and
+        Color is recorded for about half of dogs, and a litter counts only
+        when both parents have a color. Black is shared by the harlequin and
         blue families, so black × harlequin and black × blue count as within
         family.
       </p>
 
       <h3>Recognition changed the records</h3>
       <p>
-        When a colour is recognised, breeders record it by name. Among
+        When a color is recognized, breeders record it by name. Among
         harlequin-family dogs (harlequin, mantle, merle and white, not
         counting solid blacks), the share recorded as mantle was already
         rising before the GDCA approved it in 2000, and it kept climbing
@@ -1022,7 +1022,7 @@ const earlyCol = (c: string) => FO.early_colours.find(r => r.colour === c)!
       <p>
         The pedigree records who bred to whom for 140 years; genomes record
         what those choices did. Great Danes are unusual in having both a deep,
-        dated pedigree and a documented set of breeding rules (the colour
+        dated pedigree and a documented set of breeding rules (the color
         codes), which makes the breed a natural experiment in how human
         decisions reshape a genome. Below are the questions we find most
         interesting, ranked by the science rather than by cost, with the
@@ -1039,7 +1039,7 @@ const earlyCol = (c: string) => FO.early_colours.find(r => r.colour === c)!
         <li><strong>Great Danes specifically:</strong> one long-read reference genome (Zoey, 2021); 83 low-pass genomes for a megaesophagus study (2023); immune-gene variants linked to bloat (2017); population structure only from small marker panels (10 microsatellites in 88 dogs, which separated American from European Danes; 33 markers in 43 dogs at UC Davis); giant size partly mapped to loci on the X chromosome in a study of 19 giant breeds; merle and harlequin genes known down to merle insertion length.</li>
       </ul>
       <p>
-        Two gaps stand out. Nobody has looked at Great Dane colour lines
+        Two gaps stand out. Nobody has looked at Great Dane color lines
         genome-wide, and no historical genome series, in any breed, has had a
         full pedigree to test against.
       </p>
@@ -1054,10 +1054,10 @@ const earlyCol = (c: string) => FO.early_colours.find(r => r.colour === c)!
         <div class="ks-compare-col">
           <p class="ks-compare-head">Where Great Danes are stronger</p>
           <ul>
-            <li><strong>The rules target known genes.</strong> The colour codes decided which matings to avoid, and those decisions act on genes we can read directly: merle, harlequin, blue, and the fawn/black switch. A rule's effect can be measured twice: at the genes it aimed at, and across the whole genome as a side effect. German Shepherd breeding is also tightly regulated (the German club's breed surveys, and the split into working and show lines), but those rules select on looks and performance, which are spread across many genes.</li>
-            <li><strong>Several populations within one breed.</strong> This analysis finds {assigned.length} lines following the colour families, with 3–4× more kinship within lines than between them. That allows comparisons inside the breed: the same era, different rules. The German Shepherd study followed essentially one population through time.</li>
+            <li><strong>The rules target known genes.</strong> The color codes decided which matings to avoid, and those decisions act on genes we can read directly: merle, harlequin, blue, and the fawn/black switch. A rule's effect can be measured twice: at the genes it aimed at, and across the whole genome as a side effect. German Shepherd breeding is also tightly regulated (the German club's breed surveys, and the split into working and show lines), but those rules select on looks and performance, which are spread across many genes.</li>
+            <li><strong>Several populations within one breed.</strong> This analysis finds {assigned.length} lines following the color families, with 3–4× more kinship within lines than between them. That allows comparisons inside the breed: the same era, different rules. The German Shepherd study followed essentially one population through time.</li>
             <li><strong>A deep, dated pedigree.</strong> The German Shepherd study had nine museum genomes and no pedigree; it inferred bottlenecks from the DNA and linked them to popular sires afterwards. Here, 140 years of dated pedigree let every genomic estimate be checked against a known history.</li>
-            <li><strong>Two dated events to recover.</strong> WWII, and the move of the breed's centre from Germany to America (American dogs first outnumber European ones in 1945–49), are fixed dates the genome should be able to find.</li>
+            <li><strong>Two dated events to recover.</strong> WWII, and the move of the breed's center from Germany to America (American dogs first outnumber European ones in 1945–49), are fixed dates the genome should be able to find.</li>
             <li><strong>An extreme body.</strong> Giant size and a short life make Danes a natural test of the finding that bigger breeds gain more new mutations early in development. A mid-sized breed can't address that.</li>
           </ul>
         </div>
@@ -1075,7 +1075,7 @@ const earlyCol = (c: string) => FO.early_colours.find(r => r.colour === c)!
         <strong>The pitch:</strong> two breeds formed in the same country in
         the same decades and hit by the same war, but bred under different
         rules. German Shepherds are one population selected for work; Great
-        Danes were divided by colour codes and then moved to a new continent.
+        Danes were divided by color codes and then moved to a new continent.
         Running the same methods on both makes each result mean more, and it
         answers the German Shepherd authors' own call for time series from
         breeds with different histories.
@@ -1085,26 +1085,26 @@ const earlyCol = (c: string) => FO.early_colours.find(r => r.colour === c)!
       <div class="ks-papers">
         <article class="ks-paper">
           <p class="ks-paper-rank">1 · start here</p>
-          <h4>Can a breed club's rulebook split a population? Colour codes as a natural experiment</h4>
-          <p><strong>Question.</strong> For decades, breeders kept fawn/brindle, harlequin/mantle and blue/black apart by agreement, not geography. Did that written rule create genetically distinct subpopulations, as a river or a mountain range would? Did it work at the colour genes it targeted: do fawn lines still hide blue alleles, and solid lines cryptic merle? And does the growing black × fawn crossing show up as gene flow?</p>
+          <h4>Can a breed club's rulebook split a population? Color codes as a natural experiment</h4>
+          <p><strong>Question.</strong> For decades, breeders kept fawn/brindle, harlequin/mantle and blue/black apart by agreement, not geography. Did that written rule create genetically distinct subpopulations, as a river or a mountain range would? Did it work at the color genes it targeted: do fawn lines still hide blue alleles, and solid lines cryptic merle? And does the growing black × fawn crossing show up as gene flow?</p>
           <p><strong>Figures.</strong></p>
           <ul>
             <li>Genomic PCA beside the pedigree PCA in <a href="#structure">section 1</a>, for the same dogs, aligned so each dog can be compared.</li>
             <li>Genetic differentiation (F<sub>ST</sub>) between the {assigned.length} lines, set against how many generations the pedigree says they have been apart.</li>
-            <li>Colour-gene allele frequencies by line, including the length spectrum of merle insertions.</li>
+            <li>Color-gene allele frequencies by line, including the length spectrum of merle insertions.</li>
             <li>Ancestry bars with black × fawn offspring highlighted.</li>
           </ul>
-          <p><strong>Why first.</strong> It is the question only Great Danes can answer cleanly: several colour families under written rules with a documented history, including exactly when the rules bent. It asks something general, how cultural rules shape genomes. And it defines the lines, the unit every later question is measured on. It needs only living dogs.</p>
+          <p><strong>Why first.</strong> It is the question only Great Danes can answer cleanly: several color families under written rules with a documented history, including exactly when the rules bent. It asks something general, how cultural rules shape genomes. And it defines the lines, the unit every later question is measured on. It needs only living dogs.</p>
         </article>
 
         <article class="ks-paper">
           <p class="ks-paper-rank">2 · the flagship</p>
           <h4>140 years of Great Dane genomes, read against the pedigree that made them</h4>
-          <p><strong>Question.</strong> Sequence historical Great Danes (museum skeletons, teeth, taxidermy and dated hair from about 1880 onward) alongside modern dogs. Did diversity fall the way the pedigree predicts? When did the colour lines actually diverge: before the codes, or because of them? What did WWII and the move from Germany to America do to the genome? Which popular sires left the deepest marks?</p>
+          <p><strong>Question.</strong> Sequence historical Great Danes (museum skeletons, teeth, taxidermy and dated hair from about 1880 onward) alongside modern dogs. Did diversity fall the way the pedigree predicts? When did the color lines actually diverge: before the codes, or because of them? What did WWII and the move from Germany to America do to the genome? Which popular sires left the deepest marks?</p>
           <p><strong>Figures.</strong></p>
           <ul>
             <li>The headline: heterozygosity and runs of homozygosity by birth year, with each historical genome plotted against the pedigree's prediction for that same year.</li>
-            <li>Historical dogs placed on the modern genomic map, showing the path from German to American Danes and the colour lines branching apart.</li>
+            <li>Historical dogs placed on the modern genomic map, showing the path from German to American Danes and the color lines branching apart.</li>
             <li>Bottleneck dating from the genome, checked against the war years and popular sires named in the pedigree.</li>
           </ul>
           <p><strong>Why it could be a first.</strong> It would be the first historical genome series for Great Danes, and the first in any breed tested against a full, dated pedigree. That pedigree is exactly what the German Shepherd study lacked. Natural history museums hold breed collections (the German Shepherd specimens came from Bern), so finding dated Great Danes is the first practical step, and worth starting now.</p>
@@ -1118,7 +1118,7 @@ const earlyCol = (c: string) => FO.early_colours.find(r => r.colour === c)!
           <ul>
             <li>Pedigree F against genomic inbreeding (F<sub>ROH</sub>) for each dog.</li>
             <li>Runs of homozygosity split by length, by birth cohort, against the pedigree's timeline.</li>
-            <li>Realised against expected relatedness for relatives of each degree.</li>
+            <li>Realized against expected relatedness for relatives of each degree.</li>
           </ul>
           <p><strong>Why it matters.</strong> It checks a method used across conservation and livestock genetics, using a population whose history is written down. It comes from the same genomes as questions 1 and 2.</p>
         </article>
@@ -1139,7 +1139,7 @@ const earlyCol = (c: string) => FO.early_colours.find(r => r.colour === c)!
         <article class="ks-paper">
           <p class="ks-paper-rank">5</p>
           <h4>Did the bottleneck purge or concentrate harmful variants, line by line?</h4>
-          <p><strong>Question.</strong> Every recorded case of inherited myopathy of Great Danes (IMGD) was fawn or brindle, a hint that colour-line structure also decides where disease alleles sit. Did the post-war bottleneck purge harmful variants or pile them up, and does that differ between lines?</p>
+          <p><strong>Question.</strong> Every recorded case of inherited myopathy of Great Danes (IMGD) was fawn or brindle, a hint that color-line structure also decides where disease alleles sit. Did the post-war bottleneck purge harmful variants or pile them up, and does that differ between lines?</p>
           <p><strong>Figures.</strong></p>
           <ul>
             <li>Homozygous harmful variants per dog, by line and birth year, historical dogs included.</li>
@@ -1152,7 +1152,7 @@ const earlyCol = (c: string) => FO.early_colours.find(r => r.colour === c)!
           <p class="ks-paper-rank">6</p>
           <h4>Choosing which dogs to sequence</h4>
           <p><strong>Question.</strong> Does a reference panel chosen from the pedigree (<a href="#sequencing">section 4</a>), for coverage, for diversity or for both, impute the breed better than one chosen at random or by convenience?</p>
-          <p><strong>Figures.</strong> Imputation accuracy and variants discovered against panel size, for coverage, diversity, combined and random panels, by colour family.</p>
+          <p><strong>Figures.</strong> Imputation accuracy and variants discovered against panel size, for coverage, diversity, combined and random panels, by color family.</p>
           <p><strong>Why it matters.</strong> Standard in cattle, untested in a dog breed. It is a methods result more than a discovery, which is why it sits here, but it makes every later study cheaper.</p>
         </article>
 
@@ -1167,7 +1167,7 @@ const earlyCol = (c: string) => FO.early_colours.find(r => r.colour === c)!
 
       <h3>Why this order</h3>
       <ol class="ks-why">
-        <li><strong>Question 1 comes first because everything else is measured in its units.</strong> Whether the colour lines are real genetic populations decides how questions 2–7 are sampled and read. It is also the question most specific to Great Danes, and it has a general answer: whether rules alone can split a population.</li>
+        <li><strong>Question 1 comes first because everything else is measured in its units.</strong> Whether the color lines are real genetic populations decides how questions 2–7 are sampled and read. It is also the question most specific to Great Danes, and it has a general answer: whether rules alone can split a population.</li>
         <li><strong>Question 2 is the most exciting, and should start in parallel.</strong> It reuses question 1's modern genomes as its present-day end. The slow part is finding dated historical specimens, so that search should begin now.</li>
         <li><strong>Question 3 comes almost free with 1 and 2</strong> and tests a widely used method against written history.</li>
         <li><strong>Questions 4 and 5 turn the history into biology:</strong> what size and bottlenecks did to mutation and genetic load. They are richer once the lines and the time series exist.</li>
@@ -1193,9 +1193,9 @@ const earlyCol = (c: string) => FO.early_colours.find(r => r.colour === c)!
           genotyped dogs would let us check these estimates.
         </li>
         <li>
-          <strong>Colour family is inferred.</strong> Clusters were found from
-          relatedness alone; the colour labels describe what most dogs in
-          each cluster are recorded as. About a fifth of dogs have no colour
+          <strong>Color family is inferred.</strong> Clusters were found from
+          relatedness alone; the color labels describe what most dogs in
+          each cluster are recorded as. About a fifth of dogs have no color
           on record.
         </li>
         <li>
@@ -1225,9 +1225,9 @@ const earlyCol = (c: string) => FO.early_colours.find(r => r.colour === c)!
         <li><a href="https://vgl.ucdavis.edu/sites/g/files/dgvnsk15116/files/media/documents/GD_Preliminary_Report_v2.pdf" rel="noopener">UC Davis VGL, Genetic Diversity Testing for Great Dane</a></li>
         <li><a href="https://mobilednajournal.biomedcentral.com/articles/10.1186/s13100-018-0131-6" rel="noopener">Murphy et al. 2018, Length variations within the Merle retrotransposon of canine PMEL</a></li>
         <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6325901/" rel="noopener">Sams &amp; Boyko 2019, Fine-scale resolution of runs of homozygosity in domestic dogs</a></li>
-        <li><a href="https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0223995" rel="noopener">True Colors: hidden colour allele variation among dog breeds (2019)</a></li>
+        <li><a href="https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0223995" rel="noopener">True Colors: hidden color allele variation among dog breeds (2019)</a></li>
       </ul>
-      <p class="ks-src-head">Colour-code history</p>
+      <p class="ks-src-head">Color-code history</p>
       <ul>
         <li><a href="https://www.doggen.de/der-club/die-historie-der-deutschen-dogge" rel="noopener">Deutscher Doggen Club 1888 e.V., Die Historie der Deutschen Dogge</a></li>
         <li><a href="https://greatdanegnosis.wordpress.com/2016/03/06/the-ignominious-beginning-of-the-great-dane-color-code-of-ethics/" rel="noopener">Great Dane Gnosis, The "Ignominious Beginning of the Great Dane Color Code of Ethics"</a></li>
@@ -1254,11 +1254,11 @@ const earlyCol = (c: string) => FO.early_colours.find(r => r.colour === c)!
         relationship matrix was then computed the same way.
       </p>
       <p>
-        Clustering: average-linkage hierarchical clustering on 1 − normalised
+        Clustering: average-linkage hierarchical clustering on 1 − normalized
         relationship, cut to give twelve clusters of at least 30 dogs.
-        Sequencing picks, coverage design: greedy maximisation of the mean,
+        Sequencing picks, coverage design: greedy maximization of the mean,
         over the reference population, of each dog's relationship to its
-        closest selected dog. Diversity design: greedy minimisation of the
+        closest selected dog. Diversity design: greedy minimization of the
         mean kinship among the selected dogs, self-kinship included.
         Effective population size: from individual increase in inbreeding,
         ΔFᵢ = 1 − (1 − Fᵢ)^(1/(tᵢ − 1)), with tᵢ the equivalent complete
@@ -1283,7 +1283,7 @@ const earlyCol = (c: string) => FO.early_colours.find(r => r.colour === c)!
         and correlates with it at 0.95 for 2012–2020 dogs. Litters are unique
         sire–dam–birth-year combinations. Rolling windows are ten birth years
         wide and shown only where they hold at least 50 well-documented dogs
-        (COI) or 60 litters with both parents' colours (pairings).
+        (COI) or 60 litters with both parents' colors (pairings).
       </p>
     </details>
     <a class="ks-to-sections" id="ks-to-sections" href="#sections" hidden>↑ Sections</a>
@@ -1295,7 +1295,7 @@ const earlyCol = (c: string) => FO.early_colours.find(r => r.colour === c)!
     curve: study.curve,
     clusterFamily: Object.fromEntries(study.clusters.map(c => [c.cluster, c.family])),
     designs: { coverage: study.designs.coverage.curve, diversity: study.designs.diversity.curve, combined: study.designs.combined.curve, ref: study.founders.fge },
-    history: { counts: study.history.counts, coi: study.history.coi, colour: study.history.colour, regions: study.history.region_years, recording: study.history.recording, litter: study.history.litter.bins },
+    history: { counts: study.history.counts, coi: study.history.coi, color: study.history.color, regions: study.history.region_years, recording: study.history.recording, litter: study.history.litter.bins },
   })} />
 </BaseLayout>
 
@@ -1310,7 +1310,7 @@ const earlyCol = (c: string) => FO.early_colours.find(r => r.colour === c)!
     history: {
       counts: Record<string, number>
       coi: { y: number; good: number; all: number; close: number; n: number }[]
-      colour: Record<string, number>[]
+      color: Record<string, number>[]
       regions: { y: number; us: number; eu: number; au: number; rest: number }[]
       recording: { y: number; n: number; mantle: number; merle: number }[]
       litter: { lo: number; hi: number; n: number; mean: number; ci: number }[]
@@ -1392,7 +1392,7 @@ const earlyCol = (c: string) => FO.early_colours.find(r => r.colour === c)!
         for (const p of pts) if (p.fam === fam) dot(p, 2.2)
       }
     } else {
-      // everyone else recedes to a faint grey; the chosen cluster sits on top
+      // everyone else recedes to a faint gray; the chosen cluster sits on top
       ctx.fillStyle = css('--muted')
       ctx.globalAlpha = 0.12
       for (const p of pts) if (p.c !== selectedCluster) dot(p, 2)
@@ -1810,7 +1810,7 @@ const earlyCol = (c: string) => FO.early_colours.find(r => r.colour === c)!
     const val = (r: Record<string, number>, k: string) => (share ? (100 * r[k]) / Math.max(1, total(r)) : r[k])
     const bw = share ? 0 : Math.max(1, (W - m.l - m.r) / (x1 - x0 + 1) - 0.6)
     if (share) {
-      // stacked areas from the bottom series up, with a surface-coloured seam between them
+      // stacked areas from the bottom series up, with a surface-colored seam between them
       let lower = rows.map(() => 0)
       for (const g of REGIONS) {
         const upper = rows.map((r, i) => lower[i] + val(r, g.key))
@@ -1893,7 +1893,7 @@ const earlyCol = (c: string) => FO.early_colours.find(r => r.colour === c)!
     yearChart('close', h.coi, [{ key: 'close', label: 'COI10 ≥ 0.25', token: '--ink' }], {
       yMax: 15, yStep: 5, fmt: v => `${v.toFixed(v < 10 && v % 1 ? 1 : 0)}%`, height: 180, bands: WARS, x0: 1900,
     })
-    yearChart('cross', h.colour, [{ key: 'cross', label: 'Cross-family', token: '--ink' }], {
+    yearChart('cross', h.color, [{ key: 'cross', label: 'Cross-family', token: '--ink' }], {
       yMax: 20, yStep: 5, fmt: v => `${v.toFixed(v % 1 ? 1 : 0)}%`, height: 200, bands: WARS, x0: 1890, marks: CODE_MARKS,
     })
     yearChart('rec', h.recording, [
@@ -1910,7 +1910,7 @@ const earlyCol = (c: string) => FO.early_colours.find(r => r.colour === c)!
     }
     // draw after every panel is in the grid, so each measures its final width
     for (const p of PAIRS) {
-      yearChart(`pair-${p.key}`, h.colour, [{ key: p.key, label: p.label, token: '--ink' }], {
+      yearChart(`pair-${p.key}`, h.color, [{ key: p.key, label: p.label, token: '--ink' }], {
         yMax: 15, yStep: 5, fmt: v => `${v.toFixed(v % 1 ? 1 : 0)}%`, height: 140, bands: WARS, x0: 1890, mini: true, marks: CODE_MARKS,
       })
     }

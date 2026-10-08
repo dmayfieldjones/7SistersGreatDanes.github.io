@@ -200,7 +200,7 @@ def main():
              'blue': 'black/blue', 'harlequin': 'harlequin'}.get(c, 'other or unrecorded')
         n_col[c] += 1
         w_col[c] += q_ref[i]
-    founders['early_colours'] = [dict(colour=c, dogs=round(100 * n_col[c] / len(early)),
+    founders['early_colors'] = [dict(color=c, dogs=round(100 * n_col[c] / len(early)),
                                       contribution=round(100 * w_col[c] / sum(w_col.values())))
                                  for c, _ in n_col.most_common()]
 

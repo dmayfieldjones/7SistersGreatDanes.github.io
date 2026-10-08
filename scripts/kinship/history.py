@@ -3,7 +3,7 @@
 
 For every dog with a birth year: 10-generation inbreeding (COI10) and how
 complete those 10 generations are; for every litter (sire, dam, year) with
-both parents' colours recorded: the colour pairing. Writes per-dog and
+both parents' colors recorded: the color pairing. Writes per-dog and
 per-litter CSVs plus a yearly summary JSON. Uses the same loading and
 link-cleaning as pedigree_kinship.py.
 
@@ -28,7 +28,7 @@ DOGS = {}
 POS = {}
 
 
-def colour_family(c):
+def color_family(c):
     c = (c or '').lower()
     if not c:
         return None
@@ -106,11 +106,11 @@ def main():
 
     with open(os.path.join(args.out, 'dogs_history.csv'), 'w', newline='', encoding='utf-8') as fh:
         w = csv.writer(fh)
-        w.writerow(['id', 'year', 'sex', 'colour', 'family', 'coi10', 'ecg10', 'ancestors10'])
+        w.writerow(['id', 'year', 'sex', 'color', 'family', 'coi10', 'ecg10', 'ancestors10'])
         for d in dated:
             x = DOGS[d]
             f, ecg, n = res[d]
-            w.writerow([d, x['year'], x['sex'], x['color'], colour_family(x['color']) or '',
+            w.writerow([d, x['year'], x['sex'], x['color'], color_family(x['color']) or '',
                         round(f, 5), round(ecg, 3), n])
 
     litters = {}
@@ -122,7 +122,7 @@ def main():
         w = csv.writer(fh)
         w.writerow(['year', 'sire_family', 'dam_family', 'pairing', 'puppies', 'coi10'])
         for (s, m, y), pups in litters.items():
-            fs, fm = colour_family(DOGS[s]['color']), colour_family(DOGS[m]['color'])
+            fs, fm = color_family(DOGS[s]['color']), color_family(DOGS[m]['color'])
             pairing = ' x '.join(sorted([fs, fm])) if fs and fm else ''
             w.writerow([y, fs or '', fm or '', pairing, len(pups), round(res[pups[0]][0], 5)])
     log(f'{len(litters)} litters written')
