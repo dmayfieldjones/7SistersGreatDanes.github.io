@@ -5,6 +5,8 @@ import {
 } from '@jbrowse/react-linear-genome-view2'
 
 import {
+  DOG10K_COAT_CSI_URL,
+  DOG10K_COAT_VCF_URL,
   DOG10K_FGF4_CSI_URL,
   DOG10K_FGF4_VCF_URL,
   DOG10K_SV_TBI_URL,
@@ -28,11 +30,12 @@ const NCBI_REFSEQ_CSI_URL =
 // See dog10kSvSource.ts for what this VCF is, how it was built, and why.
 const DOG10K_SAMPLES_TSV_URL = '/data/dog10k-svs-samples.tsv'
 
-export type StoryTrackId = 'sv' | 'fgf4'
+export type StoryTrackId = 'sv' | 'fgf4' | 'coat'
 
 const STORY_TRACK_IDS: Record<StoryTrackId, string> = {
   sv: 'dog10k-longread-svs',
   fgf4: 'dog10k-fgf4-breeds',
+  coat: 'dog10k-coat-others',
 }
 
 // A single hand-placed point of interest for a story (e.g. a published
@@ -152,6 +155,34 @@ export default function JBrowseEmbed({
                 location: { uri: NCBI_REFSEQ_CSI_URL },
               },
             },
+          },
+          {
+            type: 'VariantTrack',
+            trackId: STORY_TRACK_IDS.coat,
+            name: 'SNP genotypes: other breeds and wolves (Dog10K)',
+            assemblyNames: ['canFam4'],
+            adapter: {
+              type: 'VcfTabixAdapter',
+              vcfGzLocation: { uri: DOG10K_COAT_VCF_URL },
+              index: {
+                indexType: 'CSI',
+                location: { uri: DOG10K_COAT_CSI_URL },
+              },
+              samplesTsvLocation: {
+                uri: new URL(
+                  '/data/dog10k-coat-samples.tsv',
+                  window.location.origin,
+                ).href,
+              },
+            },
+            displays: [
+              {
+                type: 'LinearMultiSampleVariantDisplay',
+                displayId: 'dog10k-coat-others-LinearMultiSampleVariantDisplay',
+                rowColor: 'group',
+                facet: 'group',
+              },
+            ],
           },
           {
             type: 'VariantTrack',

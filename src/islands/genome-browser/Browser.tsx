@@ -44,6 +44,7 @@ const TOUR_STOPS: TourStop[] = [
     gene: 'M Locus Merle premelanosome protein (PMEL17/SILV)',
     companionGene: 'H Locus Harlequin proteasome 20S subunit beta 7 (PSMB7)',
     diagram: 'coat',
+    tracks: ['coat'],
     markers: [
       {
         // PMEL is on the minus strand; its last exon (exon 11) starts at
@@ -548,6 +549,9 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
                     A real, in-page JBrowse view of the CanFam4 assembly: our
                     curated gene catalog (red) and the full NCBI RefSeq gene
                     annotation.
+                    {storyTracks.includes('coat')
+                      ? ' Below them, SNP genotypes for 36 dogs from 12 breeds and 4 wolves (Dog10K), one row per dog, at common variant sites in each gene\u2019s region. Switch between the two genes above.'
+                      : null}
                     {storyTracks.includes('fgf4')
                       ? ' Below them, the footprint of the FGF4 retrocopy in 38 dogs from 10 breeds. All 19 short-legged dogs (Dachshund, Basset Hound, Cardigan Corgi, Cocker Spaniel, Lhasa Apso) carry two deletions marking the FGF4 gene\u2019s introns, a sign of an extra, intron-free copy elsewhere in the genome. None of the 19 dogs from five large breeds (Mastiff, Saint Bernard, Newfoundland, Scottish Deerhound, Bullmastiff) do. Great Danes are not in this cohort, so these large breeds, which we picked, stand in.'
                       : null}
