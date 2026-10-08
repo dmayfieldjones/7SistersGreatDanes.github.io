@@ -74,9 +74,9 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
       <h1>How related are Great Danes, and which few dogs would represent them?</h1>
       <p class="ks-lede">
         A pedigree kinship analysis of {fmt(study.reference)} Great Danes born
-        2012–2020, using {fmt(study.dogs_loaded)} pedigree records. The goal:
-        cluster the breed by relatedness and pick a small set of dogs whose
-        DNA sequencing would tell us the most about the whole population.
+        2012–2020, using {fmt(study.dogs_loaded)} pedigree records. The goal
+        is to cluster the breed by relatedness and pick a small set of dogs
+        whose DNA sequences would tell us the most about the whole population.
       </p>
       <p class="ks-byline">
         Dustin Mayfield-Jones, 7 Sisters Great Danes
@@ -105,13 +105,12 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
     <section>
       <h2>Key findings</h2>
       <p>
-        Two numbers run through everything below. <em>Kinship</em> measures
-        how closely two dogs are related through shared ancestors: 0 for
+        Two measures are used throughout. <em>Kinship</em> measures how
+        closely two dogs are related through shared ancestors. It is 0 for
         unrelated dogs, about 0.06 for first cousins, 0.125 for half
         siblings and 0.25 for full siblings or a parent and its puppy.{' '}
-        <em>Inbreeding</em> (F) is the same number seen from the puppy's
-        side: a dog's F is the kinship between its sire and dam, so a puppy
-        from a half-sibling mating has F = 0.125.
+        <em>Inbreeding</em> (F) is the kinship between a dog's sire and dam,
+        so a puppy from a half-sibling mating has F = 0.125.
       </p>
       <ol class="ks-findings">
         <li>
@@ -119,52 +118,49 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
           dogs by how related they are splits the breed into clusters.
           Kinship inside a cluster is {range(within)}, against{' '}
           {range(between)} between a cluster and everyone else, a 3–4× gap.
-          In everyday terms, two dogs from the same cluster are typically as
-          related as first cousins to half siblings, while two dogs from
-          different clusters are more distant than first cousins. The clusters line
-          up with color families: fawn/brindle, harlequin/mantle, and
-          blue/black are largely bred as separate lines.
+          Two dogs from the same cluster are typically as related as first
+          cousins to half siblings, and two dogs from different clusters are
+          more distant than first cousins. The clusters match the color
+          families fawn/brindle, harlequin/mantle and blue/black, which are
+          largely bred as separate lines.
         </li>
         <li>
           <strong>Inbreeding is high and flat.</strong> Mean F is{' '}
           {study.mean_F.toFixed(3)}, so the average Great Dane is as inbred
-          as a puppy from a half-sibling mating. It sits between{' '}
+          as a puppy from a half-sibling mating. Mean F stays between{' '}
           {Math.min(...years.map(([, v]) => v.F)).toFixed(3)} and{' '}
           {Math.max(...years.map(([, v]) => v.F)).toFixed(3)} every year from 2012 to 2020,
-          neither rising nor falling, and {study.frac_F_over_quarter}% of
-          dogs are at or above 0.25 (the level of a full-sib or
-          parent–offspring mating). Average kinship across the whole
-          population is only {study.mean_kinship.toFixed(3)}: if sires and
-          dams were paired at random across the breed, puppies would be less
-          than half as inbred as they are. So most of the inbreeding comes
-          from breeding within lines, not from the breed as a whole being
-          short of unrelated dogs.
+          and {study.frac_F_over_quarter}% of dogs are at or above 0.25 (the
+          level of a full-sib or parent–offspring mating). Average kinship
+          across the whole population is {study.mean_kinship.toFixed(3)}, so
+          puppies from sires and dams paired at random across the breed
+          would be less than half as inbred. Most of the inbreeding therefore
+          comes from breeding within lines.
         </li>
         <li>
-          <strong>A few dogs cover a lot, but not evenly.</strong> Sequencing
-          a dog's DNA also tells us a good deal about its close relatives,
-          so a dog counts as covered when one of the sequenced dogs is at
-          least as closely related to it as a half sibling. Two well-chosen dogs cover{' '}
-          {pct(at(2).all)} of the population; forty reach{' '}
-          {pct(at(40).all)}. That is possible because so many dogs share
-          the same ancestors several times over. But picking purely
-          for coverage favors the big fawn/brindle line: after ten picks,{' '}
-          {pct(at(10).fawn)} of fawn/brindle dogs are covered but only{' '}
+          <strong>A few dogs cover a lot, but not evenly.</strong> A
+          sequenced dog's DNA also describes much of its close relatives'
+          DNA, so a dog counts as covered when one of the sequenced dogs is
+          at least as closely related to it as a half sibling. Two
+          well-chosen dogs cover {pct(at(2).all)} of the population and
+          forty cover {pct(at(40).all)}, because so many dogs share the same
+          ancestors several times over. Picking purely for coverage favors
+          the large fawn/brindle line. After ten picks,{' '}
+          {pct(at(10).fawn)} of fawn/brindle dogs are covered and{' '}
           {pct(at(10).blue)} of blue/black dogs.
         </li>
         <li>
-          <strong>Little of the founding diversity is left, and how we pick
-          dogs decides how much of it we see.</strong> The 2012–2020 dogs
-          trace back to {fmt(FO.founders)} founders (ancestors whose own
-          parents are not recorded), but their contributions are very
-          unequal: {FO.n50} ancestors account for half of the gene pool. The
-          genetic variety that remains is what about {FO.fge} unrelated dogs
-          would carry between them. Forty dogs chosen for coverage carry the
-          equivalent of {DS.coverage.final.fge.toFixed(1)}, because those
-          picks are related to one another. Forty chosen to be as unrelated
-          as possible carry {DS.diversity.final.fge.toFixed(1)}, but they
-          cover few dogs. A combined design
-          keeps most of both.
+          <strong>Little of the founding diversity is left, and how much of
+          it we sequence depends on which dogs we pick.</strong> The
+          2012–2020 dogs trace back to {fmt(FO.founders)} founders
+          (ancestors whose parents are not recorded). Founders contributed
+          very unequally, and {FO.n50} ancestors account for half of the
+          gene pool. The population has about as much genetic variety as{' '}
+          {FO.fge} unrelated dogs would have. Forty dogs chosen for coverage
+          have the equivalent of {DS.coverage.final.fge.toFixed(1)}, because
+          those picks are related to one another. Forty chosen to be as
+          unrelated as possible have {DS.diversity.final.fge.toFixed(1)},
+          but they cover few dogs. A combined design keeps most of both.
         </li>
       </ol>
     </section>
@@ -252,7 +248,7 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
         groups smaller than 30. Most have shallow recorded pedigrees (about{' '}
         {study.clusters.find(c => c.cluster === 0)!.ecg} equivalent generations
         against about 25 for everyone else), so they look unrelated because
-        their ancestry is missing, not because it is different.
+        their ancestry is missing.
       </p>
     </details>
 
@@ -263,7 +259,7 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
       </summary>
       <p>
         F is the probability that a dog's two copies of a gene come from the
-        same ancestor. Half of the dogs sit between{' '}
+        same ancestor. Half of the dogs have F between{' '}
         {study.F_quantiles[1].toFixed(2)} and {study.F_quantiles[3].toFixed(2)}.
       </p>
       <figure class="ks-figure">
@@ -299,12 +295,12 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
         </table>
       </div>
       <p class="ks-note">
-        Pedigree depth is equivalent complete generations: about 25 on
-        average, which is very deep for a dog breed, so these estimates rest
-        on well-documented ancestry. Effective population size (≈ {study.Ne})
-        comes from each dog's individual rate of inbreeding per generation
-        (Gutiérrez et al. 2008). Values under 100 are generally treated as a
-        conservation concern.
+        Pedigree depth is measured in equivalent complete generations. It
+        averages about 25, which is very deep for a dog breed, so these
+        estimates are based on well-documented ancestry. Effective population
+        size (≈ {study.Ne}) comes from each dog's individual rate of
+        inbreeding per generation (Gutiérrez et al. 2008). Values under 100
+        are generally treated as a conservation concern.
       </p>
     </details>
 
@@ -317,7 +313,7 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
         Every dog in the 2012–2020 population traces back to dogs with no
         recorded parents, the pedigree's founders. Counting them in
         progressively stricter ways shows how much of that starting diversity
-        the population still carries, and where it was lost.
+        the population still has, and where it was lost.
       </p>
       <div class="ks-table-wrap">
         <table class="ks-table">
@@ -354,18 +350,19 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
         </table>
       </div>
       <p>
-        Each step down has a cause. From {fmt(FO.founders)} to{' '}
-        {Math.round(FO.fe)} is unequal use: {fmt(FO.founders_under_0_01pct)}{' '}
-        of the founders each supply less than 0.01% of the gene pool. From{' '}
-        {Math.round(FO.fe)} to {FO.fa} is bottlenecks: {FO.n50} ancestors
-        account for half of the gene pool and {FO.n80} for 80%, and a single
-        dog born in {FO.top1_year} accounts for {FO.top1}% on his own. From{' '}
-        {FO.fa} to {FO.fge} is drift, mostly inside the lines of section 1.
-        The population holds about as much genetic diversity as {FO.fge}{' '}
-        unrelated dogs would.
+        Each step down has a cause. The fall from {fmt(FO.founders)} to{' '}
+        {Math.round(FO.fe)} comes from unequal use, because{' '}
+        {fmt(FO.founders_under_0_01pct)} of the founders each supply less
+        than 0.01% of the gene pool. The fall from {Math.round(FO.fe)} to{' '}
+        {FO.fa} comes from bottlenecks: {FO.n50} ancestors account for half
+        of the gene pool and {FO.n80} for 80%, and a single dog born in{' '}
+        {FO.top1_year} accounts for {FO.top1}% on his own. The fall from{' '}
+        {FO.fa} to {FO.fge} comes from drift, mostly inside the lines of
+        section 1. The population has about as much genetic diversity as{' '}
+        {FO.fge} unrelated dogs would.
       </p>
 
-      <h3>The ancestor base widened, then narrowed</h3>
+      <h3>Effective ancestors by birth cohort</h3>
       <div class="ks-table-wrap">
         <table class="ks-table ks-compact">
           <caption>The same measures for earlier birth cohorts</caption>
@@ -399,11 +396,11 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
         Effective ancestors climbed from {Math.round(cohortAt('1920–1939').fa)}{' '}
         for dogs born 1920–1939 to {Math.round(cohortPeak.fa)} for those born{' '}
         {cohortPeak.years}, then fell back to{' '}
-        {Math.round(cohortAt('2012–2020').fa)}. Today's dogs rest on about as
-        narrow a base as the dogs of the 1920s and 1930s did.
+        {Math.round(cohortAt('2012–2020').fa)}. Today's dogs have about as
+        few effective ancestors as the dogs of the 1920s and 1930s did.
       </p>
 
-      <h3>What became of the early dogs</h3>
+      <h3>Descendants of the early dogs</h3>
       <div class="ks-table-wrap">
         <table class="ks-table ks-compact">
           <caption>Dogs of each era with descendants in the 2012–2020 population</caption>
@@ -412,7 +409,7 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
               <th scope="col">Born</th>
               <th scope="col" class="num">Dogs recorded</th>
               <th scope="col" class="num">With descendants today</th>
-              <th scope="col" class="num">Dogs carrying half of the era's contribution</th>
+              <th scope="col" class="num">Dogs supplying half of the era's contribution</th>
             </tr>
           </thead>
           <tbody>
@@ -430,8 +427,9 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
         </table>
       </div>
       <p>
-        Most early dogs on record still have descendants, but a handful do
-        most of the contributing. The colors fared differently too. Among
+        Most early dogs on record still have descendants, but a few of them
+        supply most of each era's contribution. The contribution also differs
+        by color. Among
         dogs born 1900–1939, fawns and brindles were{' '}
         {earlyCol('fawn/brindle').dogs}% of the dogs recorded but supply{' '}
         {earlyCol('fawn/brindle').contribution}% of what that era contributes
@@ -441,14 +439,14 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
         {earlyCol('black/blue').contribution}%.
       </p>
       <p class="ks-note">
-        Two cautions. A "founder" here is any dog whose parents were not
-        entered, and {Math.round(FO.undated_founder_share)}% of the founder
-        contribution comes from undated dogs, so the founder counts say more
-        about where the records stop than about the breed's origin; effective
-        ancestors and founder genome equivalents are the sturdier numbers.
-        And an old dog is more likely to be in the database at all if it is
-        somebody's ancestor, so the share of early dogs with descendants is an
-        upper bound.
+        Two cautions apply. A "founder" here is any dog whose parents were
+        not entered, and {Math.round(FO.undated_founder_share)}% of the
+        founder contribution comes from undated dogs, so the founder counts
+        describe where the records stop more than they describe the breed's
+        origin. Effective ancestors and founder genome equivalents are the
+        more reliable numbers. Also, an old dog is more likely to be in the
+        database at all if it is somebody's ancestor, so the share of early
+        dogs with descendants is an upper bound.
       </p>
     </details>
 
@@ -458,11 +456,10 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
         <span class="ks-gist">Two ways to choose {DS.coverage.final.k} dogs, what each is good for, and why we recommend combining them.</span>
       </summary>
       <p>
-        {DS.coverage.final.k} genomes cannot do everything. There are two
-        defensible ways to choose them, they answer different questions, and
-        they pick nearly opposite dogs. This section sets out the case for
-        each, compares them on the same measures, and recommends a
-        combination.
+        There are two defensible ways to choose {DS.coverage.final.k}{' '}
+        genomes. They answer different questions and pick nearly opposite
+        dogs. This section sets out the case for each, compares them on the
+        same measures, and recommends a combination.
       </p>
 
       <h3>Approach A: coverage</h3>
@@ -540,7 +537,7 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
         relatives come from the most popular families, so they are closely
         related to each other and inbred themselves (mean F{' '}
         {DS.coverage.final.F.toFixed(2)}, against {study.mean_F.toFixed(2)}{' '}
-        for the population). Together the {DS.coverage.final.k} picks hold{' '}
+        for the population). Together the {DS.coverage.final.k} picks contain{' '}
         {DS.coverage.final.fge.toFixed(1)} founder genome equivalents, fewer
         than {DS.coverage.final.k} dogs drawn at random would
         ({DS.random.fge.toFixed(1)}). Much of what is sequenced is the same
@@ -549,7 +546,7 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
 
       <h3>Approach B: diversity</h3>
       <p class="ks-claim">
-        Choose dogs so that the set is as unrelated as possible, and so holds
+        Choose dogs so that the set is as unrelated as possible, and so contains
         as much of the breed's founder diversity (<a href="#founders">section 3</a>)
         as {DS.diversity.final.k} genomes can.
       </p>
@@ -559,12 +556,12 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
       </p>
       <p>
         <strong>The case for it.</strong> Every genome adds DNA the others
-        lack. The {DS.diversity.final.k} picks hold{' '}
+        lack. The {DS.diversity.final.k} picks contain{' '}
         {DS.diversity.final.fge.toFixed(1)} founder genome equivalents, close
         to twice the coverage design, and they are far less inbred (mean F{' '}
         {DS.diversity.final.F.toFixed(2)}), so less of each dog's own genome
         is the same copy twice. The picks spread almost evenly over the
-        color families. This is the right panel for cataloguing the breed's
+        color families. This is the right panel for cataloging the breed's
         variation and for comparing lines on equal terms: whether the color
         lines are separate populations (question 1), genetic load by line
         (question 5) and a pangenome (question 7).
@@ -572,9 +569,10 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
       <p>
         <strong>The case against it.</strong> Only{' '}
         {pct(DS.diversity.final.all)} of dogs get a half-sib-or-closer
-        sequenced relative, so it does little for imputation. It also leans on
-        the pedigree being complete, because a dog with missing ancestry only
-        looks unrelated. Run with no safeguard, the method spent{' '}
+        sequenced relative, so it does little for imputation. It also depends
+        on the pedigree being complete, because a dog with missing ancestry
+        looks unrelated whether or not it is. Run with no safeguard, the
+        method spent{' '}
         {DS.coverage.final.k - 1} of its {DS.coverage.final.k} picks on dogs
         with almost no recorded pedigree. The picks here are therefore limited
         to dogs with at least {DS.min_depth} equivalent complete generations
@@ -594,9 +592,9 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
             </div>
           </div>
           <div>
-            <p class="ks-chart-title">Founder genome equivalents held by the picks</p>
+            <p class="ks-chart-title">Founder genome equivalents in the picks</p>
             <div class="ks-plot" id="des-fge-wrap">
-              <svg id="des-fge" role="img" aria-label="Line chart of founder genome equivalents held by the picks as picks are added. Diversity and combined climb to about 11 or 12; coverage levels off near 6.5."></svg>
+              <svg id="des-fge" role="img" aria-label="Line chart of founder genome equivalents in the picks as picks are added. Diversity and combined climb to about 11 or 12; coverage levels off near 6.5."></svg>
               <div class="ks-tip" id="des-fge-tip" hidden></div>
             </div>
           </div>
@@ -629,7 +627,7 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
               {designCols.map(d => <td class="num">{pct(d.blue)}</td>)}
             </tr>
             <tr>
-              <th scope="row">Founder genome equivalents held by the picks</th>
+              <th scope="row">Founder genome equivalents in the picks</th>
               {designCols.map(d => <td class="num">{d.fge.toFixed(1)}</td>)}
             </tr>
             <tr>
@@ -657,23 +655,24 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
       <p class="ks-note">
         Every design, even random, reaches nearly all of the common
         ancestors. They differ in the rare lineages and in how many times the
-        common ones are sequenced over. A hand-picked set can hold more
+        common ones are sequenced over. A hand-picked set can contain more
         founder genome equivalents than the population average of {FO.fge}{' '}
         because it is chosen to be less related than dogs are on average.
       </p>
 
       <h3>Recommendation: combine them</h3>
       <p>
-        Coverage is won early. The first {DS.combined_first} coverage picks
+        Most of the coverage comes from the first picks. The first{' '}
+        {DS.combined_first} coverage picks
         reach {pct(at(DS.combined_first).all)} of the population, and the next{' '}
         {DS.coverage.final.k - DS.combined_first} add only{' '}
         {Math.round(at(DS.coverage.final.k).all - at(DS.combined_first).all)}{' '}
-        points. So we recommend spending the first {DS.combined_first} picks
-        on coverage and the remaining{' '}
-        {DS.coverage.final.k - DS.combined_first} on diversity. That keeps{' '}
-        {pct(DS.combined.final.all)} of dogs covered
+        points. We therefore recommend using the first {DS.combined_first}{' '}
+        picks for coverage and the remaining{' '}
+        {DS.coverage.final.k - DS.combined_first} for diversity. This split
+        keeps {pct(DS.combined.final.all)} of dogs covered
         ({pct((100 * DS.combined.final.all) / DS.coverage.final.all)} of what
-        the pure coverage design achieves) while holding{' '}
+        the pure coverage design achieves) and contains{' '}
         {DS.combined.final.fge.toFixed(1)} founder genome equivalents
         ({pct((100 * DS.combined.final.fge) / DS.diversity.final.fge)} of the
         pure diversity design). It also gives the blue/black lines{' '}
@@ -709,24 +708,24 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
         </table>
       </div>
       <p class="ks-note">
-        If only one goal mattered the choice would be simple: all coverage for
-        an imputation panel, all diversity for a catalogue of the breed's
-        variation. Most of the questions in{' '}
+        A panel built only for imputation would use all coverage picks, and
+        one built only to catalog the breed's variation would use all
+        diversity picks. Most of the questions in{' '}
         <a href="#questions">section 7</a> need some of each, and the split
-        costs little on either side. All of this rests on pedigree
-        expectations, and on dogs that can still be sampled.
+        loses little of either. These results are pedigree expectations, and
+        they assume the dogs can still be sampled.
       </p>
     </details>
 
     <details class="ks-sec" id="quality">
       <summary>
         <h2>5. Data quality</h2>
-        <span class="ks-gist">{study.links_dropped} impossible parent links were set aside; the rest of the pedigree is remarkably complete.</span>
+        <span class="ks-gist">{study.links_dropped} impossible parent links were set aside; the rest of the pedigree is largely complete.</span>
       </summary>
       <p>
-        The pedigree is remarkably complete: about{' '}
-        {pct((100 * 99500) / study.dogs_loaded)} of dogs have both parents on
-        record. Before the analysis, {study.links_dropped} parent links that
+        The pedigree is largely complete, with both parents on record for
+        about {pct((100 * 99500) / study.dogs_loaded)} of dogs. Before the
+        analysis, {study.links_dropped} parent links that
         can't be correct (about 0.15% of all links) were set aside:
       </p>
       <ul>
@@ -747,7 +746,7 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
         <span class="ks-gist">140 years of registry growth, inbreeding, litter size and color pairings.</span>
       </summary>
       <p>
-        The same database reaches back to the 1880s, so we can ask how
+        The pedigree records reach back to the 1880s, so they show how
         breeders' choices changed. Everything here uses {fmt(H.dated)} dogs
         with a recorded birth year and {fmt(H.litters)} litters, summarized
         over a rolling {H.window}-year window.
@@ -778,15 +777,16 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
         <figcaption>The same dogs as shares of each five-year birth cohort.</figcaption>
       </figure>
       <p>
-        The breed's center of gravity crossed the Atlantic during the Second
-        World War. Until the 1930s the record is almost entirely European,
+        During the Second World War the majority of recorded dogs shifted
+        from Europe to the United States. Until the 1930s the record is
+        almost entirely European,
         mostly German stud-book dogs. American dogs appear in the 1930s, and
         in 1945–49 they outnumber European dogs for the first time, more
         than doubling in five years while European numbers stayed flat.
         From then on the United States supplies most of the record,
-        peaking at {fmt(cnt(1996))} dogs recorded for 1996 alone. Australia
-        joins in the 1960s and holds a steady 10–16% share from the 1970s to
-        the 2000s. Both wars cut total numbers too: from {cnt(1914)} dogs in
+        peaking at {fmt(cnt(1996))} dogs recorded for 1996 alone. Australian
+        dogs appear in the 1960s and make up a steady 10–16% from the 1970s
+        to the 2000s. Both wars cut total numbers too: from {cnt(1914)} dogs in
         1914 to {cnt(1917)} in 1917, and from {cnt(1938)} in 1938 to{' '}
         {cnt(1940)} in 1940, rebounding to {cnt(1947)} by 1947.
       </p>
@@ -822,8 +822,8 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
         </table>
       </div>
       <p class="ks-note">
-        These are dogs in this database, not national registrations, so the
-        counts also reflect how completely each era and country was entered.
+        The counts are dogs in this database, not national registrations, so
+        they also reflect how completely each era and country was entered.
         "Other" includes UK and Scandinavian numbers, which don't have a
         distinctive format. Because the shift happens right at the Second
         World War, the post-war inbreeding peak below reflects both wartime
@@ -965,12 +965,13 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
         {colAt(2020).cross.toFixed(0)}% in the last years of the record.
       </p>
       <p>
-        That fits the codes. The crosses the GDCA code forbids outright
-        (blue × fawn, blue × harlequin, fawn × harlequin) stay rare. Black ×
-        fawn, the pairing the US code leaves open and the UK code leaves off
-        its approved list, is the one that grew. It more than doubled through
-        the 1950s, the decade of the Stormi Rudio controversy, held near 2%
-        for forty years, then climbed again from the mid-2000s.
+        The pattern matches the codes. The crosses the GDCA code forbids
+        outright (blue × fawn, blue × harlequin, fawn × harlequin) stay rare.
+        Black × fawn, the pairing the US code leaves open and the UK code
+        leaves off its approved list, is the one that grew. It more than
+        doubled through the 1950s, the decade of the Stormi Rudio
+        controversy, stayed near 2% for forty years, then climbed again from
+        the mid-2000s.
       </p>
       <p class="ks-note">
         Color is recorded for about half of dogs, and a litter counts only
@@ -992,7 +993,7 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
         {pct(recMaxMerle.merle)} around {winLabel(recMaxMerle.y)}. It then
         fell to {pct(recMinMerle.merle)} around {winLabel(recMinMerle.y)}{' '}
         and rose again to {pct(recAt(2020).merle)} after the 2015 vote,
-        although the last years hold fewer dogs.
+        although the last years have fewer dogs.
       </p>
       <figure class="ks-figure">
         <div class="ks-legend" id="rec-legend"></div>
@@ -1007,8 +1008,8 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
         </figcaption>
       </figure>
       <p class="ks-note">
-        This matters for reading the pairings above. Some dogs once recorded
-        as black are now recorded as mantle, so part of the fall in
+        The change in recording affects the pairings above. Some dogs once
+        recorded as black are now recorded as mantle, so part of the fall in
         black × harlequin litters in the 2010s is a change in labels, not
         in breeding.
       </p>
@@ -1020,12 +1021,12 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
         <span class="ks-gist">Seven research questions, ranked, with the figures each paper would need.</span>
       </summary>
       <p>
-        The pedigree records who bred to whom for 140 years; genomes record
-        what those choices did. Great Danes are unusual in having both a deep,
+        The pedigree records 140 years of matings, and genomes would show
+        the effects of those matings. Great Danes are unusual in having both a deep,
         dated pedigree and a documented set of breeding rules (the color
         codes), which makes the breed a natural experiment in how human
         decisions reshape a genome. Below are the questions we find most
-        interesting, ranked by the science rather than by cost, with the
+        interesting, ranked by scientific interest, with the
         figures each paper would be built around. Novelty is judged against a
         literature search in September 2026 and would need a fuller review
         before publication.
@@ -1034,21 +1035,21 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
       <h3>What has already been done</h3>
       <ul class="ks-prior">
         <li><strong>German Shepherds, 120 years of genomes (PNAS 2025).</strong> Nine museum specimens (1906–1993) against modern dogs: heterozygosity fell about 25%, runs of homozygosity roughly doubled (from about 19% to 36% of the genome), bottlenecks line up with popular sires and WWII, and harmful-variant load rose. The study had no pedigree and no health outcomes, and its authors call for time series from other breeds.</li>
-        <li><strong>New mutations across 43 breeds (Genome Biology 2025).</strong> 390 parent–offspring trios: larger breeds carry more mutations arising early in development, and fathers' age matters 1.5× more than in humans.</li>
+        <li><strong>New mutations across 43 breeds (Genome Biology 2025).</strong> 390 parent–offspring trios: larger breeds have more mutations arising early in development, and fathers' age matters 1.5× more than in humans.</li>
         <li><strong>Balto (Science 2023).</strong> One historic sled dog's genome captured diversity since lost from modern breeds.</li>
         <li><strong>Great Danes specifically:</strong> one long-read reference genome (Zoey, 2021); 83 low-pass genomes for a megaesophagus study (2023); immune-gene variants linked to bloat (2017); population structure only from small marker panels (10 microsatellites in 88 dogs, which separated American from European Danes; 33 markers in 43 dogs at UC Davis); giant size partly mapped to loci on the X chromosome in a study of 19 giant breeds; merle and harlequin genes known down to merle insertion length.</li>
       </ul>
       <p>
-        Two gaps stand out. Nobody has looked at Great Dane color lines
-        genome-wide, and no historical genome series, in any breed, has had a
-        full pedigree to test against.
+        Nobody has looked at Great Dane color lines genome-wide, and no
+        historical genome series, in any breed, has had a full pedigree to
+        test against.
       </p>
 
       <h3>Why Great Danes? A comparison with the German Shepherd study</h3>
       <p>
-        Great Danes aren't a better population across the board. They are
-        better for some questions and worse for others, and the strongest
-        case is as a contrast to German Shepherds, not a replacement.
+        Great Danes are better than German Shepherds for some questions and
+        worse for others, and the strongest case for studying them is as a
+        contrast to German Shepherds.
       </p>
       <div class="ks-compare">
         <div class="ks-compare-col">
@@ -1065,7 +1066,7 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
           <p class="ks-compare-head">Where German Shepherds are stronger</p>
           <ul>
             <li><strong>Specimens.</strong> One of the world's most common breeds, with a deep museum collection in Bern. Whether dated historical Great Danes survive in museums is still unknown, and that is the biggest risk to question 2 below.</li>
-            <li><strong>A clean start.</strong> The breed was founded in 1899 around a single dog, Horand von Grafrath. Great Danes merged several regional types around 1880, so there is no single founding moment to anchor the story.</li>
+            <li><strong>A clean start.</strong> The breed was founded in 1899 around a single dog, Horand von Grafrath. Great Danes merged several regional types around 1880, so there is no single founding date.</li>
             <li><strong>Scale and health data.</strong> Far more dogs to sample, and much more health data (hips, degenerative myelopathy), which matters for questions about genetic load.</li>
             <li><strong>Wolf ancestry.</strong> Documented wolf crosses let that study watch admixture fade under closed breeding. Great Danes have no equivalent.</li>
           </ul>
@@ -1103,7 +1104,7 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
           <p><strong>Question.</strong> Sequence historical Great Danes (museum skeletons, teeth, taxidermy and dated hair from about 1880 onward) alongside modern dogs. Did diversity fall the way the pedigree predicts? When did the color lines actually diverge: before the codes, or because of them? What did WWII and the move from Germany to America do to the genome? Which popular sires left the deepest marks?</p>
           <p><strong>Figures.</strong></p>
           <ul>
-            <li>The headline: heterozygosity and runs of homozygosity by birth year, with each historical genome plotted against the pedigree's prediction for that same year.</li>
+            <li>The main figure: heterozygosity and runs of homozygosity by birth year, with each historical genome plotted against the pedigree's prediction for that same year.</li>
             <li>Historical dogs placed on the modern genomic map, showing the path from German to American Danes and the color lines branching apart.</li>
             <li>Bottleneck dating from the genome, checked against the war years and popular sires named in the pedigree.</li>
           </ul>
@@ -1145,7 +1146,7 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
             <li>Homozygous harmful variants per dog, by line and birth year, historical dogs included.</li>
             <li>Known disease alleles (IMGD, the bloat-associated immune alleles and others) by line.</li>
           </ul>
-          <p><strong>Why it matters.</strong> It would link genetic load to the breed's history and structure, the connection the German Shepherd study said it could not make. It also gives breeders a line-aware picture of risk.</p>
+          <p><strong>Why it matters.</strong> It would link genetic load to the breed's history and structure, the connection the German Shepherd study said it could not make. It also shows breeders how risk differs by line.</p>
         </article>
 
         <article class="ks-paper">
@@ -1153,13 +1154,13 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
           <h4>Choosing which dogs to sequence</h4>
           <p><strong>Question.</strong> Does a reference panel chosen from the pedigree (<a href="#sequencing">section 4</a>), for coverage, for diversity or for both, impute the breed better than one chosen at random or by convenience?</p>
           <p><strong>Figures.</strong> Imputation accuracy and variants discovered against panel size, for coverage, diversity, combined and random panels, by color family.</p>
-          <p><strong>Why it matters.</strong> Standard in cattle, untested in a dog breed. It is a methods result more than a discovery, which is why it sits here, but it makes every later study cheaper.</p>
+          <p><strong>Why it matters.</strong> Standard in cattle, untested in a dog breed. It is a methods result more than a discovery, which is why it is ranked sixth, but it makes every later study cheaper.</p>
         </article>
 
         <article class="ks-paper">
           <p class="ks-paper-rank">7 · longer term</p>
           <h4>A Great Dane pangenome and health mapping</h4>
-          <p><strong>Question.</strong> What large structural variants does each line carry beyond the single reference genome? With health records, which variants drive bloat, dilated cardiomyopathy, wobbler syndrome and bone cancer?</p>
+          <p><strong>Question.</strong> What large structural variants does each line have beyond the single reference genome? With health records, which variants drive bloat, dilated cardiomyopathy, wobbler syndrome and bone cancer?</p>
           <p><strong>Figures.</strong> A pangenome graph with line-specific structural variants; association plots for each health trait.</p>
           <p><strong>Why later.</strong> It needs health outcomes on hundreds of dogs, best gathered with an established group, and it is far stronger once the lines from question 1 are known.</p>
         </article>
@@ -1169,9 +1170,9 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
       <ol class="ks-why">
         <li><strong>Question 1 comes first because everything else is measured in its units.</strong> Whether the color lines are real genetic populations decides how questions 2–7 are sampled and read. It is also the question most specific to Great Danes, and it has a general answer: whether rules alone can split a population.</li>
         <li><strong>Question 2 is the most exciting, and should start in parallel.</strong> It reuses question 1's modern genomes as its present-day end. The slow part is finding dated historical specimens, so that search should begin now.</li>
-        <li><strong>Question 3 comes almost free with 1 and 2</strong> and tests a widely used method against written history.</li>
+        <li><strong>Question 3 uses the same genomes as questions 1 and 2</strong> and tests a widely used method against written history.</li>
         <li><strong>Questions 4 and 5 turn the history into biology:</strong> what size and bottlenecks did to mutation and genetic load. They are richer once the lines and the time series exist.</li>
-        <li><strong>Questions 6 and 7 are the most practical and the most crowded.</strong> They matter, but they are less distinctive science, and they lean on everything before them.</li>
+        <li><strong>Questions 6 and 7 are the most practical and the most crowded.</strong> They matter, but they are less distinctive science, and they depend on the earlier questions.</li>
       </ol>
     </details>
 
@@ -1189,7 +1190,7 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
         </li>
         <li>
           <strong>Pedigree kinship is an expectation.</strong> Real shared DNA
-          varies around it, which is exactly what sequencing measures;
+          varies around it, which is what sequencing measures;
           genotyped dogs would let us check these estimates.
         </li>
         <li>
@@ -1282,7 +1283,7 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
         as unrelated founders). It is never higher than the full-depth value
         and correlates with it at 0.95 for 2012–2020 dogs. Litters are unique
         sire–dam–birth-year combinations. Rolling windows are ten birth years
-        wide and shown only where they hold at least 50 well-documented dogs
+        wide and shown only where they contain at least 50 well-documented dogs
         (COI) or 60 litters with both parents' colors (pairings).
       </p>
     </details>
