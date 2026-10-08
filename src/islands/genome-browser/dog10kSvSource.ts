@@ -50,6 +50,13 @@ export const DOG10K_SV_TBI_URL = `${S3_BASE}/dog10k-svs-12breeds.vcf.bgz.csi`
 export const DOG10K_FGF4_VCF_URL = `${S3_BASE}/dog10k-fgf4-breeds.vcf.bgz`
 export const DOG10K_FGF4_CSI_URL = `${S3_BASE}/dog10k-fgf4-breeds.vcf.bgz.csi`
 
+// SNP genotypes from the Dog10K callset for the coat story's two windows
+// (PSMB7 on chr9, PMEL on chr10): common variants (allele frequency >= 1%)
+// plus the harlequin site, for 36 dogs from 12 breeds and 4 wolves. Sliced
+// remotely with pysam; sample groups are in public/data/dog10k-coat-samples.tsv.
+export const DOG10K_COAT_VCF_URL = `${S3_BASE}/dog10k-coat-others.vcf.bgz`
+export const DOG10K_COAT_CSI_URL = `${S3_BASE}/dog10k-coat-others.vcf.bgz.csi`
+
 /**
  * A plain fetch of the same URLs JBrowse itself will request, fired the
  * moment `liveBrowserOpen` is set rather than waiting for JBrowse's own lazy
