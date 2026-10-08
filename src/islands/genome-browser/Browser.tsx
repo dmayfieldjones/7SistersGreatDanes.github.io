@@ -415,7 +415,7 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
                       ? ' Below them, RepeatMasker shows the repeated DNA elements (SINEs, LINEs) scattered through the region — merle is one of these, a SINE inserted into the pigment gene.'
                       : null}
                     {storyTracks.includes('fgf4')
-                      ? ' Below them, the footprint of the FGF4 retrocopy in 40 dogs from 10 breeds. Each short-legged dog (Dachshund, Basset Hound, Corgi, Cocker Spaniel, Lhasa Apso) carries two deletions marking the FGF4 gene\u2019s introns, a sign of an extra, intron-free copy elsewhere in the genome; the giant breeds (Mastiff, Saint Bernard, Newfoundland, Deerhound, Bullmastiff) carry neither. Great Danes are not in this cohort, so their giant relatives stand in.'
+                      ? ' Below them, the footprint of the FGF4 retrocopy in 40 dogs from 10 breeds. All 20 short-legged dogs (Dachshund, Basset Hound, Cardigan Corgi, Cocker Spaniel, Lhasa Apso) carry two deletions marking the FGF4 gene\u2019s introns, a sign of an extra, intron-free copy elsewhere in the genome. None of the 20 dogs from five large breeds (Mastiff, Saint Bernard, Newfoundland, Scottish Deerhound, Bullmastiff) do. Great Danes are not in this cohort, so these large breeds, which we picked, stand in.'
                       : null}
                     {showSvTrack
                       ? ' Below them, a structural-variant track genotyped across 12 real, named dogs — one row per breed, including a Great Dane.'

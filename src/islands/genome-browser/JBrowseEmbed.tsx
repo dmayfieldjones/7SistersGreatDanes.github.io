@@ -139,7 +139,7 @@ export default function JBrowseEmbed({
           {
             type: 'VariantTrack',
             trackId: STORY_TRACK_IDS.fgf4,
-            name: 'FGF4 retrocopy footprint: short-legged vs giant breeds (Dog10K)',
+            name: 'FGF4 retrocopy footprint: short-legged vs large breeds (Dog10K)',
             assemblyNames: ['canFam4'],
             adapter: {
               type: 'VcfTabixAdapter',

@@ -43,7 +43,7 @@ export const DOG10K_SV_TBI_URL = `${S3_BASE}/dog10k-svs-12breeds.vcf.bgz.csi`
 
 // A second, tiny derived file for the FGF4 height story: just the two
 // FGF4 "intron deletion" records (the footprint of the FGF4 retrocopy) for 4
-// dogs each of 5 short-legged and 5 giant breeds, sliced remotely with pysam
+// dogs each of 5 short-legged and 5 large breeds (our pick), sliced remotely with pysam
 // from the Michigan Dog10K Manta callset (no CORS there, so it can't be read
 // live from the browser). Sample names are "Breed (ID)"; groups are in
 // public/data/dog10k-fgf4-samples.tsv.
