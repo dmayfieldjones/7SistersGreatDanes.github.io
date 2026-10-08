@@ -35,6 +35,16 @@ const STORY_TRACK_IDS: Record<StoryTrackId, string> = {
   fgf4: 'dog10k-fgf4-breeds',
 }
 
+// A single hand-placed point of interest for a story (e.g. a published
+// causal variant), drawn as its own small track above the gene tracks.
+export interface StoryMarker {
+  refName: string
+  start: number
+  end: number
+  name: string
+  description: string
+}
+
 export interface CuratedGeneFeature {
   refName: string
   start: number
@@ -51,12 +61,14 @@ interface JBrowseEmbedProps {
   // duplication, breed genotypes for FGF4); elsewhere it is unrelated
   // noise, so the caller opts in per story.
   storyTracks: StoryTrackId[]
+  markers: StoryMarker[]
 }
 
 export default function JBrowseEmbed({
   curatedGenes,
   location,
   storyTracks,
+  markers,
 }: JBrowseEmbedProps) {
   const curatedGenesTrack = useMemo(
     () => ({
@@ -86,6 +98,30 @@ export default function JBrowseEmbed({
     [curatedGenes],
   )
 
+  const markersTrack = useMemo(
+    () => ({
+      type: 'FeatureTrack',
+      trackId: 'sevensisters-story-markers',
+      name: 'Variants this story is about',
+      assemblyNames: ['canFam4'],
+      adapter: {
+        type: 'FromConfigAdapter',
+        features: markers.map(marker => ({
+          ...marker,
+          uniqueId: `marker-${marker.name}`,
+        })),
+      },
+      displays: [
+        {
+          type: 'LinearBasicDisplay',
+          displayId: 'sevensisters-story-markers-LinearBasicDisplay',
+          color: '#1d6fa5',
+        },
+      ],
+    }),
+    [markers],
+  )
+
   const viewState = useMemo(
     () =>
       createViewState({
@@ -101,6 +137,7 @@ export default function JBrowseEmbed({
           },
         },
         tracks: [
+          markersTrack,
           curatedGenesTrack,
           {
             type: 'FeatureTrack',
@@ -181,6 +218,7 @@ export default function JBrowseEmbed({
         location,
         view: {
           tracks: [
+            ...(markers.length ? ['sevensisters-story-markers'] : []),
             'sevensisters-curated-genes',
             'canfam4-ncbi-refseq',
             ...storyTracks.map(id => STORY_TRACK_IDS[id]),
@@ -216,6 +254,12 @@ export default function JBrowseEmbed({
       else view.hideTrack(trackId)
     }
   }, [storyTracks, viewState])
+
+  useEffect(() => {
+    const view = viewState.session.view
+    if (markers.length) view.showTrack('sevensisters-story-markers')
+    else view.hideTrack('sevensisters-story-markers')
+  }, [markers, viewState])
 
   return (
     <div className="genome-jbrowse-embed">
