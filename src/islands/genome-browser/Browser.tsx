@@ -2,7 +2,7 @@ import { lazy, Suspense, useMemo, useRef, useState } from 'react'
 
 import { prefetchDog10kSvVcf } from './dog10kSvSource'
 import GenomeIdeogram, { type ChromosomeInfo } from './GenomeIdeogram'
-import type { CuratedGeneFeature } from './JBrowseEmbed'
+import type { CuratedGeneFeature, StoryTrackId } from './JBrowseEmbed'
 
 const JBrowseEmbed = lazy(() => import('./JBrowseEmbed'))
 
@@ -21,6 +21,10 @@ interface TourStop {
   // default view — for a story about a variant near, not inside, the gene
   // body (e.g. a duplication whose breakpoints sit outside it).
   location?: string
+  // Evidence tracks for the live browser beyond the gene tracks. Only set
+  // where that data is actually the story — at other loci it is unrelated
+  // noise that suggests a finding that isn't there.
+  tracks?: StoryTrackId[]
 }
 
 // Three loci with a real, tellable story — each an exact-match `name` from
@@ -30,6 +34,7 @@ const TOUR_STOPS: TourStop[] = [
     label: 'Coat pattern',
     gene: 'M Locus Merle premelanosome protein (PMEL17/SILV)',
     companionGene: 'H Locus Harlequin proteasome 20S subunit beta 7 (PSMB7)',
+    tracks: ['repeats'],
     hook: 'Why do some Great Danes look like a black-and-white patchwork? It takes two genes stacked on top of each other.',
     intro:
       "This pattern is two genes, not one: merle (below) lays down random patches of diluted pigment on its own — that alone is a recognized Great Dane pattern. Stack one copy of the Harlequin gene on top of it and it strips the dilution back out, leaving solid black patches on white instead of the softer merle mottling. Breeders ran harlequin programs for a century before anyone knew this: a 1988 study first argued harlequin was a modified merle, and DNA work later found both genes. Merle itself was a disqualifying fault until the AKC accepted it in 2019. Even the size of the merle mutation matters — the longer a repetitive stretch inside it, the stronger the pattern, from 'cryptic' merles that look solid to the longest versions, found in harlequins.",
@@ -61,6 +66,7 @@ const MORE_STORIES: MoreStory[] = [
     gene: 'AMY2B',
     hook: 'Why can dogs eat kibble but wolves can barely digest a potato?',
     location: 'chr6:47,370,000-47,398,000',
+    tracks: ['sv'],
     intro:
       "Somewhere in this window, most dogs carry a duplication wolves don't have — one of the clearest fingerprints of domestication in the entire genome. Extra copies of this gene meant more of the enzyme that digests starch, letting early dogs thrive on grain and food scraps around human settlements in a way wolves never could. Below, watch the duplication show up in most of the 12 dogs in our structural-variant track, including the Great Dane — but not in the Greenland Wolf sample sitting right next to them.",
   },
@@ -123,10 +129,8 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
   const [gene, setGene] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
   const [searchOpen, setSearchOpen] = useState(false)
-  const [infoOpen, setInfoOpen] = useState(false)
+  const [exploreOpen, setExploreOpen] = useState(false)
   const [liveBrowserOpen, setLiveBrowserOpen] = useState(false)
-  const [buildInfoOpen, setBuildInfoOpen] = useState(false)
-  const liveSectionRef = useRef<HTMLDivElement>(null)
   const storyRef = useRef<HTMLDivElement>(null)
 
   // Treat 'all' and empty string the same - show all genes
@@ -203,6 +207,15 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
     setSearchOpen(false)
   }
 
+  // Picking a gene from the whole-genome explorer changes what the stage above
+  // shows, which is off-screen by then — bring it back into view.
+  function selectGeneFromExplorer(name: string) {
+    selectGene(name)
+    requestAnimationFrame(() => {
+      storyRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    })
+  }
+
   function selectType(newType: string) {
     setType(newType)
     setGene('')
@@ -224,6 +237,14 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
     })
   }
 
+  const storyTracks = useMemo(
+    () => activeTourStop?.tracks ?? [],
+    [activeTourStop],
+  )
+  const showSvTrack = storyTracks.includes('sv')
+  const showStage = !!gene || liveBrowserOpen
+  const stageTitle = activeTourStop?.label ?? geneEntry?.name
+
   return (
     <div>
       <div className="content">
@@ -239,11 +260,10 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
               style={{ margin: '0 auto' }}
             />
           </section>
-          <p />
-          <span className="accent-color">7</span>Sisters Genome Browser
-          (CanFam4)
-          <br />
-          <br />
+          <h1 className="genome-page-title">
+            <span className="accent-color">7</span>Sisters Genome Browser
+            <span className="genome-page-subtitle"> (CanFam4)</span>
+          </h1>
           <section className="genome-tour">
             <img
               src="/img/close-up-puppy-faces-cart-illinois-corn-field-sunset.jpg"
@@ -262,7 +282,10 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
                   <button
                     key={stop.gene}
                     type="button"
-                    className="genome-tour-card"
+                    className={
+                      'genome-tour-card' +
+                      (stop.gene === gene ? ' genome-tour-card-active' : '')
+                    }
                     onClick={() => openTourStop(stop)}
                   >
                     <span className="genome-tour-card-label">{stop.label}</span>
@@ -301,291 +324,303 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
               ))}
             </section>
           ) : null}
-          <p />
-          Or search for a gene, or filter by category, then explore its position
-          on the genome below.
-          <div className="genome-info">
-            <button
-              type="button"
-              className="genome-info-toggle"
-              aria-expanded={infoOpen}
-              onClick={() => setInfoOpen(open => !open)}
-            >
-              What am I looking at?{' '}
-              <span className="genome-info-caret">{infoOpen ? '▾' : '▸'}</span>
-            </button>
-            {infoOpen ? (
-              <div className="genome-info-panel">
-                <p>
-                  Each bar below is one dog chromosome from the CanFam4
-                  reference genome, drawn to scale by length. The small tick
-                  mark partway along a bar is the centromere, dividing the
-                  chromosome into its p (short) and q (long) arms.
-                </p>
-                <p>
-                  Colored dots mark genes we&rsquo;ve placed at a known position
-                  &mdash; hover one for details, or click it (or a gene name
-                  above) to read more about that gene. Use the search box or
-                  category buttons to filter which genes are highlighted.
-                </p>
-              </div>
-            ) : null}
-          </div>
-          <div className="genome-controls">
-            <div className="genome-search">
-              <input
-                type="text"
-                className="genome-search-input"
-                placeholder="Search genes by name..."
-                value={searchQuery}
-                onChange={event => {
-                  setSearchQuery(event.target.value)
-                  setSearchOpen(true)
-                }}
-                onFocus={() => setSearchOpen(true)}
-                onBlur={() => setTimeout(() => setSearchOpen(false), 150)}
-              />
-              {searchOpen && searchMatches.length ? (
-                <ul className="genome-search-results">
-                  {searchMatches.map(entry => (
-                    <li key={entry.name}>
-                      <button
-                        type="button"
-                        onMouseDown={event => event.preventDefault()}
-                        onClick={() => selectGene(entry.name)}
-                      >
-                        {entry.name}
-                        <span className="genome-search-category">
-                          {entry.type}
-                        </span>
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
-            </div>
-            <div
-              className="genome-pills"
-              role="group"
-              aria-label="Filter by category"
-            >
-              <button
-                type="button"
-                className={
-                  'genome-pill' +
-                  (effectiveType === 'all' ? ' genome-pill-active' : '')
-                }
-                onClick={() => selectType('all')}
-              >
-                All ({geneCategories.length})
-              </button>
-              {categories.map(category => (
-                <button
-                  key={category}
-                  type="button"
-                  className={
-                    'genome-pill' +
-                    (effectiveType === category ? ' genome-pill-active' : '')
-                  }
-                  onClick={() => selectType(category)}
-                >
-                  {category} (
-                  {geneCategories.filter(e => e.type === category).length})
-                </button>
-              ))}
-            </div>
-          </div>
-          {categoryGenes.length ? (
-            <div className="genome-category-genes">
-              <div className="genome-category-genes-title">
-                {effectiveType} genes ({categoryGenes.length}) - select one to
-                learn more
-              </div>
-              <div className="genome-category-genes-chips">
-                {categoryGenes.map(entry => (
+
+          <div className="genome-stage" ref={storyRef}>
+            {showStage ? (
+              <>
+                <div className="genome-stage-header">
+                  {stageTitle ? (
+                    <h2 className="genome-stage-title">{stageTitle}</h2>
+                  ) : null}
+                  {activeTourStop ? (
+                    <p className="genome-stage-hook">{activeTourStop.hook}</p>
+                  ) : null}
+                </div>
+                {liveBrowserOpen ? (
+                  <Suspense
+                    fallback={
+                      <div className="genome-live-loading">
+                        Loading genome browser&hellip;
+                      </div>
+                    }
+                  >
+                    <JBrowseEmbed
+                      curatedGenes={curatedGenes}
+                      location={liveLocation}
+                      storyTracks={storyTracks}
+                    />
+                  </Suspense>
+                ) : (
                   <button
-                    key={entry.name}
+                    type="button"
+                    className="genome-live-toggle"
+                    onClick={() => {
+                      prefetchDog10kSvVcf()
+                      setLiveBrowserOpen(true)
+                    }}
+                  >
+                    Open live genome browser
+                    {geneEntry ? ` — ${geneEntry.name}` : ''}
+                  </button>
+                )}
+                <div className="genome-accordions" key={gene}>
+                  {activeTourStop?.intro ? (
+                    <details className="genome-accordion">
+                      <summary>The story</summary>
+                      <p className="genome-accordion-body">
+                        {activeTourStop.intro}
+                      </p>
+                    </details>
+                  ) : null}
+                  {geneEntry ? (
+                    <details className="genome-accordion">
+                      <summary>About this gene</summary>
+                      <div className="genome-accordion-body">
+                        <DescriptionComponent geneEntry={geneEntry} />
+                      </div>
+                    </details>
+                  ) : null}
+                  {companionEntry ? (
+                    <details className="genome-accordion">
+                      <summary>The companion gene</summary>
+                      <div className="genome-accordion-body">
+                        <DescriptionComponent geneEntry={companionEntry} />
+                      </div>
+                    </details>
+                  ) : null}
+                </div>
+              </>
+            ) : null}
+            <div className="genome-accordions">
+              <details className="genome-accordion">
+                <summary>What the live browser shows</summary>
+                <div className="genome-accordion-body">
+                  <p>
+                    A real, in-page JBrowse view of the CanFam4 assembly: our
+                    curated gene catalog (red) and the full NCBI RefSeq gene
+                    annotation.
+                    {storyTracks.includes('repeats')
+                      ? ' Below them, RepeatMasker shows the repeated DNA elements (SINEs, LINEs) scattered through the region — merle is one of these, a SINE inserted into the pigment gene.'
+                      : null}
+                    {showSvTrack
+                      ? ' Below them, a structural-variant track genotyped across 12 real, named dogs — one row per breed, including a Great Dane.'
+                      : storyTracks.length
+                        ? null
+                        : ' Stories add extra evidence tracks where they help tell the story.'}
+                  </p>
+                  {showSvTrack ? (
+                    <table className="genome-sv-samples-table">
+                      <tbody>
+                        {DOG10K_SV_SAMPLES.map(({ sample, breed }) => (
+                          <tr key={sample}>
+                            <td>{sample}</td>
+                            <td>{breed}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  ) : null}
+                </div>
+              </details>
+              <details className="genome-accordion">
+                <summary>How this browser is built</summary>
+                <ul className="genome-accordion-body">
+                  <li>
+                    Reference sequence: UCSC canFam4 / UU_Cfam_GSD_1.0, read
+                    directly from{' '}
+                    <a
+                      href="https://hgdownload.soe.ucsc.edu/goldenPath/canFam4/"
+                      target="_blank"
+                    >
+                      hgdownload.soe.ucsc.edu
+                    </a>
+                    .
+                  </li>
+                  <li>
+                    Gene annotation: the full NCBI RefSeq set for canFam4, from
+                    JBrowse&rsquo;s own hosted UCSC mirror.
+                  </li>
+                  <li>
+                    Structural variants: 12 long-read dog genomes, including the
+                    Great Dane reference assembly &ldquo;Zoey&rdquo; (
+                    <a
+                      href="https://doi.org/10.1073/pnas.2016274118"
+                      target="_blank"
+                    >
+                      Halo et al., 2021, PNAS
+                    </a>
+                    ), genotyped by{' '}
+                    <a
+                      href="https://doi.org/10.5281/zenodo.14968874"
+                      target="_blank"
+                    >
+                      Schall &amp; Kidd, 2025
+                    </a>
+                    .
+                  </li>
+                  <li>
+                    Curated gene catalog: our own, {geneCategories.length}{' '}
+                    genes, each cited to primary literature.
+                  </li>
+                  <li>
+                    Built with{' '}
+                    <a href="https://jbrowse.org" target="_blank">
+                      JBrowse 2
+                    </a>
+                    , the open-source genome browser platform.
+                  </li>
+                </ul>
+              </details>
+            </div>
+          </div>
+
+          <details
+            className="genome-accordion genome-explore"
+            open={exploreOpen}
+            onToggle={event => setExploreOpen(event.currentTarget.open)}
+          >
+            <summary>Explore the whole genome</summary>
+          </details>
+        </main>
+      </div>
+      {exploreOpen ? (
+        <>
+          <div className="content">
+            <main className="content-wrapper">
+              <p className="genome-explore-intro">
+                Each bar is one dog chromosome from the CanFam4 reference, drawn
+                to scale; the small tick is the centromere, dividing the p
+                (short) and q (long) arms. Colored dots mark genes we&rsquo;ve
+                placed &mdash; hover for details, or click one to load it above.
+              </p>
+              <div className="genome-controls">
+                <div className="genome-search">
+                  <input
+                    type="text"
+                    className="genome-search-input"
+                    placeholder="Search genes by name..."
+                    value={searchQuery}
+                    onChange={event => {
+                      setSearchQuery(event.target.value)
+                      setSearchOpen(true)
+                    }}
+                    onFocus={() => setSearchOpen(true)}
+                    onBlur={() => setTimeout(() => setSearchOpen(false), 150)}
+                  />
+                  {searchOpen && searchMatches.length ? (
+                    <ul className="genome-search-results">
+                      {searchMatches.map(entry => (
+                        <li key={entry.name}>
+                          <button
+                            type="button"
+                            onMouseDown={event => event.preventDefault()}
+                            onClick={() => selectGeneFromExplorer(entry.name)}
+                          >
+                            {entry.name}
+                            <span className="genome-search-category">
+                              {entry.type}
+                            </span>
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
+                </div>
+                <div
+                  className="genome-pills"
+                  role="group"
+                  aria-label="Filter by category"
+                >
+                  <button
                     type="button"
                     className={
-                      'genome-chip' +
-                      (entry.name === gene ? ' genome-chip-active' : '')
+                      'genome-pill' +
+                      (effectiveType === 'all' ? ' genome-pill-active' : '')
                     }
-                    onClick={() => selectGene(entry.name)}
+                    onClick={() => selectType('all')}
                   >
-                    {entry.name}
+                    All ({geneCategories.length})
                   </button>
-                ))}
+                  {categories.map(category => (
+                    <button
+                      key={category}
+                      type="button"
+                      className={
+                        'genome-pill' +
+                        (effectiveType === category
+                          ? ' genome-pill-active'
+                          : '')
+                      }
+                      onClick={() => selectType(category)}
+                    >
+                      {category} (
+                      {geneCategories.filter(e => e.type === category).length})
+                    </button>
+                  ))}
+                </div>
+              </div>
+              {categoryGenes.length ? (
+                <div className="genome-category-genes">
+                  <div className="genome-category-genes-title">
+                    {effectiveType} genes ({categoryGenes.length}) - select one
+                    to learn more
+                  </div>
+                  <div className="genome-category-genes-chips">
+                    {categoryGenes.map(entry => (
+                      <button
+                        key={entry.name}
+                        type="button"
+                        className={
+                          'genome-chip' +
+                          (entry.name === gene ? ' genome-chip-active' : '')
+                        }
+                        onClick={() => selectGeneFromExplorer(entry.name)}
+                      >
+                        {entry.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+            </main>
+          </div>
+          <GenomeIdeogram
+            chromosomes={chromosomes}
+            annotations={annotations}
+            selectedGene={gene}
+            activeCategory={effectiveType}
+            onSelectGene={selectGeneFromExplorer}
+          />
+          {unplacedGenes.length ? (
+            <div className="genome-unplaced">
+              <div className="genome-unplaced-title">
+                Genes without genome coordinates yet ({unplacedGenes.length})
+              </div>
+              <div className="genome-unplaced-chips">
+                {unplacedGenes
+                  .toSorted((a, b) => a.name.localeCompare(b.name))
+                  .map(entry => {
+                    const isDimmed =
+                      effectiveType !== 'all' && entry.type !== effectiveType
+                    return (
+                      <button
+                        key={entry.name}
+                        type="button"
+                        className={
+                          'genome-chip' +
+                          (entry.name === gene ? ' genome-chip-active' : '') +
+                          (isDimmed ? ' genome-chip-dimmed' : '')
+                        }
+                        onClick={() => selectGeneFromExplorer(entry.name)}
+                      >
+                        {entry.name}
+                      </button>
+                    )
+                  })}
               </div>
             </div>
           ) : null}
-          <div ref={storyRef}>
-            {activeTourStop?.intro ? (
-              <p className="genome-tour-story">{activeTourStop.intro}</p>
-            ) : null}
-            {geneEntry ? <DescriptionComponent geneEntry={geneEntry} /> : null}
-            {companionEntry ? (
-              <DescriptionComponent geneEntry={companionEntry} />
-            ) : null}
-            {activeTourStop && liveBrowserOpen ? (
-              <p className="genome-live-loading-hint">
-                The live genome browser is already loading below &mdash; keep
-                scrolling when you&rsquo;re ready to see it.
-              </p>
-            ) : null}
-          </div>
-        </main>
-      </div>
-      <GenomeIdeogram
-        chromosomes={chromosomes}
-        annotations={annotations}
-        selectedGene={gene}
-        activeCategory={effectiveType}
-        onSelectGene={selectGene}
-      />
-      <div className="content">
-        <main className="content-wrapper">
-          <div className="genome-live-section" ref={liveSectionRef}>
-            <button
-              type="button"
-              className="genome-live-toggle"
-              onClick={() => {
-                if (!liveBrowserOpen) prefetchDog10kSvVcf()
-                setLiveBrowserOpen(open => !open)
-              }}
-            >
-              {liveBrowserOpen ? 'Hide' : 'Open'} live genome browser
-              {geneEntry ? ` — ${geneEntry.name}` : ''}
-            </button>
-            <p className="genome-live-caption">
-              A real, in-page JBrowse view of the CanFam4 assembly: our curated
-              gene catalog and the full NCBI RefSeq annotation above, plus a
-              structural-variant track genotyped across 12 real, named dogs
-              &mdash; one row per breed, including a Great Dane. Select a gene
-              above, then open the browser to jump there.
-            </p>
-            {liveBrowserOpen ? (
-              <Suspense
-                fallback={
-                  <div className="genome-live-loading">
-                    Loading genome browser&hellip;
-                  </div>
-                }
-              >
-                <JBrowseEmbed
-                  curatedGenes={curatedGenes}
-                  location={liveLocation}
-                />
-              </Suspense>
-            ) : null}
-            <div className="genome-sv-samples">
-              <div className="genome-sv-samples-title">
-                Who&rsquo;s in the structural-variant track
-              </div>
-              <table className="genome-sv-samples-table">
-                <tbody>
-                  {DOG10K_SV_SAMPLES.map(({ sample, breed }) => (
-                    <tr key={sample}>
-                      <td>{sample}</td>
-                      <td>{breed}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <div className="genome-info">
-              <button
-                type="button"
-                className="genome-info-toggle"
-                aria-expanded={buildInfoOpen}
-                onClick={() => setBuildInfoOpen(open => !open)}
-              >
-                How this browser is built{' '}
-                <span className="genome-info-caret">
-                  {buildInfoOpen ? '▾' : '▸'}
-                </span>
-              </button>
-              {buildInfoOpen ? (
-                <div className="genome-info-panel">
-                  <ul>
-                    <li>
-                      Reference sequence: UCSC canFam4 / UU_Cfam_GSD_1.0, read
-                      directly from{' '}
-                      <a
-                        href="https://hgdownload.soe.ucsc.edu/goldenPath/canFam4/"
-                        target="_blank"
-                      >
-                        hgdownload.soe.ucsc.edu
-                      </a>
-                      .
-                    </li>
-                    <li>
-                      Gene annotation: the full NCBI RefSeq set for canFam4,
-                      from JBrowse&rsquo;s own hosted UCSC mirror.
-                    </li>
-                    <li>
-                      Structural variants: 12 long-read dog genomes, including
-                      the Great Dane reference assembly &ldquo;Zoey&rdquo; (
-                      <a
-                        href="https://doi.org/10.1073/pnas.2016274118"
-                        target="_blank"
-                      >
-                        Halo et al., 2021, PNAS
-                      </a>
-                      ), genotyped by{' '}
-                      <a
-                        href="https://doi.org/10.5281/zenodo.14968874"
-                        target="_blank"
-                      >
-                        Schall &amp; Kidd, 2025
-                      </a>
-                      .
-                    </li>
-                    <li>
-                      Curated gene catalog: our own, {geneCategories.length}{' '}
-                      genes, each cited to primary literature above.
-                    </li>
-                    <li>
-                      Built with{' '}
-                      <a href="https://jbrowse.org" target="_blank">
-                        JBrowse 2
-                      </a>
-                      , the open-source genome browser platform.
-                    </li>
-                  </ul>
-                </div>
-              ) : null}
-            </div>
-          </div>
-        </main>
-      </div>
-      {unplacedGenes.length ? (
-        <div className="genome-unplaced">
-          <div className="genome-unplaced-title">
-            Genes without genome coordinates yet ({unplacedGenes.length})
-          </div>
-          <div className="genome-unplaced-chips">
-            {unplacedGenes
-              .toSorted((a, b) => a.name.localeCompare(b.name))
-              .map(entry => {
-                const isDimmed =
-                  effectiveType !== 'all' && entry.type !== effectiveType
-                return (
-                  <button
-                    key={entry.name}
-                    type="button"
-                    className={
-                      'genome-chip' +
-                      (entry.name === gene ? ' genome-chip-active' : '') +
-                      (isDimmed ? ' genome-chip-dimmed' : '')
-                    }
-                    onClick={() => selectGene(entry.name)}
-                  >
-                    {entry.name}
-                  </button>
-                )
-              })}
-          </div>
-        </div>
+        </>
       ) : null}
     </div>
   )

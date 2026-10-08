@@ -503,3 +503,99 @@
     gap: 0;
   }
 }
+
+.genome-page-title {
+  margin: 1rem 0;
+  font-size: 1.6rem;
+  text-align: center;
+}
+
+.genome-page-subtitle {
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--genome-muted);
+}
+
+.genome-tour-card-active {
+  border-color: var(--genome-accent);
+  box-shadow: inset 0 0 0 1px var(--genome-accent);
+}
+
+.genome-stage {
+  margin: 1.5rem 0;
+  scroll-margin-top: 1rem;
+}
+
+.genome-stage-title {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.genome-stage-hook {
+  margin: 0.2rem 0 0;
+  color: var(--genome-muted);
+}
+
+.genome-stage .genome-jbrowse-embed {
+  height: 640px;
+}
+
+.genome-accordions {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.genome-accordion {
+  border: 1px solid var(--genome-border);
+  border-radius: 8px;
+  background: var(--genome-surface);
+  color: var(--genome-text);
+}
+
+.genome-accordion > summary {
+  cursor: pointer;
+  padding: 0.65rem 1rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.genome-accordion > summary::-webkit-details-marker {
+  display: none;
+}
+
+.genome-accordion > summary::after {
+  content: '+';
+  font-size: 1.2rem;
+  color: var(--genome-accent);
+}
+
+.genome-accordion[open] > summary::after {
+  content: '\2212';
+}
+
+.genome-accordion-body {
+  margin: 0;
+  padding: 0 1rem 0.9rem;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+ul.genome-accordion-body {
+  padding-left: 2.2rem;
+}
+
+.genome-explore {
+  margin: 1.5rem 0;
+}
+
+.genome-explore-intro {
+  color: var(--genome-muted);
+  font-size: 0.9rem;
+  margin: 0.5rem 0;
+}
