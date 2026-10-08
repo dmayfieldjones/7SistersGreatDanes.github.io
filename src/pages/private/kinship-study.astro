@@ -52,6 +52,13 @@ const recMinMerle = H.recording.filter(r => r.y > recMaxMerle.y && r.y <= 2015).
 const winLabel = (y: number) => `${y - H.window / 2 + 1}–${y + H.window / 2}`
 const cnt = (y: number) => (H.counts as Record<string, number>)[String(y)] ?? 0
 const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).toFixed(2)}`
+const FO = study.founders
+const DS = study.designs
+const designCols = [DS.coverage.final, DS.diversity.final, DS.combined.final, DS.random]
+const famSplit = (f: Record<string, number>) => `${f.fawn} / ${f.harl} / ${f.blue} / ${f.other}`
+const cohortAt = (y: string) => FO.cohorts.find(c => c.years === y)!
+const cohortPeak = FO.cohorts.reduce((a, b) => (b.fa > a.fa ? b : a))
+const earlyCol = (c: string) => FO.early_colours.find(r => r.colour === c)!
 ---
 
 <BaseLayout
@@ -123,11 +130,28 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
           after ten picks, {pct(at(10).fawn)} of fawn/brindle dogs are covered
           but only {pct(at(10).blue)} of blue/black dogs.
         </li>
+        <li>
+          <strong>Little of the founding diversity is left, and how we pick
+          dogs decides how much of it we see.</strong> {FO.n50} ancestors
+          account for half of the gene pool, which now equals about {FO.fge}{' '}
+          unrelated founders. Picks chosen for coverage hold{' '}
+          {DS.coverage.final.fge.toFixed(1)} of those; picks chosen for
+          diversity hold {DS.diversity.final.fge.toFixed(1)} but cover few
+          dogs. A combined design keeps most of both.
+        </li>
       </ol>
     </section>
 
-    <section>
-      <h2>1. Population structure</h2>
+    <div class="ks-toolbar" id="sections">
+      <h2>Sections</h2>
+      <button type="button" class="ks-toggle-all" id="ks-toggle-all">Open all</button>
+    </div>
+
+    <details class="ks-sec" id="structure">
+      <summary>
+        <h2>1. Population structure</h2>
+        <span class="ks-gist">{assigned.length} lines that follow the colour families; kinship is 3–4× higher inside a line than between lines.</span>
+      </summary>
       <p>
         Each dot is one dog, placed by the two strongest axes of the
         relationship matrix (principal coordinates; they explain{' '}
@@ -203,10 +227,13 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
         against about 25 for everyone else), so they look unrelated because
         their ancestry is missing, not because it is different.
       </p>
-    </section>
+    </details>
 
-    <section>
-      <h2>2. Inbreeding</h2>
+    <details class="ks-sec" id="inbreeding">
+      <summary>
+        <h2>2. Inbreeding</h2>
+        <span class="ks-gist">Mean F is {study.mean_F.toFixed(3)} and flat from 2012 to 2020; effective population size is about {study.Ne}.</span>
+      </summary>
       <p>
         F is the probability that a dog's two copies of a gene come from the
         same ancestor. Half of the dogs sit between{' '}
@@ -252,10 +279,170 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
         (Gutiérrez et al. 2008). Values under 100 are generally treated as a
         conservation concern.
       </p>
-    </section>
+    </details>
 
-    <section>
-      <h2>3. Choosing dogs to sequence</h2>
+    <details class="ks-sec" id="founders">
+      <summary>
+        <h2>3. Founder diversity</h2>
+        <span class="ks-gist">{FO.n50} ancestors account for half of today's gene pool; what is left equals about {FO.fge} unrelated founders.</span>
+      </summary>
+      <p>
+        Every dog in the 2012–2020 population traces back to dogs with no
+        recorded parents, the pedigree's founders. Counting them in
+        progressively stricter ways shows how much of that starting diversity
+        the population still carries, and where it was lost.
+      </p>
+      <div class="ks-table-wrap">
+        <table class="ks-table">
+          <caption>Founder diversity in the {fmt(study.reference)} dogs born 2012–2020</caption>
+          <thead>
+            <tr>
+              <th scope="col">Measure</th>
+              <th scope="col" class="num">Value</th>
+              <th scope="col">What it counts</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Founders</th>
+              <td class="num">{fmt(FO.founders)}</td>
+              <td>Dogs with no recorded parents that have descendants in the population, out of {fmt(FO.founders_in_database)} such dogs in the database.</td>
+            </tr>
+            <tr>
+              <th scope="row">Effective founders</th>
+              <td class="num">{Math.round(FO.fe)}</td>
+              <td>How many founders would give the same diversity if each had contributed equally.</td>
+            </tr>
+            <tr>
+              <th scope="row">Effective ancestors</th>
+              <td class="num">{FO.fa}</td>
+              <td>The same, after counting bottlenecks: popular dogs through whom many founders' genes had to pass.</td>
+            </tr>
+            <tr>
+              <th scope="row">Founder genome equivalents</th>
+              <td class="num">{FO.fge}</td>
+              <td>The same, after also counting gene copies lost by chance in each generation.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Each step down has a cause. From {fmt(FO.founders)} to{' '}
+        {Math.round(FO.fe)} is unequal use: {fmt(FO.founders_under_0_01pct)}{' '}
+        of the founders each supply less than 0.01% of the gene pool. From{' '}
+        {Math.round(FO.fe)} to {FO.fa} is bottlenecks: {FO.n50} ancestors
+        account for half of the gene pool and {FO.n80} for 80%, and a single
+        dog born in {FO.top1_year} accounts for {FO.top1}% on his own. From{' '}
+        {FO.fa} to {FO.fge} is drift, mostly inside the lines of section 1.
+        The population holds about as much genetic diversity as {FO.fge}{' '}
+        unrelated dogs would.
+      </p>
+
+      <h3>The ancestor base widened, then narrowed</h3>
+      <div class="ks-table-wrap">
+        <table class="ks-table ks-compact">
+          <caption>The same measures for earlier birth cohorts</caption>
+          <thead>
+            <tr>
+              <th scope="col">Born</th>
+              <th scope="col" class="num">Dogs</th>
+              <th scope="col" class="num">Effective founders</th>
+              <th scope="col" class="num">Effective ancestors</th>
+              <th scope="col" class="num">Ancestors for half the gene pool</th>
+              <th scope="col" class="num">Largest single ancestor</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              FO.cohorts.map(c => (
+                <tr>
+                  <th scope="row">{c.years}</th>
+                  <td class="num">{fmt(c.n)}</td>
+                  <td class="num">{Math.round(c.fe)}</td>
+                  <td class="num">{Math.round(c.fa)}</td>
+                  <td class="num">{c.n50}</td>
+                  <td class="num">{c.top1.toFixed(1)}%</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Effective ancestors climbed from {Math.round(cohortAt('1920–1939').fa)}{' '}
+        for dogs born 1920–1939 to {Math.round(cohortPeak.fa)} for those born{' '}
+        {cohortPeak.years}, then fell back to{' '}
+        {Math.round(cohortAt('2012–2020').fa)}. Today's dogs rest on about as
+        narrow a base as the dogs of the 1920s and 1930s did.
+      </p>
+
+      <h3>What became of the early dogs</h3>
+      <div class="ks-table-wrap">
+        <table class="ks-table ks-compact">
+          <caption>Dogs of each era with descendants in the 2012–2020 population</caption>
+          <thead>
+            <tr>
+              <th scope="col">Born</th>
+              <th scope="col" class="num">Dogs recorded</th>
+              <th scope="col" class="num">With descendants today</th>
+              <th scope="col" class="num">Dogs carrying half of the era's contribution</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              FO.eras.map(e => (
+                <tr>
+                  <th scope="row">{e.years}</th>
+                  <td class="num">{fmt(e.recorded)}</td>
+                  <td class="num">{fmt(e.surviving)}</td>
+                  <td class="num">{e.half}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Most early dogs on record still have descendants, but a handful do
+        most of the contributing. The colours fared differently too. Among
+        dogs born 1900–1939, fawns and brindles were{' '}
+        {earlyCol('fawn/brindle').dogs}% of the dogs recorded but supply{' '}
+        {earlyCol('fawn/brindle').contribution}% of what that era contributes
+        today. Harlequins were {earlyCol('harlequin').dogs}% and supply{' '}
+        {earlyCol('harlequin').contribution}%; blacks and blues were{' '}
+        {earlyCol('black/blue').dogs}% and supply{' '}
+        {earlyCol('black/blue').contribution}%.
+      </p>
+      <p class="ks-note">
+        Two cautions. A "founder" here is any dog whose parents were not
+        entered, and {Math.round(FO.undated_founder_share)}% of the founder
+        contribution comes from undated dogs, so the founder counts say more
+        about where the records stop than about the breed's origin; effective
+        ancestors and founder genome equivalents are the sturdier numbers.
+        And an old dog is more likely to be in the database at all if it is
+        somebody's ancestor, so the share of early dogs with descendants is an
+        upper bound.
+      </p>
+    </details>
+
+    <details class="ks-sec" id="sequencing">
+      <summary>
+        <h2>4. Choosing dogs to sequence</h2>
+        <span class="ks-gist">Two ways to choose {DS.coverage.final.k} dogs, what each is good for, and why we recommend combining them.</span>
+      </summary>
+      <p>
+        {DS.coverage.final.k} genomes cannot do everything. There are two
+        defensible ways to choose them, they answer different questions, and
+        they pick nearly opposite dogs. This section sets out the case for
+        each, compares them on the same measures, and recommends a
+        combination.
+      </p>
+
+      <h3>Approach A: coverage</h3>
+      <p class="ks-claim">
+        Choose dogs so that as many other dogs as possible have a close
+        sequenced relative.
+      </p>
       <p>
         Dogs are added one at a time, each time taking the dog that most
         raises the average relationship between every dog in the population
@@ -278,7 +465,7 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
       </figure>
       <div class="ks-table-wrap">
         <table class="ks-table ks-compact">
-          <caption>Coverage at selected pick counts</caption>
+          <caption>Coverage design: dogs covered at selected pick counts</caption>
           <thead>
             <tr>
               <th scope="col">Picks</th>
@@ -311,13 +498,204 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
         {study.curve.filter(r => r.cluster === 2).length} from the US
         harlequin/mantle line. The blue/black lines get their first pick at
         number {study.curve.findIndex(r => [4, 5, 6, 7, 11, 12].includes(r.cluster)) + 1}.
-        A stratified design (a fixed budget per colour family) would cover the
-        smaller lines far sooner. The individual picks are not listed here.
+        The individual picks are not listed here.
       </p>
-    </section>
+      <p>
+        <strong>The case for it.</strong> A sequenced close relative lets a
+        dog's whole genome be filled in from an inexpensive SNP test, so each
+        pick makes many other dogs cheaper to study. Ten picks already cover{' '}
+        {pct(at(10).all)} of the population. This is the right panel for work
+        that needs many dogs: imputation (question 6 in{' '}
+        <a href="#questions">section 7</a>) and, later, health mapping.
+      </p>
+      <p>
+        <strong>The case against it.</strong> The dogs that cover the most
+        relatives come from the most popular families, so they are closely
+        related to each other and inbred themselves (mean F{' '}
+        {DS.coverage.final.F.toFixed(2)}, against {study.mean_F.toFixed(2)}{' '}
+        for the population). Together the {DS.coverage.final.k} picks hold{' '}
+        {DS.coverage.final.fge.toFixed(1)} founder genome equivalents, fewer
+        than {DS.coverage.final.k} dogs drawn at random would
+        ({DS.random.fge.toFixed(1)}). Much of what is sequenced is the same
+        DNA several times over.
+      </p>
 
-    <section>
-      <h2>4. Data quality</h2>
+      <h3>Approach B: diversity</h3>
+      <p class="ks-claim">
+        Choose dogs so that the set is as unrelated as possible, and so holds
+        as much of the breed's founder diversity (<a href="#founders">section 3</a>)
+        as {DS.diversity.final.k} genomes can.
+      </p>
+      <p>
+        Dogs are again added one at a time, each time taking the dog that
+        least raises the average kinship among the dogs already picked.
+      </p>
+      <p>
+        <strong>The case for it.</strong> Every genome adds DNA the others
+        lack. The {DS.diversity.final.k} picks hold{' '}
+        {DS.diversity.final.fge.toFixed(1)} founder genome equivalents, close
+        to twice the coverage design, and they are far less inbred (mean F{' '}
+        {DS.diversity.final.F.toFixed(2)}), so less of each dog's own genome
+        is the same copy twice. The picks spread almost evenly over the
+        colour families. This is the right panel for cataloguing the breed's
+        variation and for comparing lines on equal terms: whether the colour
+        lines are separate populations (question 1), genetic load by line
+        (question 5) and a pangenome (question 7).
+      </p>
+      <p>
+        <strong>The case against it.</strong> Only{' '}
+        {pct(DS.diversity.final.all)} of dogs get a half-sib-or-closer
+        sequenced relative, so it does little for imputation. It also leans on
+        the pedigree being complete, because a dog with missing ancestry only
+        looks unrelated. Run with no safeguard, the method spent{' '}
+        {DS.coverage.final.k - 1} of its {DS.coverage.final.k} picks on dogs
+        with almost no recorded pedigree. The picks here are therefore limited
+        to dogs with at least {DS.min_depth} equivalent complete generations
+        on record ({fmt(DS.deep_candidates)} of the {fmt(DS.candidates)}{' '}
+        candidates).
+      </p>
+
+      <h3>Side by side</h3>
+      <figure class="ks-figure">
+        <div class="ks-legend" id="des-legend"></div>
+        <div class="ks-pair">
+          <div>
+            <p class="ks-chart-title">Dogs with a half-sib-or-closer sequenced relative</p>
+            <div class="ks-plot" id="des-cov-wrap">
+              <svg id="des-cov" role="img" aria-label="Line chart of the share of dogs covered as picks are added, for the three designs. Coverage and combined rise quickly to above 60 percent; diversity stays below 20 percent."></svg>
+              <div class="ks-tip" id="des-cov-tip" hidden></div>
+            </div>
+          </div>
+          <div>
+            <p class="ks-chart-title">Founder genome equivalents held by the picks</p>
+            <div class="ks-plot" id="des-fge-wrap">
+              <svg id="des-fge" role="img" aria-label="Line chart of founder genome equivalents held by the picks as picks are added. Diversity and combined climb to about 11 or 12; coverage levels off near 6.5."></svg>
+              <div class="ks-tip" id="des-fge-tip" hidden></div>
+            </div>
+          </div>
+        </div>
+        <figcaption>
+          The two goals as dogs are added. The combined design follows the
+          coverage design for its first {DS.combined_first} picks and the
+          diversity rule after that.
+        </figcaption>
+      </figure>
+      <div class="ks-table-wrap">
+        <table class="ks-table">
+          <caption>Three designs of {DS.coverage.final.k} dogs, and {DS.coverage.final.k} dogs drawn at random</caption>
+          <thead>
+            <tr>
+              <th scope="col">Measure</th>
+              <th scope="col" class="num">Coverage</th>
+              <th scope="col" class="num">Diversity</th>
+              <th scope="col" class="num">Combined</th>
+              <th scope="col" class="num">Random</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Dogs with a half-sib-or-closer sequenced relative</th>
+              {designCols.map(d => <td class="num">{pct(d.all)}</td>)}
+            </tr>
+            <tr>
+              <th scope="row">Blue/black dogs with one</th>
+              {designCols.map(d => <td class="num">{pct(d.blue)}</td>)}
+            </tr>
+            <tr>
+              <th scope="row">Founder genome equivalents held by the picks</th>
+              {designCols.map(d => <td class="num">{d.fge.toFixed(1)}</td>)}
+            </tr>
+            <tr>
+              <th scope="row">Mean inbreeding (F) of the picks</th>
+              {designCols.map(d => <td class="num">{d.F.toFixed(2)}</td>)}
+            </tr>
+            <tr>
+              <th scope="row">Founders in the picks' ancestry, of {fmt(FO.founders)}</th>
+              {designCols.map(d => <td class="num">{fmt(Math.round(d.founders))}</td>)}
+            </tr>
+            <tr>
+              <th scope="row">Of the {DS.major_n} ancestors behind 80% of the gene pool, in the picks' ancestry</th>
+              {designCols.map(d => <td class="num">{Math.round(d.major)}</td>)}
+            </tr>
+            <tr>
+              <th scope="row">Picks: fawn / harlequin / blue / unassigned</th>
+              <td class="num">{famSplit(DS.coverage.families)}</td>
+              <td class="num">{famSplit(DS.diversity.families)}</td>
+              <td class="num">{famSplit(DS.combined.families)}</td>
+              <td class="num">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="ks-note">
+        Every design, even random, reaches nearly all of the common
+        ancestors. They differ in the rare lineages and in how many times the
+        common ones are sequenced over. A hand-picked set can hold more
+        founder genome equivalents than the population average of {FO.fge}{' '}
+        because it is chosen to be less related than dogs are on average.
+      </p>
+
+      <h3>Recommendation: combine them</h3>
+      <p>
+        Coverage is won early. The first {DS.combined_first} coverage picks
+        reach {pct(at(DS.combined_first).all)} of the population, and the next{' '}
+        {DS.coverage.final.k - DS.combined_first} add only{' '}
+        {Math.round(at(DS.coverage.final.k).all - at(DS.combined_first).all)}{' '}
+        points. So we recommend spending the first {DS.combined_first} picks
+        on coverage and the remaining{' '}
+        {DS.coverage.final.k - DS.combined_first} on diversity. That keeps{' '}
+        {pct(DS.combined.final.all)} of dogs covered
+        ({pct((100 * DS.combined.final.all) / DS.coverage.final.all)} of what
+        the pure coverage design achieves) while holding{' '}
+        {DS.combined.final.fge.toFixed(1)} founder genome equivalents
+        ({pct((100 * DS.combined.final.fge) / DS.diversity.final.fge)} of the
+        pure diversity design). It also gives the blue/black lines{' '}
+        {DS.combined.families.blue} picks in place of{' '}
+        {DS.coverage.families.blue}.
+      </p>
+      <div class="ks-table-wrap">
+        <table class="ks-table ks-compact">
+          <caption>Splitting {DS.coverage.final.k} picks between the two rules</caption>
+          <thead>
+            <tr>
+              <th scope="col">Picks by coverage, then diversity</th>
+              <th scope="col" class="num">Dogs covered</th>
+              <th scope="col" class="num">Founder genome equivalents</th>
+              <th scope="col" class="num">Mean F of the picks</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              DS.splits.map(s => (
+                <tr class={s.first === DS.combined_first ? 'ks-row-pick' : undefined}>
+                  <th scope="row">
+                    {s.first} + {s.k - s.first}
+                    {s.first === DS.combined_first ? ' (recommended)' : ''}
+                  </th>
+                  <td class="num">{pct(s.all)}</td>
+                  <td class="num">{s.fge.toFixed(1)}</td>
+                  <td class="num">{s.F.toFixed(2)}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <p class="ks-note">
+        If only one goal mattered the choice would be simple: all coverage for
+        an imputation panel, all diversity for a catalogue of the breed's
+        variation. Most of the questions in{' '}
+        <a href="#questions">section 7</a> need some of each, and the split
+        costs little on either side. All of this rests on pedigree
+        expectations, and on dogs that can still be sampled.
+      </p>
+    </details>
+
+    <details class="ks-sec" id="quality">
+      <summary>
+        <h2>5. Data quality</h2>
+        <span class="ks-gist">{study.links_dropped} impossible parent links were set aside; the rest of the pedigree is remarkably complete.</span>
+      </summary>
       <p>
         The pedigree is remarkably complete: about{' '}
         {pct((100 * 99500) / study.dogs_loaded)} of dogs have both parents on
@@ -334,10 +712,13 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
         with them it is {study.generations}, running in date order back to the
         early 1900s. The full list is available to the database maintainer.
       </p>
-    </section>
+    </details>
 
-    <section>
-      <h2>5. Breeding choices through history</h2>
+    <details class="ks-sec" id="history">
+      <summary>
+        <h2>6. Breeding choices through history</h2>
+        <span class="ks-gist">140 years of registry growth, inbreeding, litter size and colour pairings.</span>
+      </summary>
       <p>
         The same database reaches back to the 1880s, so we can ask how
         breeders' choices changed. Everything here uses {fmt(H.dated)} dogs
@@ -509,7 +890,7 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
       <p class="ks-note">
         A firm answer needs litters counted at birth, from registries' litter
         records or breeders' own records, and genomic inbreeding (question 3
-        in section 6) in place of the pedigree estimate.
+        in <a href="#questions">section 7</a>) in place of the pedigree estimate.
       </p>
 
       <h3>Colour pairings</h3>
@@ -604,10 +985,13 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
         black × harlequin litters in the 2010s is a change in labels, not
         in breeding.
       </p>
-    </section>
+    </details>
 
-    <section>
-      <h2>6. What sequencing could tell us</h2>
+    <details class="ks-sec" id="questions">
+      <summary>
+        <h2>7. What sequencing could tell us</h2>
+        <span class="ks-gist">Seven research questions, ranked, with the figures each paper would need.</span>
+      </summary>
       <p>
         The pedigree records who bred to whom for 140 years; genomes record
         what those choices did. Great Danes are unusual in having both a deep,
@@ -678,7 +1062,7 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
           <p><strong>Question.</strong> For decades, breeders kept fawn/brindle, harlequin/mantle and blue/black apart by agreement, not geography. Did that written rule create genetically distinct subpopulations, as a river or a mountain range would? Did it work at the colour genes it targeted: do fawn lines still hide blue alleles, and solid lines cryptic merle? And does the growing black × fawn crossing show up as gene flow?</p>
           <p><strong>Figures.</strong></p>
           <ul>
-            <li>Genomic PCA beside the pedigree PCA in section 1, for the same dogs, aligned so each dog can be compared.</li>
+            <li>Genomic PCA beside the pedigree PCA in <a href="#structure">section 1</a>, for the same dogs, aligned so each dog can be compared.</li>
             <li>Genetic differentiation (F<sub>ST</sub>) between the {assigned.length} lines, set against how many generations the pedigree says they have been apart.</li>
             <li>Colour-gene allele frequencies by line, including the length spectrum of merle insertions.</li>
             <li>Ancestry bars with black × fawn offspring highlighted.</li>
@@ -740,8 +1124,8 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
         <article class="ks-paper">
           <p class="ks-paper-rank">6</p>
           <h4>Choosing which dogs to sequence</h4>
-          <p><strong>Question.</strong> Does a reference panel chosen from the pedigree (section 3), with a set share per colour family, impute the breed better than one chosen at random or by convenience?</p>
-          <p><strong>Figures.</strong> Imputation accuracy against panel size, for pedigree-selected, stratified and random panels, by colour family.</p>
+          <p><strong>Question.</strong> Does a reference panel chosen from the pedigree (<a href="#sequencing">section 4</a>), for coverage, for diversity or for both, impute the breed better than one chosen at random or by convenience?</p>
+          <p><strong>Figures.</strong> Imputation accuracy and variants discovered against panel size, for coverage, diversity, combined and random panels, by colour family.</p>
           <p><strong>Why it matters.</strong> Standard in cattle, untested in a dog breed. It is a methods result more than a discovery, which is why it sits here, but it makes every later study cheaper.</p>
         </article>
 
@@ -762,10 +1146,13 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
         <li><strong>Questions 4 and 5 turn the history into biology:</strong> what size and bottlenecks did to mutation and genetic load. They are richer once the lines and the time series exist.</li>
         <li><strong>Questions 6 and 7 are the most practical and the most crowded.</strong> They matter, but they are less distinctive science, and they lean on everything before them.</li>
       </ol>
-    </section>
+    </details>
 
-    <section>
-      <h2>Limitations and next steps</h2>
+    <details class="ks-sec" id="limits">
+      <summary>
+        <h2>Limitations and next steps</h2>
+        <span class="ks-gist">What this analysis cannot say, and what comes next.</span>
+      </summary>
       <ul>
         <li>
           <strong>The data effectively stop in 2020.</strong> Dogs born
@@ -785,17 +1172,17 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
           on record.
         </li>
         <li>
-          <strong>Next:</strong> add post-2020 litters, rerun with a
-          per-colour-family sequencing budget, and sequence living dogs
+          <strong>Next:</strong> add post-2020 litters, rerun the
+          combined sequencing design on living dogs, and sequence living dogs
           across the lines for question 1 while searching museum collections
-          for dated historical Great Danes (section 6).
+          for dated historical Great Danes (<a href="#questions">section 7</a>).
         </li>
       </ul>
-    </section>
+    </details>
 
     <details class="ks-methods">
       <summary>Sources</summary>
-      <p class="ks-src-head">Prior work (section 6)</p>
+      <p class="ks-src-head">Prior work (section 7)</p>
       <ul>
         <li><a href="https://www.sciencedirect.com/science/article/abs/pii/S1090023314004559" rel="noopener">Leroy et al. 2015, Inbreeding impact on litter size and survival in selected canine breeds (Veterinary Journal)</a></li>
         <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6606663/" rel="noopener">Inbreeding depression causes reduced fecundity in Golden Retrievers</a></li>
@@ -842,12 +1229,24 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
       <p>
         Clustering: average-linkage hierarchical clustering on 1 − normalised
         relationship, cut to give twelve clusters of at least 30 dogs.
-        Sequencing picks: greedy maximisation of the mean, over the reference
-        population, of each dog's relationship to its closest selected dog.
+        Sequencing picks, coverage design: greedy maximisation of the mean,
+        over the reference population, of each dog's relationship to its
+        closest selected dog. Diversity design: greedy minimisation of the
+        mean kinship among the selected dogs, self-kinship included.
         Effective population size: from individual increase in inbreeding,
         ΔFᵢ = 1 − (1 − Fᵢ)^(1/(tᵢ − 1)), with tᵢ the equivalent complete
         generations. Methods were checked against textbook cases (full-sib and
         parent–offspring matings).
+      </p>
+      <p>
+        Founder diversity: founders are dogs with no recorded parents, and
+        each missing parent of a dog with one recorded parent counts as a
+        founder. Effective founders are 1/Σp², with p each founder's expected
+        share of the reference gene pool. Effective ancestors use marginal
+        contributions (Boichard, Maignel and Verrier 1997), taken until 99.5%
+        of the gene pool is explained. Founder genome equivalents are 1/(2 ×
+        mean kinship), self-kinship included (Lacy 1989). The random
+        comparison is the mean of 300 draws from the same candidates.
       </p>
       <p>
         History: 10-generation COI for every dog with a birth year, computed
@@ -860,6 +1259,7 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
         (COI) or 60 litters with both parents' colours (pairings).
       </p>
     </details>
+    <a class="ks-to-sections" id="ks-to-sections" href="#sections" hidden>↑ Sections</a>
   </article>
 
   <script type="application/json" id="ks-data" set:html={JSON.stringify({
@@ -867,6 +1267,7 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
     hist: study.F_hist,
     curve: study.curve,
     clusterFamily: Object.fromEntries(study.clusters.map(c => [c.cluster, c.family])),
+    designs: { coverage: study.designs.coverage.curve, diversity: study.designs.diversity.curve, combined: study.designs.combined.curve, ref: study.founders.fge },
     history: { counts: study.history.counts, coi: study.history.coi, colour: study.history.colour, regions: study.history.region_years, recording: study.history.recording, litter: study.history.litter.bins },
   })} />
 </BaseLayout>
@@ -878,6 +1279,7 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
     hist: number[]
     curve: Row[]
     clusterFamily: Record<string, string>
+    designs: Record<'coverage' | 'diversity' | 'combined', { k: number; all: number; fge: number }[]> & { ref: number }
     history: {
       counts: Record<string, number>
       coi: { y: number; good: number; all: number; close: number; n: number }[]
@@ -1176,6 +1578,87 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
     })
   }
 
+  // --- Sequencing designs: both goals as picks are added ---
+  const DESIGNS = [
+    { key: 'coverage', label: 'Coverage', token: '--ink' },
+    { key: 'diversity', label: 'Diversity', token: '--ink-2', dash: true },
+    { key: 'combined', label: 'Combined', token: '--accent' },
+  ] as const
+  function designChart(
+    id: string,
+    field: 'all' | 'fge',
+    opt: { yMax: number; yStep: number; fmt: (v: number) => string; ref?: number; refLabel?: string },
+  ) {
+    const wrap = document.getElementById(`${id}-wrap`)!
+    const svg = document.getElementById(id)!
+    const tip = document.getElementById(`${id}-tip`)!
+    svg.innerHTML = ''
+    const W = wrap.clientWidth
+    const H = 240
+    const m = { t: 12, r: 12, b: 32, l: 40 }
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`)
+    svg.setAttribute('height', String(H))
+    const K = data.designs.coverage.length
+    const sx = (k: number) => m.l + ((k - 1) / (K - 1)) * (W - m.l - m.r)
+    const sy = (v: number) => H - m.b - (v / opt.yMax) * (H - m.t - m.b)
+    for (let v = 0; v <= opt.yMax; v += opt.yStep) {
+      el('line', { x1: m.l, x2: W - m.r, y1: sy(v), y2: sy(v), class: v ? 'ks-grid' : 'ks-axis' }, svg)
+      el('text', { x: m.l - 6, y: sy(v) + 4, 'text-anchor': 'end', class: 'ks-tick' }, svg).textContent = opt.fmt(v)
+    }
+    for (const k of [1, 10, 20, 30, 40]) {
+      el('text', { x: sx(k), y: H - m.b + 18, 'text-anchor': 'middle', class: 'ks-tick' }, svg).textContent = String(k)
+    }
+    el('text', { x: W - m.r, y: H - 2, 'text-anchor': 'end', class: 'ks-tick' }, svg).textContent = 'dogs sequenced'
+    if (opt.ref !== undefined) {
+      el('line', { x1: m.l, x2: W - m.r, y1: sy(opt.ref), y2: sy(opt.ref), class: 'ks-mark' }, svg)
+      el('text', { x: W - m.r, y: sy(opt.ref) + 14, 'text-anchor': 'end', class: 'ks-tick' }, svg).textContent = opt.refLabel ?? ''
+    }
+    for (const s of DESIGNS) {
+      const d = data.designs[s.key].map((r, i) => `${i ? 'L' : 'M'}${sx(r.k)},${sy(r[field])}`).join('')
+      el('path', {
+        d,
+        fill: 'none',
+        stroke: `var(${s.token})`,
+        'stroke-width': 2,
+        'stroke-dasharray': 'dash' in s ? '5 4' : 'none',
+        'stroke-linejoin': 'round',
+      }, svg)
+    }
+    const cross = el('line', { y1: m.t, y2: H - m.b, class: 'ks-cross', visibility: 'hidden' }, svg)
+    const dots = DESIGNS.map(s => el('circle', { r: 4, fill: `var(${s.token})`, class: 'ks-dot', visibility: 'hidden' }, svg))
+    const hit = el('rect', { x: m.l, y: m.t, width: W - m.l - m.r, height: H - m.t - m.b, fill: 'transparent' }, svg)
+    hit.addEventListener('mousemove', (e: Event) => {
+      const r = svg.getBoundingClientRect()
+      const k = Math.min(K, Math.max(1, Math.round(1 + (((e as MouseEvent).clientX - r.left - m.l) / (W - m.l - m.r)) * (K - 1))))
+      cross.setAttribute('x1', String(sx(k)))
+      cross.setAttribute('x2', String(sx(k)))
+      cross.setAttribute('visibility', 'visible')
+      DESIGNS.forEach((s, i) => {
+        dots[i].setAttribute('cx', String(sx(k)))
+        dots[i].setAttribute('cy', String(sy(data.designs[s.key][k - 1][field])))
+        dots[i].setAttribute('visibility', 'visible')
+      })
+      tip.innerHTML =
+        `<b>${k} dog${k > 1 ? 's' : ''} sequenced</b>` +
+        DESIGNS.map(s => `<br><i class="ks-key" style="--key:var(${s.token})"></i>${s.label} ${opt.fmt(data.designs[s.key][k - 1][field])}`).join('')
+      placeTip(tip, wrap, sx(k), m.t + 20)
+    })
+    hit.addEventListener('mouseleave', () => {
+      tip.hidden = true
+      cross.setAttribute('visibility', 'hidden')
+      dots.forEach(d => d.setAttribute('visibility', 'hidden'))
+    })
+  }
+  function drawDesigns() {
+    designChart('des-cov', 'all', { yMax: 100, yStep: 25, fmt: v => `${v.toFixed(0)}%` })
+    designChart('des-fge', 'fge', {
+      yMax: 12,
+      yStep: 3,
+      fmt: v => (Number.isInteger(v) ? String(v) : v.toFixed(1)),
+      ref: data.designs.ref,
+      refLabel: `whole population ${data.designs.ref}`,
+    })
+  }
 
   // --- History: generic year-axis charts ---
   type Line = { key: string; label: string; token: string; dash?: boolean }
@@ -1457,13 +1940,57 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
     { label: 'All dated dogs', token: '--muted', dash: true },
   ])
   legend('cov-legend', SERIES.map(s => ({ label: s.label, token: s.token, dash: 'dash' in s })))
+  legend('des-legend', DESIGNS.map(s => ({ label: s.label, token: s.token, dash: 'dash' in s })))
+
+  // --- Sections: accordions. A chart inside a closed section has no width,
+  // so charts are drawn only for open sections and again when one opens. ---
+  const sections = [...root.querySelectorAll<HTMLDetailsElement>('details.ks-sec')]
+  const CHARTS: [string, () => void][] = [
+    ['structure', drawPca],
+    ['inbreeding', drawHist],
+    ['sequencing', drawCoverage],
+    ['sequencing', drawDesigns],
+    ['history', drawHistory],
+    ['history', drawLitter],
+  ]
   const drawAll = () => {
-    drawPca()
-    drawHist()
-    drawCoverage()
-    drawHistory()
-    drawLitter()
+    for (const [id, draw] of CHARTS) {
+      if ((document.getElementById(id) as HTMLDetailsElement).open) draw()
+    }
   }
+  const toggleAll = document.getElementById('ks-toggle-all')!
+  const syncToggleAll = () => {
+    toggleAll.textContent = sections.every(s => s.open) ? 'Close all' : 'Open all'
+  }
+  for (const sec of sections) {
+    sec.addEventListener('toggle', () => {
+      if (sec.open) for (const [id, draw] of CHARTS) if (id === sec.id) draw()
+      syncToggleAll()
+    })
+  }
+  toggleAll.addEventListener('click', () => {
+    const open = !sections.every(s => s.open)
+    for (const sec of sections) sec.open = open
+  })
+  // a link to #section (or to anything inside one) opens it first
+  const openFromHash = () => {
+    const target = location.hash ? document.getElementById(location.hash.slice(1)) : null
+    const sec = target?.closest<HTMLDetailsElement>('details.ks-sec')
+    if (!sec) return
+    sec.open = true
+    target!.scrollIntoView()
+  }
+  window.addEventListener('hashchange', openFromHash)
+  window.addEventListener('beforeprint', () => sections.forEach(s => (s.open = true)))
+  // the "Sections" button appears once the list has scrolled out of view
+  const toTop = document.getElementById('ks-to-sections')!
+  const toolbar = document.getElementById('sections')!
+  const syncToTop = () => {
+    toTop.hidden = toolbar.getBoundingClientRect().bottom > 0
+  }
+  window.addEventListener('scroll', syncToTop, { passive: true })
+  syncToTop()
+  openFromHash()
   drawAll()
   let t: number | undefined
   window.addEventListener('resize', () => {
@@ -1896,6 +2423,108 @@ const range = (a: number[]) => `${Math.min(...a).toFixed(2)}–${Math.max(...a).
   }
   .f-other {
     background: var(--muted);
+  }
+  .ks-toolbar {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 2.25rem 0 0.5rem;
+    scroll-margin-top: 6.75rem;
+  }
+  .ks-toolbar h2 {
+    margin: 0;
+  }
+  .ks-toggle-all {
+    font: inherit;
+    font-size: 0.85rem;
+    color: var(--accent);
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.25rem 0.7rem;
+    cursor: pointer;
+  }
+  .ks-sec {
+    border-top: 1px solid var(--grid);
+    scroll-margin-top: 6rem;
+  }
+  .ks-sec > summary {
+    position: relative;
+    display: block;
+    cursor: pointer;
+    padding: 0.85rem 2.25rem 0.85rem 0;
+    list-style: none;
+  }
+  .ks-sec > summary::-webkit-details-marker {
+    display: none;
+  }
+  .ks-sec > summary::after {
+    content: '+';
+    position: absolute;
+    right: 0.35rem;
+    top: 0.7rem;
+    font-size: 1.4rem;
+    line-height: 1.2;
+    color: var(--muted);
+  }
+  .ks-sec[open] > summary::after {
+    content: '−';
+  }
+  .ks-sec > summary:hover h2 {
+    color: var(--accent);
+  }
+  .ks-sec > summary h2 {
+    margin: 0;
+    font-size: 1.15rem;
+  }
+  .ks-gist {
+    display: block;
+    margin-top: 0.15rem;
+    font-size: 0.9rem;
+    color: var(--ink-2);
+  }
+  .ks-sec[open] {
+    padding-bottom: 1.25rem;
+  }
+  .ks-sec[open] > summary {
+    margin-bottom: 0.25rem;
+  }
+  .ks-claim {
+    border-left: 3px solid var(--accent);
+    padding-left: 0.75rem;
+    font-weight: 600;
+  }
+  .ks-pair {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+    gap: 0.75rem 1.5rem;
+  }
+  .ks-chart-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin: 0 0 0.35rem;
+  }
+  .ks-row-pick th,
+  .ks-row-pick td {
+    font-weight: 700;
+  }
+  .ks-to-sections {
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 900;
+    padding: 0.45rem 0.85rem;
+    border-radius: 999px;
+    background: var(--ink);
+    color: var(--surface);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  }
+  .ks-to-sections[hidden] {
+    display: none;
   }
   .ks-methods {
     margin-top: 2rem;
