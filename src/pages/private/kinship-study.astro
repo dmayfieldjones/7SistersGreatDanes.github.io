@@ -104,40 +104,67 @@ const earlyCol = (c: string) => FO.early_colours.find(r => r.colour === c)!
 
     <section>
       <h2>Key findings</h2>
+      <p>
+        Two numbers run through everything below. <em>Kinship</em> measures
+        how closely two dogs are related through shared ancestors: 0 for
+        unrelated dogs, about 0.06 for first cousins, 0.125 for half
+        siblings and 0.25 for full siblings or a parent and its puppy.{' '}
+        <em>Inbreeding</em> (F) is the same number seen from the puppy's
+        side: a dog's F is the kinship between its sire and dam, so a puppy
+        from a half-sibling mating has F = 0.125.
+      </p>
       <ol class="ks-findings">
         <li>
-          <strong>The breed is several populations, not one.</strong> Kinship
-          inside a cluster is {range(within)}, against {range(between)}{' '}
-          between a cluster and everyone else, a 3–4× gap. The clusters line
+          <strong>The breed is several populations, not one.</strong> Sorting
+          dogs by how related they are splits the breed into clusters.
+          Kinship inside a cluster is {range(within)}, against{' '}
+          {range(between)} between a cluster and everyone else, a 3–4× gap.
+          In everyday terms, two dogs from the same cluster are typically as
+          related as first cousins to half siblings, while two dogs from
+          different clusters are more distant than first cousins. The clusters line
           up with colour families: fawn/brindle, harlequin/mantle, and
           blue/black are largely bred as separate lines.
         </li>
         <li>
           <strong>Inbreeding is high and flat.</strong> Mean F is{' '}
-          {study.mean_F.toFixed(3)}, it sits between{' '}
+          {study.mean_F.toFixed(3)}, so the average Great Dane is as inbred
+          as a puppy from a half-sibling mating. It sits between{' '}
           {Math.min(...years.map(([, v]) => v.F)).toFixed(3)} and{' '}
           {Math.max(...years.map(([, v]) => v.F)).toFixed(3)} every year from 2012 to 2020,
-          and {study.frac_F_over_quarter}% of dogs are at or above 0.25 (the
-          level of a full-sib or parent–offspring mating). Average kinship
-          across the whole population is only {study.mean_kinship.toFixed(3)},
-          so most of that inbreeding comes from breeding within lines.
+          neither rising nor falling, and {study.frac_F_over_quarter}% of
+          dogs are at or above 0.25 (the level of a full-sib or
+          parent–offspring mating). Average kinship across the whole
+          population is only {study.mean_kinship.toFixed(3)}: if sires and
+          dams were paired at random across the breed, puppies would be less
+          than half as inbred as they are. So most of the inbreeding comes
+          from breeding within lines, not from the breed as a whole being
+          short of unrelated dogs.
         </li>
         <li>
-          <strong>A few dogs cover a lot, but not evenly.</strong> Two
-          well-chosen dogs give {pct(at(2).all)} of the population a
-          half-sib-or-closer relative in the sequenced set; forty reach{' '}
-          {pct(at(40).all)}. The greedy picks favour the big fawn/brindle line:
-          after ten picks, {pct(at(10).fawn)} of fawn/brindle dogs are covered
-          but only {pct(at(10).blue)} of blue/black dogs.
+          <strong>A few dogs cover a lot, but not evenly.</strong> Sequencing
+          a dog's DNA also tells us a good deal about its close relatives,
+          so a dog counts as covered when one of the sequenced dogs is at
+          least as closely related to it as a half sibling. Two well-chosen dogs cover{' '}
+          {pct(at(2).all)} of the population; forty reach{' '}
+          {pct(at(40).all)}. That is possible because so many dogs share
+          the same ancestors several times over. But picking purely
+          for coverage favours the big fawn/brindle line: after ten picks,{' '}
+          {pct(at(10).fawn)} of fawn/brindle dogs are covered but only{' '}
+          {pct(at(10).blue)} of blue/black dogs.
         </li>
         <li>
           <strong>Little of the founding diversity is left, and how we pick
-          dogs decides how much of it we see.</strong> {FO.n50} ancestors
-          account for half of the gene pool, which now equals about {FO.fge}{' '}
-          unrelated founders. Picks chosen for coverage hold{' '}
-          {DS.coverage.final.fge.toFixed(1)} of those; picks chosen for
-          diversity hold {DS.diversity.final.fge.toFixed(1)} but cover few
-          dogs. A combined design keeps most of both.
+          dogs decides how much of it we see.</strong> The 2012–2020 dogs
+          trace back to {fmt(FO.founders)} founders (ancestors whose own
+          parents are not recorded), but their contributions are very
+          unequal: {FO.n50} ancestors account for half of the gene pool. The
+          genetic variety that remains is what about {FO.fge} unrelated dogs
+          would carry between them. Forty dogs chosen for coverage carry the
+          equivalent of {DS.coverage.final.fge.toFixed(1)}, because those
+          picks are related to one another. Forty chosen to be as unrelated
+          as possible carry {DS.diversity.final.fge.toFixed(1)}, but they
+          cover few dogs. A combined design
+          keeps most of both.
         </li>
       </ol>
     </section>
