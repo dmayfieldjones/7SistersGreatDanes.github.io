@@ -599,3 +599,47 @@ ul.genome-accordion-body {
   font-size: 0.9rem;
   margin: 0.5rem 0;
 }
+
+.genome-coat-diagram {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin: 0.75rem 0 1rem;
+  padding: 1rem;
+  border: 1px solid var(--genome-border);
+  border-radius: 8px;
+  background: var(--genome-surface);
+  color: var(--genome-text);
+}
+
+.genome-coat-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  width: 150px;
+  text-align: center;
+  font-size: 0.8rem;
+}
+
+.genome-coat-swatch {
+  width: 130px;
+}
+
+.genome-coat-plus {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--genome-accent);
+}
+
+.genome-locus-switch {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.75rem 0;
+  font-size: 0.85rem;
+  color: var(--genome-muted);
+}

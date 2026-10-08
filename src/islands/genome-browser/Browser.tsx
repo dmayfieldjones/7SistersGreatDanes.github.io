@@ -25,6 +25,9 @@ interface TourStop {
   // where that data is actually the story — at other loci it is unrelated
   // noise that suggests a finding that isn't there.
   tracks?: StoryTrackId[]
+  // A small explainer drawn above the live browser for stories whose idea is
+  // easier to see as a picture than as a genome track.
+  diagram?: 'coat'
 }
 
 // Three loci with a real, tellable story — each an exact-match `name` from
@@ -34,7 +37,7 @@ const TOUR_STOPS: TourStop[] = [
     label: 'Coat pattern',
     gene: 'M Locus Merle premelanosome protein (PMEL17/SILV)',
     companionGene: 'H Locus Harlequin proteasome 20S subunit beta 7 (PSMB7)',
-    tracks: ['repeats'],
+    diagram: 'coat',
     hook: 'Why do some Great Danes look like a black-and-white patchwork? It takes two genes stacked on top of each other.',
     intro:
       "This pattern is two genes, not one: merle (below) lays down random patches of diluted pigment on its own — that alone is a recognized Great Dane pattern. Stack one copy of the Harlequin gene on top of it and it strips the dilution back out, leaving solid black patches on white instead of the softer merle mottling. Breeders ran harlequin programs for a century before anyone knew this: a 1988 study first argued harlequin was a modified merle, and DNA work later found both genes. Merle itself was a disqualifying fault until the AKC accepted it in 2019. Even the size of the merle mutation matters — the longer a repetitive stretch inside it, the stronger the pattern, from 'cryptic' merles that look solid to the longest versions, found in harlequins.",
@@ -102,6 +105,65 @@ function padLocation(location?: string) {
   return `${chr}:${Math.max(1, Number(start) - flank)}-${Number(end) + flank}`
 }
 
+const COAT_PATCHES = [
+  [18, 20, 11, 7],
+  [44, 12, 9, 8],
+  [62, 28, 13, 8],
+  [30, 38, 10, 6],
+  [78, 14, 7, 6],
+  [86, 40, 8, 7],
+  [52, 46, 9, 5],
+]
+
+function CoatSwatch({ base, patch }: { base: string; patch?: string }) {
+  return (
+    <svg viewBox="0 0 100 56" className="genome-coat-swatch" aria-hidden="true">
+      <clipPath id={`coat-${base.slice(1)}`}>
+        <rect width="100" height="56" rx="10" />
+      </clipPath>
+      <g clipPath={`url(#coat-${base.slice(1)})`}>
+        <rect width="100" height="56" fill={base} stroke="#bbb" />
+        {patch
+          ? COAT_PATCHES.map(([cx, cy, rx, ry]) => (
+              <ellipse
+                key={`${cx}-${cy}`}
+                cx={cx}
+                cy={cy}
+                rx={rx}
+                ry={ry}
+                fill={patch}
+              />
+            ))
+          : null}
+      </g>
+    </svg>
+  )
+}
+
+function CoatDiagram() {
+  return (
+    <div className="genome-coat-diagram">
+      <div className="genome-coat-step">
+        <CoatSwatch base="#1a1a1a" />
+        <strong>Neither gene</strong>
+        <span>Solid coat</span>
+      </div>
+      <span className="genome-coat-plus">+ merle &rarr;</span>
+      <div className="genome-coat-step">
+        <CoatSwatch base="#8a8a90" patch="#1a1a1a" />
+        <strong>Merle gene</strong>
+        <span>Random patches of diluted pigment</span>
+      </div>
+      <span className="genome-coat-plus">+ harlequin &rarr;</span>
+      <div className="genome-coat-step">
+        <CoatSwatch base="#ffffff" patch="#1a1a1a" />
+        <strong>Merle + harlequin</strong>
+        <span>The dilution is stripped out: solid black on white</span>
+      </div>
+    </div>
+  )
+}
+
 interface DescriptionComponentProps {
   geneEntry: Record<string, string>
 }
@@ -142,6 +204,7 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
   const [searchQuery, setSearchQuery] = useState('')
   const [searchOpen, setSearchOpen] = useState(false)
   const [exploreOpen, setExploreOpen] = useState(false)
+  const [showCompanion, setShowCompanion] = useState(false)
   const [liveBrowserOpen, setLiveBrowserOpen] = useState(false)
   const storyRef = useRef<HTMLDivElement>(null)
 
@@ -194,7 +257,10 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
 
   const liveLocation = (
     activeTourStop?.location ??
-    padLocation(geneEntry?.location) ??
+    padLocation(
+      (showCompanion ? companionEntry?.location : undefined) ??
+        geneEntry?.location,
+    ) ??
     DEFAULT_LOCATION
   ).replaceAll(',', '')
 
@@ -215,6 +281,7 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
 
   function selectGene(name: string) {
     setGene(name)
+    setShowCompanion(false)
     setSearchQuery('')
     setSearchOpen(false)
   }
@@ -348,6 +415,30 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
                     <p className="genome-stage-hook">{activeTourStop.hook}</p>
                   ) : null}
                 </div>
+                {activeTourStop?.diagram === 'coat' ? <CoatDiagram /> : null}
+                {companionEntry ? (
+                  <div className="genome-locus-switch" role="group">
+                    <span>Show in the browser:</span>
+                    {[
+                      { label: 'Merle gene (PMEL)', companion: false },
+                      { label: 'Harlequin gene (PSMB7)', companion: true },
+                    ].map(({ label, companion }) => (
+                      <button
+                        key={label}
+                        type="button"
+                        className={
+                          'genome-pill' +
+                          (showCompanion === companion
+                            ? ' genome-pill-active'
+                            : '')
+                        }
+                        onClick={() => setShowCompanion(companion)}
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+                ) : null}
                 {liveBrowserOpen ? (
                   <Suspense
                     fallback={
@@ -411,9 +502,6 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
                     A real, in-page JBrowse view of the CanFam4 assembly: our
                     curated gene catalog (red) and the full NCBI RefSeq gene
                     annotation.
-                    {storyTracks.includes('repeats')
-                      ? ' Below them, RepeatMasker shows the repeated DNA elements (SINEs, LINEs) scattered through the region — merle is one of these, a SINE inserted into the pigment gene.'
-                      : null}
                     {storyTracks.includes('fgf4')
                       ? ' Below them, the footprint of the FGF4 retrocopy in 38 dogs from 10 breeds. All 19 short-legged dogs (Dachshund, Basset Hound, Cardigan Corgi, Cocker Spaniel, Lhasa Apso) carry two deletions marking the FGF4 gene\u2019s introns, a sign of an extra, intron-free copy elsewhere in the genome. None of the 19 dogs from five large breeds (Mastiff, Saint Bernard, Newfoundland, Scottish Deerhound, Bullmastiff) do. Great Danes are not in this cohort, so these large breeds, which we picked, stand in.'
                       : null}

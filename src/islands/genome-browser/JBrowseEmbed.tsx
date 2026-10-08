@@ -28,11 +28,10 @@ const NCBI_REFSEQ_CSI_URL =
 // See dog10kSvSource.ts for what this VCF is, how it was built, and why.
 const DOG10K_SAMPLES_TSV_URL = '/data/dog10k-svs-samples.tsv'
 
-export type StoryTrackId = 'sv' | 'repeats' | 'fgf4'
+export type StoryTrackId = 'sv' | 'fgf4'
 
 const STORY_TRACK_IDS: Record<StoryTrackId, string> = {
   sv: 'dog10k-longread-svs',
-  repeats: 'canfam4-rmsk',
   fgf4: 'dog10k-fgf4-breeds',
 }
 
@@ -49,7 +48,7 @@ interface JBrowseEmbedProps {
   location: string
   // Story-specific evidence tracks to show on top of the gene tracks. Each is
   // only the right evidence for some stories (the SV track for the AMY2B
-  // duplication, repeats for the merle insertion); elsewhere it is unrelated
+  // duplication, breed genotypes for FGF4); elsewhere it is unrelated
   // noise, so the caller opts in per story.
   storyTracks: StoryTrackId[]
 }
@@ -114,25 +113,6 @@ export default function JBrowseEmbed({
               index: {
                 indexType: 'CSI',
                 location: { uri: NCBI_REFSEQ_CSI_URL },
-              },
-            },
-          },
-          {
-            // Same hosted UCSC mirror (and CORS behavior) as the RefSeq track.
-            type: 'FeatureTrack',
-            trackId: STORY_TRACK_IDS.repeats,
-            name: 'RepeatMasker (SINEs, LINEs and other repeats)',
-            assemblyNames: ['canFam4'],
-            adapter: {
-              type: 'BedTabixAdapter',
-              bedGzLocation: {
-                uri: 'https://jbrowse.org/ucsc/canFam4/rmsk.bed.gz',
-              },
-              index: {
-                indexType: 'CSI',
-                location: {
-                  uri: 'https://jbrowse.org/ucsc/canFam4/rmsk.bed.gz.csi',
-                },
               },
             },
           },
