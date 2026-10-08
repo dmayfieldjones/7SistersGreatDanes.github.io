@@ -643,3 +643,9 @@ ul.genome-accordion-body {
   font-size: 0.85rem;
   color: var(--genome-muted);
 }
+
+.genome-locus-note {
+  margin: 0 0 0.75rem;
+  font-size: 0.85rem;
+  color: var(--genome-muted);
+}

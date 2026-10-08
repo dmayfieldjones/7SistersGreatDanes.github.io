@@ -2,7 +2,11 @@ import { lazy, Suspense, useMemo, useRef, useState } from 'react'
 
 import { prefetchDog10kSvVcf } from './dog10kSvSource'
 import GenomeIdeogram, { type ChromosomeInfo } from './GenomeIdeogram'
-import type { CuratedGeneFeature, StoryTrackId } from './JBrowseEmbed'
+import type {
+  CuratedGeneFeature,
+  StoryMarker,
+  StoryTrackId,
+} from './JBrowseEmbed'
 
 const JBrowseEmbed = lazy(() => import('./JBrowseEmbed'))
 
@@ -28,6 +32,8 @@ interface TourStop {
   // A small explainer drawn above the live browser for stories whose idea is
   // easier to see as a picture than as a genome track.
   diagram?: 'coat'
+  // Specific published variants to mark on the browser.
+  markers?: StoryMarker[]
 }
 
 // Three loci with a real, tellable story — each an exact-match `name` from
@@ -38,6 +44,31 @@ const TOUR_STOPS: TourStop[] = [
     gene: 'M Locus Merle premelanosome protein (PMEL17/SILV)',
     companionGene: 'H Locus Harlequin proteasome 20S subunit beta 7 (PSMB7)',
     diagram: 'coat',
+    markers: [
+      {
+        // PMEL is on the minus strand; its last exon (exon 11) starts at
+        // 644,259 and ends at 644,511, so the intron 10 / exon 11 boundary
+        // where the merle SINE sits is at its upper edge. Approximate: placed
+        // from the RefSeq gene structure, not a surveyed insertion coordinate.
+        refName: 'chr10',
+        start: 644500,
+        end: 644524,
+        name: 'Merle insertion (approx.)',
+        description:
+          'Merle: a SINE inserted at the boundary of PMEL intron 10 and exon 11 (Clark et al. 2006). Position approximate.',
+      },
+      {
+        // OMIA lists this at canFam3 chr9:58,530,295 (T>G, c.146T>G, p.V49G);
+        // lifted to canFam4 with UCSC's canFam3ToCanFam4 chain, where the
+        // Dog10K SNP callset also has exactly this T>G.
+        refName: 'chr9',
+        start: 58614852,
+        end: 58614853,
+        name: 'Harlequin variant (PSMB7 T>G)',
+        description:
+          'Harlequin: PSMB7 c.146T>G, p.V49G (Clark et al. 2011), chr9:58,614,853 in canFam4.',
+      },
+    ],
     hook: 'Why do some Great Danes look like a black-and-white patchwork? It takes two genes stacked on top of each other.',
     intro:
       "This pattern is two genes, not one: merle (below) lays down random patches of diluted pigment on its own — that alone is a recognized Great Dane pattern. Stack one copy of the Harlequin gene on top of it and it strips the dilution back out, leaving solid black patches on white instead of the softer merle mottling. Breeders ran harlequin programs for a century before anyone knew this: a 1988 study first argued harlequin was a modified merle, and DNA work later found both genes. Merle itself was a disqualifying fault until the AKC accepted it in 2019. Even the size of the merle mutation matters — the longer a repetitive stretch inside it, the stronger the pattern, from 'cryptic' merles that look solid to the longest versions, found in harlequins.",
@@ -320,6 +351,7 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
     () => activeTourStop?.tracks ?? [],
     [activeTourStop],
   )
+  const markers = useMemo(() => activeTourStop?.markers ?? [], [activeTourStop])
   const showSvTrack = storyTracks.includes('sv')
   const showStage = !!gene || liveBrowserOpen
   const stageTitle = activeTourStop?.label ?? geneEntry?.name
@@ -439,6 +471,16 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
                     ))}
                   </div>
                 ) : null}
+                {companionEntry && showCompanion ? (
+                  <p className="genome-locus-note">
+                    The blue marker is the published harlequin change (a T
+                    swapped for a G in exon 2). In the Dog10K callset of 1,987
+                    sequenced dogs, only one carries it &mdash; a village dog
+                    from Peru. No Great Danes are in that set, but the change is
+                    otherwise essentially absent: a rare variant that rides
+                    along with the harlequin pattern.
+                  </p>
+                ) : null}
                 {liveBrowserOpen ? (
                   <Suspense
                     fallback={
@@ -448,9 +490,13 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
                     }
                   >
                     <JBrowseEmbed
+                      // The view state is built once from its props, so a story
+                      // with different markers needs a fresh one.
+                      key={markers.map(marker => marker.name).join('|')}
                       curatedGenes={curatedGenes}
                       location={liveLocation}
                       storyTracks={storyTracks}
+                      markers={markers}
                     />
                   </Suspense>
                 ) : (
