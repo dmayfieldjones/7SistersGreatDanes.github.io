@@ -68,6 +68,8 @@ featured: true
   .gd-car .gd-prev { left: 14px; } .gd-car .gd-next { right: 14px; }
   .gd-meta { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: .65rem 1rem; background: #04121f; color: #cfe0ee; font-size: .74rem; letter-spacing: .1em; text-transform: uppercase; }
   .gd-count { white-space: nowrap; opacity: .85; }
+  .gd-ctl { display: inline-flex; align-items: center; gap: .8rem; }
+  .gd-car .gd-pp { position: static; transform: none; width: auto; height: auto; border-radius: 999px; font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; padding: .25rem .8rem; background: rgba(255,255,255,.14); }
   .gd-bar { position: absolute; left: 0; bottom: 0; height: 3px; width: 0; background: #bf141c; z-index: 3; }
   .gd-intro { margin: 2rem 0 0; }
   .gd-intro .gd-kicker { color: #bf141c; opacity: 1; }
@@ -105,7 +107,7 @@ featured: true
     <button type="button" class="gd-next" aria-label="Next photo">&#8250;</button>
     <div class="gd-bar"></div>
   </div>
-  <div class="gd-meta"><span>Trip photos from the Galápagos, Dec 2025 – Jan 2026</span><span class="gd-count" aria-live="off"></span></div>
+  <div class="gd-meta"><span>Trip photos from the Galápagos, Dec 2025 – Jan 2026</span><span class="gd-ctl"><button type="button" class="gd-pp" aria-label="Pause slideshow">Pause</button><span class="gd-count" aria-live="off"></span></span></div>
 </div>
 
 <div class="gd-intro">
@@ -118,9 +120,9 @@ featured: true
 (function () {
   var car = document.getElementById('gd-car'); if (!car) return;
   var slides = Array.prototype.slice.call(car.querySelectorAll('.gd-slide')), n = slides.length, i = 0, timer = null, x0 = null;
-  var count = car.querySelector('.gd-count'), bar = car.querySelector('.gd-bar');
+  var count = car.querySelector('.gd-count'), bar = car.querySelector('.gd-bar'), pp = car.querySelector('.gd-pp');
   var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var DWELL = 6000;
+  var DWELL = 4000, AFTER_CLICK = 6500, userPaused = still, inView = true;
   function prep(s) {
     var img = s.querySelector('img'); if (!img) return;
     if (img.dataset.src) { img.src = img.dataset.src; img.removeAttribute('data-src'); }
@@ -131,25 +133,36 @@ featured: true
     }
     if (img.complete) fit(); else img.addEventListener('load', fit);
   }
-  function show(k) {
+  function canPlay() { return !userPaused && inView && !document.hidden; }
+  function schedule(ms) {
+    if (timer) clearTimeout(timer); timer = null;
+    bar.style.transition = 'none'; bar.style.width = '0';
+    if (!canPlay()) return;
+    void bar.offsetWidth; bar.style.transition = 'width ' + ms + 'ms linear'; bar.style.width = '100%';
+    timer = setTimeout(function () { go(i + 1, DWELL); }, ms);
+  }
+  function go(k, ms) {
     slides[i].classList.remove('is-active'); i = (k + n) % n; slides[i].classList.add('is-active');
     prep(slides[i]); prep(slides[(i + 1) % n]);
-    count.textContent = (i + 1) + ' / ' + n; restart();
+    count.textContent = (i + 1) + ' / ' + n; schedule(ms);
   }
-  function restart() {
-    bar.style.transition = 'none'; bar.style.width = '0';
-    if (timer) clearTimeout(timer); if (still || car.dataset.paused) return;
-    void bar.offsetWidth; bar.style.transition = 'width ' + DWELL + 'ms linear'; bar.style.width = '100%';
-    timer = setTimeout(function () { show(i + 1); }, DWELL);
+  function manual(k) { go(k, AFTER_CLICK); }
+  function setPaused(v) {
+    userPaused = v; pp.textContent = v ? 'Play' : 'Pause'; pp.setAttribute('aria-label', v ? 'Play slideshow' : 'Pause slideshow'); schedule(DWELL);
   }
-  function pause() { car.dataset.paused = '1'; if (timer) clearTimeout(timer); bar.style.transition = 'none'; bar.style.width = '0'; }
-  car.querySelector('.gd-prev').addEventListener('click', function () { pause(); show(i - 1); });
-  car.querySelector('.gd-next').addEventListener('click', function () { pause(); show(i + 1); });
+  car.querySelector('.gd-prev').addEventListener('click', function () { manual(i - 1); });
+  car.querySelector('.gd-next').addEventListener('click', function () { manual(i + 1); });
+  pp.addEventListener('click', function () { setPaused(!userPaused); });
   car.setAttribute('tabindex', '0');
-  car.addEventListener('keydown', function (e) { if (e.key === 'ArrowLeft') { pause(); show(i - 1); } if (e.key === 'ArrowRight') { pause(); show(i + 1); } });
+  car.addEventListener('keydown', function (e) { if (e.key === 'ArrowLeft') manual(i - 1); if (e.key === 'ArrowRight') manual(i + 1); });
   car.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; }, { passive: true });
-  car.addEventListener('touchend', function (e) { if (x0 === null) return; var dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 40) { pause(); show(i + (dx < 0 ? 1 : -1)); } x0 = null; });
-  prep(slides[0]); prep(slides[1]); count.textContent = '1 / ' + n; restart();
+  car.addEventListener('touchend', function (e) { if (x0 === null) return; var dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 40) manual(i + (dx < 0 ? 1 : -1)); x0 = null; });
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (es) { inView = es[0].isIntersecting; schedule(DWELL); }, { threshold: 0.3 }).observe(car);
+  }
+  document.addEventListener('visibilitychange', function () { schedule(DWELL); });
+  pp.textContent = userPaused ? 'Play' : 'Pause';
+  prep(slides[0]); prep(slides[1]); count.textContent = '1 / ' + n; schedule(DWELL);
 })();
 </script>
 
