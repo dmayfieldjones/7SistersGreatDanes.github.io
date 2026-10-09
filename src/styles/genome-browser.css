@@ -634,6 +634,42 @@ ul.genome-accordion-body {
   color: var(--genome-accent);
 }
 
+.genome-aging-diagram {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 0.75rem 0 1rem;
+  padding: 1rem;
+  border: 1px solid var(--genome-border);
+  border-radius: 8px;
+  background: var(--genome-surface);
+  color: var(--genome-text);
+}
+
+.genome-aging-panel {
+  flex: 1 1 180px;
+  margin: 0;
+  font-size: 0.8rem;
+}
+
+.genome-aging-panel svg {
+  width: 100%;
+  max-width: 260px;
+  display: block;
+  margin: 0 auto 0.25rem;
+}
+
+.genome-aging-panel-wide {
+  flex-grow: 1.6;
+}
+
+.genome-aging-note {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--genome-muted);
+}
+
 .genome-locus-switch {
   display: flex;
   align-items: center;

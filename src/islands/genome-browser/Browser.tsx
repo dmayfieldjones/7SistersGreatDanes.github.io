@@ -1,6 +1,8 @@
 import { lazy, Suspense, useMemo, useRef, useState } from 'react'
 
 import { prefetchDog10kSvVcf } from './dog10kSvSource'
+import lineMethylation from './lineMethylation.json'
+import promoterMethylation from './promoterMethylation.json'
 import GenomeIdeogram, { type ChromosomeInfo } from './GenomeIdeogram'
 import type {
   CuratedGeneFeature,
@@ -31,7 +33,7 @@ interface TourStop {
   tracks?: StoryTrackId[]
   // A small explainer drawn above the live browser for stories whose idea is
   // easier to see as a picture than as a genome track.
-  diagram?: 'coat'
+  diagram?: 'coat' | 'aging'
   // Specific published variants to mark on the browser.
   markers?: StoryMarker[]
 }
@@ -72,7 +74,7 @@ const TOUR_STOPS: TourStop[] = [
     ],
     hook: 'Why do some Great Danes look like a black-and-white patchwork? It takes two genes stacked on top of each other.',
     intro:
-      "This pattern is two genes, not one: merle (below) lays down random patches of diluted pigment on its own — that alone is a recognized Great Dane pattern. Stack one copy of the Harlequin gene on top of it and it strips the dilution back out, leaving solid black patches on white instead of the softer merle mottling. Breeders ran harlequin programs for a century before anyone knew this: a 1988 study first argued harlequin was a modified merle, and DNA work later found both genes. Merle itself was a disqualifying fault until the AKC accepted it in 2019. Even the size of the merle mutation matters — the longer a repetitive stretch inside it, the stronger the pattern, from 'cryptic' merles that look solid to the longest versions, found in harlequins.",
+      "This pattern is two genes, not one: merle (below) lays down random patches of diluted pigment on its own — that alone is a recognized Great Dane pattern. Harlequin is what geneticists call a dominant modifier. A modifier does nothing on its own; it only changes how another gene's effect looks, and this one acts only on merle. Dominant means a single copy is enough. With one copy of harlequin stacked on merle, the dilution is stripped back out, leaving solid black patches on white instead of the softer merle mottling. (No dog with two copies has ever been found, which suggests those puppies are lost early in pregnancy.) Breeders ran harlequin programs for a century before anyone knew this: a 1988 study first argued harlequin was a modified merle, and DNA work later found both genes. Merle itself was a disqualifying fault until the AKC accepted it in 2019. Even the size of the merle mutation matters — the longer a repetitive stretch inside it, the stronger the pattern, from 'cryptic' merles that look solid to the longest versions, found in harlequins.",
   },
   {
     label: 'Height',
@@ -105,6 +107,15 @@ const MORE_STORIES: MoreStory[] = [
     tracks: ['sv'],
     intro:
       "Somewhere in this window, most dogs carry a duplication wolves don't have — one of the clearest fingerprints of domestication in the entire genome. Extra copies of this gene meant more of the enzyme that digests starch, letting early dogs thrive on grain and food scraps around human settlements in a way wolves never could. Below, watch the duplication show up in most of the 12 dogs in our structural-variant track, including the Great Dane — but not in the Greenland Wolf sample sitting right next to them.",
+  },
+  {
+    theme: 'Aging',
+    label: 'Aging and size',
+    gene: 'IGF1',
+    diagram: 'aging',
+    hook: 'Giants age on a faster clock. A new study shows how scientists can now measure it, and where to look for why.',
+    intro:
+      "Size comes with a trade-off: small breeds can live up to twice as long as giant ones. The Dog Aging Project (Mariner, McCoy et al., Science, October 2026) asked whether big dogs simply die earlier or really age faster. They read the chemical tags on DNA, called methylation, in 1,640 blood samples from 894 pet dogs, and built an 'epigenetic clock' that predicts a dog's age to within about a year. Dogs whose clocks ran ahead of their real age were more likely to die: each extra year of epigenetic age came with about a 15% higher risk of death. Larger dogs, and males, aged faster by this clock. The tags that changed most with size were not in genes themselves but in transposons, the 'jumping genes' that make up a large share of the genome. As dogs age these lose their methylation, which can wake them up, and the loss was about 31% steeper in larger dogs, most of all in the youngest, most recently active families of one kind, called LINE-1. Where IGF1 comes in: this gene carries the small-dog variant that is a main driver of body size (Sutter et al., 2007), and the study found that many gene control regions gaining methylation with both age and size sit beside genes tied to IGF1 signaling, such as FOXE1 and GATA4. We checked the public data: those two promoters do gain methylation with age, while IGF1's own promoter, shown below, stays almost entirely unmethylated and barely changes. So IGF1 is a signpost to the pathway, not the place the aging shows up, and the study did not test IGF1 variants. Methylation is not a feature of the DNA sequence, so it can't be drawn as a genome-browser track. The authors say their transposon model is still speculative: they measured methylation, not transposon activity.",
   },
 ]
 
@@ -190,9 +201,275 @@ function CoatDiagram() {
       <div className="genome-coat-step">
         <CoatSwatch base="#ffffff" patch="#1a1a1a" />
         <strong>Merle + harlequin</strong>
-        <span>The dilution is stripped out: solid black on white</span>
+        <span>
+          The harlequin gene is a dominant modifier of merle: one copy removes
+          the dilution, leaving solid black patches on white
+        </span>
       </div>
     </div>
+  )
+}
+
+const SMALL_COLOR = '#1d6fa5'
+const GIANT_COLOR = '#bf141c'
+
+// A schematic of the Dog Aging Project's findings (Mariner, McCoy et al.,
+// Science 2026) — the lines are drawn to show direction and rough size of
+// the effects, not plotted from the study's data.
+function AgingDiagram() {
+  return (
+    <div className="genome-aging-diagram">
+      <figure className="genome-aging-panel">
+        <svg
+          viewBox="0 0 160 120"
+          role="img"
+          aria-label="Epigenetic age against real age, with a dog above the diagonal"
+        >
+          <line x1="22" y1="100" x2="150" y2="100" stroke="#999" />
+          <line x1="22" y1="100" x2="22" y2="10" stroke="#999" />
+          <line
+            x1="22"
+            y1="100"
+            x2="140"
+            y2="16"
+            stroke="#999"
+            strokeDasharray="4 3"
+          />
+          <circle cx="82" cy="50" r="5" fill={GIANT_COLOR} />
+          <circle cx="110" cy="52" r="5" fill={SMALL_COLOR} />
+          <line
+            x1="82"
+            y1="50"
+            x2="82"
+            y2="66"
+            stroke={GIANT_COLOR}
+            strokeDasharray="2 2"
+          />
+          <text x="90" y="44" fontSize="9" fill={GIANT_COLOR}>
+            ahead
+          </text>
+          <text x="116" y="64" fontSize="9" fill={SMALL_COLOR}>
+            behind
+          </text>
+          <text x="86" y="114" fontSize="9" fill="#666" textAnchor="middle">
+            real age
+          </text>
+          <text
+            x="9"
+            y="56"
+            fontSize="9"
+            fill="#666"
+            transform="rotate(-90 9 56)"
+            textAnchor="middle"
+          >
+            clock age
+          </text>
+        </svg>
+        <figcaption>
+          <strong>1. A clock for aging.</strong> DNA methylation predicts a
+          dog&rsquo;s age to within a year. Dogs whose clock runs ahead face
+          about 15% higher risk of death for each extra year.
+        </figcaption>
+      </figure>
+      <LineMethylationPanel />
+      <PromoterPanel />
+      <p className="genome-aging-note">
+        Panel 1 is a schematic of the study&rsquo;s clock. Panels 2 and 3 are
+        plotted from the study&rsquo;s public data. Blue: smaller dogs. Red:
+        giant dogs.
+      </p>
+    </div>
+  )
+}
+
+const PLOT_AGE_MAX = 15
+const plotX = (age: number) => 34 + (age / PLOT_AGE_MAX) * 156
+const plotY = (pct: number) => 118 - ((pct - 70) / 12) * 104
+
+// Real data: our re-analysis of the study's public methylation data (Zenodo
+// 10.5281/zenodo.20709041) — each dot is the average over dogs in a 2-year
+// age bin, at the LINE sites that lose methylation with age.
+function LineMethylationPanel() {
+  const { fits, points, lociTested } = lineMethylation
+  const groups = [
+    { key: 'Small', label: 'small', color: SMALL_COLOR },
+    { key: 'Giant', label: 'giant', color: GIANT_COLOR },
+  ] as const
+  return (
+    <figure className="genome-aging-panel genome-aging-panel-wide">
+      <svg
+        viewBox="0 0 200 140"
+        role="img"
+        aria-label="Average methylation at jumping-gene sites against age, for small and giant dogs"
+      >
+        <line x1="34" y1="118" x2="192" y2="118" stroke="#999" />
+        <line x1="34" y1="12" x2="34" y2="118" stroke="#999" />
+        {[70, 74, 78, 82].map(tick => (
+          <text
+            key={tick}
+            x="30"
+            y={plotY(tick) + 3}
+            fontSize="8"
+            fill="#666"
+            textAnchor="end"
+          >
+            {tick}%
+          </text>
+        ))}
+        {[0, 5, 10, 15].map(tick => (
+          <text
+            key={tick}
+            x={plotX(tick)}
+            y="128"
+            fontSize="8"
+            fill="#666"
+            textAnchor="middle"
+          >
+            {tick}
+          </text>
+        ))}
+        <text x="113" y="138" fontSize="9" fill="#666" textAnchor="middle">
+          age (years)
+        </text>
+        {groups.map(({ key, color }) => {
+          const fit = fits[key]
+          return (
+            <g key={key}>
+              <line
+                x1={plotX(0.5)}
+                y1={plotY(fit.intercept + fit.slope * 0.5)}
+                x2={plotX(fit.maxAge)}
+                y2={plotY(fit.intercept + fit.slope * fit.maxAge)}
+                stroke={color}
+                strokeWidth="2"
+              />
+              {points
+                .filter(point => point.size === key)
+                .map(point => (
+                  <g key={point.age}>
+                    <line
+                      x1={plotX(point.age)}
+                      x2={plotX(point.age)}
+                      y1={plotY(point.pct - point.sem)}
+                      y2={plotY(point.pct + point.sem)}
+                      stroke={color}
+                      opacity="0.5"
+                    />
+                    <circle
+                      cx={plotX(point.age)}
+                      cy={plotY(point.pct)}
+                      r="2.5"
+                      fill={color}
+                    />
+                  </g>
+                ))}
+            </g>
+          )
+        })}
+        {groups.map(({ key, label, color }, index) => (
+          <text
+            key={key}
+            x="190"
+            y={20 + index * 11}
+            fontSize="9"
+            fill={color}
+            textAnchor="end"
+          >
+            {label} dogs
+          </text>
+        ))}
+      </svg>
+      <figcaption>
+        <strong>2. Jumping genes lose their tags.</strong> Real data, our
+        re-analysis: at {lociTested.toLocaleString()} LINE sites that lose
+        methylation with age, giant dogs ({fits.Giant.n} samples) lose{' '}
+        {Math.abs(fits.Giant.slope).toFixed(2)} points a year against{' '}
+        {Math.abs(fits.Small.slope).toFixed(2)} for small dogs ({fits.Small.n}),
+        about {Math.round((fits.Giant.slope / fits.Small.slope - 1) * 100)}%
+        steeper. That is the same direction as the paper&rsquo;s 31%, but on
+        this simple comparison alone the gap is within the noise.
+      </figcaption>
+    </figure>
+  )
+}
+
+const PROMOTER_X_MAX = 6
+const promoterX = (perDecade: number) => 62 + (perDecade / PROMOTER_X_MAX) * 128
+
+// Real data: methylation at each gene's promoter (2 kb before the start of
+// the gene) against age, from the same public dataset, modeled with sex,
+// genotype, batch and a random effect per dog, at the cohort's average size.
+function PromoterPanel() {
+  const rows = promoterMethylation
+  return (
+    <figure className="genome-aging-panel genome-aging-panel-wide">
+      <svg
+        viewBox="0 0 200 140"
+        role="img"
+        aria-label="Change in promoter methylation per decade of age for FOXE1, GATA4, IGF2, IGF1R and IGF1"
+      >
+        <line x1="62" y1="104" x2="192" y2="104" stroke="#999" />
+        <line
+          x1="62"
+          y1="12"
+          x2="62"
+          y2="104"
+          stroke="#999"
+          strokeDasharray="2 3"
+        />
+        {[0, 2, 4, 6].map(tick => (
+          <text
+            key={tick}
+            x={promoterX(tick)}
+            y="114"
+            fontSize="8"
+            fill="#666"
+            textAnchor="middle"
+          >
+            {tick}
+          </text>
+        ))}
+        <text x="127" y="128" fontSize="9" fill="#666" textAnchor="middle">
+          points gained per decade
+        </text>
+        {rows.map((row, index) => {
+          const y = 24 + index * 18
+          const perDecade = row.perYear * 10
+          const half = row.se * 1.96 * 10
+          const significant = row.p < 0.001
+          return (
+            <g key={row.gene}>
+              <text x="58" y={y + 3} fontSize="9" fill="#333" textAnchor="end">
+                {row.gene}
+              </text>
+              <line
+                x1={promoterX(Math.max(0, perDecade - half))}
+                x2={promoterX(perDecade + half)}
+                y1={y}
+                y2={y}
+                stroke="#444"
+              />
+              <circle
+                cx={promoterX(perDecade)}
+                cy={y}
+                r="3.5"
+                fill={significant ? '#444' : '#fff'}
+                stroke="#444"
+                strokeWidth="1.5"
+              />
+            </g>
+          )
+        })}
+      </svg>
+      <figcaption>
+        <strong>3. Gene switches gain tags.</strong> Real data, our re-analysis:
+        the promoters of FOXE1 and GATA4, two genes the paper links to IGF1,
+        gain methylation steadily with age. IGF1&rsquo;s own promoter is almost
+        untouched (hollow dot, about 4% methylated, no clear change), so the
+        study&rsquo;s IGF1 link runs through its neighbors, not the gene itself.
+        Bars show 95% ranges.
+      </figcaption>
+    </figure>
   )
 }
 
@@ -449,6 +726,7 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
                   ) : null}
                 </div>
                 {activeTourStop?.diagram === 'coat' ? <CoatDiagram /> : null}
+                {activeTourStop?.diagram === 'aging' ? <AgingDiagram /> : null}
                 {companionEntry ? (
                   <div className="genome-locus-switch" role="group">
                     <span>Show in the browser:</span>
@@ -611,6 +889,25 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
                       Schall &amp; Kidd, 2025
                     </a>
                     .
+                  </li>
+                  <li>
+                    Methylation (Aging story): the Dog Aging Project&rsquo;s
+                    public data from{' '}
+                    <a
+                      href="https://doi.org/10.1126/science.aeb2986"
+                      target="_blank"
+                    >
+                      Mariner, McCoy et al., 2026, Science
+                    </a>{' '}
+                    (
+                    <a
+                      href="https://doi.org/10.5281/zenodo.20709041"
+                      target="_blank"
+                    >
+                      Zenodo, CC BY 4.0
+                    </a>
+                    ), re-analyzed by us at LINE repeats from UCSC RepeatMasker.
+                    Our simplified analysis is not the authors&rsquo;.
                   </li>
                   <li>
                     Curated gene catalog: our own, {geneCategories.length}{' '}
