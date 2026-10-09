@@ -36,6 +36,9 @@ interface TourStop {
   diagram?: 'coat' | 'aging'
   // Specific published variants to mark on the browser.
   markers?: StoryMarker[]
+  // Several places to look at for one story, switched between with buttons
+  // above the browser — for a story that spans more than one gene.
+  views?: { label: string; location: string; note: string }[]
 }
 
 // Three loci with a real, tellable story — each an exact-match `name` from
@@ -113,9 +116,27 @@ const MORE_STORIES: MoreStory[] = [
     label: 'Aging and size',
     gene: 'IGF1',
     diagram: 'aging',
+    tracks: ['methylation'],
+    views: [
+      {
+        label: 'FOXE1 promoter',
+        location: 'chr11:55,440,000-55,520,000',
+        note: 'FOXE1 switches on IGF1-related genes. Its promoter (the 2 kb in front of the gene) is 7.7% methylated in dogs under 3 and 11.2% in dogs 8 and older.',
+      },
+      {
+        label: 'GATA4 promoter',
+        location: 'chr25:26,300,000-26,400,000',
+        note: 'GATA4 responds to IGF1 signals. Its promoter goes from 14.0% methylated in dogs under 3 to 18.5% in dogs 8 and older.',
+      },
+      {
+        label: 'IGF1 itself',
+        location: 'chr15:41,480,000-41,590,000',
+        note: 'The size gene itself barely moves: its promoter is 3.4% methylated in young dogs and 3.7% in older dogs. The aging signal is in its neighbors.',
+      },
+    ],
     hook: 'Giants age on a faster clock. A new study shows how scientists can now measure it, and where to look for why.',
     intro:
-      "Size comes with a trade-off: small breeds can live up to twice as long as giant ones. The Dog Aging Project (Mariner, McCoy et al., Science, October 2026) asked whether big dogs simply die earlier or really age faster. They read the chemical tags on DNA, called methylation, in 1,640 blood samples from 894 pet dogs, and built an 'epigenetic clock' that predicts a dog's age to within about a year. Dogs whose clocks ran ahead of their real age were more likely to die: each extra year of epigenetic age came with about a 15% higher risk of death. Larger dogs, and males, aged faster by this clock. The tags that changed most with size were not in genes themselves but in transposons, the 'jumping genes' that make up a large share of the genome. As dogs age these lose their methylation, which can wake them up, and the loss was about 31% steeper in larger dogs, most of all in the youngest, most recently active families of one kind, called LINE-1. Where IGF1 comes in: this gene carries the small-dog variant that is a main driver of body size (Sutter et al., 2007), and the study found that many gene control regions gaining methylation with both age and size sit beside genes tied to IGF1 signaling, such as FOXE1 and GATA4. We checked the public data: those two promoters do gain methylation with age, while IGF1's own promoter, shown below, stays almost entirely unmethylated and barely changes. So IGF1 is a signpost to the pathway, not the place the aging shows up, and the study did not test IGF1 variants. Methylation is not a feature of the DNA sequence, so it can't be drawn as a genome-browser track. The authors say their transposon model is still speculative: they measured methylation, not transposon activity.",
+      "Size comes with a trade-off: small breeds can live up to twice as long as giant ones. The Dog Aging Project (Mariner, McCoy et al., Science, October 2026) asked whether big dogs simply die earlier or really age faster. They read the chemical tags on DNA, called methylation, in 1,640 blood samples from 894 pet dogs, and built an 'epigenetic clock' that predicts a dog's age to within about a year. Dogs whose clocks ran ahead of their real age were more likely to die: each extra year of epigenetic age came with about a 15% higher risk of death. Larger dogs, and males, aged faster by this clock. The tags that changed most with size were not in genes themselves but in transposons, the 'jumping genes' that make up a large share of the genome. As dogs age these lose their methylation, which can wake them up, and the loss was about 31% steeper in larger dogs, most of all in the youngest, most recently active families of one kind, called LINE-1. Where IGF1 comes in: this gene carries the small-dog variant that is a main driver of body size (Sutter et al., 2007), and the study found that many gene control regions gaining methylation with both age and size sit beside genes tied to IGF1 signaling, such as FOXE1 and GATA4. We checked the public data and plotted it in the browser track below: the FOXE1 and GATA4 promoters do gain methylation with age, while IGF1's own promoter stays almost entirely unmethylated and barely changes. So IGF1 is a signpost to the pathway, not the place the aging shows up, and the study did not test IGF1 variants. Use the buttons above the browser to switch between the three genes; only the sites this kind of sequencing happened to cover have bars, so the track is sparse. The authors say their transposon model is still speculative: they measured methylation, not transposon activity.",
   },
 ]
 
@@ -282,112 +303,87 @@ function AgingDiagram() {
   )
 }
 
-const PLOT_AGE_MAX = 15
-const plotX = (age: number) => 34 + (age / PLOT_AGE_MAX) * 156
-const plotY = (pct: number) => 118 - ((pct - 70) / 12) * 104
+const LOSS_MAX = 0.65
+const lossX = (loss: number) => 78 + (loss / LOSS_MAX) * 112
 
 // Real data: our re-analysis of the study's public methylation data (Zenodo
-// 10.5281/zenodo.20709041) — each dot is the average over dogs in a 2-year
-// age bin, at the LINE sites that lose methylation with age.
+// 10.5281/zenodo.20709041), done the way the paper does it — site by site.
+// Each bar is the typical (median) methylation lost per year at LINE sites
+// that lose methylation with age, in dogs below vs above the median
+// genotype-predicted adult size.
 function LineMethylationPanel() {
-  const { fits, points, lociTested } = lineMethylation
-  const groups = [
-    { key: 'Small', label: 'small', color: SMALL_COLOR },
-    { key: 'Giant', label: 'giant', color: GIANT_COLOR },
-  ] as const
+  const { all, families } = lineMethylation
+  const rows = [all, ...families]
   return (
     <figure className="genome-aging-panel genome-aging-panel-wide">
       <svg
         viewBox="0 0 200 140"
         role="img"
-        aria-label="Average methylation at jumping-gene sites against age, for small and giant dogs"
+        aria-label="Methylation lost per year at jumping-gene sites, for smaller and larger dogs, overall and by LINE-1 family"
       >
-        <line x1="34" y1="118" x2="192" y2="118" stroke="#999" />
-        <line x1="34" y1="12" x2="34" y2="118" stroke="#999" />
-        {[70, 74, 78, 82].map(tick => (
-          <text
-            key={tick}
-            x="30"
-            y={plotY(tick) + 3}
-            fontSize="8"
-            fill="#666"
-            textAnchor="end"
-          >
-            {tick}%
-          </text>
-        ))}
-        {[0, 5, 10, 15].map(tick => (
-          <text
-            key={tick}
-            x={plotX(tick)}
-            y="128"
-            fontSize="8"
-            fill="#666"
-            textAnchor="middle"
-          >
-            {tick}
-          </text>
-        ))}
-        <text x="113" y="138" fontSize="9" fill="#666" textAnchor="middle">
-          age (years)
-        </text>
-        {groups.map(({ key, color }) => {
-          const fit = fits[key]
+        <line x1="78" y1="12" x2="78" y2="112" stroke="#999" />
+        {rows.map((row, index) => {
+          const y = 14 + index * 19
           return (
-            <g key={key}>
-              <line
-                x1={plotX(0.5)}
-                y1={plotY(fit.intercept + fit.slope * 0.5)}
-                x2={plotX(fit.maxAge)}
-                y2={plotY(fit.intercept + fit.slope * fit.maxAge)}
-                stroke={color}
-                strokeWidth="2"
+            <g key={row.label}>
+              <text
+                x="74"
+                y={y + 8}
+                fontSize="7.5"
+                fill="#333"
+                textAnchor="end"
+              >
+                {row.label.length > 16
+                  ? row.label
+                      .replace(' LINE-1', ' L1')
+                      .replace('dog-specific ', '')
+                  : row.label}
+              </text>
+              <rect
+                x="78"
+                y={y}
+                width={lossX(row.small) - 78}
+                height="7"
+                fill={SMALL_COLOR}
               />
-              {points
-                .filter(point => point.size === key)
-                .map(point => (
-                  <g key={point.age}>
-                    <line
-                      x1={plotX(point.age)}
-                      x2={plotX(point.age)}
-                      y1={plotY(point.pct - point.sem)}
-                      y2={plotY(point.pct + point.sem)}
-                      stroke={color}
-                      opacity="0.5"
-                    />
-                    <circle
-                      cx={plotX(point.age)}
-                      cy={plotY(point.pct)}
-                      r="2.5"
-                      fill={color}
-                    />
-                  </g>
-                ))}
+              <rect
+                x="78"
+                y={y + 8}
+                width={lossX(row.large) - 78}
+                height="7"
+                fill={GIANT_COLOR}
+              />
+              <text
+                x={lossX(row.large) + 3}
+                y={y + 14}
+                fontSize="7"
+                fill={GIANT_COLOR}
+              >
+                {row.steeperPct}% steeper
+              </text>
             </g>
           )
         })}
-        {groups.map(({ key, label, color }, index) => (
-          <text
-            key={key}
-            x="190"
-            y={20 + index * 11}
-            fontSize="9"
-            fill={color}
-            textAnchor="end"
-          >
-            {label} dogs
-          </text>
-        ))}
+        <text x="134" y="124" fontSize="8" fill="#666" textAnchor="middle">
+          points lost per year
+        </text>
+        <text x="134" y="135" fontSize="8" textAnchor="middle">
+          <tspan fill={SMALL_COLOR}>smaller dogs</tspan>
+          <tspan fill="#666"> · </tspan>
+          <tspan fill={GIANT_COLOR}>larger dogs</tspan>
+        </text>
       </svg>
       <figcaption>
-        <strong>2. Jumping genes lose their tags.</strong> Real data, our
-        re-analysis: at {lociTested.toLocaleString()} LINE sites that lose
-        methylation with age, giant dogs ({fits.Giant.n} samples) lose{' '}
-        {Math.abs(fits.Giant.slope).toFixed(2)} points a year against{' '}
-        {Math.abs(fits.Small.slope).toFixed(2)} for small dogs ({fits.Small.n}),
-        about {Math.round((fits.Giant.slope / fits.Small.slope - 1) * 100)}%
-        steeper. That is the same direction as the paper&rsquo;s 31%, but on
-        this simple comparison alone the gap is within the noise.
+        <strong>2. Jumping genes lose their tags faster in big dogs.</strong>{' '}
+        Real data, our re-analysis: at {all.sites.toLocaleString()} LINE sites
+        that lose methylation with age, the typical site loses{' '}
+        {all.large.toFixed(2)} points a year in larger dogs against{' '}
+        {all.small.toFixed(2)} in smaller dogs, about{' '}
+        {Math.round((all.large / all.small - 1) * 100)}% faster, and{' '}
+        {all.steeperPct}% of sites are steeper in larger dogs. The paper reports
+        31%, and finds the youngest LINE-1 families most affected; here too the
+        youngest dog-specific family has the biggest gap (
+        {families[0].steeperPct}% of its sites).
       </figcaption>
     </figure>
   )
@@ -514,6 +510,7 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
   const [searchOpen, setSearchOpen] = useState(false)
   const [exploreOpen, setExploreOpen] = useState(false)
   const [showCompanion, setShowCompanion] = useState(false)
+  const [viewIndex, setViewIndex] = useState(0)
   const [liveBrowserOpen, setLiveBrowserOpen] = useState(false)
   const storyRef = useRef<HTMLDivElement>(null)
 
@@ -565,6 +562,7 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
   )
 
   const liveLocation = (
+    activeTourStop?.views?.[viewIndex]?.location ??
     activeTourStop?.location ??
     padLocation(
       (showCompanion ? companionEntry?.location : undefined) ??
@@ -591,6 +589,7 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
   function selectGene(name: string) {
     setGene(name)
     setShowCompanion(false)
+    setViewIndex(0)
     setSearchQuery('')
     setSearchOpen(false)
   }
@@ -727,6 +726,29 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
                 </div>
                 {activeTourStop?.diagram === 'coat' ? <CoatDiagram /> : null}
                 {activeTourStop?.diagram === 'aging' ? <AgingDiagram /> : null}
+                {activeTourStop?.views ? (
+                  <>
+                    <div className="genome-locus-switch" role="group">
+                      <span>Show in the browser:</span>
+                      {activeTourStop.views.map((view, index) => (
+                        <button
+                          key={view.label}
+                          type="button"
+                          className={
+                            'genome-pill' +
+                            (viewIndex === index ? ' genome-pill-active' : '')
+                          }
+                          onClick={() => setViewIndex(index)}
+                        >
+                          {view.label}
+                        </button>
+                      ))}
+                    </div>
+                    <p className="genome-locus-note">
+                      {activeTourStop.views[viewIndex]?.note}
+                    </p>
+                  </>
+                ) : null}
                 {companionEntry ? (
                   <div className="genome-locus-switch" role="group">
                     <span>Show in the browser:</span>
@@ -833,6 +855,9 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
                       : null}
                     {storyTracks.includes('fgf4')
                       ? ' Below them, the footprint of the FGF4 retrocopy in 38 dogs from 10 breeds. All 19 short-legged dogs (Dachshund, Basset Hound, Cardigan Corgi, Cocker Spaniel, Lhasa Apso) carry two deletions marking the FGF4 gene\u2019s introns, a sign of an extra, intron-free copy elsewhere in the genome. None of the 19 dogs from five large breeds (Mastiff, Saint Bernard, Newfoundland, Scottish Deerhound, Bullmastiff) do. Great Danes are not in this cohort, so these large breeds, which we picked, stand in.'
+                      : null}
+                    {storyTracks.includes('methylation')
+                      ? ' Below them, methylation (the share of DNA copies carrying the chemical tag) at the sites the Dog Aging Project sequenced, pooled across 268 dogs under 3 and 377 dogs aged 8 and older. Switch between the three genes above.'
                       : null}
                     {showSvTrack
                       ? ' Below them, a structural-variant track genotyped across 12 real, named dogs — one row per breed, including a Great Dane.'
