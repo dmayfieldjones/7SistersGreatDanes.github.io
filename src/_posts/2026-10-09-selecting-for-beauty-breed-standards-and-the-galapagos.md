@@ -5,6 +5,7 @@ date: 2026-10-09
 categories: ["Breeding", "Genetics", "Research"]
 tags: ["Galápagos", "Sexual Selection", "Prum", "Breed Standards"]
 featured: true
+draft: true
 ---
 
 <style>
