@@ -475,11 +475,12 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
                 {companionEntry && showCompanion ? (
                   <p className="genome-locus-note">
                     The blue marker is the published harlequin change (a T
-                    swapped for a G in exon 2). In the Dog10K callset of 1,987
-                    sequenced dogs, only one carries it &mdash; a village dog
-                    from Peru. No Great Danes are in that set, but the change is
-                    otherwise essentially absent: a rare variant that rides
-                    along with the harlequin pattern.
+                    swapped for a G in exon 2). Of the 8 Great Danes in the top
+                    rows, whose coat colors were not recorded, 2 carry one copy
+                    of the G &mdash; as expected for harlequin dogs, which carry
+                    exactly one. Among the 1,987 dogs in the Dog10K callset
+                    (which has no Great Danes), only a single village dog from
+                    Peru has it.
                   </p>
                 ) : null}
                 {liveBrowserOpen ? (
@@ -550,7 +551,7 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
                     curated gene catalog (red) and the full NCBI RefSeq gene
                     annotation.
                     {storyTracks.includes('coat')
-                      ? ' Below them, SNP genotypes for 36 dogs from 12 breeds and 4 wolves (Dog10K), one row per dog, at common variant sites in each gene\u2019s region. Switch between the two genes above.'
+                      ? ' Below them, SNP genotypes, one row per dog, at common variant sites in each gene\u2019s region: 8 Great Danes (top, genotyped from Logan\u2019s assembled public sequencing data) against 35 dogs from 12 other breeds and 4 wolves (Dog10K). Switch between the two genes above.'
                       : null}
                     {storyTracks.includes('fgf4')
                       ? ' Below them, the footprint of the FGF4 retrocopy in 38 dogs from 10 breeds. All 19 short-legged dogs (Dachshund, Basset Hound, Cardigan Corgi, Cocker Spaniel, Lhasa Apso) carry two deletions marking the FGF4 gene\u2019s introns, a sign of an extra, intron-free copy elsewhere in the genome. None of the 19 dogs from five large breeds (Mastiff, Saint Bernard, Newfoundland, Scottish Deerhound, Bullmastiff) do. Great Danes are not in this cohort, so these large breeds, which we picked, stand in.'

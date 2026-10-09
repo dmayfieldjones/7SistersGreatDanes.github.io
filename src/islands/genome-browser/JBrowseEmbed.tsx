@@ -5,8 +5,8 @@ import {
 } from '@jbrowse/react-linear-genome-view2'
 
 import {
-  DOG10K_COAT_CSI_URL,
-  DOG10K_COAT_VCF_URL,
+  COAT_PANEL_CSI_URL,
+  COAT_PANEL_VCF_URL,
   DOG10K_FGF4_CSI_URL,
   DOG10K_FGF4_VCF_URL,
   DOG10K_SV_TBI_URL,
@@ -35,7 +35,7 @@ export type StoryTrackId = 'sv' | 'fgf4' | 'coat'
 const STORY_TRACK_IDS: Record<StoryTrackId, string> = {
   sv: 'dog10k-longread-svs',
   fgf4: 'dog10k-fgf4-breeds',
-  coat: 'dog10k-coat-others',
+  coat: 'dog10k-coat-panel',
 }
 
 // A single hand-placed point of interest for a story (e.g. a published
@@ -163,10 +163,10 @@ export default function JBrowseEmbed({
             assemblyNames: ['canFam4'],
             adapter: {
               type: 'VcfTabixAdapter',
-              vcfGzLocation: { uri: DOG10K_COAT_VCF_URL },
+              vcfGzLocation: { uri: COAT_PANEL_VCF_URL },
               index: {
                 indexType: 'CSI',
-                location: { uri: DOG10K_COAT_CSI_URL },
+                location: { uri: COAT_PANEL_CSI_URL },
               },
               samplesTsvLocation: {
                 uri: new URL(
@@ -178,7 +178,7 @@ export default function JBrowseEmbed({
             displays: [
               {
                 type: 'LinearMultiSampleVariantDisplay',
-                displayId: 'dog10k-coat-others-LinearMultiSampleVariantDisplay',
+                displayId: 'dog10k-coat-panel-LinearMultiSampleVariantDisplay',
                 rowColor: 'group',
                 facet: 'group',
               },

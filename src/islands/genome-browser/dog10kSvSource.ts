@@ -50,12 +50,15 @@ export const DOG10K_SV_TBI_URL = `${S3_BASE}/dog10k-svs-12breeds.vcf.bgz.csi`
 export const DOG10K_FGF4_VCF_URL = `${S3_BASE}/dog10k-fgf4-breeds.vcf.bgz`
 export const DOG10K_FGF4_CSI_URL = `${S3_BASE}/dog10k-fgf4-breeds.vcf.bgz.csi`
 
-// SNP genotypes from the Dog10K callset for the coat story's two windows
-// (PSMB7 on chr9, PMEL on chr10): common variants (allele frequency >= 1%)
-// plus the harlequin site, for 36 dogs from 12 breeds and 4 wolves. Sliced
-// remotely with pysam; sample groups are in public/data/dog10k-coat-samples.tsv.
-export const DOG10K_COAT_VCF_URL = `${S3_BASE}/dog10k-coat-others.vcf.bgz`
-export const DOG10K_COAT_CSI_URL = `${S3_BASE}/dog10k-coat-others.vcf.bgz.csi`
+// SNP genotypes at the coat story's two windows (PSMB7 on chr9, PMEL on
+// chr10) at 710 common Dog10K variant sites plus the harlequin site. Two
+// sources in one file: 39 non-Dane dogs (35 dogs from 12 breeds + 4 wolves) are the Dog10K
+// callset's own genotypes, sliced remotely with pysam; 8 Great Danes from
+// public SRA runs (Helsinki and Minnesota) are genotyped from Logan unitigs
+// by counting k-mer-weighted allele support at those same sites (see AD).
+// Sample groups are in public/data/dog10k-coat-samples.tsv.
+export const COAT_PANEL_VCF_URL = `${S3_BASE}/dog10k-coat-panel.vcf.bgz`
+export const COAT_PANEL_CSI_URL = `${S3_BASE}/dog10k-coat-panel.vcf.bgz.csi`
 
 /**
  * A plain fetch of the same URLs JBrowse itself will request, fired the
