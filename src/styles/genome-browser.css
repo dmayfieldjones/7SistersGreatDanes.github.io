@@ -289,10 +289,61 @@
 
 .genome-jbrowse-embed {
   margin-top: 1rem;
-  height: 600px;
+  min-height: 400px;
   border: 1px solid var(--genome-border);
   border-radius: 8px;
   overflow: hidden;
+}
+
+.genome-jbrowse-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+  padding: 0.5rem;
+  border-bottom: 1px solid var(--genome-border);
+  font-size: 0.8rem;
+}
+
+.genome-jbrowse-body {
+  display: flex;
+  align-items: stretch;
+}
+
+.genome-feature-panel,
+.genome-feature-hint {
+  width: 220px;
+  flex: none;
+  padding: 0.6rem;
+  margin: 0;
+  font-size: 0.78rem;
+  border-left: 1px solid var(--genome-border);
+  overflow: auto;
+  max-height: 100vh;
+}
+
+.genome-feature-title {
+  display: flex;
+  justify-content: space-between;
+}
+
+.genome-feature-locus {
+  color: var(--genome-muted);
+}
+
+.genome-feature-panel dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px 8px;
+}
+
+.genome-feature-panel dl > div {
+  display: contents;
+}
+
+.genome-feature-panel dd {
+  margin: 0;
+  word-break: break-word;
 }
 
 .genome-sv-samples {
@@ -537,7 +588,7 @@
 }
 
 .genome-stage .genome-jbrowse-embed {
-  height: 640px;
+  min-height: 440px;
 }
 
 .genome-accordions {
@@ -684,4 +735,176 @@ ul.genome-accordion-body {
   margin: 0 0 0.75rem;
   font-size: 0.85rem;
   color: var(--genome-muted);
+}
+
+.genome-gridlines {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.genome-gridlines > div {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: color-mix(in srgb, CanvasText 12%, transparent);
+}
+
+.genome-marker-label {
+  font-size: 11px;
+  font-weight: 600;
+  fill: var(--genome-text);
+  paint-order: stroke;
+  stroke: var(--genome-surface);
+  stroke-width: 3px;
+  pointer-events: none;
+}
+
+.genome-explore-stat {
+  font-size: 1.05rem;
+  margin: 0.5rem 0 0.25rem;
+  color: var(--genome-text);
+}
+
+.genome-explore-stat strong {
+  color: var(--genome-accent);
+  font-size: 1.3em;
+}
+
+.genome-chr-track {
+  overflow: visible;
+}
+
+/* Static gene strips */
+.gene-strip {
+  margin: 0.75rem 0 1rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--genome-border);
+  border-radius: 8px;
+  background: var(--genome-surface);
+  color: var(--genome-text);
+}
+
+.gene-strip svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.gene-strip-title {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.gene-strip-axis-label,
+.gene-strip-row-label,
+.gene-strip-gene-label,
+.gene-strip-marker-label,
+.gene-strip-span-label {
+  font-size: 11px;
+  fill: var(--genome-text);
+}
+
+.gene-strip-axis-label {
+  fill: var(--genome-muted);
+}
+
+.gene-strip-gene-label {
+  font-weight: 600;
+}
+
+.gene-strip-ruler {
+  stroke: var(--genome-muted);
+  stroke-width: 1;
+}
+
+.gene-strip-gene {
+  fill: var(--genome-muted);
+}
+
+.gene-strip-span,
+.gene-strip-row-hit {
+  fill: var(--genome-accent);
+}
+
+.gene-strip-span-label {
+  fill: var(--genome-accent);
+  font-weight: 600;
+}
+
+.gene-strip-row-base {
+  stroke: var(--genome-border);
+  stroke-width: 1;
+}
+
+.gene-strip-row-uncalled {
+  stroke-dasharray: 3 3;
+}
+
+.gene-strip-group-label {
+  font-size: 11px;
+  font-weight: 600;
+  fill: var(--genome-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.gene-strip-marker {
+  fill: var(--genome-selected);
+  stroke: var(--genome-surface);
+  stroke-width: 1.5;
+}
+
+.gene-strip-marker-line {
+  stroke: var(--genome-selected);
+  stroke-width: 1.5;
+}
+
+.gene-strip-marker-label {
+  font-weight: 600;
+}
+
+.gene-strip-note,
+.gene-strip-caption {
+  margin: 0.4rem 0 0;
+  font-size: 0.85rem;
+  color: var(--genome-muted);
+}
+
+.breed-dots-list {
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.breed-dots-list li {
+  display: grid;
+  grid-template-columns: minmax(8rem, 12rem) 1fr;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.breed-dots-dots {
+  display: flex;
+  gap: 4px;
+}
+
+.breed-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--genome-muted);
+  box-sizing: border-box;
+}
+
+.breed-dot-on {
+  background: var(--genome-accent);
+  border-color: var(--genome-accent);
 }
