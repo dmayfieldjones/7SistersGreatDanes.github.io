@@ -39,7 +39,7 @@
 const S3_BASE =
   'https://7sistersgreatdanes-genome-data.s3.us-east-2.amazonaws.com/data'
 export const DOG10K_SV_VCF_URL = `${S3_BASE}/dog10k-svs-12breeds.vcf.bgz`
-export const DOG10K_SV_TBI_URL = `${S3_BASE}/dog10k-svs-12breeds.vcf.bgz.csi`
+export const DOG10K_SV_TBI_URL = `${S3_BASE}/dog10k-svs-12breeds.vcf.bgz.tbi`
 
 // A second, tiny derived file for the FGF4 height story: just the two
 // FGF4 "intron deletion" records (the footprint of the FGF4 retrocopy) for 4
