@@ -470,12 +470,13 @@ function PromoterPanel() {
         })}
       </svg>
       <figcaption>
-        <strong>3. Gene switches gain tags.</strong> Real data, our re-analysis:
-        the promoters of FOXE1 and GATA4, two genes the paper links to IGF1,
-        gain methylation steadily with age. IGF1&rsquo;s own promoter is almost
-        untouched (hollow dot, about 4% methylated, no clear change), so the
-        study&rsquo;s IGF1 link runs through its neighbors, not the gene itself.
-        Bars show 95% ranges.
+        <strong>3. IGF1&rsquo;s partner genes gain tags.</strong> IGF1 is the
+        main body-size gene. The paper points to two genes that work with it,
+        FOXE1 and GATA4, and our re-analysis confirms their on/off switches
+        (promoters) gain methylation steadily with age. IGF1&rsquo;s own switch
+        barely changes (hollow dot: about 4% methylated, no clear change). So
+        aging shows up in IGF1&rsquo;s partners, not in IGF1 itself. Lines show
+        95% ranges.
       </figcaption>
     </figure>
   )
