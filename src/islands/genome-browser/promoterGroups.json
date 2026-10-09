@@ -1,0 +1,5 @@
+[
+  { "gene": "FOXE1", "young": 7.7, "old": 11.2 },
+  { "gene": "GATA4", "young": 14.0, "old": 18.5 },
+  { "gene": "IGF1", "young": 3.4, "old": 3.7 }
+]
