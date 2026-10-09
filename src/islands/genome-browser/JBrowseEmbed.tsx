@@ -30,12 +30,13 @@ const NCBI_REFSEQ_CSI_URL =
 // See dog10kSvSource.ts for what this VCF is, how it was built, and why.
 const DOG10K_SAMPLES_TSV_URL = '/data/dog10k-svs-samples.tsv'
 
-export type StoryTrackId = 'sv' | 'fgf4' | 'coat'
+export type StoryTrackId = 'sv' | 'fgf4' | 'coat' | 'methylation'
 
 const STORY_TRACK_IDS: Record<StoryTrackId, string> = {
   sv: 'dog10k-longread-svs',
   fgf4: 'dog10k-fgf4-breeds',
   coat: 'dog10k-coat-panel',
+  methylation: 'dog-aging-methylation',
 }
 
 // A single hand-placed point of interest for a story (e.g. a published
@@ -213,6 +214,42 @@ export default function JBrowseEmbed({
             ],
           },
           {
+            // Pooled methylation at the CpG sites the Dog Aging Project's
+            // sequencing covered (Mariner, McCoy et al., Science 2026): one
+            // row per age group, only near the genes the Aging story uses.
+            type: 'MultiQuantitativeTrack',
+            trackId: STORY_TRACK_IDS.methylation,
+            name: 'Methylation (%): dogs under 3 vs dogs 8 and older',
+            assemblyNames: ['canFam4'],
+            adapter: {
+              type: 'MultiWiggleAdapter',
+              subadapters: [
+                {
+                  type: 'BedGraphAdapter',
+                  name: 'Under 3 years (268 dogs)',
+                  color: '#1d6fa5',
+                  bedGraphLocation: {
+                    uri: new URL(
+                      '/data/dog-methylation-young.bedgraph',
+                      window.location.origin,
+                    ).href,
+                  },
+                },
+                {
+                  type: 'BedGraphAdapter',
+                  name: '8 years and older (377 dogs)',
+                  color: '#bf141c',
+                  bedGraphLocation: {
+                    uri: new URL(
+                      '/data/dog-methylation-old.bedgraph',
+                      window.location.origin,
+                    ).href,
+                  },
+                },
+              ],
+            },
+          },
+          {
             type: 'VariantTrack',
             trackId: 'dog10k-longread-svs',
             name: 'Dog10K long-read structural variants (12 breeds incl. Great Dane)',
@@ -273,9 +310,20 @@ export default function JBrowseEmbed({
   useEffect(() => {
     if (location === lastLocation.current) return
     lastLocation.current = location
-    viewState.session.view.navToLocString(location).catch(() => {
-      /* invalid/out-of-range location string; ignore */
-    })
+    // A switch made while the browser is still loading its tracks is rejected,
+    // so retry for a while rather than dropping it. Stop if the location has
+    // moved on or the component is gone.
+    let cancelled = false
+    const tryNavigate = (attemptsLeft: number) => {
+      viewState.session.view.navToLocString(location).catch(() => {
+        if (cancelled || attemptsLeft <= 0) return
+        setTimeout(() => tryNavigate(attemptsLeft - 1), 1000)
+      })
+    }
+    tryNavigate(15)
+    return () => {
+      cancelled = true
+    }
   }, [location, viewState])
 
   useEffect(() => {

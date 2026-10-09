@@ -1,117 +1,39 @@
 {
- "lociTested": 7292,
- "fits": {
-  "Giant": {
-   "intercept": 78.858,
-   "slope": -0.2644,
-   "n": 140,
-   "maxAge": 11.8
-  },
-  "Small": {
-   "intercept": 78.282,
-   "slope": -0.1794,
-   "n": 367,
-   "maxAge": 19.1
-  }
+ "all": {
+  "label": "All LINE sites",
+  "sites": 6951,
+  "small": 0.262,
+  "large": 0.363,
+  "steeperPct": 72
  },
- "points": [
+ "families": [
   {
-   "size": "Giant",
-   "age": 1.48,
-   "pct": 79.66,
-   "sem": 1.87,
-   "n": 9
+   "label": "Youngest dog-specific LINE-1",
+   "sites": 208,
+   "small": 0.234,
+   "large": 0.368,
+   "steeperPct": 79
   },
   {
-   "size": "Giant",
-   "age": 3.1,
-   "pct": 78.76,
-   "sem": 0.57,
-   "n": 43
+   "label": "Genus Canis LINE-1",
+   "sites": 1985,
+   "small": 0.218,
+   "large": 0.304,
+   "steeperPct": 73
   },
   {
-   "size": "Giant",
-   "age": 4.85,
-   "pct": 76.35,
-   "sem": 0.93,
-   "n": 41
+   "label": "Carnivore LINE-1",
+   "sites": 248,
+   "small": 0.288,
+   "large": 0.394,
+   "steeperPct": 69
   },
   {
-   "size": "Giant",
-   "age": 6.88,
-   "pct": 76.33,
-   "sem": 1.17,
-   "n": 23
-  },
-  {
-   "size": "Giant",
-   "age": 8.92,
-   "pct": 79.46,
-   "sem": 1.04,
-   "n": 10
-  },
-  {
-   "size": "Giant",
-   "age": 10.81,
-   "pct": 75.67,
-   "sem": 1.02,
-   "n": 14
-  },
-  {
-   "size": "Small",
-   "age": 1.52,
-   "pct": 79.59,
-   "sem": 1.06,
-   "n": 12
-  },
-  {
-   "size": "Small",
-   "age": 3.04,
-   "pct": 77.84,
-   "sem": 0.48,
-   "n": 90
-  },
-  {
-   "size": "Small",
-   "age": 4.96,
-   "pct": 77.02,
-   "sem": 0.52,
-   "n": 97
-  },
-  {
-   "size": "Small",
-   "age": 6.9,
-   "pct": 76.93,
-   "sem": 0.49,
-   "n": 67
-  },
-  {
-   "size": "Small",
-   "age": 8.74,
-   "pct": 76.65,
-   "sem": 0.74,
-   "n": 41
-  },
-  {
-   "size": "Small",
-   "age": 10.98,
-   "pct": 76.5,
-   "sem": 0.87,
-   "n": 31
-  },
-  {
-   "size": "Small",
-   "age": 12.97,
-   "pct": 77.06,
-   "sem": 1.15,
-   "n": 20
-  },
-  {
-   "size": "Small",
-   "age": 14.58,
-   "pct": 72.36,
-   "sem": 2.85,
-   "n": 5
+   "label": "Oldest LINE-1 (L1M)",
+   "sites": 1524,
+   "small": 0.288,
+   "large": 0.397,
+   "steeperPct": 73
   }
  ]
 }
