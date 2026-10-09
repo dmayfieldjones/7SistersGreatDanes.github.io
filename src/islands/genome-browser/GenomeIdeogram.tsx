@@ -18,6 +18,8 @@ interface GenomeIdeogramProps {
   chromosomes: ChromosomeInfo[]
   annotations: GeneAnnotation[]
   selectedGene?: string
+  // Genes the current story is about: drawn like the selection, with a label.
+  highlightGenes?: string[]
   activeCategory?: string
   onSelectGene: (gene: string) => void
 }
@@ -80,9 +82,18 @@ interface ChromosomeRowProps {
   pxPerBp: number
   trackWidth: number
   selectedGene?: string
+  // Genes the current story is about: drawn like the selection, with a label.
+  highlightGenes?: string[]
   activeCategory?: string
   onSelectGene: (gene: string) => void
   onHover: (state: TooltipState | null) => void
+}
+
+// Catalog names read like "M Locus Merle premelanosome protein (PMEL17/SILV)";
+// a chromosome bar has room only for the symbol in the trailing parentheses.
+function geneLabel(name: string) {
+  const match = name.match(/\(([^)]+)\)\s*$/)
+  return match ? match[1] : name
 }
 
 function ChromosomeRow({
@@ -91,6 +102,7 @@ function ChromosomeRow({
   pxPerBp,
   trackWidth,
   selectedGene,
+  highlightGenes,
   activeCategory,
   onSelectGene,
   onHover,
@@ -147,7 +159,8 @@ function ChromosomeRow({
           const pos = ((annotation.start + annotation.stop) / 2) * pxPerBp
           const offset = laneOffset(lanes[idx])
           const cy = barCenterY + offset
-          const isSelected = annotation.name === selectedGene
+          const isStoryGene = !!highlightGenes?.includes(annotation.name)
+          const isSelected = isStoryGene || annotation.name === selectedGene
 
           return (
             <g
@@ -177,6 +190,11 @@ function ChromosomeRow({
                 r={isSelected ? 5 : 3.5}
                 className="genome-marker-dot"
               />
+              {isStoryGene ? (
+                <text x={pos + 8} y={cy + 3.5} className="genome-marker-label">
+                  {geneLabel(annotation.name)}
+                </text>
+              ) : null}
             </g>
           )
         })}
@@ -189,6 +207,7 @@ export default function GenomeIdeogram({
   chromosomes,
   annotations,
   selectedGene,
+  highlightGenes,
   activeCategory,
   onSelectGene,
 }: GenomeIdeogramProps) {
@@ -270,6 +289,7 @@ export default function GenomeIdeogram({
                 pxPerBp={pxPerBp}
                 trackWidth={trackWidth}
                 selectedGene={selectedGene}
+                highlightGenes={highlightGenes}
                 activeCategory={activeCategory}
                 onSelectGene={onSelectGene}
                 onHover={setTooltip}
