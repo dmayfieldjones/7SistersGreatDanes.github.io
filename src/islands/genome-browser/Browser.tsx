@@ -38,7 +38,13 @@ interface TourStop {
   markers?: StoryMarker[]
   // Several places to look at for one story, switched between with buttons
   // above the browser — for a story that spans more than one gene.
-  views?: { label: string; location: string; note: string }[]
+  views?: {
+    label: string
+    location: string
+    note: string
+    // Overrides the story's `tracks` while this view is showing.
+    tracks?: StoryTrackId[]
+  }[]
 }
 
 // Three loci with a real, tellable story — each an exact-match `name` from
@@ -118,6 +124,12 @@ const MORE_STORIES: MoreStory[] = [
     diagram: 'aging',
     tracks: ['methylation'],
     views: [
+      {
+        label: 'Jumping genes (chromosome 1)',
+        location: 'chr1',
+        tracks: ['lineLoss'],
+        note: 'Each bar is one jumping-gene (LINE) site on chromosome 1 that loses methylation with age. Top row: how much it loses per year in smaller dogs. Middle: in larger dogs. Bottom: larger minus smaller, so a bar above zero means larger dogs lose more. Zoom in to read individual sites. Across all autosomes, 72% of sites sit above zero. X chromosome left out: its methylation depends on sex.',
+      },
       {
         label: 'FOXE1 promoter',
         location: 'chr11:55,440,000-55,520,000',
@@ -625,8 +637,11 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
   }
 
   const storyTracks = useMemo(
-    () => activeTourStop?.tracks ?? [],
-    [activeTourStop],
+    () =>
+      activeTourStop?.views?.[viewIndex]?.tracks ??
+      activeTourStop?.tracks ??
+      [],
+    [activeTourStop, viewIndex],
   )
   const markers = useMemo(() => activeTourStop?.markers ?? [], [activeTourStop])
   const showSvTrack = storyTracks.includes('sv')
@@ -857,7 +872,10 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
                       ? ' Below them, the footprint of the FGF4 retrocopy in 38 dogs from 10 breeds. All 19 short-legged dogs (Dachshund, Basset Hound, Cardigan Corgi, Cocker Spaniel, Lhasa Apso) carry two deletions marking the FGF4 gene\u2019s introns, a sign of an extra, intron-free copy elsewhere in the genome. None of the 19 dogs from five large breeds (Mastiff, Saint Bernard, Newfoundland, Scottish Deerhound, Bullmastiff) do. Great Danes are not in this cohort, so these large breeds, which we picked, stand in.'
                       : null}
                     {storyTracks.includes('methylation')
-                      ? ' Below them, methylation (the share of DNA copies carrying the chemical tag) at the sites the Dog Aging Project sequenced, pooled across 268 dogs under 3 and 377 dogs aged 8 and older. Switch between the three genes above.'
+                      ? ' Below them, methylation (the share of DNA copies carrying the chemical tag) at the sites the Dog Aging Project sequenced, pooled across 268 dogs under 3 and 377 dogs aged 8 and older.'
+                      : null}
+                    {storyTracks.includes('lineLoss')
+                      ? ' Below them, how much methylation each jumping-gene site loses per year of age, in smaller dogs, in larger dogs, and the difference (our analysis of the Dog Aging Project data, split at the median predicted adult size).'
                       : null}
                     {showSvTrack
                       ? ' Below them, a structural-variant track genotyped across 12 real, named dogs — one row per breed, including a Great Dane.'

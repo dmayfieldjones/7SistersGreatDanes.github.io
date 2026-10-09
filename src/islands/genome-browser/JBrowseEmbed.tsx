@@ -30,13 +30,14 @@ const NCBI_REFSEQ_CSI_URL =
 // See dog10kSvSource.ts for what this VCF is, how it was built, and why.
 const DOG10K_SAMPLES_TSV_URL = '/data/dog10k-svs-samples.tsv'
 
-export type StoryTrackId = 'sv' | 'fgf4' | 'coat' | 'methylation'
+export type StoryTrackId = 'sv' | 'fgf4' | 'coat' | 'methylation' | 'lineLoss'
 
 const STORY_TRACK_IDS: Record<StoryTrackId, string> = {
   sv: 'dog10k-longread-svs',
   fgf4: 'dog10k-fgf4-breeds',
   coat: 'dog10k-coat-panel',
   methylation: 'dog-aging-methylation',
+  lineLoss: 'dog-aging-line-loss',
 }
 
 // A single hand-placed point of interest for a story (e.g. a published
@@ -242,6 +243,54 @@ export default function JBrowseEmbed({
                   bedGraphLocation: {
                     uri: new URL(
                       '/data/dog-methylation-old.bedgraph',
+                      window.location.origin,
+                    ).href,
+                  },
+                },
+              ],
+            },
+          },
+          {
+            // Per-site methylation lost per year at LINE (jumping-gene) sites
+            // that lose methylation with age, from the Dog Aging Project's data
+            // (Mariner, McCoy et al., Science 2026): smaller dogs, larger dogs,
+            // and the difference. Computed by us; autosomes only.
+            type: 'MultiQuantitativeTrack',
+            trackId: STORY_TRACK_IDS.lineLoss,
+            name: 'Jumping genes: methylation lost per year, by dog size',
+            assemblyNames: ['canFam4'],
+            adapter: {
+              type: 'MultiWiggleAdapter',
+              subadapters: [
+                {
+                  type: 'BedGraphAdapter',
+                  name: 'Smaller dogs',
+                  color: '#1d6fa5',
+                  bedGraphLocation: {
+                    uri: new URL(
+                      '/data/dog-line-loss-small.bedgraph',
+                      window.location.origin,
+                    ).href,
+                  },
+                },
+                {
+                  type: 'BedGraphAdapter',
+                  name: 'Larger dogs',
+                  color: '#bf141c',
+                  bedGraphLocation: {
+                    uri: new URL(
+                      '/data/dog-line-loss-large.bedgraph',
+                      window.location.origin,
+                    ).href,
+                  },
+                },
+                {
+                  type: 'BedGraphAdapter',
+                  name: 'Larger minus smaller',
+                  color: '#444444',
+                  bedGraphLocation: {
+                    uri: new URL(
+                      '/data/dog-line-loss-diff.bedgraph',
                       window.location.origin,
                     ).href,
                   },
