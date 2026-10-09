@@ -2,6 +2,8 @@ import { lazy, Suspense, useMemo, useRef, useState } from 'react'
 
 import AgingStory from './AgingStory'
 import { prefetchDog10kSvVcf } from './dog10kSvSource'
+import BreedDots from './BreedDots'
+import GeneStrip, { type StripRow } from './GeneStrip'
 import GenomeIdeogram, { type ChromosomeInfo } from './GenomeIdeogram'
 import type {
   CuratedGeneFeature,
@@ -33,13 +35,16 @@ interface TourStop {
   // A small explainer drawn above the live browser for stories whose idea is
   // easier to see as a picture than as a genome track.
   diagram?: 'coat' | 'aging'
+  // A static picture of the locus (no live browser needed to follow the story).
+  strip?: 'coat' | 'fgf4' | 'amy2b'
   // Specific published variants to mark on the browser.
   markers?: StoryMarker[]
   // Several places to look at for one story, switched between with buttons
   // above the browser — for a story that spans more than one gene.
   // 'optional': the written story and pictures carry it, and the live browser
   // opens only when the reader asks for it.
-  browser?: 'optional'
+  // 'none': the story is told entirely by its pictures; no live browser.
+  browser?: 'optional' | 'none'
   views?: {
     label: string
     location: string
@@ -57,19 +62,19 @@ const TOUR_STOPS: TourStop[] = [
     gene: 'M Locus Merle premelanosome protein (PMEL17/SILV)',
     companionGene: 'H Locus Harlequin proteasome 20S subunit beta 7 (PSMB7)',
     diagram: 'coat',
+    strip: 'coat',
+    browser: 'optional',
     tracks: ['coat'],
     markers: [
       {
-        // PMEL is on the minus strand; its last exon (exon 11) starts at
-        // 644,259 and ends at 644,511, so the intron 10 / exon 11 boundary
-        // where the merle SINE sits is at its upper edge. Approximate: placed
-        // from the RefSeq gene structure, not a surveyed insertion coordinate.
+        // Exact site from the SINE junction unitigs in the Danes: the last
+        // base of a 13-bp target-site duplication (chr10:644,501-644,513).
         refName: 'chr10',
-        start: 644500,
-        end: 644524,
-        name: 'Merle insertion (approx.)',
+        start: 644512,
+        end: 644513,
+        name: 'Merle insertion',
         description:
-          'Merle: a SINE inserted at the boundary of PMEL intron 10 and exon 11 (Clark et al. 2006). Position approximate.',
+          'Merle: a SINE inserted at the boundary of PMEL intron 10 and exon 11 (Clark et al. 2006), chr10:644,513 in canFam4.',
       },
       {
         // OMIA lists this at canFam3 chr9:58,530,295 (T>G, c.146T>G, p.V49G);
@@ -90,12 +95,15 @@ const TOUR_STOPS: TourStop[] = [
   {
     label: 'Height',
     gene: 'FGF4',
+    strip: 'fgf4',
+    browser: 'optional',
     tracks: ['fgf4'],
     hook: "Why are Great Danes so tall? It's what they DON'T carry.",
   },
   {
     label: 'Health',
     gene: 'PRKCZ',
+    browser: 'optional',
     hook: 'The health scare every Great Dane owner knows, found in the genome.',
   },
 ]
@@ -113,47 +121,93 @@ const MORE_STORIES: MoreStory[] = [
     theme: 'Origins',
     label: 'The starch gene',
     gene: 'AMY2B',
-    hook: 'Why can dogs eat kibble but wolves can barely digest a potato?',
+    strip: 'amy2b',
+    browser: 'optional',
+    hook: 'Why are dogs better than wolves at digesting starch?',
     location: 'chr6:47,370,000-47,398,000',
     tracks: ['sv'],
     intro:
-      "Somewhere in this window, most dogs carry a duplication wolves don't have — one of the clearest fingerprints of domestication in the entire genome. Extra copies of this gene meant more of the enzyme that digests starch, letting early dogs thrive on grain and food scraps around human settlements in a way wolves never could. Below, watch the duplication show up in most of the 12 dogs in our structural-variant track, including the Great Dane — but not in the Greenland Wolf sample sitting right next to them.",
+      "Somewhere in this window, most dogs carry a duplication wolves don't have — one of the clearest fingerprints of domestication in the entire genome. Extra copies of this gene meant more of the enzyme that digests starch, letting early dogs thrive on grain and food scraps around human settlements in a way wolves never could. Below, the duplication is called in 8 of the 12 long-read genomes in our structural-variant data, including Zoey, our Great Dane. The other four, the Greenland Wolf and the dingo among them, simply have no duplication call; that is not the same as proof it is absent.",
   },
   {
     theme: 'Aging',
     label: 'Aging and size',
     gene: 'IGF1',
     diagram: 'aging',
-    browser: 'optional',
-    tracks: ['methylation'],
-    views: [
-      {
-        label: 'Jumping genes (chromosome 1)',
-        location: 'chr1',
-        tracks: ['lineLoss'],
-        note: 'Each bar is one jumping-gene (LINE) site on chromosome 1 that loses methylation with age. Top row: how much it loses per year in smaller dogs. Middle: in larger dogs. Bottom: larger minus smaller, so a bar above zero means larger dogs lose more. Zoom in to read individual sites. Across all autosomes, 72% of sites sit above zero. X chromosome left out: its methylation depends on sex.',
-      },
-      {
-        label: 'FOXE1 promoter',
-        location: 'chr11:55,440,000-55,520,000',
-        note: 'FOXE1 switches on IGF1-related genes. Its promoter (the 2 kb in front of the gene) is 7.7% methylated in dogs under 3 and 11.2% in dogs 8 and older.',
-      },
-      {
-        label: 'GATA4 promoter',
-        location: 'chr25:26,300,000-26,400,000',
-        note: 'GATA4 responds to IGF1 signals. Its promoter goes from 14.0% methylated in dogs under 3 to 18.5% in dogs 8 and older.',
-      },
-      {
-        label: 'IGF1 itself',
-        location: 'chr15:41,480,000-41,590,000',
-        note: 'The size gene itself barely moves: its promoter is 3.4% methylated in young dogs and 3.7% in older dogs. The aging signal is in its neighbors.',
-      },
-    ],
+    browser: 'none',
     hook: "Big dogs don't just live shorter lives. A new study shows their DNA ages faster.",
     intro:
-      "Small breeds can live up to twice as long as giant ones. The Dog Aging Project (Mariner, McCoy et al., Science, October 2026) asked whether big dogs simply die earlier or really age faster. They measured methylation, chemical tags on DNA that change predictably with age, in 1,640 blood samples from 894 pet dogs, and found that larger dogs, and males, age faster by this molecular clock. The biggest differences were not in genes but in transposons, the \'jumping genes\' that make up a large share of the genome: they lose tags with age, which can wake them up, and they lose them faster in larger dogs, most of all in the youngest LINE-1 families. The authors caution that this is a pattern in tags, not proof of cause: they did not measure transposon activity. The pictures above use the study\'s public data; the genome browser below lets you look at the same sites and genes in the dog genome.",
+      "Small breeds can live up to twice as long as giant ones. The Dog Aging Project (Mariner, McCoy et al., Science, October 2026) asked whether big dogs simply die earlier or really age faster. They measured methylation, chemical tags on DNA that change predictably with age, in 1,640 blood samples from 894 pet dogs, and found that larger dogs, and males, age faster by this molecular clock. The biggest differences were not in genes but in transposons, the 'jumping genes' that make up a large share of the genome: they lose tags with age, which can wake them up, and they lose them faster in larger dogs, most of all in the youngest LINE-1 families. The authors caution that this is a pattern in tags, not proof of cause: they did not measure transposon activity. The pictures above use the study's public data.",
   },
 ]
+
+const AMY2B_ROWS: StripRow[] = [
+  { label: 'Great Dane (Zoey)', state: 'yes', group: 'Dogs' },
+  { label: 'Bernese (BD)', state: 'yes' },
+  { label: 'Bernese (OD)', state: 'yes' },
+  { label: 'German Shepherd (Mischka)', state: 'yes' },
+  { label: 'Basenji (China)', state: 'yes' },
+  { label: 'Boxer (Tasha)', state: 'yes' },
+  { label: 'Labrador (Yella)', state: 'yes' },
+  { label: 'Cairn Terrier (CA611)', state: 'yes' },
+  { label: 'German Shepherd (Nala)', state: 'none' },
+  { label: 'Basenji (Wags)', state: 'none' },
+  { label: 'Dingo (Sandy)', state: 'none', group: 'Wild canids' },
+  { label: 'Greenland Wolf', state: 'none' },
+]
+
+function StoryStrip({ kind }: { kind: NonNullable<TourStop['strip']> }) {
+  switch (kind) {
+    case 'coat':
+      return (
+        <>
+          <GeneStrip
+            title="Merle: PMEL on chromosome 10"
+            chr="chr10"
+            start={640000}
+            stop={656000}
+            genes={[{ name: 'PMEL', start: 644259, stop: 651766 }]}
+            markers={[
+              {
+                pos: 644513,
+                label: 'Merle SINE insertion',
+                note: 'Found in the sequencing reads of 3 of the 8 Great Danes.',
+              },
+            ]}
+          />
+          <GeneStrip
+            title="Harlequin: PSMB7 on chromosome 9"
+            chr="chr9"
+            start={58600000}
+            stop={58690000}
+            genes={[{ name: 'PSMB7', start: 58614281, stop: 58677679 }]}
+            markers={[{ pos: 58614853, label: 'T>G (p.V49G)' }]}
+            caption="Two genes on two different chromosomes. Harlequin only shows its effect on top of merle."
+          />
+        </>
+      )
+    case 'fgf4':
+      return <BreedDots />
+    case 'amy2b':
+      return (
+        <GeneStrip
+          title="AMY2B on chromosome 6"
+          chr="chr6"
+          start={47365000}
+          stop={47400000}
+          genes={[{ name: 'AMY2B', start: 47381288, stop: 47388483 }]}
+          span={{
+            start: 47375677,
+            stop: 47390529,
+            label: '~15 kb duplication',
+          }}
+          rows={AMY2B_ROWS}
+          rowsNote="8 of the 10 dogs have a duplication call. Neither the dingo nor the wolf does."
+          caption="Red bar = duplication called in that sample. Dashed line = no call, which is not the same as absent."
+        />
+      )
+  }
+}
 
 // The 12 long-read dog genomes in the Dog10K structural-variant track, and
 // which breed each one is — mirrors public/data/dog10k-svs-samples.tsv,
@@ -285,7 +339,6 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
   const [gene, setGene] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
   const [searchOpen, setSearchOpen] = useState(false)
-  const [exploreOpen, setExploreOpen] = useState(false)
   const [showCompanion, setShowCompanion] = useState(false)
   const [viewIndex, setViewIndex] = useState(0)
   const [liveBrowserOpen, setLiveBrowserOpen] = useState(false)
@@ -411,6 +464,13 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
     [activeTourStop, viewIndex],
   )
   const markers = useMemo(() => activeTourStop?.markers ?? [], [activeTourStop])
+  const storyGenes = useMemo(
+    () =>
+      [activeTourStop?.gene, activeTourStop?.companionGene].filter(
+        (name): name is string => !!name,
+      ),
+    [activeTourStop],
+  )
   const showSvTrack = storyTracks.includes('sv')
   const showStage = !!gene || liveBrowserOpen
   const stageTitle = activeTourStop?.label ?? geneEntry?.name
@@ -434,6 +494,10 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
             <span className="accent-color">7</span>Sisters Genome Browser
             <span className="genome-page-subtitle"> (CanFam4)</span>
           </h1>
+        </main>
+      </div>
+      <div className="content">
+        <main className="content-wrapper">
           <section className="genome-tour">
             <img
               src="/img/close-up-puppy-faces-cart-illinois-corn-field-sunset.jpg"
@@ -508,7 +572,11 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
                 </div>
                 {activeTourStop?.diagram === 'coat' ? <CoatDiagram /> : null}
                 {activeTourStop?.diagram === 'aging' ? <AgingStory /> : null}
+                {activeTourStop?.strip ? (
+                  <StoryStrip kind={activeTourStop.strip} />
+                ) : null}
                 {activeTourStop?.views &&
+                activeTourStop.browser !== 'none' &&
                 (activeTourStop.browser !== 'optional' || liveBrowserOpen) ? (
                   <>
                     <div className="genome-locus-switch" role="group">
@@ -532,7 +600,7 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
                     </p>
                   </>
                 ) : null}
-                {companionEntry ? (
+                {companionEntry && liveBrowserOpen ? (
                   <div className="genome-locus-switch" role="group">
                     <span>Show in the browser:</span>
                     {[
@@ -555,7 +623,7 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
                     ))}
                   </div>
                 ) : null}
-                {companionEntry && showCompanion ? (
+                {companionEntry && liveBrowserOpen && showCompanion ? (
                   <p className="genome-locus-note">
                     The blue marker is the published harlequin change (a T
                     swapped for a G in exon 2). Of the 8 Great Danes in the top
@@ -566,7 +634,7 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
                     Peru has it.
                   </p>
                 ) : null}
-                {liveBrowserOpen ? (
+                {activeTourStop?.browser === 'none' ? null : liveBrowserOpen ? (
                   <Suspense
                     fallback={
                       <div className="genome-live-loading">
@@ -582,6 +650,8 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
                       location={liveLocation}
                       storyTracks={storyTracks}
                       markers={markers}
+                      hideControls={activeTourStop?.diagram === 'aging'}
+                      hideRefSeq={activeTourStop?.diagram === 'aging'}
                     />
                   </Suspense>
                 ) : (
@@ -627,45 +697,47 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
               </>
             ) : null}
             <div className="genome-accordions">
-              <details className="genome-accordion">
-                <summary>What the live browser shows</summary>
-                <div className="genome-accordion-body">
-                  <p>
-                    A real, in-page JBrowse view of the CanFam4 assembly: our
-                    curated gene catalog (red) and the full NCBI RefSeq gene
-                    annotation.
-                    {storyTracks.includes('coat')
-                      ? ' Below them, SNP genotypes, one row per dog, at common variant sites in each gene\u2019s region: 8 Great Danes (top, genotyped from Logan\u2019s assembled public sequencing data) against 35 dogs from 12 other breeds and 4 wolves (Dog10K). Switch between the two genes above.'
-                      : null}
-                    {storyTracks.includes('fgf4')
-                      ? ' Below them, the footprint of the FGF4 retrocopy in 38 dogs from 10 breeds. All 19 short-legged dogs (Dachshund, Basset Hound, Cardigan Corgi, Cocker Spaniel, Lhasa Apso) carry two deletions marking the FGF4 gene\u2019s introns, a sign of an extra, intron-free copy elsewhere in the genome. None of the 19 dogs from five large breeds (Mastiff, Saint Bernard, Newfoundland, Scottish Deerhound, Bullmastiff) do. Great Danes are not in this cohort, so these large breeds, which we picked, stand in.'
-                      : null}
-                    {storyTracks.includes('methylation')
-                      ? ' Below them, methylation (the share of DNA copies carrying the chemical tag) at the sites the Dog Aging Project sequenced, pooled across 268 dogs under 3 and 377 dogs aged 8 and older.'
-                      : null}
-                    {storyTracks.includes('lineLoss')
-                      ? ' Below them, how much methylation each jumping-gene site loses per year of age, in smaller dogs, in larger dogs, and the difference (our analysis of the Dog Aging Project data, split at the median predicted adult size).'
-                      : null}
-                    {showSvTrack
-                      ? ' Below them, a structural-variant track genotyped across 12 real, named dogs — one row per breed, including a Great Dane.'
-                      : storyTracks.length
-                        ? null
-                        : ' Stories add extra evidence tracks where they help tell the story.'}
-                  </p>
-                  {showSvTrack ? (
-                    <table className="genome-sv-samples-table">
-                      <tbody>
-                        {DOG10K_SV_SAMPLES.map(({ sample, breed }) => (
-                          <tr key={sample}>
-                            <td>{sample}</td>
-                            <td>{breed}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  ) : null}
-                </div>
-              </details>
+              {activeTourStop?.browser === 'none' ? null : (
+                <details className="genome-accordion">
+                  <summary>What the live browser shows</summary>
+                  <div className="genome-accordion-body">
+                    <p>
+                      A real, in-page JBrowse view of the CanFam4 assembly: our
+                      curated gene catalog (red) and the full NCBI RefSeq gene
+                      annotation.
+                      {storyTracks.includes('coat')
+                        ? ' Below them, SNP genotypes, one row per dog, at common variant sites in each gene\u2019s region: 8 Great Danes (top, genotyped from Logan\u2019s assembled public sequencing data) against 34 other dogs (32 from 12 breeds, plus 2 wolves). The merle insertion itself is one row at the PMEL site, found by searching each dog\u2019s assembled sequence for the insertion\u2019s junctions. Switch between the two genes above.'
+                        : null}
+                      {storyTracks.includes('fgf4')
+                        ? ' Below them, the footprint of the FGF4 retrocopy in 38 dogs from 10 breeds. All 19 short-legged dogs (Dachshund, Basset Hound, Cardigan Corgi, Cocker Spaniel, Lhasa Apso) carry two deletions marking the FGF4 gene\u2019s introns, a sign of an extra, intron-free copy elsewhere in the genome. None of the 19 dogs from five large breeds (Mastiff, Saint Bernard, Newfoundland, Scottish Deerhound, Bullmastiff) do. Great Danes are not in this cohort, so these large breeds, which we picked, stand in.'
+                        : null}
+                      {storyTracks.includes('methylation')
+                        ? ' Below them, methylation (the share of DNA copies carrying the chemical tag) at the sites the Dog Aging Project sequenced, pooled across 268 dogs under 3 and 377 dogs aged 8 and older.'
+                        : null}
+                      {storyTracks.includes('lineLoss')
+                        ? ' Below them, how much methylation each jumping-gene site loses per year of age, in smaller dogs, in larger dogs, and the difference (our analysis of the Dog Aging Project data, split at the median predicted adult size).'
+                        : null}
+                      {showSvTrack
+                        ? ' Below them, a structural-variant track genotyped across 12 real, named samples (10 dogs, a dingo and a wolf) — one row per sample, grouped by breed, including a Great Dane.'
+                        : storyTracks.length
+                          ? null
+                          : ' Stories add extra evidence tracks where they help tell the story.'}
+                    </p>
+                    {showSvTrack ? (
+                      <table className="genome-sv-samples-table">
+                        <tbody>
+                          {DOG10K_SV_SAMPLES.map(({ sample, breed }) => (
+                            <tr key={sample}>
+                              <td>{sample}</td>
+                              <td>{breed}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    ) : null}
+                  </div>
+                </details>
+              )}
               <details className="genome-accordion">
                 <summary>How this browser is built</summary>
                 <ul className="genome-accordion-body">
@@ -736,154 +808,142 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
               </details>
             </div>
           </div>
-
-          <details
-            className="genome-accordion genome-explore"
-            open={exploreOpen}
-            onToggle={event => setExploreOpen(event.currentTarget.open)}
-          >
-            <summary>Explore the whole genome</summary>
-          </details>
         </main>
       </div>
-      {exploreOpen ? (
-        <>
-          <div className="content">
-            <main className="content-wrapper">
-              <p className="genome-explore-intro">
-                Each bar is one dog chromosome from the CanFam4 reference, drawn
-                to scale; the small tick is the centromere, dividing the p
-                (short) and q (long) arms. Colored dots mark genes we&rsquo;ve
-                placed &mdash; hover for details, or click one to load it above.
-              </p>
-              <div className="genome-controls">
-                <div className="genome-search">
-                  <input
-                    type="text"
-                    className="genome-search-input"
-                    placeholder="Search genes by name..."
-                    value={searchQuery}
-                    onChange={event => {
-                      setSearchQuery(event.target.value)
-                      setSearchOpen(true)
-                    }}
-                    onFocus={() => setSearchOpen(true)}
-                    onBlur={() => setTimeout(() => setSearchOpen(false), 150)}
-                  />
-                  {searchOpen && searchMatches.length ? (
-                    <ul className="genome-search-results">
-                      {searchMatches.map(entry => (
-                        <li key={entry.name}>
-                          <button
-                            type="button"
-                            onMouseDown={event => event.preventDefault()}
-                            onClick={() => selectGeneFromExplorer(entry.name)}
-                          >
-                            {entry.name}
-                            <span className="genome-search-category">
-                              {entry.type}
-                            </span>
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : null}
-                </div>
-                <div
-                  className="genome-pills"
-                  role="group"
-                  aria-label="Filter by category"
+      <div className="content">
+        <main className="content-wrapper">
+          <p className="genome-explore-intro">
+            Each bar is one dog chromosome from the CanFam4 reference, drawn to
+            scale; the small tick is the centromere, dividing the p (short) and
+            q (long) arms. Colored dots mark genes we&rsquo;ve placed &mdash;
+            hover for details, or click one to read its story above. Pick a
+            story and its genes light up here.
+          </p>
+          <div className="genome-controls">
+            <div className="genome-search">
+              <input
+                type="text"
+                className="genome-search-input"
+                placeholder="Search genes by name..."
+                value={searchQuery}
+                onChange={event => {
+                  setSearchQuery(event.target.value)
+                  setSearchOpen(true)
+                }}
+                onFocus={() => setSearchOpen(true)}
+                onBlur={() => setTimeout(() => setSearchOpen(false), 150)}
+              />
+              {searchOpen && searchMatches.length ? (
+                <ul className="genome-search-results">
+                  {searchMatches.map(entry => (
+                    <li key={entry.name}>
+                      <button
+                        type="button"
+                        onMouseDown={event => event.preventDefault()}
+                        onClick={() => selectGeneFromExplorer(entry.name)}
+                      >
+                        {entry.name}
+                        <span className="genome-search-category">
+                          {entry.type}
+                        </span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+            </div>
+            <div
+              className="genome-pills"
+              role="group"
+              aria-label="Filter by category"
+            >
+              <button
+                type="button"
+                className={
+                  'genome-pill' +
+                  (effectiveType === 'all' ? ' genome-pill-active' : '')
+                }
+                onClick={() => selectType('all')}
+              >
+                All ({geneCategories.length})
+              </button>
+              {categories.map(category => (
+                <button
+                  key={category}
+                  type="button"
+                  className={
+                    'genome-pill' +
+                    (effectiveType === category ? ' genome-pill-active' : '')
+                  }
+                  onClick={() => selectType(category)}
                 >
+                  {category} (
+                  {geneCategories.filter(e => e.type === category).length})
+                </button>
+              ))}
+            </div>
+          </div>
+          {categoryGenes.length ? (
+            <div className="genome-category-genes">
+              <div className="genome-category-genes-title">
+                {effectiveType} genes ({categoryGenes.length}) - select one to
+                learn more
+              </div>
+              <div className="genome-category-genes-chips">
+                {categoryGenes.map(entry => (
                   <button
+                    key={entry.name}
                     type="button"
                     className={
-                      'genome-pill' +
-                      (effectiveType === 'all' ? ' genome-pill-active' : '')
+                      'genome-chip' +
+                      (entry.name === gene ? ' genome-chip-active' : '')
                     }
-                    onClick={() => selectType('all')}
+                    onClick={() => selectGeneFromExplorer(entry.name)}
                   >
-                    All ({geneCategories.length})
+                    {entry.name}
                   </button>
-                  {categories.map(category => (
-                    <button
-                      key={category}
-                      type="button"
-                      className={
-                        'genome-pill' +
-                        (effectiveType === category
-                          ? ' genome-pill-active'
-                          : '')
-                      }
-                      onClick={() => selectType(category)}
-                    >
-                      {category} (
-                      {geneCategories.filter(e => e.type === category).length})
-                    </button>
-                  ))}
-                </div>
-              </div>
-              {categoryGenes.length ? (
-                <div className="genome-category-genes">
-                  <div className="genome-category-genes-title">
-                    {effectiveType} genes ({categoryGenes.length}) - select one
-                    to learn more
-                  </div>
-                  <div className="genome-category-genes-chips">
-                    {categoryGenes.map(entry => (
-                      <button
-                        key={entry.name}
-                        type="button"
-                        className={
-                          'genome-chip' +
-                          (entry.name === gene ? ' genome-chip-active' : '')
-                        }
-                        onClick={() => selectGeneFromExplorer(entry.name)}
-                      >
-                        {entry.name}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              ) : null}
-            </main>
-          </div>
-          <GenomeIdeogram
-            chromosomes={chromosomes}
-            annotations={annotations}
-            selectedGene={gene}
-            activeCategory={effectiveType}
-            onSelectGene={selectGeneFromExplorer}
-          />
-          {unplacedGenes.length ? (
-            <div className="genome-unplaced">
-              <div className="genome-unplaced-title">
-                Genes without genome coordinates yet ({unplacedGenes.length})
-              </div>
-              <div className="genome-unplaced-chips">
-                {unplacedGenes
-                  .toSorted((a, b) => a.name.localeCompare(b.name))
-                  .map(entry => {
-                    const isDimmed =
-                      effectiveType !== 'all' && entry.type !== effectiveType
-                    return (
-                      <button
-                        key={entry.name}
-                        type="button"
-                        className={
-                          'genome-chip' +
-                          (entry.name === gene ? ' genome-chip-active' : '') +
-                          (isDimmed ? ' genome-chip-dimmed' : '')
-                        }
-                        onClick={() => selectGeneFromExplorer(entry.name)}
-                      >
-                        {entry.name}
-                      </button>
-                    )
-                  })}
+                ))}
               </div>
             </div>
           ) : null}
-        </>
+        </main>
+      </div>
+      <GenomeIdeogram
+        chromosomes={chromosomes}
+        annotations={annotations}
+        selectedGene={gene}
+        highlightGenes={storyGenes}
+        activeCategory={effectiveType}
+        onSelectGene={selectGeneFromExplorer}
+      />
+      {unplacedGenes.length ? (
+        <div className="genome-unplaced">
+          <div className="genome-unplaced-title">
+            Genes without genome coordinates yet ({unplacedGenes.length})
+          </div>
+          <div className="genome-unplaced-chips">
+            {unplacedGenes
+              .toSorted((a, b) => a.name.localeCompare(b.name))
+              .map(entry => {
+                const isDimmed =
+                  effectiveType !== 'all' && entry.type !== effectiveType
+                return (
+                  <button
+                    key={entry.name}
+                    type="button"
+                    className={
+                      'genome-chip' +
+                      (entry.name === gene ? ' genome-chip-active' : '') +
+                      (isDimmed ? ' genome-chip-dimmed' : '')
+                    }
+                    onClick={() => selectGeneFromExplorer(entry.name)}
+                  >
+                    {entry.name}
+                  </button>
+                )
+              })}
+          </div>
+        </div>
       ) : null}
     </div>
   )

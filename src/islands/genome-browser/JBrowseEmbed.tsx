@@ -1,8 +1,15 @@
 import { useEffect, useMemo, useRef } from 'react'
+import { isFeature } from '@jbrowse/core/util/simpleFeature'
 import {
-  createViewState,
-  JBrowseLinearGenomeView,
-} from '@jbrowse/react-linear-genome-view2'
+  EmbedProvider,
+  LocationBox,
+  RegionSeams,
+  Scalebar,
+  TrackStack,
+  TrackToggle,
+} from '@jbrowse/display-ui/embed'
+import { createViewState } from '@jbrowse/react-linear-genome-view2'
+import { observer } from 'mobx-react'
 
 import {
   COAT_PANEL_CSI_URL,
@@ -16,6 +23,10 @@ import {
 // UCSC's canFam4 (UU_Cfam_GSD_1.0) reference sequence, straight off hgdownload.
 const CANFAM4_TWOBIT_URL =
   'https://hgdownload.soe.ucsc.edu/goldenPath/canFam4/bigZips/canFam4.2bit'
+// Chromosome names and lengths, so the browser doesn't have to read them out of
+// the 2bit file (the slow "Downloading chromosome sizes" step on first load).
+const CANFAM4_CHROM_SIZES_URL =
+  'https://hgdownload.soe.ucsc.edu/goldenPath/canFam4/bigZips/canFam4.chrom.sizes'
 
 // The full NCBI RefSeq gene annotation for canFam4, as jbrowse.org's hosted
 // UCSC mirror serves it (genomes.jbrowse.org's "UCSC" hub listing links here
@@ -67,6 +78,123 @@ interface JBrowseEmbedProps {
   // noise, so the caller opts in per story.
   storyTracks: StoryTrackId[]
   markers: StoryMarker[]
+  // The location box, zoom and track toggles; a story whose tracks are fixed
+  // by the narrative can hide them.
+  hideControls?: boolean
+  // The full RefSeq annotation track; a story the curated genes already cover
+  // can drop it.
+  hideRefSeq?: boolean
+}
+
+const HIDDEN_FEATURE_KEYS = new Set([
+  'refName',
+  'start',
+  'end',
+  'strand',
+  'type',
+  'name',
+  'uniqueId',
+  'subfeatures',
+])
+
+type ViewState = ReturnType<typeof createViewState>
+
+const FeaturePanel = observer(function FeaturePanel({
+  session,
+}: {
+  session: ViewState['session']
+}) {
+  const { selection } = session
+  if (!isFeature(selection)) return null
+  const data = selection.toJSON()
+  const rows = Object.entries(data).filter(
+    ([key, value]) =>
+      !HIDDEN_FEATURE_KEYS.has(key) &&
+      value !== null &&
+      typeof value !== 'object',
+  )
+  return (
+    <div className="genome-feature-panel">
+      <div className="genome-feature-title">
+        <strong>{data.name ?? data.type ?? 'Feature'}</strong>
+        <button type="button" onClick={() => session.clearSelection()}>
+          Clear
+        </button>
+      </div>
+      <div className="genome-feature-locus">
+        {data.refName}:{data.start.toLocaleString()}-{data.end.toLocaleString()}
+      </div>
+      <dl>
+        {rows.map(([key, value]) => (
+          <div key={key}>
+            <dt>{key}</dt>
+            <dd>{String(value)}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  )
+})
+
+// Faint vertical lines under the scale bar's tick labels, running through
+// every track.
+const Gridlines = observer(function Gridlines({
+  view,
+}: {
+  view: ViewState['session']['view']
+}) {
+  return (
+    <div
+      aria-hidden
+      className="genome-gridlines"
+      style={{ transform: `translateX(${view.staticBlocksTranslateX}px)` }}
+    >
+      {view.scalebarLabels.map(({ x }) => (
+        <div key={x} style={{ left: x }} />
+      ))}
+    </div>
+  )
+})
+
+const Controls = observer(function Controls({
+  view,
+  trackIds,
+}: {
+  view: ViewState['session']['view']
+  trackIds: { id: string; label: string }[]
+}) {
+  return (
+    <div className="genome-jbrowse-toolbar">
+      <LocationBox view={view} />
+      <button
+        type="button"
+        aria-label="Zoom out"
+        onClick={() => view.zoom(view.bpPerPx * 2)}
+      >
+        −
+      </button>
+      <button
+        type="button"
+        aria-label="Zoom in"
+        onClick={() => view.zoom(view.bpPerPx / 2)}
+      >
+        +
+      </button>
+      {trackIds.map(({ id, label }) => (
+        <TrackToggle key={id} view={view} trackId={id}>
+          {label}
+        </TrackToggle>
+      ))}
+    </div>
+  )
+})
+
+const STORY_TRACK_LABELS: Record<StoryTrackId, string> = {
+  sv: 'Structural variants',
+  fgf4: 'FGF4 breeds',
+  coat: 'Coat SNPs',
+  methylation: 'Methylation',
+  lineLoss: 'Jumping genes',
 }
 
 export default function JBrowseEmbed({
@@ -74,6 +202,8 @@ export default function JBrowseEmbed({
   location,
   storyTracks,
   markers,
+  hideControls,
+  hideRefSeq,
 }: JBrowseEmbedProps) {
   const curatedGenesTrack = useMemo(
     () => ({
@@ -97,6 +227,7 @@ export default function JBrowseEmbed({
           type: 'LinearBasicDisplay',
           displayId: 'sevensisters-curated-genes-LinearBasicDisplay',
           color: '#bf141c',
+          height: 70,
         },
       ],
     }),
@@ -121,6 +252,7 @@ export default function JBrowseEmbed({
           type: 'LinearBasicDisplay',
           displayId: 'sevensisters-story-markers-LinearBasicDisplay',
           color: '#1d6fa5',
+          height: 70,
         },
       ],
     }),
@@ -138,6 +270,7 @@ export default function JBrowseEmbed({
             adapter: {
               type: 'TwoBitAdapter',
               uri: CANFAM4_TWOBIT_URL,
+              chromSizesLocation: { uri: CANFAM4_CHROM_SIZES_URL },
             },
           },
         },
@@ -157,6 +290,13 @@ export default function JBrowseEmbed({
                 location: { uri: NCBI_REFSEQ_CSI_URL },
               },
             },
+            displays: [
+              {
+                type: 'LinearBasicDisplay',
+                displayId: 'canfam4-ncbi-refseq-LinearBasicDisplay',
+                height: 190,
+              },
+            ],
           },
           {
             type: 'VariantTrack',
@@ -337,7 +477,7 @@ export default function JBrowseEmbed({
           tracks: [
             ...(markers.length ? ['sevensisters-story-markers'] : []),
             'sevensisters-curated-genes',
-            'canfam4-ncbi-refseq',
+            ...(hideRefSeq ? [] : ['canfam4-ncbi-refseq']),
             ...storyTracks.map(id => STORY_TRACK_IDS[id]),
           ],
         },
@@ -389,9 +529,36 @@ export default function JBrowseEmbed({
     else view.hideTrack('sevensisters-story-markers')
   }, [markers, viewState])
 
+  const { session } = viewState
+  const toggles = [
+    ...(markers.length
+      ? [{ id: 'sevensisters-story-markers', label: 'Variants' }]
+      : []),
+    { id: 'sevensisters-curated-genes', label: 'Curated genes' },
+    ...(hideRefSeq
+      ? []
+      : [{ id: 'canfam4-ncbi-refseq', label: 'RefSeq genes' }]),
+    ...storyTracks.map(id => ({
+      id: STORY_TRACK_IDS[id],
+      label: STORY_TRACK_LABELS[id],
+    })),
+  ]
+
   return (
     <div className="genome-jbrowse-embed">
-      <JBrowseLinearGenomeView viewState={viewState} />
+      <EmbedProvider session={session}>
+        {hideControls ? null : (
+          <Controls view={session.view} trackIds={toggles} />
+        )}
+        <div className="genome-jbrowse-body">
+          <TrackStack view={session.view} style={{ flex: 1, minWidth: 0 }}>
+            <Scalebar view={session.view} />
+            <Gridlines view={session.view} />
+            <RegionSeams view={session.view} />
+          </TrackStack>
+          <FeaturePanel session={session} />
+        </div>
+      </EmbedProvider>
     </div>
   )
 }
