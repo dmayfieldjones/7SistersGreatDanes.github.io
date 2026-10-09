@@ -97,3 +97,23 @@ git show origin/gh-pages:CNAME
 - **Never edit files directly in `gh-pages` branch** - they will be overwritten
 - **`out/` is auto-generated** - don't edit it manually
 - **Package manager**: pnpm is canonical (see `pnpm-workspace.yaml` and `pnpm-lock.yaml`). Don't reintroduce `package-lock.json` or `yarn.lock`.
+
+## Draft posts (cannot go live by accident)
+
+Everything in `src/_posts/` is published when it reaches `main`, **unless** its
+front matter has `draft: true`. Drafts render in `pnpm dev` but are left out of
+production builds: no page, no archive entry, no sitemap entry. Remove the
+`draft: true` line when the post is ready.
+
+CI also runs `node scripts/check-posts.mjs` before building. A post without
+`draft: true` fails the deploy if it still has a `[TODO]`/`[verify]` marker, a
+`VIDEO_ID_HERE` placeholder, or an invalid date. Images for a draft should stay
+out of `public/` until publish day, because files in `public/` are always served.
+
+## If a deploy fails
+
+The deploy runs from GitHub Actions on every push to `main` (see
+`.github/workflows/deploy.yml`). If the "Build" step fails, the live site keeps
+the last good version. Reproduce it locally the way CI does: from a clean
+checkout, `pnpm install --frozen-lockfile && pnpm build`. A common cause is code
+that imports a package that is only in an uncommitted `package.json`.

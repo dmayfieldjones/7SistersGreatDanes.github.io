@@ -9,6 +9,8 @@ interface Frontmatter {
   tags?: string[]
   categories?: string[]
   featured?: boolean
+  /** Drafts render in `astro dev` but are left out of production builds (pages, archive, sitemap). */
+  draft?: boolean
 }
 
 interface PostModule {
@@ -16,9 +18,17 @@ interface PostModule {
   default: unknown
 }
 
-const postModules = import.meta.glob<PostModule>('/src/_posts/*.md', {
+const allPostModules = import.meta.glob<PostModule>('/src/_posts/*.md', {
   eager: true,
 })
+
+// A post with `draft: true` in its front matter is previewable in `astro dev`
+// but never built for production, so committing one cannot publish it.
+const postModules = Object.fromEntries(
+  Object.entries(allPostModules).filter(
+    ([, module]) => import.meta.env.DEV || module.frontmatter.draft !== true,
+  ),
+)
 
 /** ISO date string YYYY-MM-DD from frontmatter (Date or string). Invalid → undefined. */
 function toIsoDay(value: string | Date | undefined): string | undefined {
