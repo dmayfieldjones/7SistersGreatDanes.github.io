@@ -191,7 +191,7 @@ function PartnerDumbbell() {
       viewBox="0 0 380 170"
       className="aging-dumbbell"
       role="img"
-      aria-label="Methylation at the FOXE1, GATA4 and IGF1 promoters in young and older dogs: FOXE1 and GATA4 rise, IGF1 barely moves"
+      aria-label="Methylation at the FOXE1, GATA4 and IGF1 promoters in young and older dogs: FOXE1 and GATA4 rise, and IGF1 changes little"
     >
       {[0, 5, 10, 15, 20].map(tick => (
         <g key={tick}>
@@ -271,7 +271,7 @@ function PartnerDumbbell() {
               fill={INK}
               fontWeight={flat ? 400 : 600}
             >
-              {flat ? 'barely moves' : `+${change.toFixed(1)} points`}
+              {flat ? 'about the same' :`+${change.toFixed(1)} points`}
             </text>
           </g>
         )
@@ -297,10 +297,10 @@ export default function AgingStory() {
     <div className="aging-story">
       <Step
         number={1}
-        headline="A dog's DNA carries a clock."
+        headline="A dog's DNA has a clock."
         hero={`+${RISK_PER_YEAR}%`}
         heroLabel="higher risk of death for every year a dog's clock runs ahead of its real age"
-        note="The Dog Aging Project read chemical tags (methylation) on DNA from 894 pet dogs. The clock predicts a dog's age to within about a year. Picture is a schematic."
+        note="The Dog Aging Project read chemical tags (methylation) on DNA from 894 pet dogs. The clock predicts a dog's age to within about a year. The picture is a schematic."
       >
         <ClockSchematic />
       </Step>
@@ -309,7 +309,7 @@ export default function AgingStory() {
         headline="In big dogs, the clock runs faster at the jumping genes."
         hero={`${all.steeperPct} of 100`}
         heroLabel={`jumping-gene sites lose tags faster in larger dogs (of ${all.sites.toLocaleString()} sites checked)`}
-        note={`Jumping genes (transposons) lose tags as dogs age, which can wake them up. The typical site loses ${all.large.toFixed(2)} points a year in larger dogs against ${all.small.toFixed(2)} in smaller dogs, about ${faster}% faster; the paper reports 31%. Our re-analysis of the study's public data.`}
+        note={`Jumping genes (transposons) lose tags as dogs age, which can wake them up. The typical site loses ${all.large.toFixed(2)} points a year in larger dogs against ${all.small.toFixed(2)} in smaller dogs, about ${faster}% faster; the paper reports 31%. This is our re-analysis of the study's public data.`}
       >
         <div className="aging-pair">
           <SiteGrid percent={all.steeperPct} />
@@ -323,10 +323,10 @@ export default function AgingStory() {
       </Step>
       <Step
         number={3}
-        headline="The size gene's partners age with the dog. The size gene itself doesn't."
+        headline="Genes that work with IGF1 gain methylation with age, and IGF1 does not."
         hero="2 of 3"
         heroLabel="genes in the IGF1 pathway gain tags with age; IGF1 itself stays put"
-        note="IGF1 is the main body-size gene. FOXE1 and GATA4 work with it, and the paper links them to size and age. We measured methylation at each gene's on/off switch (promoter) in dogs under 3 and dogs 8 and older. Our re-analysis of the study's public data."
+        note="IGF1 is the main body-size gene. FOXE1 and GATA4 work with it, and the paper links them to size and age. We measured methylation at each gene's on/off switch (promoter) in dogs under 3 and dogs 8 and older. This is our re-analysis of the study's public data."
       >
         <PartnerDumbbell />
       </Step>

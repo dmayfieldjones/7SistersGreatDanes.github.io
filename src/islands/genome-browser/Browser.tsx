@@ -90,7 +90,7 @@ const TOUR_STOPS: TourStop[] = [
     ],
     hook: 'Why do some Great Danes look like a black-and-white patchwork? It takes two genes stacked on top of each other.',
     intro:
-      "This pattern is two genes, not one: merle (below) lays down random patches of diluted pigment on its own — that alone is a recognized Great Dane pattern. Harlequin is what geneticists call a dominant modifier. A modifier does nothing on its own; it only changes how another gene's effect looks, and this one acts only on merle. Dominant means a single copy is enough. With one copy of harlequin stacked on merle, the dilution is stripped back out, leaving solid black patches on white instead of the softer merle mottling. (No dog with two copies has ever been found, which suggests those puppies are lost early in pregnancy.) Breeders ran harlequin programs for a century before anyone knew this: a 1988 study first argued harlequin was a modified merle, and DNA work later found both genes. Merle itself was a disqualifying fault until the AKC accepted it in 2019. Even the size of the merle mutation matters — the longer a repetitive stretch inside it, the stronger the pattern, from 'cryptic' merles that look solid to the longest versions, found in harlequins.",
+      "This pattern comes from two genes. Merle, shown below, lays down random patches of diluted pigment by itself, and that pattern alone is recognized in Great Danes. Harlequin is what geneticists call a dominant modifier: a modifier changes how another gene's effect looks and does nothing alone, and dominant means one copy is enough. Harlequin acts only on merle. With one copy of harlequin on top of merle, the dilution is removed, which leaves solid black patches on white in place of the softer merle mottling. No dog with two copies has been found, which suggests those puppies are lost early in pregnancy. Breeders ran harlequin programs for a century before anyone knew the genetics: a 1988 study first argued that harlequin was a modified merle, and DNA work later found both genes. Merle was a disqualifying fault until the AKC accepted it in 2019. The length of the merle insertion also matters, because the longer a repetitive stretch inside it, the stronger the pattern, from 'cryptic' merles that look solid to the longest versions, found in harlequins.",
   },
   {
     label: 'Height',
@@ -98,7 +98,7 @@ const TOUR_STOPS: TourStop[] = [
     strip: 'fgf4',
     browser: 'optional',
     tracks: ['fgf4'],
-    hook: "Why are Great Danes so tall? It's what they DON'T carry.",
+    hook: 'Why are Great Danes so tall? Short-legged breeds carry an extra copy of FGF4, and Great Danes do not.',
   },
   {
     label: 'Health',
@@ -127,7 +127,7 @@ const MORE_STORIES: MoreStory[] = [
     location: 'chr6:47,370,000-47,398,000',
     tracks: ['sv'],
     intro:
-      "Somewhere in this window, most dogs carry a duplication wolves don't have — one of the clearest fingerprints of domestication in the entire genome. Extra copies of this gene meant more of the enzyme that digests starch, letting early dogs thrive on grain and food scraps around human settlements in a way wolves never could. Below, the duplication is called in 8 of the 12 long-read genomes in our structural-variant data, including Zoey, our Great Dane. The other four, the Greenland Wolf and the dingo among them, simply have no duplication call; that is not the same as proof it is absent.",
+      "Most dogs carry a duplication of this gene that wolves lack, and it is a well-documented sign of domestication. Extra copies of the gene mean more of the enzyme that digests starch, which let early dogs live on grain and food scraps around human settlements. Below, the duplication is called in 8 of the 12 long-read genomes in our structural-variant data, including Zoey, our Great Dane. The other four, including the Greenland Wolf and the dingo, have no duplication call, and a missing call does not show that the duplication is absent.",
   },
   {
     theme: 'Aging',
@@ -135,9 +135,9 @@ const MORE_STORIES: MoreStory[] = [
     gene: 'IGF1',
     diagram: 'aging',
     browser: 'none',
-    hook: "Big dogs don't just live shorter lives. A new study shows their DNA ages faster.",
+    hook: 'Big dogs live shorter lives, and a new study finds that their DNA ages faster.',
     intro:
-      "Small breeds can live up to twice as long as giant ones. The Dog Aging Project (Mariner, McCoy et al., Science, October 2026) asked whether big dogs simply die earlier or really age faster. They measured methylation, chemical tags on DNA that change predictably with age, in 1,640 blood samples from 894 pet dogs, and found that larger dogs, and males, age faster by this molecular clock. The biggest differences were not in genes but in transposons, the 'jumping genes' that make up a large share of the genome: they lose tags with age, which can wake them up, and they lose them faster in larger dogs, most of all in the youngest LINE-1 families. The authors caution that this is a pattern in tags, not proof of cause: they did not measure transposon activity. The pictures above use the study's public data.",
+      "Small breeds can live up to twice as long as giant ones. The Dog Aging Project (Mariner, McCoy et al., Science, October 2026) asked whether big dogs die earlier or age faster. They measured methylation, chemical tags on DNA that change predictably with age, in 1,640 blood samples from 894 pet dogs, and found that larger dogs, and males, age faster by this molecular clock. The biggest differences were in transposons, the 'jumping genes' that make up a large share of the genome. Transposons lose tags with age, which can wake them up, and they lose tags faster in larger dogs, most of all in the youngest LINE-1 families. The authors caution that the pattern in tags does not show cause, because they did not measure transposon activity. The pictures above use the study's public data.",
   },
 ]
 
@@ -182,7 +182,7 @@ function StoryStrip({ kind }: { kind: NonNullable<TourStop['strip']> }) {
             stop={58690000}
             genes={[{ name: 'PSMB7', start: 58614281, stop: 58677679 }]}
             markers={[{ pos: 58614853, label: 'T>G (p.V49G)' }]}
-            caption="Two genes on two different chromosomes. Harlequin only shows its effect on top of merle."
+            caption="Two genes on two different chromosomes. Harlequin changes the coat only on top of merle."
           />
         </>
       )
@@ -203,7 +203,7 @@ function StoryStrip({ kind }: { kind: NonNullable<TourStop['strip']> }) {
           }}
           rows={AMY2B_ROWS}
           rowsNote="8 of the 10 dogs have a duplication call. Neither the dingo nor the wolf does."
-          caption="Red bar = duplication called in that sample. Dashed line = no call, which is not the same as absent."
+          caption="Red bar: duplication called in that sample. Dashed line: no call, which does not show the duplication is absent."
         />
       )
   }
@@ -508,8 +508,8 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
             <div className="genome-tour-body">
               <h2 className="genome-tour-title">Take the tour</h2>
               <p className="genome-tour-intro">
-                Three real places in a Great Dane&rsquo;s genome, each with a
-                story worth telling.
+                Three places in a Great Dane&rsquo;s genome, with a story for
+                each.
               </p>
               <div className="genome-tour-cards">
                 {TOUR_STOPS.map(stop => (
@@ -628,7 +628,7 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
                     The blue marker is the published harlequin change (a T
                     swapped for a G in exon 2). Of the 8 Great Danes in the top
                     rows, whose coat colors were not recorded, 2 carry one copy
-                    of the G &mdash; as expected for harlequin dogs, which carry
+                    of the G, as expected for harlequin dogs, which carry
                     exactly one. Among the 1,987 dogs in the Dog10K callset
                     (which has no Great Danes), only a single village dog from
                     Peru has it.
@@ -665,7 +665,7 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
                   >
                     {activeTourStop?.browser === 'optional'
                       ? 'Explore the data in the genome browser (optional)'
-                      : `Open live genome browser${geneEntry ? ` — ${geneEntry.name}` : ''}`}
+                      : `Open live genome browser${geneEntry ? `: ${geneEntry.name}` : ''}`}
                   </button>
                 )}
                 <div className="genome-accordions" key={gene}>
@@ -702,14 +702,14 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
                   <summary>What the live browser shows</summary>
                   <div className="genome-accordion-body">
                     <p>
-                      A real, in-page JBrowse view of the CanFam4 assembly: our
+                      An in-page JBrowse view of the CanFam4 assembly: our
                       curated gene catalog (red) and the full NCBI RefSeq gene
                       annotation.
                       {storyTracks.includes('coat')
                         ? ' Below them, SNP genotypes, one row per dog, at common variant sites in each gene\u2019s region: 8 Great Danes (top, genotyped from Logan\u2019s assembled public sequencing data) against 34 other dogs (32 from 12 breeds, plus 2 wolves). The merle insertion itself is one row at the PMEL site, found by searching each dog\u2019s assembled sequence for the insertion\u2019s junctions. Switch between the two genes above.'
                         : null}
                       {storyTracks.includes('fgf4')
-                        ? ' Below them, the footprint of the FGF4 retrocopy in 38 dogs from 10 breeds. All 19 short-legged dogs (Dachshund, Basset Hound, Cardigan Corgi, Cocker Spaniel, Lhasa Apso) carry two deletions marking the FGF4 gene\u2019s introns, a sign of an extra, intron-free copy elsewhere in the genome. None of the 19 dogs from five large breeds (Mastiff, Saint Bernard, Newfoundland, Scottish Deerhound, Bullmastiff) do. Great Danes are not in this cohort, so these large breeds, which we picked, stand in.'
+                        ? ' Below them, the footprint of the FGF4 retrocopy in 38 dogs from 10 breeds. All 19 short-legged dogs (Dachshund, Basset Hound, Cardigan Corgi, Cocker Spaniel, Lhasa Apso) carry two deletions at the FGF4 introns, which indicate an extra, intron-free copy elsewhere in the genome. None of the 19 dogs from five large breeds (Mastiff, Saint Bernard, Newfoundland, Scottish Deerhound, Bullmastiff) do. Great Danes are not in this cohort, so these large breeds, which we picked, stand in.'
                         : null}
                       {storyTracks.includes('methylation')
                         ? ' Below them, methylation (the share of DNA copies carrying the chemical tag) at the sites the Dog Aging Project sequenced, pooled across 268 dogs under 3 and 377 dogs aged 8 and older.'
@@ -718,10 +718,10 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
                         ? ' Below them, how much methylation each jumping-gene site loses per year of age, in smaller dogs, in larger dogs, and the difference (our analysis of the Dog Aging Project data, split at the median predicted adult size).'
                         : null}
                       {showSvTrack
-                        ? ' Below them, a structural-variant track genotyped across 12 real, named samples (10 dogs, a dingo and a wolf) — one row per sample, grouped by breed, including a Great Dane.'
+                        ? ' Below them, a structural-variant track genotyped in 12 named samples (10 dogs, a dingo and a wolf), with one row per sample, grouped by breed. One of the dogs is a Great Dane.'
                         : storyTracks.length
                           ? null
-                          : ' Stories add extra evidence tracks where they help tell the story.'}
+                          : ' Each story adds the evidence tracks that apply to it.'}
                     </p>
                     {showSvTrack ? (
                       <table className="genome-sv-samples-table">
@@ -815,9 +815,9 @@ export default function Browser({ geneCategories, chromosomes }: BrowserProps) {
           <p className="genome-explore-intro">
             Each bar is one dog chromosome from the CanFam4 reference, drawn to
             scale; the small tick is the centromere, dividing the p (short) and
-            q (long) arms. Colored dots mark genes we&rsquo;ve placed &mdash;
-            hover for details, or click one to read its story above. Pick a
-            story and its genes light up here.
+            q (long) arms. Colored dots mark genes we&rsquo;ve placed. Hover a
+            dot for details, or click it to read the gene&rsquo;s story above.
+            Picking a story lights up its genes here.
           </p>
           <div className="genome-controls">
             <div className="genome-search">
