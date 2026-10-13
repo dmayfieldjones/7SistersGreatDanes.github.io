@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Breed Relatedness Map | 7Sisters Farm</title>
+<script src="/private-gate.js" data-key="breed-map" data-codes="1887"></script>
+<style>
+:root{
+  --page:#f9f9f7;--surface:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--grid:#e1e0d9;--rule:#c3c2b7;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --page:#0d0d0d;--surface:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--grid:#2c2c2a;--rule:#383835;
+}}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{margin:0;background:var(--page);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:1100px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:1.5rem;margin:0 0 4px}
+.sub{color:var(--ink2);margin:0 0 16px;max-width:64ch}
+.panel{background:var(--surface);border:1px solid var(--grid);border-radius:12px}
+.controls{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;padding:10px 14px;margin-bottom:12px}
+.controls label{font-size:.85rem;color:var(--ink2);display:flex;gap:8px;align-items:center}
+.controls select,.controls button{font:inherit;font-size:.9rem;color:var(--ink);background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:5px 10px;cursor:pointer}
+.controls button[aria-pressed="true"]{border-color:var(--ink);font-weight:600}
+input[type=range]{width:min(220px,50vw);accent-color:var(--ink)}
+/* the map is always a night sky, whatever the site theme */
+.stage{position:relative;height:min(70vh,820px);min-height:440px;overflow:hidden;border-radius:12px 12px 0 0;background:radial-gradient(ellipse at 50% 40%,#161a26 0%,#0a0c12 70%);color:#e8e8ee}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+#cv{cursor:grab}#cv.drag{cursor:grabbing}
+#ov{pointer-events:none}
+.tip{position:absolute;pointer-events:none;background:rgba(15,17,25,.94);color:#f0efec;border:1px solid #3a3d4a;border-radius:8px;padding:6px 9px;font-size:.8rem;line-height:1.35;display:none;white-space:nowrap;z-index:3}
+.hint{position:absolute;left:12px;bottom:10px;max-width:40%;font-size:.75rem;color:#8b8ea0;z-index:2}
+.card{position:absolute;right:12px;top:12px;width:min(260px,70%);background:rgba(15,17,25,.9);border:1px solid #3a3d4a;border-radius:10px;padding:12px 14px;font-size:.85rem;display:none;z-index:3}
+.card h2{font-size:1rem;margin:0 0 6px}
+.card dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:2px 12px}
+.card dt{color:#9a9db0}.card dd{margin:0;text-align:right}
+.card button{margin-top:10px;font:inherit;font-size:.8rem;color:#e8e8ee;background:transparent;border:1px solid #3a3d4a;border-radius:6px;padding:3px 10px;cursor:pointer}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;padding:10px 14px;font-size:.85rem;color:var(--ink2)}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.legend i.ring{box-shadow:0 0 0 2px var(--surface),0 0 0 3.5px var(--ink)}
+.legend .ramp{display:inline-block;width:140px;height:10px;border-radius:5px;vertical-align:-1px;margin:0 6px}
+.seqbar{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;padding:10px 14px;margin:0 0 12px}
+.seqbar .sl{display:flex;gap:8px;align-items:center;font-size:.85rem;color:var(--ink2)}
+.seqbar .grow{flex:1;min-width:220px}.seqbar .grow input{flex:1;width:auto}
+.seqbar select,.seqbar button{font:inherit;font-size:.9rem;color:var(--ink);background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:5px 10px;cursor:pointer}
+.seqbar .stepper{display:inline-flex;gap:4px}
+.seqbar .stepper button{padding:5px 9px}
+.seqbar output{min-width:2ch;font-variant-numeric:tabular-nums;color:var(--ink)}
+.seqbar .big{font-size:1.5rem;white-space:nowrap}
+.stage .read{position:absolute;left:12px;bottom:30px;max-width:min(380px,60%);background:rgba(15,17,25,.82);border:1px solid #2c2f3c;border-radius:10px;padding:8px 11px;font-size:.82rem;line-height:1.4;color:#d8d9e2;margin:0;z-index:2;pointer-events:none}
+.curvebox{position:absolute;right:12px;bottom:12px;width:min(300px,46%);background:rgba(15,17,25,.82);border:1px solid #2c2f3c;border-radius:10px;padding:6px 6px 2px;z-index:2}
+#curve,.stage .curvebox canvas{position:static;inset:auto;width:100%;height:150px;display:block}
+@media (max-width:640px){
+  .curvebox{display:none}.hint{display:none}
+  .stage{height:min(118vw,68vh);min-height:0}
+  .stage .read{max-width:calc(100% - 24px);font-size:.74rem;padding:6px 9px;bottom:10px}
+  .seqbar{gap:8px 12px}.seqbar>*{order:3}.seqbar .sl:first-child{order:1;flex:1}.seqbar .sl:first-child select{flex:1;min-width:0}.seqbar .grow{min-width:100%;order:2}
+  .seqbar .big{font-size:1.25rem;margin-left:auto}
+  h1{font-size:1.3rem}.sub{font-size:.92rem}
+  .controls{gap:8px 12px}.controls input[type=range]{width:100%}
+}
+.seq h2{font-size:1.05rem;margin:0 0 2px}
+.seq p{margin:0 0 10px;color:var(--ink2);font-size:.88rem;max-width:70ch}
+.seqctl{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin-bottom:10px}
+.seqctl select,.seqctl button{font:inherit;font-size:.9rem;color:var(--ink);background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:5px 10px;cursor:pointer}
+.seqctl input[type=range]{flex:1;min-width:160px}
+.big{font-size:2rem;font-weight:700;line-height:1.1}
+.read{color:var(--ink2);font-size:.9rem;margin-top:6px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:12px 0}
+.stat{padding:12px 14px}
+.stat b{display:block;font-size:1.5rem;line-height:1.15}
+.stat span{font-size:.8rem;color:var(--ink2)}
+details{margin-top:12px;padding:10px 14px}
+.how ol{margin:10px 0 2px;padding-left:1.2em;color:var(--ink2);font-size:.88rem;max-width:75ch}
+.how li{margin:.5em 0}
+.how b{color:var(--ink)}
+summary{cursor:pointer;font-weight:600}
+table{border-collapse:collapse;width:100%;margin-top:8px;font-size:.88rem}
+th,td{text-align:right;padding:5px 8px;border-bottom:1px solid var(--grid)}
+th:first-child,td:first-child{text-align:left}
+.note{color:var(--ink2);font-size:.85rem;max-width:70ch;margin-top:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Breed relatedness map</h1>
+  <p class="sub">Every Great Dane born 2012&ndash;2020, a stand-in for the population alive and breeding today. Slide to choose how many dogs to sequence.</p>
+
+  <section class="panel seqbar" id="seq" hidden>
+    <label class="sl">Strategy
+      <select id="strat" title="How the dogs to sequence are chosen">
+        <option value="p">Split into k groups</option>
+        <option value="g">Best next dog, one at a time</option>
+        <option value="f">One stand-in per family</option>
+      </select>
+    </label>
+    <label class="sl grow">Dogs to sequence <input type="range" id="nseq" min="0" max="40" value="0"><output id="nv">0</output></label>
+    <span class="stepper"><button id="prev" type="button" aria-label="One fewer dog">&#9664;</button><button id="next" type="button" aria-label="One more dog">&#9654;</button></span>
+    <button id="play" type="button">Play</button>
+    <div class="big" id="cov-big" title="Share of dogs with a sequenced dog at half-sibling level or closer">&mdash;</div>
+  </section>
+
+  <div class="panel">
+    <div class="stage" id="stage">
+      <canvas id="cv" role="img" aria-label="Map of Great Dane families by pedigree relatedness. A table of family summaries follows below."></canvas>
+      <canvas id="ov" aria-hidden="true"></canvas>
+      <div class="tip" id="tip"></div>
+      <div class="card" id="card"></div>
+      <div class="read" id="cov-read"></div>
+      <div class="curvebox"><canvas id="curve" role="img" aria-label="Share of dogs with a sequenced close relative, against number of dogs sequenced, for the three strategies"></canvas></div>
+      <div class="hint">Scroll to zoom &middot; drag to pan &middot; click an island for its numbers</div>
+    </div>
+    <div class="legend" id="legend"></div>
+  </div>
+
+  <div class="panel controls" style="margin:12px 0 0">
+    <label>Color by
+      <select id="mode">
+        <option value="fam">Coat family</option>
+        <option value="F">Inbreeding</option>
+        <option value="yr">Birth year</option>
+      </select>
+    </label>
+    <label>Born up to <input type="range" id="year" aria-describedby="yv"><output id="yv"></output></label>
+    <button id="find" type="button" aria-pressed="true">Litter labels</button>
+    <button id="shake" type="button">Shake</button>
+    <button id="alive" type="button" aria-pressed="false">Keep moving</button>
+    <button id="reset" type="button">Reset view</button>
+  </div>
+
+
+
+  <div class="stats">
+    <div class="panel stat"><b id="s-n"></b><span>dogs shown</span></div>
+    <div class="panel stat"><b id="s-k"></b><span>distinct families</span></div>
+    <div class="panel stat"><b id="s-f"></b><span>average inbreeding</span></div>
+    <div class="panel stat"><b id="s-hi"></b><span>with inbreeding above 12.5%<br>(a half-sibling mating)</span></div>
+  </div>
+
+  <details class="panel">
+    <summary>Table view</summary>
+    <table id="tbl"><thead><tr><th>Family</th><th>Dogs</th><th>Average inbreeding</th><th>Median birth year</th></tr></thead><tbody></tbody></table>
+  </details>
+
+  <details class="panel how">
+    <summary>How this was made</summary>
+    <ol>
+      <li><b>What "covered" means.</b> A dog is covered when a sequenced dog is at half-sibling level or closer (relatedness 0.25 or more), so its genome can be filled in from that relative. The window of birth years 2012 to 2020 stands in for the dogs alive and breeding today; the most recent years are thin because registrations lag.</li>
+      <li><b>The pedigree.</b> A pedigree database export of show-bred Great Danes born 2012 to 2020, plus the ancestors of those dogs, with a few close relatives of ours added from our own records. Dogs with both parents recorded are kept. Our own litters, born or planned after 2020, are added as one node per litter.</li>
+      <li><b>Relatedness.</b> For every pair of dogs, the expected share of genes identical by descent, computed from the whole recorded pedigree (up to 77 generations back). The same calculation gives each dog's inbreeding. Because it counts every recorded generation, these figures run higher than the 10-generation figures on the pedigree explorers.</li>
+      <li><b>Families.</b> Dogs are grouped by average-linkage clustering on relatedness. Groups above 600 dogs are split again. Each group is named for its dominant coat.</li>
+      <li><b>The map.</b> Families are placed as islands, pushed apart or pulled together by how many close relatives they share. Inside an island, each dog is a particle held by springs to its four closest relatives. The layout is settled ahead of time, then the physics keeps running in your browser, so you can drag and shake it.</li>
+      <li><b>Splitting into k groups.</b> Like k-means, but the center of each group must be a real dog and distance is kinship. Start with one group. Each step divides the group where two centers raise average relatedness the most, with each family moving as a whole so groups line up with the islands. A group's center is the dog at half-sibling level or closer to the most of its members, and that dog is the one to sequence.</li>
+      <li><b>Sequencing.</b> A dog counts as covered when a sequenced dog is at half-sibling level (relatedness 0.25) or closer. "Best next dog" greedily picks the dog that covers the most uncovered dogs. "One per family" takes a stand-in from each family, biggest first.</li>
+      <li><b>Keeping it small and anonymous.</b> The page carries only a position, birth year, coat family, family number, and inbreeding figure per dog, in a shuffled order, with the links packed as 16-bit numbers. No names, registrations, or kennels are included, except for our own eight nodes.</li>
+    </ol>
+  </details>
+</div>
+
+<script>/*D3FORCE*/</script>
+<script>
+/*DATA*/
+(function(){
+const d64=(s,T)=>{const b=atob(s),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return new T(u.buffer)}
+const n=DATA.n,m=DATA.m,ext=DATA.ext,SC=ext/30000
+const X=d64(DATA.x,Int16Array),Y=d64(DATA.y,Int16Array),YR=d64(DATA.yr,Uint8Array),F=d64(DATA.F,Uint8Array),FAM=d64(DATA.fam,Uint8Array),OUR=d64(DATA.our,Uint8Array),CL=d64(DATA.cl,Uint8Array)
+const COV=DATA.cov&&{close:DATA.cov.close,
+  g:{first:d64(DATA.cov.g.first,Uint8Array),rank:d64(DATA.cov.g.rank,Uint8Array),frac:DATA.cov.g.frac,mean:DATA.cov.g.mean,new:DATA.cov.g.new},
+  f:{first:d64(DATA.cov.f.first,Uint8Array),rank:d64(DATA.cov.f.rank,Uint8Array),frac:DATA.cov.f.frac,mean:DATA.cov.f.mean,new:DATA.cov.f.new}}
+const GRP=DATA.grp&&{final:d64(DATA.grp.final,Uint8Array),parent:DATA.grp.parent,reps:DATA.grp.reps,frac:DATA.grp.frac,mean:DATA.grp.mean}
+let GK=null,GKk=0
+const gcolor=g=>{let h=(g*137.508)%360;if(h>335||h<22)h=(h+50)%360;return`hsl(${h|0},${g%2?72:62}%,${g%3===0?64:g%3===1?56:70}%)`}
+// group id of every dog at level k: walk each dog's final group up its split history until it exists
+function groupsAt(k){
+  if(GKk===k&&GK)return GK
+  const out=new Uint8Array(n),up=GRP.parent
+  for(let i=0;i<n;i++){let g=GRP.final[i];while(g>=k)g=up[g];out[i]=g}
+  GK=out;GKk=k;return out
+}
+const OURS=new Map((DATA.ours||[]).map(o=>[o.i,o]))
+let spot=true
+let strat='g',NSEQ=0
+const E=d64(DATA.e,Uint16Array),EW=d64(DATA.ew,Uint8Array)
+const COATS=['Mixed / unrecorded','Fawn & brindle','Blue','Harlequin & mantle','Black']
+// night-sky palette (map is always dark): categorical coat colors, validated slots
+const COATC=['#8b8ea0','#f2b134','#4c9bf0','#ef86b0','#9a8cf2']
+const RAMP=[[40,60,110],[60,110,200],[90,160,240],[200,225,255],[255,250,235]]
+const ramp=t=>{t=Math.max(0,Math.min(1,t));const p=t*(RAMP.length-1),i=Math.min(RAMP.length-2,Math.floor(p)),f=p-i,a=RAMP[i],b=RAMP[i+1];return`rgb(${a[0]+(b[0]-a[0])*f|0},${a[1]+(b[1]-a[1])*f|0},${a[2]+(b[2]-a[2])*f|0})`}
+
+// families: [x,y,r,n,meanF%,medianYear,topCoat,hasOurs]
+const FAMS=DATA.fams.map((f,c)=>({c,x:f[0]*SC,y:f[1]*SC,r:f[2]*SC,n:f[3],F:f[4],yr:f[5],coat:f[6],ours:f[7]}))
+const perCoat={};FAMS.slice().sort((a,b)=>b.n-a.n).forEach(f=>{if(f.c===0){f.name='Smaller groups';return}
+  perCoat[f.coat]=(perCoat[f.coat]||0)+1;f.name=COATS[f.coat].replace(' / unrecorded','').replace(' & brindle',' &amp; brindle')+' '+perCoat[f.coat]})
+const nodes=new Array(n),links=new Array(m),deg=new Uint16Array(n)
+for(let i=0;i<n;i++)nodes[i]={i,hx:X[i]*SC,hy:Y[i]*SC,x:0,y:0,yr:YR[i]+1990,F:F[i]/400,fam:FAM[i],our:OUR[i],cl:CL[i]}
+for(let k=0;k<m;k++){links[k]={source:E[2*k],target:E[2*k+1],w:EW[k]/200};deg[E[2*k]]++;deg[E[2*k+1]]++}
+const acc=FAMS.map(()=>({x:0,y:0,n:0}))
+nodes.forEach(d=>{const a=acc[d.cl];a.x+=d.hx;a.y+=d.hy;a.n++})
+FAMS.forEach((f,i)=>{const a=acc[i];if(a.n){f.cx=a.x/a.n;f.cy=a.y/a.n;let s=0;nodes.forEach(d=>{if(d.cl===i)s+=(d.hx-f.cx)**2+(d.hy-f.cy)**2});f.sp=Math.sqrt(s/a.n)*1.8}})
+const LABEL_ORDER=FAMS.slice().sort((a,b)=>b.n-a.n)
+const minY=Math.min(...nodes.map(d=>d.yr).filter(Boolean)),maxY=Math.max(...nodes.map(d=>d.yr))
+const $=id=>document.getElementById(id)
+const cv=$('cv'),ctx=cv.getContext('2d'),ov=$('ov'),octx=ov.getContext('2d'),stage=$('stage'),tip=$('tip'),card=$('card')
+let W=0,H=0,dpr=1,T={k:1,x:0,y:0},year=maxY,mode='fam',alive=false,hover=null,dragNode=null,panning=null,dirty=true,sel=-1,anim=null,intro=0
+
+const yearEl=$('year');yearEl.min=minY;yearEl.max=maxY;yearEl.value=maxY
+function fit(){
+  W=stage.clientWidth;H=stage.clientHeight;dpr=Math.min(2,window.devicePixelRatio||1)
+  for(const c of[cv,ov]){c.width=W*dpr;c.height=H*dpr}
+  T={k:Math.min(W,H)/(2*ext*1.02),x:W/2,y:H/2};dirty=true
+}
+const toW=(x,y)=>[(x-T.x)/T.k,(y-T.y)/T.k]
+const vis=d=>d.yr<=year
+const colorOf=d=>mode==='fam'?COATC[d.fam]:mode==='F'?ramp(d.F/0.3):ramp((d.yr-minY)/(maxY-minY||1))
+
+function draw(){
+  dirty=false
+  ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H)
+  // family glows: soft discs under each island
+  ctx.globalCompositeOperation='lighter'
+  for(const f of FAMS){
+    if(!f.n)continue
+    const x=(f.cx??f.x)*T.k+T.x,y=(f.cy??f.y)*T.k+T.y,r=Math.max(f.r,f.sp||0)*T.k*1.3
+    if(x<-r||y<-r||x>W+r||y>H+r)continue
+    const g=ctx.createRadialGradient(x,y,0,x,y,r)
+    const a=(sel<0||sel===f.c)?0.16:0.05
+    g.addColorStop(0,`rgba(120,150,255,${a})`);g.addColorStop(1,'rgba(120,150,255,0)')
+    ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r,0,6.2832);ctx.fill()
+  }
+  // links
+  for(const same of[false,true]){
+    ctx.lineWidth=.6;ctx.strokeStyle=same?'rgba(150,170,255,.16)':'rgba(150,170,255,.045)';ctx.beginPath()
+    for(const l of links){const s=l.source,t=l.target;if((s.cl===t.cl)!==same||!vis(s)||!vis(t))continue
+      if(sel>=0&&s.cl!==sel&&t.cl!==sel)continue
+      ctx.moveTo(s.x*T.k+T.x,s.y*T.k+T.y);ctx.lineTo(t.x*T.k+T.x,t.y*T.k+T.y)}
+    ctx.stroke()
+  }
+  // dots (normal blending so dense areas keep their color)
+  ctx.globalCompositeOperation='source-over'
+  const r=Math.max(1.2,Math.min(4.5,1.1*Math.sqrt(T.k*8)))
+  ctx.globalAlpha=1
+  const byColor=new Map()
+  for(const d of nodes){
+    if(!vis(d))continue
+    const x=d.x*T.k+T.x,y=d.y*T.k+T.y
+    if(x<-8||y<-8||x>W+8||y>H+8)continue
+    let dim=sel>=0&&d.cl!==sel
+    let c
+    if(strat==='p'&&GRP){c=gcolor(groupsAt(Math.max(1,NSEQ))[d.i])}
+    else{if(COV&&NSEQ>0){const f=COV[strat].first[d.i];if(!(f>0&&f<=NSEQ))dim=true}
+      c=colorOf(d)}
+    const key=c+(dim?'d':'')
+    let a=byColor.get(key);if(!a){a={c,dim,p:[]};byColor.set(key,a)}
+    a.p.push(x,y)
+  }
+  for(const a of byColor.values()){
+    ctx.globalAlpha=a.dim?.15:(spot?.62:.78);ctx.fillStyle=a.c;ctx.beginPath()
+    for(let i=0;i<a.p.length;i+=2){ctx.moveTo(a.p[i]+r,a.p[i+1]);ctx.arc(a.p[i],a.p[i+1],r,0,6.2832)}
+    ctx.fill()
+  }
+  ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over'
+}
+const pulseT=t=>(Math.sin(t/300)+1)/2
+function drawOverlay(t){
+  octx.setTransform(dpr,0,0,dpr,0,0);octx.clearRect(0,0,W,H)
+  octx.textAlign='center';octx.textBaseline='middle'
+  // family labels, biggest first; a label is skipped if it would sit on one already placed
+  const placed=[],base=Math.min(W,H)/(2*ext*1.02),zoom=T.k/base
+  for(const f of LABEL_ORDER){
+    if(!f.n||f.cx===undefined)continue
+    const x=f.cx*T.k+T.x,y=f.cy*T.k+T.y,rr=f.sp*T.k
+    if(x<-60||x>W+60||y<-20||y>H+20)continue
+    if(f.n<150&&zoom<1.5)continue
+    if(W<500&&f.n<400&&zoom<2)continue
+    if(f.n<90&&zoom<2.4)continue
+    const fs=Math.max(10,Math.min(15,10+Math.log2(f.n/60)*1.4))*(W<500?.82:1)
+    const tag=f.name.replace(/&amp;/g,'&'),txt=tag+' \u00b7 '+f.n.toLocaleString()
+    octx.font=`600 ${fs}px system-ui,sans-serif`
+    const w=octx.measureText(txt).width,h=fs+4,ly=y-Math.min(rr,60*zoom+30)-h*.4
+    const lx=Math.max(w/2+8,Math.min(W-w/2-8,x))
+    const box=[lx-w/2-4,ly-h/2,lx+w/2+4,ly+h/2]
+    if(placed.some(q=>box[0]<q[2]&&box[2]>q[0]&&box[1]<q[3]&&box[3]>q[1]))continue
+    placed.push(box)
+    octx.fillStyle='rgba(8,10,16,.55)';octx.fillRect(box[0],box[1],box[2]-box[0],box[3]-box[1])
+    octx.fillStyle=sel<0||sel===f.c?'rgba(240,242,252,.95)':'rgba(240,242,252,.35)'
+    octx.fillText(txt,lx,ly)
+  }
+  // sequenced dogs: diamonds, numbered while there are few
+  if(strat==='p'&&GRP){
+    const k=Math.max(1,NSEQ),reps=GRP.reps[k-1],gk=groupsAt(k)
+    reps.forEach((j,g)=>{const d=nodes[j];if(!vis(d))return
+      const x=d.x*T.k+T.x,y=d.y*T.k+T.y,s=7+(g===k-1&&k>1?2*pulseT(t):0)
+      octx.fillStyle=gcolor(g);octx.strokeStyle='#fff';octx.lineWidth=2
+      octx.beginPath();octx.moveTo(x,y-s);octx.lineTo(x+s,y);octx.lineTo(x,y+s);octx.lineTo(x-s,y);octx.closePath();octx.fill();octx.stroke()
+      if(k<=12){octx.font='600 11px system-ui,sans-serif';octx.fillStyle='#fff';octx.fillText(String(g+1),x,y-s-8)}})
+  }else if(COV&&NSEQ>0){
+    const rk=COV[strat].rank
+    for(const d of nodes){
+      const r=rk[d.i];if(!r||r>NSEQ||!vis(d))continue
+      const x=d.x*T.k+T.x,y=d.y*T.k+T.y,s=6
+      octx.fillStyle='#fff';octx.strokeStyle='#0a0c12';octx.lineWidth=1.5
+      octx.beginPath();octx.moveTo(x,y-s);octx.lineTo(x+s,y);octx.lineTo(x,y+s);octx.lineTo(x-s,y);octx.closePath();octx.fill();octx.stroke()
+      if(NSEQ<=12){octx.font='600 11px system-ui,sans-serif';octx.fillStyle='#fff';octx.fillText(String(r),x,y-s-8)}
+    }
+  }
+  // where a hovered dog of ours comes from: lines to its closest relatives
+  if(hover&&hover.our&&OURS.has(hover.i)){
+    const o=OURS.get(hover.i),hx=hover.x*T.k+T.x,hy=hover.y*T.k+T.y
+    for(const [j,w] of o.rel){
+      const q=nodes[j];if(!vis(q))continue
+      const x=q.x*T.k+T.x,y=q.y*T.k+T.y
+      octx.strokeStyle=`rgba(255,255,255,${.15+.5*Math.min(1,w)})`;octx.lineWidth=.8+1.6*Math.min(1,w)
+      octx.beginPath();octx.moveTo(hx,hy);octx.lineTo(x,y);octx.stroke()
+      octx.fillStyle='#fff';octx.beginPath();octx.arc(x,y,2.6,0,6.2832);octx.fill()
+    }
+  }
+  // our dogs: always brand red with a white ring; names when the toggle is on
+  const RED='#bf141c',REDL='#ff3b44',pulse=(Math.sin(t/450)+1)/2
+  const mine=[]
+  for(const d of nodes){
+    if(!d.our||!vis(d))continue
+    const o=OURS.get(d.i),x=d.x*T.k+T.x,y=d.y*T.k+T.y,lit=o&&/litter/i.test(o.name)
+    mine.push({d,o,x,y})
+    const gr=octx.createRadialGradient(x,y,0,x,y,13+5*pulse)
+    gr.addColorStop(0,'rgba(255,59,68,.4)');gr.addColorStop(1,'rgba(255,59,68,0)')
+    octx.fillStyle=gr;octx.beginPath();octx.arc(x,y,13+5*pulse,0,6.2832);octx.fill()
+    octx.fillStyle=RED;octx.strokeStyle='#fff';octx.lineWidth=2
+    octx.beginPath()
+    if(lit){octx.rect(x-6,y-6,12,12)}else{octx.arc(x,y,6.5,0,6.2832)}
+    octx.fill();octx.stroke()
+  }
+  if(spot&&mine.length){
+    // each name sits beside its dog; labels that would overlap are nudged down
+    mine.sort((p,q)=>p.y-q.y)
+    octx.font=`600 ${W<500?10.5:12}px system-ui,sans-serif`;octx.textAlign='left';octx.textBaseline='middle'
+    const boxes=[]
+    for(const m of mine){
+      // litters only; Mia stands for her litter of five. Individual names show on hover.
+      const nm=m.o&&m.o.name||'',from=(m.o&&m.o.note||'').match(/^From the (.*litter)/i)
+      const label=(/litter/i.test(nm)?nm:from?from[1]:'').replace(/ \(.*\)/,'')
+      if(!label)continue
+      const w=octx.measureText(label).width+14
+      let lx=m.x+16,ly=m.y-16
+      if(lx+w>W-6)lx=m.x-16-w
+      ly=Math.max(14,Math.min(H-14,ly))
+      for(let k=0;k<40&&boxes.some(q=>lx<q[2]&&lx+w>q[0]&&ly-10<q[3]&&ly+10>q[1]);k++)ly+=22
+      boxes.push([lx,ly-10,lx+w,ly+10])
+      octx.strokeStyle='rgba(255,255,255,.6)';octx.lineWidth=1
+      octx.beginPath();octx.moveTo(m.x,m.y);octx.lineTo(lx<m.x?lx+w:lx,ly);octx.stroke()
+      octx.fillStyle='#bf141c';octx.beginPath();octx.roundRect(lx,ly-10,w,20,10);octx.fill()
+      octx.strokeStyle='#fff';octx.stroke()
+      octx.fillStyle='#fff';octx.fillText(label,lx+7,ly)
+    }
+    octx.textAlign='center'
+  }
+  if(hover&&vis(hover)){const x=hover.x*T.k+T.x,y=hover.y*T.k+T.y;octx.strokeStyle='#fff';octx.lineWidth=1.5;octx.beginPath();octx.arc(x,y,6,0,6.2832);octx.stroke()}
+}
+
+// start scattered, then ease into the settled layout
+function intro0(){
+  const R=ext*1.1
+  nodes.forEach(d=>{const a=Math.random()*6.2832,r=R*Math.sqrt(Math.random());d.sx=r*Math.cos(a);d.sy=r*Math.sin(a);d.x=d.sx;d.y=d.sy})
+  const t0=performance.now()
+  anim=function(now){
+    const t=Math.min(1,(now-t0)/2600),e=1-Math.pow(1-t,3)
+    nodes.forEach(d=>{d.x=d.sx+(d.hx-d.sx)*e;d.y=d.sy+(d.hy-d.sy)*e})
+    dirty=true
+    if(t>=1){anim=null;startSim()}
+  }
+}
+let sim
+function startSim(){
+  nodes.forEach(d=>{d.x=d.hx;d.y=d.hy;d.vx=d.vy=0})
+  sim=d3.forceSimulation(nodes)
+    .force('link',d3.forceLink(links).distance(l=>6+40*(.5-Math.min(l.w,.5))).strength(l=>l.source.cl===l.target.cl?.3:.015).iterations(1))
+    .force('charge',d3.forceManyBody().strength(-6).distanceMax(70).theta(.9))
+    .force('collide',d3.forceCollide(1.6))
+    .force('x',d3.forceX(d=>FAMS[d.cl].x).strength(.22)).force('y',d3.forceY(d=>FAMS[d.cl].y).strength(.22))
+    .alphaDecay(.04).velocityDecay(.35).alpha(0).stop()
+  sim.on('tick',()=>{if(alive)for(const d of nodes){d.vx+=(Math.random()-.5)*.9;d.vy+=(Math.random()-.5)*.9};dirty=true})
+}
+function wake(a){if(!sim)return;sim.alphaTarget(alive?0.03:0).alpha(Math.max(sim.alpha(),a));sim.restart()}
+
+function pick(mx,my){
+  const [wx,wy]=toW(mx,my)
+  for(const d of nodes){if(!d.our||!vis(d))continue;const dx=(d.x-wx)*T.k,dy=(d.y-wy)*T.k;if(dx*dx+dy*dy<18*18)return d}
+  let best=null,bd=(10/T.k)**2
+  for(const d of nodes){if(!vis(d))continue;const dx=d.x-wx,dy=d.y-wy,q=dx*dx+dy*dy;if(q<bd){bd=q;best=d}}
+  return best
+}
+function famAt(mx,my){
+  const [wx,wy]=toW(mx,my);let best=-1,bd=1e18
+  for(const f of FAMS){if(!f.n)continue;const q=(f.cx-wx)**2+(f.cy-wy)**2;if(q<(f.sp*1.1)**2&&q<bd){bd=q;best=f.c}}
+  return best
+}
+const pos=e=>{const r=cv.getBoundingClientRect();return[e.clientX-r.left,e.clientY-r.top]}
+let down=null
+cv.addEventListener('pointerdown',e=>{
+  if(anim)return
+  const [mx,my]=pos(e);cv.setPointerCapture(e.pointerId);down={mx,my,moved:false}
+  const d=pick(mx,my)
+  if(d){dragNode=d;d.fx=d.x;d.fy=d.y}else panning={mx,my,x:T.x,y:T.y}
+  cv.classList.add('drag')
+})
+cv.addEventListener('pointermove',e=>{
+  const [mx,my]=pos(e)
+  if(down&&(Math.abs(mx-down.mx)+Math.abs(my-down.my)>4))down.moved=true
+  if(dragNode){if(down.moved){const [wx,wy]=toW(mx,my);dragNode.fx=wx;dragNode.fy=wy;wake(.3)}return}
+  if(panning){T.x=panning.x+mx-panning.mx;T.y=panning.y+my-panning.my;dirty=true;return}
+  const h=anim?null:pick(mx,my)
+  hover=h;showTip(h,mx,my)
+})
+function end(e){
+  const wasClick=down&&!down.moved
+  if(dragNode){dragNode.fx=dragNode.fy=null;dragNode=null;wake(.2)}
+  panning=null;cv.classList.remove('drag')
+  if(wasClick&&e&&e.type==='pointerup'){const [mx,my]=pos(e);select(famAt(mx,my))}
+  down=null
+}
+cv.addEventListener('pointerup',end);cv.addEventListener('pointercancel',end)
+cv.addEventListener('pointerleave',()=>{hover=null;tip.style.display='none'})
+cv.addEventListener('wheel',e=>{
+  e.preventDefault();const [mx,my]=pos(e),f=Math.exp(-e.deltaY*.0015),k=Math.max(.2,Math.min(60,T.k*f))
+  T.x=mx-(mx-T.x)*(k/T.k);T.y=my-(my-T.y)*(k/T.k);T.k=k;dirty=true
+},{passive:false})
+function showTip(d,mx,my){
+  if(!d){tip.style.display='none';return}
+  const o=d.our&&OURS.get(d.i)
+  let extra=''
+  if(o&&o.rel.length){
+    const c={};o.rel.forEach(([j])=>{const f=FAMS[nodes[j].cl].name.replace(/&amp;/g,'&');c[f]=(c[f]||0)+1})
+    extra='<br><span style="color:#9a9db0">Closest '+o.rel.length+' relatives:</span><br>'+Object.entries(c).sort((a,b)=>b[1]-a[1]).slice(0,4).map(([f,k])=>k+' in '+f).join('<br>')
+  }
+  tip.innerHTML=(o?`<b style="font-size:.95rem">${o.name||'One of ours'}</b><br>`:'')+`${o&&o.note?o.note:'Born '+d.yr} &middot; ${COATS[d.fam]}<br>Inbreeding ${(d.F*100).toFixed(1)}% &middot; ${FAMS[d.cl].name.replace(/&amp;/g,'&')}`+extra
+  tip.style.display='block'
+  tip.style.left=Math.min(W-tip.offsetWidth-8,mx+14)+'px';tip.style.top=Math.max(4,my-tip.offsetHeight-10)+'px'
+}
+function select(c){
+  sel=c<0||c===sel?-1:c
+  if(sel<0){card.style.display='none';dirty=true;return}
+  const f=FAMS[sel];let hi=0,cnt=0
+  for(const d of nodes)if(d.cl===sel&&vis(d)){cnt++;if(d.F>=.125)hi++}
+  card.innerHTML=`<h2>${f.name}</h2><dl><dt>Dogs</dt><dd>${f.n.toLocaleString()}</dd><dt>Average inbreeding</dt><dd>${f.F.toFixed(1)}%</dd><dt>Above 12.5%</dt><dd>${(100*hi/(cnt||1)).toFixed(0)}%</dd><dt>Median birth year</dt><dd>${f.yr||'n/a'}</dd><dt>Most common coat</dt><dd>${COATS[f.coat]}</dd>${f.ours?'<dt>Includes</dt><dd>our dogs</dd>':''}</dl><button type="button" id="close">Clear</button>`
+  card.style.display='block';$('close').onclick=()=>select(-1)
+  zoomTo(f.cx,f.cy,Math.min(W,H)/(Math.max(f.sp,f.r)*3))
+  dirty=true
+}
+function zoomTo(x,y,k){
+  const from={...T},to={k,x:W/2-x*k,y:H/2-y*k},t0=performance.now()
+  ;(function step(now){const t=Math.min(1,(now-t0)/600),e=1-Math.pow(1-t,3)
+    T.k=from.k+(to.k-from.k)*e;T.x=from.x+(to.x-from.x)*e;T.y=from.y+(to.y-from.y)*e;dirty=true
+    if(t<1)requestAnimationFrame(step)})(t0)
+}
+
+function drawCurve(){
+  const c=$('curve');if(!c||!COV)return
+  const w=c.clientWidth,h=c.clientHeight,d=Math.min(2,window.devicePixelRatio||1)
+  if(c.width!==w*d||c.height!==h*d){c.width=w*d;c.height=h*d}
+  const g=c.getContext('2d');g.setTransform(d,0,0,d,0,0);g.clearRect(0,0,w,h)
+  const ink='#e8e8ee',ink2='#9a9db0',grid='#2c2e3a'
+  const L=30,R=8,Tp=8,B=20,pw=w-L-R,ph=h-Tp-B,max=Math.min(strat==='p'?60:40,(strat==='p'&&GRP?GRP.frac:COV.g.frac).length)
+  const px=k=>L+pw*k/max,py=v=>Tp+ph*(1-v)
+  g.font='10px system-ui,sans-serif';g.textBaseline='middle';g.textAlign='right';g.lineWidth=1
+  for(let v=0;v<=1.001;v+=.25){g.strokeStyle=grid;g.beginPath();g.moveTo(L,py(v));g.lineTo(w-R,py(v));g.stroke();g.fillStyle=ink2;g.fillText(Math.round(v*100)+'%',L-6,py(v))}
+  g.textAlign='center';g.textBaseline='top'
+  for(const k of(max>40?[0,10,20,30,40,50,60]:[0,10,20,30,40])){if(k>max)continue;g.fillStyle=ink2;g.fillText(k,px(k),h-B+6)}
+  const fr=key=>key==='p'?GRP.frac:COV[key].frac
+  const line=(key,col,dash)=>{const a=fr(key);g.strokeStyle=col;g.lineWidth=2.2;g.setLineDash(dash);g.beginPath();g.moveTo(px(0),py(0))
+    a.slice(0,max).forEach((v,i)=>g.lineTo(px(i+1),py(v)));g.stroke();g.setLineDash([])}
+  const NAMES={g:'best next dog',f:'one per family',p:'split into groups'}
+  const keys=GRP?['g','f','p']:['g','f']
+  for(const kk of keys)if(kk!==strat)line(kk,ink2,[5,4])
+  line(strat,'#5aa2ff',[])
+  g.textAlign='left';g.textBaseline='middle';g.font='600 10px system-ui,sans-serif'
+  keys.forEach((kk,i)=>{const a=fr(kk),at=Math.floor(max*(.2+.22*i)),yy=py(a[Math.min(at,a.length-1)])+(kk===strat?15:-11)
+    g.fillStyle=kk===strat?'#5aa2ff':ink2;g.fillText(NAMES[kk],px(max*(.2+.22*i)),yy)})
+  if(NSEQ>0){const v=fr(strat)[NSEQ-1],x=px(NSEQ),y=py(v)
+    g.strokeStyle=ink;g.lineWidth=1;g.setLineDash([3,3]);g.beginPath();g.moveTo(x,y);g.lineTo(x,Tp+ph);g.stroke();g.setLineDash([])
+    g.fillStyle='#5aa2ff';g.strokeStyle=ink;g.lineWidth=2;g.beginPath();g.arc(x,y,5,0,6.2832);g.fill();g.stroke()}
+}
+function seqReadout(){
+  if(!COV)return
+  $('nv').textContent=NSEQ
+  const big=$('cov-big'),rd=$('cov-read')
+  if(NSEQ===0&&strat!=='p'){big.textContent='0%';rd.textContent='Nothing sequenced yet. Slide right or press Play.'}
+  else if(strat==='p'){
+    const k=Math.max(1,NSEQ),gk=groupsAt(k),cnt=new Array(k).fill(0)
+    for(let i=0;i<n;i++)cnt[gk[i]]++
+    const v=GRP.frac[k-1],mv=GRP.mean[k-1],sz=cnt.slice().sort((a,b)=>b-a)
+    big.textContent=(100*v).toFixed(0)+'% covered'
+    let msg=`Sequence the ${k} dog${k>1?'s':''} marked by diamonds and ${(100*v).toFixed(0)}% of all dogs have a close relative (half-sibling level or nearer) among them.`
+    if(k>1){const a=cnt[GRP.parent[k-1]],b=cnt[k-1];msg+=` Newest split: a group of ${(a+b).toLocaleString()} became ${a.toLocaleString()} and ${b.toLocaleString()}.`}
+    rd.textContent=msg}
+  else{const v=COV[strat].frac[NSEQ-1],nw=COV[strat].new[NSEQ-1],tot=COV.g.first.length
+    big.textContent=(100*v).toFixed(0)+'% covered'
+    rd.textContent=`Sequence the ${NSEQ} dog${NSEQ>1?'s':''} marked by diamonds and ${(100*v).toFixed(0)}% of all dogs have a close relative (half-sibling level or nearer) among them. The newest pick added ${nw.toLocaleString()} dogs.`}
+  drawCurve()
+}
+let playT=null
+function setN(k){NSEQ=Math.max(+$('nseq').min,Math.min(+$('nseq').max,k));$('nseq').value=NSEQ;seqReadout();dirty=true}
+if(COV){
+  $('seq').hidden=false
+  $('nseq').max=Math.min(40,COV.g.frac.length)
+  if(!GRP)$('strat').querySelector('option[value=p]').remove()
+  if(GRP){strat='p';$('strat').value='p';$('nseq').min=1;$('nseq').max=Math.min(60,GRP.frac.length);NSEQ=1;$('nseq').value=1;seqReadout();legend()}
+  $('nseq').addEventListener('input',e=>{stopPlay();setN(+e.target.value)})
+  $('strat').addEventListener('change',e=>{stopPlay();strat=e.target.value
+    const p=strat==='p'
+    $('nseq').min=p?1:0;$('nseq').max=p?Math.min(60,GRP.frac.length):Math.min(40,COV.g.frac.length)
+    setN(Math.max(+$('nseq').min,Math.min(NSEQ,+$('nseq').max)));legend()})
+  function stopPlay(){if(playT){clearInterval(playT);playT=null;$('play').textContent='Play'}}
+  $('prev').addEventListener('click',()=>{stopPlay();setN(NSEQ-1)})
+  $('next').addEventListener('click',()=>{stopPlay();setN(NSEQ+1)})
+  $('play').addEventListener('click',()=>{
+    if(playT){stopPlay();return}
+    if(NSEQ>=+$('nseq').max)setN(+$('nseq').min)
+    $('play').textContent='Pause'
+    playT=setInterval(()=>{if(NSEQ>=+$('nseq').max){stopPlay();return}setN(NSEQ+1)},350)
+  })
+  addEventListener('resize',drawCurve)
+}
+function stats(){
+  let c=0,sf=0,hi=0;const ks=new Set(),byF=FAMS.map(()=>({n:0,f:0,y:[]}))
+  for(const d of nodes){if(!vis(d))continue;c++;sf+=d.F;if(d.F>=.125)hi++;if(d.cl)ks.add(d.cl);const b=byF[d.cl];b.n++;b.f+=d.F;b.y.push(d.yr)}
+  $('s-n').textContent=c.toLocaleString();$('s-k').textContent=ks.size
+  $('s-f').textContent=(100*sf/(c||1)).toFixed(1)+'%';$('s-hi').textContent=(100*hi/(c||1)).toFixed(1)+'%'
+  $('tbl').tBodies[0].innerHTML=FAMS.map((f,i)=>({f,b:byF[i]})).filter(o=>o.b.n).sort((a,b)=>b.b.n-a.b.n).map(({f,b})=>{
+    b.y.sort((p,q)=>p-q);return`<tr><td>${f.name}</td><td>${b.n.toLocaleString()}</td><td>${(100*b.f/b.n).toFixed(1)}%</td><td>${b.y[b.y.length>>1]}</td></tr>`}).join('')
+}
+function legend(){
+  const L=$('legend'),our='<span><i style="background:#bf141c;box-shadow:0 0 0 2px var(--surface),0 0 0 3.5px var(--ink)"></i>Our dogs &amp; litters (squares)</span>'
+  if(strat==='p'&&GRP)L.innerHTML='<span><i style="background:#fff;border:1.5px solid #333;border-radius:2px;transform:rotate(45deg) scale(.85)"></i>Dog to sequence for its group</span><span>Each color is one group of close kin</span>'+our
+  else if(mode==='fam')L.innerHTML=COATS.map((f,i)=>`<span><i style="background:${COATC[i]}"></i>${f}</span>`).join('')+our
+  else{const g=`linear-gradient(90deg,${ramp(0)},${ramp(.5)},${ramp(1)})`
+    L.innerHTML=mode==='F'?`<span>Inbreeding 0%<span class="ramp" style="background:${g}"></span>30%+</span>${our}`:`<span>Born ${minY}<span class="ramp" style="background:${g}"></span>${maxY}</span>${our}`}
+}
+function refresh(){$('yv').textContent=' '+year;stats();legend();dirty=true}
+$('mode').addEventListener('change',e=>{mode=e.target.value;refresh()})
+yearEl.addEventListener('input',e=>{year=+e.target.value;refresh()})
+$('shake').addEventListener('click',()=>{if(!sim)return;for(const d of nodes){d.vx+=(Math.random()-.5)*6;d.vy+=(Math.random()-.5)*6}wake(.6)})
+$('alive').addEventListener('click',e=>{alive=!alive;e.currentTarget.setAttribute('aria-pressed',alive);if(sim){wake(alive?.2:0);if(!alive)sim.alphaTarget(0)}})
+$('reset').addEventListener('click',()=>{select(-1);fit()})
+$('find').addEventListener('click',e=>{spot=!spot;e.currentTarget.setAttribute('aria-pressed',spot);dirty=true})
+addEventListener('resize',fit)
+const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches
+if(reduce){$('alive').hidden=true;$('shake').hidden=true}
+fit();refresh();seqReadout()
+if(reduce){nodes.forEach(d=>{d.x=d.hx;d.y=d.hy});startSim()}else intro0()
+;(function loop(now){if(anim)anim(now);if(dirty)draw();drawOverlay(now);requestAnimationFrame(loop)})(performance.now())
+})()
+</script>
+</body>
+</html>

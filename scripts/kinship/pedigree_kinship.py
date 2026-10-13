@@ -49,22 +49,23 @@ def read_dbw(path):
                 buf = ''
 
 
-def birth_year(dob):
+def birth_year(dob, fix_typos=True):
     if len(dob) >= 4 and dob[:4].isdigit():
         y = int(dob[:4])
-        # a handful of records carry 2026-2029 dates; they are 1920s typos
-        return y - 100 if y > 2025 else y
+        # a handful of export records carry 2026-2029 dates; they are 1920s typos
+        # (supplement files are ours and may hold genuine recent dates)
+        return y - 100 if fix_typos and y > 2025 else y
     return None
 
 
 def load(paths):
     dogs = {}
-    for p in paths:  # later files override earlier ones
+    for n, p in enumerate(paths):  # later files override earlier ones
         for r in read_dbw(p):
             if not r[0]:
                 continue
             dogs[r[0]] = dict(id=r[0], name=r[1].replace('"', "'"),
-                              year=birth_year(r[2]), sire=r[3], dam=r[4],
+                              year=birth_year(r[2], fix_typos=(n == 0)), sire=r[3], dam=r[4],
                               titles=r[6], reg=r[7], color=r[8],
                               sex=r[9].upper() if r[9].upper() in 'MF' else '')
     for d in dogs.values():
