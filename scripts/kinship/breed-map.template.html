@@ -56,7 +56,7 @@ input[type=range]{width:min(220px,50vw);accent-color:var(--ink)}
   .curvebox{display:none}.hint{display:none}
   .stage{height:min(118vw,68vh);min-height:0}
   .stage .read{max-width:calc(100% - 24px);font-size:.74rem;padding:6px 9px;bottom:10px}
-  .seqbar{gap:8px 12px}.seqbar>*{order:3}.seqbar .sl:first-child{order:1;flex:1}.seqbar .sl:first-child select{flex:1;min-width:0}.seqbar .grow{min-width:100%;order:2}
+  .seqbar{gap:8px 12px}.seqbar>*{order:3}.seqbar .sl{min-width:0;max-width:100%}.seqbar .sl:not(.grow){order:1;flex:1 1 100%}.seqbar .sl select{flex:1;min-width:0;max-width:100%}.seqbar .grow{min-width:100%;order:2}
   .seqbar .big{font-size:1.25rem;margin-left:auto}
   h1{font-size:1.3rem}.sub{font-size:.92rem}
   .controls{gap:8px 12px}.controls input[type=range]{width:100%}
@@ -86,7 +86,7 @@ th:first-child,td:first-child{text-align:left}
 <body>
 <div class="wrap">
   <h1>Breed relatedness map</h1>
-  <p class="sub">Every Great Dane born 2012&ndash;2020, a stand-in for the population alive and breeding today. Slide to choose how many dogs to sequence.</p>
+  <p class="sub">Every Great Dane born 2012&ndash;2020, a stand-in for the population alive and breeding today. Pick who counts, then slide to choose how many dogs to sequence.</p>
 
   <section class="panel seqbar" id="seq" hidden>
     <label class="sl">Strategy
@@ -95,6 +95,9 @@ th:first-child,td:first-child{text-align:left}
         <option value="g">Best next dog, one at a time</option>
         <option value="f">One stand-in per family</option>
       </select>
+    </label>
+    <label class="sl">Who counts
+      <select id="tgt" title="Which dogs the coverage is measured over"></select>
     </label>
     <label class="sl grow">Dogs to sequence <input type="range" id="nseq" min="0" max="40" value="0"><output id="nv">0</output></label>
     <span class="stepper"><button id="prev" type="button" aria-label="One fewer dog">&#9664;</button><button id="next" type="button" aria-label="One more dog">&#9654;</button></span>
@@ -147,7 +150,7 @@ th:first-child,td:first-child{text-align:left}
   <details class="panel how">
     <summary>How this was made</summary>
     <ol>
-      <li><b>What "covered" means.</b> A dog is covered when a sequenced dog is at half-sibling level or closer (relatedness 0.25 or more), so its genome can be filled in from that relative. The window of birth years 2012 to 2020 stands in for the dogs alive and breeding today; the most recent years are thin because registrations lag.</li>
+      <li><b>What "covered" means.</b> A dog is covered when a sequenced dog is at half-sibling level or closer (relatedness 0.25 or more), so its genome can be filled in from that relative. The window of birth years 2012 to 2020 stands in for the dogs alive and breeding today. "Who counts" narrows the dogs measured to those born in a recent stretch of it; the sequenced dogs can come from anywhere in the window for the one-at-a-time strategy, and from the counted dogs for the groups. The most recent years are thin because registrations lag.</li>
       <li><b>The pedigree.</b> A pedigree database export of show-bred Great Danes born 2012 to 2020, plus the ancestors of those dogs, with a few close relatives of ours added from our own records. Dogs with both parents recorded are kept. Our own litters, born or planned after 2020, are added as one node per litter.</li>
       <li><b>Relatedness.</b> For every pair of dogs, the expected share of genes identical by descent, computed from the whole recorded pedigree (up to 77 generations back). The same calculation gives each dog's inbreeding. Because it counts every recorded generation, these figures run higher than the 10-generation figures on the pedigree explorers.</li>
       <li><b>Families.</b> Dogs are grouped by average-linkage clustering on relatedness. Groups above 600 dogs are split again. Each group is named for its dominant coat.</li>
@@ -166,19 +169,25 @@ th:first-child,td:first-child{text-align:left}
 const d64=(s,T)=>{const b=atob(s),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return new T(u.buffer)}
 const n=DATA.n,m=DATA.m,ext=DATA.ext,SC=ext/30000
 const X=d64(DATA.x,Int16Array),Y=d64(DATA.y,Int16Array),YR=d64(DATA.yr,Uint8Array),F=d64(DATA.F,Uint8Array),FAM=d64(DATA.fam,Uint8Array),OUR=d64(DATA.our,Uint8Array),CL=d64(DATA.cl,Uint8Array)
-const COV=DATA.cov&&{close:DATA.cov.close,
-  g:{first:d64(DATA.cov.g.first,Uint8Array),rank:d64(DATA.cov.g.rank,Uint8Array),frac:DATA.cov.g.frac,mean:DATA.cov.g.mean,new:DATA.cov.g.new},
-  f:{first:d64(DATA.cov.f.first,Uint8Array),rank:d64(DATA.cov.f.rank,Uint8Array),frac:DATA.cov.f.frac,mean:DATA.cov.f.mean,new:DATA.cov.f.new}}
-const GRP=DATA.grp&&{final:d64(DATA.grp.final,Uint8Array),parent:DATA.grp.parent,reps:DATA.grp.reps,frac:DATA.grp.frac,mean:DATA.grp.mean}
+// sequencing targets: one block per cutoff year; COV (greedy, per family) and GRP (nested groups) point at the chosen one
+const TG=(DATA.tg||[]).map(t=>{
+  const st=r=>({first:d64(r.first,Uint8Array),rank:d64(r.rank,Uint8Array),frac:r.frac,mean:r.mean,new:r.new})
+  const reps=[[t.p.rep0]]
+  t.p.steps.forEach((s,i)=>{const r=reps[i].slice();r[t.p.parent[i+1]]=s[0];r.push(s[1]);reps.push(r)})
+  return{frm:t.frm,n:t.n,g:st(t.g),f:st(t.f),p:{final:d64(t.p.final,Uint8Array),parent:t.p.parent,reps,frac:t.p.frac,mean:t.p.mean}}
+})
+let COV=null,GRP=null,TI=0
+function setTarget(i){TI=i;const t=TG[i];COV={n:t.n,g:t.g,f:t.f};GRP=t.p;GK=null;GKk=0}
 let GK=null,GKk=0
 const gcolor=g=>{let h=(g*137.508)%360;if(h>335||h<22)h=(h+50)%360;return`hsl(${h|0},${g%2?72:62}%,${g%3===0?64:g%3===1?56:70}%)`}
-// group id of every dog at level k: walk each dog's final group up its split history until it exists
+// group id of every dog at level k (255 = not in the target): walk each dog's final group up its split history until it exists
 function groupsAt(k){
   if(GKk===k&&GK)return GK
   const out=new Uint8Array(n),up=GRP.parent
-  for(let i=0;i<n;i++){let g=GRP.final[i];while(g>=k)g=up[g];out[i]=g}
+  for(let i=0;i<n;i++){let g=GRP.final[i];if(g!==255)while(g>=k)g=up[g];out[i]=g}
   GK=out;GKk=k;return out
 }
+if(TG.length)setTarget(Math.max(0,TG.findIndex(t=>t.frm===2016)))
 const OURS=new Map((DATA.ours||[]).map(o=>[o.i,o]))
 let spot=true
 let strat='g',NSEQ=0
@@ -248,7 +257,7 @@ function draw(){
     if(x<-8||y<-8||x>W+8||y>H+8)continue
     let dim=sel>=0&&d.cl!==sel
     let c
-    if(strat==='p'&&GRP){c=gcolor(groupsAt(Math.max(1,NSEQ))[d.i])}
+    if(strat==='p'&&GRP){const gg=groupsAt(Math.max(1,NSEQ))[d.i];if(gg===255){c='#6a6f84';dim=true}else c=gcolor(gg)}
     else{if(COV&&NSEQ>0){const f=COV[strat].first[d.i];if(!(f>0&&f<=NSEQ))dim=true}
       c=colorOf(d)}
     const key=c+(dim?'d':'')
@@ -460,12 +469,12 @@ function drawCurve(){
   if(c.width!==w*d||c.height!==h*d){c.width=w*d;c.height=h*d}
   const g=c.getContext('2d');g.setTransform(d,0,0,d,0,0);g.clearRect(0,0,w,h)
   const ink='#e8e8ee',ink2='#9a9db0',grid='#2c2e3a'
-  const L=30,R=8,Tp=8,B=20,pw=w-L-R,ph=h-Tp-B,max=Math.min(strat==='p'?60:40,(strat==='p'&&GRP?GRP.frac:COV.g.frac).length)
+  const L=36,R=8,Tp=8,B=20,pw=w-L-R,ph=h-Tp-B,max=Math.max(COV.g.frac.length,GRP?GRP.frac.length:0)
   const px=k=>L+pw*k/max,py=v=>Tp+ph*(1-v)
   g.font='10px system-ui,sans-serif';g.textBaseline='middle';g.textAlign='right';g.lineWidth=1
   for(let v=0;v<=1.001;v+=.25){g.strokeStyle=grid;g.beginPath();g.moveTo(L,py(v));g.lineTo(w-R,py(v));g.stroke();g.fillStyle=ink2;g.fillText(Math.round(v*100)+'%',L-6,py(v))}
   g.textAlign='center';g.textBaseline='top'
-  for(const k of(max>40?[0,10,20,30,40,50,60]:[0,10,20,30,40])){if(k>max)continue;g.fillStyle=ink2;g.fillText(k,px(k),h-B+6)}
+  for(let k=0;k<=max;k+=50){if(k>max)continue;g.fillStyle=ink2;g.fillText(k,px(k),h-B+6)}
   const fr=key=>key==='p'?GRP.frac:COV[key].frac
   const line=(key,col,dash)=>{const a=fr(key);g.strokeStyle=col;g.lineWidth=2.2;g.setLineDash(dash);g.beginPath();g.moveTo(px(0),py(0))
     a.slice(0,max).forEach((v,i)=>g.lineTo(px(i+1),py(v)));g.stroke();g.setLineDash([])}
@@ -487,29 +496,32 @@ function seqReadout(){
   if(NSEQ===0&&strat!=='p'){big.textContent='0%';rd.textContent='Nothing sequenced yet. Slide right or press Play.'}
   else if(strat==='p'){
     const k=Math.max(1,NSEQ),gk=groupsAt(k),cnt=new Array(k).fill(0)
-    for(let i=0;i<n;i++)cnt[gk[i]]++
+    for(let i=0;i<n;i++)if(gk[i]<k)cnt[gk[i]]++
     const v=GRP.frac[k-1],mv=GRP.mean[k-1],sz=cnt.slice().sort((a,b)=>b-a)
     big.textContent=(100*v).toFixed(0)+'% covered'
-    let msg=`Sequence the ${k} dog${k>1?'s':''} marked by diamonds and ${(100*v).toFixed(0)}% of all dogs have a close relative (half-sibling level or nearer) among them.`
+    let msg=`Sequence the ${k} dog${k>1?'s':''} marked by diamonds and ${(100*v).toFixed(0)}% of the ${COV.n.toLocaleString()} dogs that count have a close relative (half-sibling level or nearer) among them.`
     if(k>1){const a=cnt[GRP.parent[k-1]],b=cnt[k-1];msg+=` Newest split: a group of ${(a+b).toLocaleString()} became ${a.toLocaleString()} and ${b.toLocaleString()}.`}
     rd.textContent=msg}
-  else{const v=COV[strat].frac[NSEQ-1],nw=COV[strat].new[NSEQ-1],tot=COV.g.first.length
+  else{const v=COV[strat].frac[NSEQ-1],nw=COV[strat].new[NSEQ-1],tot=COV.n
     big.textContent=(100*v).toFixed(0)+'% covered'
-    rd.textContent=`Sequence the ${NSEQ} dog${NSEQ>1?'s':''} marked by diamonds and ${(100*v).toFixed(0)}% of all dogs have a close relative (half-sibling level or nearer) among them. The newest pick added ${nw.toLocaleString()} dogs.`}
+    rd.textContent=`Sequence the ${NSEQ} dog${NSEQ>1?'s':''} marked by diamonds and ${(100*v).toFixed(0)}% of the ${COV.n.toLocaleString()} dogs that count have a close relative (half-sibling level or nearer) among them. The newest pick added ${nw.toLocaleString()} dogs.`}
   drawCurve()
 }
 let playT=null
 function setN(k){NSEQ=Math.max(+$('nseq').min,Math.min(+$('nseq').max,k));$('nseq').value=NSEQ;seqReadout();dirty=true}
+function seqRange(){
+  const p=strat==='p'
+  $('nseq').min=p?1:0
+  $('nseq').max=strat==='p'?GRP.frac.length:COV[strat].frac.length
+}
 if(COV){
   $('seq').hidden=false
-  $('nseq').max=Math.min(40,COV.g.frac.length)
-  if(!GRP)$('strat').querySelector('option[value=p]').remove()
-  if(GRP){strat='p';$('strat').value='p';$('nseq').min=1;$('nseq').max=Math.min(60,GRP.frac.length);NSEQ=1;$('nseq').value=1;seqReadout();legend()}
+  const T=$('tgt');TG.forEach((t,i)=>{const o=document.createElement('option');o.value=i
+    o.textContent=t.frm<=2012?`Whole window, born 2012+ (${t.n.toLocaleString()} dogs)`:`Born ${t.frm} or later (${t.n.toLocaleString()} dogs)`;T.appendChild(o)});T.value=TI
+  T.addEventListener('change',e=>{stopPlay();setTarget(+e.target.value);seqRange();setN(Math.min(Math.max(NSEQ,+$('nseq').min),+$('nseq').max));legend()})
+  strat='p';$('strat').value='p';seqRange();NSEQ=1;$('nseq').value=1;seqReadout();legend()
   $('nseq').addEventListener('input',e=>{stopPlay();setN(+e.target.value)})
-  $('strat').addEventListener('change',e=>{stopPlay();strat=e.target.value
-    const p=strat==='p'
-    $('nseq').min=p?1:0;$('nseq').max=p?Math.min(60,GRP.frac.length):Math.min(40,COV.g.frac.length)
-    setN(Math.max(+$('nseq').min,Math.min(NSEQ,+$('nseq').max)));legend()})
+  $('strat').addEventListener('change',e=>{stopPlay();strat=e.target.value;seqRange();setN(Math.max(+$('nseq').min,Math.min(NSEQ,+$('nseq').max)));legend()})
   function stopPlay(){if(playT){clearInterval(playT);playT=null;$('play').textContent='Play'}}
   $('prev').addEventListener('click',()=>{stopPlay();setN(NSEQ-1)})
   $('next').addEventListener('click',()=>{stopPlay();setN(NSEQ+1)})
@@ -517,7 +529,7 @@ if(COV){
     if(playT){stopPlay();return}
     if(NSEQ>=+$('nseq').max)setN(+$('nseq').min)
     $('play').textContent='Pause'
-    playT=setInterval(()=>{if(NSEQ>=+$('nseq').max){stopPlay();return}setN(NSEQ+1)},350)
+    playT=setInterval(()=>{if(NSEQ>=+$('nseq').max){stopPlay();return}setN(NSEQ+1)},Math.max(50,Math.min(350,12000/+$('nseq').max)))
   })
   addEventListener('resize',drawCurve)
 }
@@ -531,7 +543,7 @@ function stats(){
 }
 function legend(){
   const L=$('legend'),our='<span><i style="background:#bf141c;box-shadow:0 0 0 2px var(--surface),0 0 0 3.5px var(--ink)"></i>Our dogs &amp; litters (squares)</span>'
-  if(strat==='p'&&GRP)L.innerHTML='<span><i style="background:#fff;border:1.5px solid #333;border-radius:2px;transform:rotate(45deg) scale(.85)"></i>Dog to sequence for its group</span><span>Each color is one group of close kin</span>'+our
+  if(strat==='p'&&GRP)L.innerHTML='<span><i style="background:#fff;border:1.5px solid #333;border-radius:2px;transform:rotate(45deg) scale(.85)"></i>Dog to sequence for its group</span><span>Each color is one group of close kin</span><span><i style="background:#6a6f84"></i>Born before the chosen cutoff, not counted</span>'+our
   else if(mode==='fam')L.innerHTML=COATS.map((f,i)=>`<span><i style="background:${COATC[i]}"></i>${f}</span>`).join('')+our
   else{const g=`linear-gradient(90deg,${ramp(0)},${ramp(.5)},${ramp(1)})`
     L.innerHTML=mode==='F'?`<span>Inbreeding 0%<span class="ramp" style="background:${g}"></span>30%+</span>${our}`:`<span>Born ${minY}<span class="ramp" style="background:${g}"></span>${maxY}</span>${our}`}

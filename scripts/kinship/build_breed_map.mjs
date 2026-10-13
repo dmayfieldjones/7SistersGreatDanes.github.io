@@ -122,27 +122,17 @@ order.forEach((old, nu) => {
 })
 const E = new Uint16Array(edges.length * 2), EW = new Uint8Array(edges.length)
 edges.forEach((e, i) => { E[2 * i] = remap[e.source.index ?? e.source]; E[2 * i + 1] = remap[e.target.index ?? e.target]; EW[i] = Math.round(Math.min(e.w, 1) * 200) })
-// sequencing coverage (optional): first step each dog is covered, and pick rank, per strategy
-const covFile = path.join(dir, 'coverage.json')
-let cov = null
-if (fs.existsSync(covFile)) {
-  const c = JSON.parse(fs.readFileSync(covFile, 'utf8'))
-  const pack = (arr) => { const u = new Uint8Array(n); order.forEach((old, nu) => { u[nu] = arr[old] }); return u }
-  const strat = r => ({ first: pack(r.first), rank: pack(r.rank), frac: r.frac, mean: r.mean, new: r.new })
-  cov = { close: c.close, g: strat(c.greedy), f: strat(c.family) }
-}
+// sequencing targets (optional): one block per target_<year>.json, default target first
 const b64 = a => Buffer.from(a.buffer, a.byteOffset, a.byteLength).toString('base64')
-const covOut = cov && { close: cov.close,
-  g: { first: b64(cov.g.first), rank: b64(cov.g.rank), frac: cov.g.frac, mean: cov.g.mean, new: cov.g.new },
-  f: { first: b64(cov.f.first), rank: b64(cov.f.rank), frac: cov.f.frac, mean: cov.f.mean, new: cov.f.new } }
-// nested kinship groups (optional): group id per dog after the last split, parent of each group, representatives per level
-const grpFile = path.join(dir, 'groups.json')
-let grp = null
-if (fs.existsSync(grpFile)) {
-  const g = JSON.parse(fs.readFileSync(grpFile, 'utf8'))
-  const u = new Uint8Array(n); order.forEach((old, nu) => { u[nu] = g.final[old] })
-  grp = { close: g.close, final: b64(u), parent: g.parent, reps: g.reps.map(r => r.map(j => remap[j])), frac: g.frac, mean: g.mean }
-}
+const pack = (arr) => { const u = new Uint8Array(n); order.forEach((old, nu) => { u[nu] = arr[old] }); return u }
+const tgFiles = fs.readdirSync(dir).filter(f => /^target_\d{4}\.json$/.test(f))
+  .sort()
+const tg = tgFiles.map(f => {
+  const t = JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8'))
+  const st = r => ({ first: b64(pack(r.first)), rank: b64(pack(r.rank)), frac: r.frac, mean: r.mean, new: r.new })
+  return { frm: t.frm, n: t.n, close: t.close, g: st(t.g), f: st(t.f),
+    p: { final: b64(pack(t.p.final)), parent: t.p.parent, rep0: remap[t.p.rep0], steps: t.p.steps.map(s => s.map(j => remap[j])), frac: t.p.frac, mean: t.p.mean } }
+})
 // our dogs: display name and closest relatives (anonymous indices into the shuffled list)
 const relFile = path.join(dir, 'ours_relatives.json')
 const relRaw = fs.existsSync(relFile) ? JSON.parse(fs.readFileSync(relFile, 'utf8')) : {}
@@ -153,7 +143,7 @@ dogs.forEach((d, old) => {
   const o = oursNames.get(d.id) || {}
   oursOut.push({ i: remap[old], name: o.name || '', note: o.note || '', rel })
 })
-const data = { ours: oursOut, cov: covOut, grp, n, m: edges.length, ext, x: b64(X), y: b64(Y), yr: b64(yr), F: b64(F), fam: b64(fam), our: b64(our), cl: b64(CL), fams: fams.map(f => {
+const data = { ours: oursOut, tg, n, m: edges.length, ext, x: b64(X), y: b64(Y), yr: b64(yr), F: b64(F), fam: b64(fam), our: b64(our), cl: b64(CL), fams: fams.map(f => {
     const ys = f.years.filter(Boolean).sort((a, b) => a - b)
     const k = f.coat.indexOf(Math.max(...f.coat.slice(1)))
     return [+(f.x / ext * 30000).toFixed(0), +(f.y / ext * 30000).toFixed(0), +(f.r / ext * 30000).toFixed(0),
