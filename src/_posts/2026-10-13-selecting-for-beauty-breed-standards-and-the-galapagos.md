@@ -1,11 +1,10 @@
 ---
 title: "Selecting for Beauty: Great Danes, Breed Standards, and the Galápagos"
-description: "A dive trip to the Galápagos sent me back to Richard Prum's argument about beauty, and then to the Great Dane standard, which names one fault as the most serious and never defines it."
-date: 2026-10-09
+description: "A dive trip to the Galápagos, Richard Prum's argument about beauty, and what it says about how we select for beauty in our Great Danes."
+date: 2026-10-13
 categories: ["Breeding", "Genetics", "Research"]
 tags: ["Galápagos", "Sexual Selection", "Prum", "Breed Standards"]
 featured: true
-draft: true
 ---
 
 <style>
@@ -113,8 +112,8 @@ draft: true
 
 <div class="gd-intro">
   <p class="gd-kicker">Galápagos · Darwin &amp; Wolf · Isabela · Santa Cruz</p>
-  <h2>Darwin used dogs to explain evolution. In the Galápagos, I began to wonder about the real target of our selection.</h2>
-  <p style="color:#666;font-size:.95rem;font-style:italic;margin-top:1rem">Every photo and video in this post is from our own trip, taken between December 2025 and January 2026.</p>
+  <h2>Darwin used dogs to help explain evolution. In the Galápagos, organisms sometimes choose mates for beauty, and so do dog breeders.</h2>
+  <p style="color:#666;font-size:.95rem;font-style:italic;margin-top:1rem">Photos and videos taken from our trip.</p>
 </div>
 
 <script>
@@ -167,156 +166,101 @@ draft: true
 })();
 </script>
 
-<p class="gd-lede">Beauty is what drew me to the Galápagos. Karen and I took a dive trip over the holidays, a liveaboard out to Darwin and Wolf, the two islands at the far northern end of the archipelago, then a few days on land with giant tortoises. Underwater, looking at creatures in their home and far from mine, I kept thinking about how beautiful they all looked. Then I started wondering about the rest of it. To what degree do they understand beauty? What advantage does it give them, or me, or the way we treat each other? I didn't come home with a lesson in how to breed Great Danes. I came home with that question, and it's the one Richard Prum takes on in <em>The Evolution of Beauty</em>, a book I'd read before we left.</p>
+<p class="gd-lede">Beauty is often spoken of as a lesser value, something vain or superficial. I think that sells it short. People have long counted it with truth and goodness as one of the things worth having for its own sake, and we hold it in common even when we disagree about what is beautiful.</p>
 
-<p>Darwin opened <em>On the Origin of Species</em> with domestic animals, pigeons above all and dogs among them, because breeders had already shown that selection could reshape a species in a handful of generations. Breeding was his proof that selection works. I want to run that comparison backward and use wild populations to ask what our own breeding is doing.</p>
+<p>Conformation dog shows are not beauty pageants. They are more akin to an evaluation of livestock, and a sport with a long history. For those of us fostering a breed they are something closer to a sacred experience, a place of communion with others in the dog fancy where we make connections and learn new things. Beauty is still part of the evaluation, though, written into every breed standard.</p>
+
+<p>The Galápagos was more of a pilgrimage than a work trip or vacation. Karen and I went for the diving, the wildlife, and the chance to touch history that shaped Charles Darwin's life and ideas. It was also our first liveaboard, and we got to focus on diving some of the more remote yet popular sites, including Darwin and Wolf at the far northern end of the archipelago. Before we left I re-read some of my favorite books about Darwin, and Richard Prum's <em>The Evolution of Beauty</em> stayed in my mind during and after the trip, making me think more critically about selection. Prum argues that in nature, mate choice is not always about finding the fittest partner. Animals can also choose mates for beauty itself, and when they do, those choices can shape what a species looks like. I think about selection a lot, and the trip made me think again about beauty. As breeders, we don't always say so directly, but we choose for it too. We talk about the head and the front, about movement and balance, and a good deal of that language is beauty by another name.</p>
 
 <div class="gd-video">
-<iframe loading="lazy" src="https://www.youtube.com/embed/DVbgBGMCzh0?si=&autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&iv_load_policy=3&fs=0&cc_load_policy=0&loop=1&playlist=DVbgBGMCzh0&disablekb=1&enablejsapi=0&origin=https://7sistersgreatdanes.com" title="Approaching Darwin's Arch" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
-<div class="gd-figcap">Approaching Darwin's Arch, the first thing you see of Darwin Island.</div>
+<iframe loading="lazy" src="https://www.youtube.com/embed/DVbgBGMCzh0?si=&autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&iv_load_policy=3&fs=0&cc_load_policy=0&loop=1&playlist=DVbgBGMCzh0&disablekb=1&enablejsapi=0&origin=https://7sistersgreatdanes.com" title="The Pillars of Evolution, formerly Darwin's Arch" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
+<div class="gd-figcap">The Pillars of Evolution, formerly Darwin's Arch.</div>
 </div>
 
 <div class="gd-lesson">
 <p class="gd-num">01</p>
 
-## An argument Darwin lost
+## Blue feet
 
 </div>
 
-Darwin proposed two kinds of selection. Natural selection is about survival: traits that help an animal live and reproduce spread. Sexual selection is about mating, and for the showy traits (the peacock's tail, the bird-of-paradise's plumes) he thought it came down to something like taste. Females prefer certain males, and over many generations the preference shapes the animal. He used the word *beauty*, and he meant it.
+The blue-footed booby is the easy example. When researchers dulled the feet of males, their mates laid significantly smaller second eggs (Velando et al., 2006). The color tracks the bird's condition, so the feet work as an advertisement of health, which is the answer Alfred Russel Wallace would have given. Darwin's was simpler: in many species, females prefer what they find beautiful, and over many generations that preference can shape the animal.
 
-Wallace, who had arrived at natural selection independently, would not accept that. His position was that a preference can only persist if it tracks something useful, so an ornament has to be an advertisement: this male is healthy, this male can afford to waste resources on a tail. That adaptive view is what the field mostly went on to build, in the form of good-genes and costly-signaling models.
+Prum sides with Darwin on this, and his name for the idea is "Beauty Happens." By beauty he means a preference for a trait for its own sake, not for what the trait says about the animal's quality. Not everyone is convinced. A philosopher of biology has argued that his proposed null model supports more modest conclusions than he claims (Kovaka, 2020), and a condition-dependent trait like the booby's feet is the kind of evidence the honest-signal side points to. You can't tell which story you're looking at by admiring it.
 
-Prum's claim is that Wallace's side won more completely than the evidence justifies. He argues that the Lande–Kirkpatrick runaway model, in which a preference and the trait it favors can run away together with no quality signal at all, should be the null model, and adaptive explanations should have to earn their place (Prum, 2010). His phrase for it is "Beauty Happens." Plenty of biologists think he undersells how much evidence there is for honest signals, and I think that disagreement is the interesting part.
+The booby fits Wallace's side best. Prum's own examples run the other way, like the club-winged manakin, whose male plays a song by rubbing his wing feathers together (Bostwick & Prum, 2005).
 
 <div class="gd-fig gd-wide">
   <img src="/img/galapagos/gallery/blue-footed-booby.jpg" alt="A blue-footed booby on the rocks." loading="lazy" style="max-width:420px;margin:0 auto" />
-  <div class="gd-figcap" style="text-align:center">A blue-footed booby.</div>
+  <div class="gd-figcap" style="text-align:center">A blue-footed booby, feet on display.</div>
 </div>
-
-The booby is a good test case, because it could be on either side. The brightness of a blue-footed booby's feet has been linked to the bird's condition, which is the honest-signal story Wallace would have told (Velando et al., 2006). But a preference for blue feet could also have started somewhere arbitrary and run from there, and the two explanations aren't mutually exclusive. You can't tell which one you're looking at by admiring it.
 
 <div class="gd-lesson">
 <p class="gd-num">02</p>
 
-## A place where function is easy to see
+## Tortoises don't care how they look
 
 </div>
 
-The tortoises were the cleanest contrast available. Shell shape varies with the islands: on drier islands, where food grows higher off the ground, tortoises tend to have saddleback shells that flare up at the front, and the usual explanation is that this lets the neck reach higher. Nobody picked that for looks. It works or the tortoise doesn't eat.
+I was surprised by how few scientists I met along the way, but we did run into Tatiana at Rancho Primicias, a tortoise site in the highlands of Santa Cruz. She is a friend who runs <a href="https://orchidsforpeace.org/about-us-80/">Orchids for Peace</a>, and we were both studying evolutionary biology when we met at the University of Missouri-Columbia. I loved seeing her continued commitment and passion for science.
+
+The tortoises are a good reminder that not everything out there is about looks. On the drier islands, where food grows higher off the ground, tortoises tend to have saddleback shells that flare up at the front, and the usual explanation is that this lets the neck reach higher (Fritts, 1984). Nobody picked that for looks. It works or the tortoise doesn't eat.
 
 <div class="gd-video">
 <iframe loading="lazy" src="https://www.youtube.com/embed/GPPZaC0YiUw?si=&autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&iv_load_policy=3&fs=0&cc_load_policy=0&loop=1&playlist=GPPZaC0YiUw&disablekb=1&enablejsapi=0&origin=https://7sistersgreatdanes.com" title="Giant tortoises on Santa Cruz" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
 <div class="gd-figcap">Wild giant tortoises in the Santa Cruz highlands.</div>
 </div>
 
-Isolation is part of that story too, and it connects to the piece of Prum's argument that matters most to a breeder. Lande's 1981 paper was about speciation: if preferences and the traits they favor run away independently in separate populations, the populations can drift apart, and groups that split on taste alone can end up reproductively isolated. The tortoises show what isolation does even without a preference. Microsatellite work found that tortoises on three of Isabela's volcanoes (Wolf, Darwin and Alcedo) differ significantly from one another (Ciofi et al., 2002), and a later study found that the Wolf population is itself the product of two lineages that arrived separately from Santiago and then interbred (Garrick et al., 2014).
+<div class="gd-lesson">
+<p class="gd-num">03</p>
 
-A Great Dane color group looks a lot like one of those populations. Registry rules and coat genetics keep it semi-isolated, and breeders select it toward its own look. Nobody would call a fawn and a harlequin separate species, but the two ingredients are there: a barrier, and a preference.
+## Beauty and our dogs
+
+</div>
+
+In the wild, animals choose their mates, and survival checks the choice. In a dog breed, we decide which dogs are bred. I think of the breed standard as our preference written down, and the ring as where we reward it.
+
+Some of the Great Dane standard is function: a dog that moves with long reach and powerful drive and "never appears clumsy." Some of it is plainly beauty, since the same document calls the breed "the Apollo of dogs." And the most serious fault in the standard is one it never *really* defines.
+
+<p class="gd-quote">"Lack of true Dane breed <span style="color:#bf141c">type</span>, as defined in this standard, is the most serious fault."<span class="gd-cite">AKC Official Standard of the Great Dane</span></p>
+
+The fault says "as defined in this standard," so I counted. The word "type" appears twice in the entire standard. The word "health" does not appear at all.
+
+The breed's judges' education guide helps fill in the meaning. Type is "a sculptured headpiece," a long, clean neck, strong bone, "a glossy coat of correct rich color," and movement "with precision and grace" (Stutzman). Some of those are function, like bone and movement. Some are look. Of all the faults the standard lists, the one it names as most serious is a lack of type, which the guide describes as a "common looking" dog.
+
+Beauty is hard to talk about, and our breed is no exception. Words like "sculptured" and "correct rich color" point at something most of us recognize when we see it and have trouble explaining. One answer is the head, the size, the front, and the complete dog, including movement and attitude. That is hard to put into words, and calling the breed something between a greyhound and a mastiff doesn't help much either. Some of it can be measured, like height and proportion, and some of it may only be learned by looking at a lot of dogs. Standards are written by clubs, not by scientists, so it makes sense that they describe what a trained eye sees.
+
+<div class="gd-fig gd-wide">
+  <img src="/img/piper-first-litter-5-fawn-puppies-4-boys-1-girl-breeding-female-mia.jpg" alt="A fawn Great Dane with a black mask looks at the camera while five newborn puppies nurse." loading="lazy" style="max-width:760px;margin:0 auto" />
+  <div class="gd-figcap" style="text-align:center">Piper with her newborn puppies.</div>
+</div>
+
+Most of us already know that beauty can have a price, and harlequin is the example. Homozygosity for the H allele is embryonic lethal (Clark et al., 2011), so two harlequins bred together would be expected to lose about a quarter of their conceptions. It is also one of the most beautiful and unique patterns in our breed.
 
 <div class="gd-bleed" style="margin-top:2.5rem;margin-bottom:2.5rem">
   <img src="/img/galapagos/eagle-rays.jpg" alt="Four spotted eagle rays silhouetted against deep blue water." style="width:100%;max-height:70vh;object-fit:cover;display:block" loading="lazy" />
 </div>
 
-<div class="gd-lesson">
-<p class="gd-num">03</p>
-
-## Who is doing the choosing?
-
-</div>
-
-In the wild, the chooser is another animal and survival checks the choice. In a dog breed, the chooser is us. The standard is a written preference, the ring is where it gets rewarded, and the pedigree carries the result forward.
-
-As a geneticist, I see two differences from the wild case. In the Lande and Kirkpatrick runaway models (Lande, 1981; Kirkpatrick, 1982), the preference itself is heritable, and mating by preference makes the preference alleles and the trait alleles travel together. In dogs the preference isn't in the genome. It lives in the standard and in the culture of judges and breeders, and people pass it on. The second difference is that in the wild a trait that gets too costly pays for itself in survival, while in our dogs much of that check is gone. Breeders do apply one: health screening, selecting against affected lines, and the soundness language in some standards are all real brakes. The question is whether they are enough.
-
-It would be easy to read all this as a contest between Darwin and Wallace and to ask which side a breed standard belongs to. It's both. Much of a standard is about function: the Great Dane standard asks for a dog that moves with a long reach and powerful drive and "never appears clumsy," and one that is "spirited, courageous, never timid" (AKC). Part of it is plainly aesthetic, since the same document calls the breed "the Apollo of dogs." And some of it is vague, and left to the reader to interpret. The vague part is where I'd look first.
-
-<div class="gd-lesson">
-<p class="gd-num">04</p>
-
-## The fault nobody defines
-
-</div>
-
-Breeders have a word for the part that is hardest to pin down: type. It carries more weight than anything else in the AKC standard for our breed.
-
-<p class="gd-quote">"Lack of true Dane breed type, as defined in this standard, is the most serious fault."<span class="gd-cite">AKC Official Standard of the Great Dane</span></p>
-
-But the standard never defines type separately. I counted.
-
-<div class="gd-stats">
-  <div class="gd-stat"><b>2</b><span>times the word "type" appears in the entire standard</span></div>
-  <div class="gd-stat"><b>0</b><span>times the word "health" appears</span></div>
-  <div class="gd-stat"><b>1</b><span>fault the standard calls "the most serious"</span></div>
-</div>
-
-The breed's judges' education guide fills in the meaning. "The essence of Great Dane type" is a balanced combination of "a sculptured headpiece," a long, tapered, clean neck, a well-developed body, strong bone, "a glossy coat of correct rich color," and movement "with precision and grace." A substantial deficiency in any of them produces "a 'common looking' dog," and the guide calls the presence or absence of type "the single most important factor in assessing the overall quality of the Great Dane" (Stutzman). It also includes the old scale of points, no longer part of the American standard but offered as a guide to priorities: 30 points for general conformation, which includes color, markings and coat, 28 for movement, 20 for head, 20 for torso and 2 for tail. Neither health nor temperament gets a line.
-
-Read that carefully. Some of those attributes are function: strong bone, movement. Some are look: a sculptured headpiece, a glossy coat of correct rich color. The failure it names isn't being unsound or unhealthy. It's looking common.
-
-I'll be honest that this bothers me. I'd like to be able to say what I mean by "sculptured" or "correct rich color" in a way someone else could check, and as far as I can see nobody can. In Prum's terms, type is a breed's own standard of beauty: a shared preference that has settled on a look and that the group keeps enforcing.
-
-So I don't think the useful question is whether a standard is honest or arbitrary. It's which parts are which. Bone and movement can be tested against soundness. A sculptured headpiece and correct rich color can't be tested at all until they're defined well enough to measure, because a trait you can't measure can't be compared with anything, health included.
-
-<div class="gd-lesson">
-<p class="gd-num">05</p>
-
-## What beauty can cost
-
-</div>
-
-The clearest case in our breed is a coat pattern.
-
-<div class="gd-bleed gd-band">
-  <div class="gd-band-inner">
-    <h3>Harlequin</h3>
-    <p>A harlequin Great Dane needs merle, a SINE insertion in <em>PMEL</em>, plus a mutation in <em>PSMB7</em>, the H allele described by Clark and colleagues. Harlequin is dominant, but no dog with two copies of H has been found, and it is presumed to be embryonic lethal. So every harlequin is heterozygous, none can be bred true, and two harlequins bred together would be expected to lose about a quarter of their conceptions.</p>
-    <p>It is a beautiful pattern, and the breed built a standard around it. I'm not arguing that anyone should stop breeding it. I think it's an honest example of a preference locking in a genetic cost.</p>
-  </div>
-</div>
-
-Harlequin is an easy case. The harder question is how far this goes, and veterinary researchers have been working on it for years. A review of the 50 most popular Kennel Club breeds in the UK found that every one of them has at least one feature of its conformation that predisposes it to a disorder (Asher et al., 2009), and a companion review cataloged more than 300 inherited disorders that have nothing to do with the standard (Summers et al., 2010). The cleanest evidence that a standard can drive a health cost comes from flat-faced breeds, where the risk of breathing problems climbs steeply as the muzzle gets shorter (Packer et al., 2015).
-
-Great Danes have a foot in both camps. Bloat sits at the top of the risk lists for large and giant breeds, and a deep, narrow chest is one of the proposed risk factors (Glickman et al., 2000). Dilated cardiomyopathy is a different kind of problem. It is common in the breed, with prevalence in earlier screening studies ranging from about 12% to 36%, and it is usually an adult-onset disease with a long preclinical phase in which the dog shows no signs at all. That means a dog can develop it after it has already produced puppies, and the authors of a recent Great Dane study point out that this is a particular problem in breeding populations. There is no genetic test for it in the breed yet, and the disease is suspected to be hereditary (El Sharkawy et al., 2023). A standard that reads only the outside can't select against a heart it can't see, and a good-looking dog tells you nothing about it.
-
-What I couldn't find is a study that asks Prum's question directly for our breed: whether the dogs that do well in the ring turn out healthier or less healthy than the ones that don't. As far as I can tell, nobody has tested it. I also couldn't find a study that measures whether judges agree with each other about type, which would be the first step. The test itself wouldn't take exotic data. Type would need a measurable definition, such as scores from several judges checked for agreement, or body measurements. Then you would need the show records of a large set of Great Danes and health outcomes measured the same way for all of them, such as echocardiogram results for DCM, bloat incidence and lifespan, and you would ask whether the two are related.
+Many things get our attention in our dogs, and they deserve it. Beauty usually gets a caption, a kind word for a dog we admire, and we rarely say what we mean by it. It is okay to talk about it. It may be difficult, and we can try our best. That is part of what makes breeding Great Danes wonderful to me, because we are working with living art. I'd like to hear more of that conversation.
 
 <div class="gd-closing gd-bleed">
-  <p>Who is choosing, and what does it cost?</p>
+  <p>What do you see when you call a dog beautiful?</p>
 </div>
 
 ## Sources
 
 Prum, R. O. (2017). *The Evolution of Beauty: How Darwin's Forgotten Theory of Mate Choice Shapes the Animal World—and Us*. Doubleday.
 
-Prum, R. O. (2010). The Lande–Kirkpatrick mechanism is the null model of evolution by intersexual selection: implications for meaning, honesty, and design in intersexual signals. *Evolution*, 64(11), 3085–3100. [doi:10.1111/j.1558-5646.2010.01054.x](https://doi.org/10.1111/j.1558-5646.2010.01054.x)
-
-Darwin, C. (1871). *The Descent of Man, and Selection in Relation to Sex*. John Murray.
-
 American Kennel Club. (2019). *Official Standard of the Great Dane*. [images.akc.org](https://images.akc.org/pdf/Great_Dane_01-01-19.pdf)
 
 Stutzman, D. (2018, rev. 2024). *The Great Dane: A Study of the Apollo of Dogs*. Judges' education presentation, American Kennel Club. [akc.org](https://www.akc.org/wp-content/uploads/2024/06/Great-Dane-Study-Guide.pdf)
 
-Wallace, A. R. (1889). *Darwinism: An Exposition of the Theory of Natural Selection with Some of Its Applications*. Macmillan.
-
-Lande, R. (1981). Models of speciation by sexual selection on polygenic traits. *Proceedings of the National Academy of Sciences*, 78(6), 3721–3725. [doi:10.1073/pnas.78.6.3721](https://doi.org/10.1073/pnas.78.6.3721)
-
-Kirkpatrick, M. (1982). Sexual selection and the evolution of female choice. *Evolution*, 36(1), 1–12. [doi:10.1111/j.1558-5646.1982.tb05003.x](https://doi.org/10.1111/j.1558-5646.1982.tb05003.x)
-
 Velando, A., Beamonte-Barrientos, R., & Torres, R. (2006). Pigment-based skin colour in the blue-footed booby: an honest signal of current condition used by females to adjust reproductive investment. *Oecologia*, 149(3), 535–542. [doi:10.1007/s00442-006-0457-5](https://doi.org/10.1007/s00442-006-0457-5)
 
-Ciofi, C., Milinkovitch, M. C., Gibbs, J. P., Caccone, A., & Powell, J. R. (2002). Microsatellite analysis of genetic divergence among populations of giant Galápagos tortoises. *Molecular Ecology*, 11(11), 2265–2283. [doi:10.1046/j.1365-294X.2002.01617.x](https://doi.org/10.1046/j.1365-294X.2002.01617.x)
+Bostwick, K. S., & Prum, R. O. (2005). Courting bird sings with stridulating wing feathers. *Science*, 309(5735), 736. [doi:10.1126/science.1111701](https://doi.org/10.1126/science.1111701)
 
-Garrick, R. C., Benavides, E., Russello, M. A., Hyseni, C., Edwards, D. L., Gibbs, J. P., Tapia, W., Ciofi, C., & Caccone, A. (2014). Lineage fusion in Galápagos giant tortoises. *Molecular Ecology*, 23(21), 5276–5290. [doi:10.1111/mec.12919](https://doi.org/10.1111/mec.12919)
+Fritts, T. H. (1984). Evolutionary divergence of giant tortoises in Galápagos. *Biological Journal of the Linnean Society*, 21(1–2), 165–176. [doi:10.1111/j.1095-8312.1984.tb02059.x](https://doi.org/10.1111/j.1095-8312.1984.tb02059.x)
+
+Kovaka, K. (2020). Mate choice and null models. *Philosophy of Science*, 87(5), 1096–1106. [doi:10.1086/710614](https://doi.org/10.1086/710614)
 
 Clark, L. A., Tsai, K. L., Starr, A. N., Nowend, K. L., & Murphy, K. E. (2011). A missense mutation in the 20S proteasome β2 subunit of Great Danes having harlequin coat patterning. *Genomics*, 97(4), 244–248. [doi:10.1016/j.ygeno.2011.01.003](https://doi.org/10.1016/j.ygeno.2011.01.003)
-
-Asher, L., Diesel, G., Summers, J. F., McGreevy, P. D., & Collins, L. M. (2009). Inherited defects in pedigree dogs. Part 1: Disorders related to breed standards. *The Veterinary Journal*, 182(3), 402–411.
-
-Summers, J. F., Diesel, G., Asher, L., McGreevy, P. D., & Collins, L. M. (2010). Inherited defects in pedigree dogs. Part 2: Disorders that are not related to breed standards. *The Veterinary Journal*, 183(1), 39–45.
-
-Packer, R. M. A., Hendricks, A., Tivers, M. S., & Burn, C. C. (2015). Impact of facial conformation on canine health: brachycephalic obstructive airway syndrome. *PLOS ONE*, 10(10), e0137496. [doi:10.1371/journal.pone.0137496](https://doi.org/10.1371/journal.pone.0137496)
-
-Glickman, L. T., Glickman, N. W., Schellenberg, D. B., et al. (2000). Non-dietary risk factors for gastric dilatation-volvulus in large and giant breed dogs. *Journal of the American Veterinary Medical Association*, 217(10), 1492–1499. [doi:10.2460/javma.2000.217.1492](https://doi.org/10.2460/javma.2000.217.1492)
-
-El Sharkawy, S., Dukes-McEwan, J., Abdelrahman, H., & Stephenson, H. (2023). Long-term outcome and troponin I concentrations in Great Danes screened for dilated cardiomyopathy: an observational retrospective epidemiological study. *Journal of Veterinary Cardiology*, 47, 1–13. [doi:10.1016/j.jvc.2023.03.003](https://doi.org/10.1016/j.jvc.2023.03.003)
