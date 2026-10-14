@@ -699,6 +699,7 @@ function showStory(i){
   $('sskip').style.display=last?'none':''
   $('seq').hidden=!last
   strat='g';$('strat').value='g';seqRange()
+  if(story===4){clearTimeout(rampT);setN(0)}  // step 5 always starts from an unlit map
   rampTo(Math.max(+$('nseq').min,st[story].k))
   legend();dirty=true
 }
