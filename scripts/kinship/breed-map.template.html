@@ -368,12 +368,12 @@ function drawOverlay(t){
     const rk=COV[strat].rank
     for(const d of nodes){
       const r=rk[d.i];if(!r||r>NSEQ||!vis(d))continue
-      const x=d.x*T.k+T.x,y=d.y*T.k+T.y,spot1=story===3&&r===1,s=spot1?9:7
-      if(spot1){
+      const x=d.x*T.k+T.x,y=d.y*T.k+T.y,spot1=story===3&&r===1,waveDog=spot1||(story===4&&r===NSEQ),waveFirst=story===3?1:NSEQ,s=spot1?9:7
+      if(waveDog){
         // connectedness: a wave leaves the tested dog and every dog it reaches swells and glows as it passes
         const B=5,dots=Array.from({length:B},()=>[]),spokes=Array.from({length:B},()=>[])
         for(const q of nodes){
-          if(COV.g.first[q.i]!==1||q===d||!vis(q))continue
+          if(COV.g.first[q.i]!==waveFirst||q===d||!vis(q))continue
           const qx=q.x*T.k+T.x,qy=q.y*T.k+T.y,dist=Math.hypot(qx-x,qy-y)
           const w=.5+.5*Math.sin(6.2832*(t/2200-dist/Math.max(180,Math.min(W,H)*.55)))
           const bi=Math.min(B-1,Math.floor(w*B))
@@ -408,7 +408,7 @@ function drawOverlay(t){
         octx.globalAlpha=.55+.45*Math.sin(t/260);octx.fillStyle=gr;octx.beginPath();octx.arc(x,y,34,0,6.2832);octx.fill();octx.globalAlpha=1
         octx.strokeStyle=`rgba(255,255,255,${1-ph})`;octx.lineWidth=2;octx.beginPath();octx.arc(x,y,10+40*ph,0,6.2832);octx.stroke()
       }
-      if(!spot1){
+      if(!waveDog){
         // every tested dog glows, each on its own beat; the newest also sends out a ring
         const gr=octx.createRadialGradient(x,y,0,x,y,22)
         gr.addColorStop(0,'rgba(255,255,255,.7)');gr.addColorStop(.4,'rgba(160,230,255,.28)');gr.addColorStop(1,'rgba(160,230,255,0)')
@@ -673,7 +673,7 @@ function storySteps(){
     {k:0,html:`Dogs that are <b>close relatives</b> sit close together. That is why the dots gather into big clumps: <b>families</b>.`},
     {k:0,html:`The <b style="color:#bf141c">red dots</b> are <b>our dogs</b> and litters. Tap one to see where it comes from.`},
     {k:1,html:`Here is one dog to DNA-test, the white diamond. It is a close relative (a half-sibling or closer) of <b>${COV.g.new[0].toLocaleString()} other dogs</b>: its pups, grandpups and siblings. The lines reach them, and they <b style="color:#1d9bc4">glow</b>. Popular dogs get used again and again, so one dog can be kin to <b>${inTen(f[0])} of every 10</b> dogs.`},
-    {k:k10,html:`Watch us add ${k10-1} more dogs, one at a time. Each is chosen because it is related to a part of the breed that is not lit yet, and the dots it newly reaches flash white. Together the <b>${k10} dogs</b> are close relatives of <b>${inTen(f[k10-1])} of every 10</b> dogs.`},
+    {k:k10,html:`Watch us add ${k10-1} more dogs, one at a time. Each is chosen because it is related to a part of the breed that is not lit yet. The lines show the dots that dog newly reaches, and they flash white. Together the <b>${k10} dogs</b> are close relatives of <b>${inTen(f[k10-1])} of every 10</b> dogs.`},
     {k:k90,html:`With <b>${k90} dogs</b> tested, <b>9 of every 10</b> dogs have a tested close relative. Each new dog lights up fewer new dots than the one before, because the big families are already lit. The last few dogs have no close relatives, so each needs its own test.`},
     {k:k10,html:`<b>Your turn.</b> Drag the slider to test any number of dogs and watch the map light up.`}
   ]
