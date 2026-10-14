@@ -356,7 +356,7 @@ function drawOverlay(t){
     const rk=COV[strat].rank
     for(const d of nodes){
       const r=rk[d.i];if(!r||r>NSEQ||!vis(d))continue
-      const x=d.x*T.k+T.x,y=d.y*T.k+T.y,spot1=story===3&&r===1,s=spot1?9:6
+      const x=d.x*T.k+T.x,y=d.y*T.k+T.y,spot1=story===3&&r===1,s=spot1?9:7
       if(spot1){
         octx.strokeStyle='rgba(127,227,255,.16)';octx.lineWidth=.8;octx.beginPath()
         for(const q of nodes){if(COV.g.first[q.i]!==1||q===d||!vis(q))continue;octx.moveTo(x,y);octx.lineTo(q.x*T.k+T.x,q.y*T.k+T.y)}
@@ -368,6 +368,13 @@ function drawOverlay(t){
         gr.addColorStop(0,'rgba(255,255,255,.85)');gr.addColorStop(.35,'rgba(160,230,255,.35)');gr.addColorStop(1,'rgba(160,230,255,0)')
         octx.globalAlpha=.55+.45*Math.sin(t/260);octx.fillStyle=gr;octx.beginPath();octx.arc(x,y,34,0,6.2832);octx.fill();octx.globalAlpha=1
         octx.strokeStyle=`rgba(255,255,255,${1-ph})`;octx.lineWidth=2;octx.beginPath();octx.arc(x,y,10+40*ph,0,6.2832);octx.stroke()
+      }
+      if(!spot1){
+        // every tested dog glows, each on its own beat; the newest also sends out a ring
+        const gr=octx.createRadialGradient(x,y,0,x,y,22)
+        gr.addColorStop(0,'rgba(255,255,255,.7)');gr.addColorStop(.4,'rgba(160,230,255,.28)');gr.addColorStop(1,'rgba(160,230,255,0)')
+        octx.globalAlpha=.5+.5*Math.sin(t/300+r*1.3);octx.fillStyle=gr;octx.beginPath();octx.arc(x,y,22,0,6.2832);octx.fill();octx.globalAlpha=1
+        if(r===NSEQ){const ph=(t%1400)/1400;octx.strokeStyle=`rgba(255,255,255,${1-ph})`;octx.lineWidth=2;octx.beginPath();octx.arc(x,y,8+30*ph,0,6.2832);octx.stroke()}
       }
       octx.fillStyle='#fff';octx.strokeStyle='#0a0c12';octx.lineWidth=1.5
       octx.beginPath();octx.moveTo(x,y-s);octx.lineTo(x+s,y);octx.lineTo(x,y+s);octx.lineTo(x-s,y);octx.closePath();octx.fill();octx.stroke()
