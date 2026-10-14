@@ -610,9 +610,9 @@ function storySteps(){
     {k:0,html:`Every dot is one <b>Great Dane</b> born 2012&ndash;2020, to look at recent, living examples of the population. That is about ${(Math.round(n/100)*100).toLocaleString()} dogs.`},
     {k:0,html:`Dogs that are <b>close relatives</b> sit close together. That is why the dots gather into big clumps: <b>families</b>.`},
     {k:0,html:`The <b style="color:#bf141c">red dots</b> are <b>our dogs</b> and litters. Tap one to see where it comes from.`},
-    {k:1,html:`Now suppose we DNA-test just <b>one dog</b>, the white diamond. Every <b style="color:#1d9bc4">glowing dot</b> has a close relative (a half-sibling or closer) that was tested. That is <b>${inTen(f[0])} in 10</b> dogs from a single test.`},
-    {k:k10,html:`Test <b>${k10} dogs</b> and it is <b>${inTen(f[k10-1])} in 10</b> dogs. Each new test lights up a new part of the breed.`},
-    {k:k90,html:`Test <b>${k90} dogs</b> and it is <b>9 in 10</b>. Every new test helps a little less than the last, so the last few dogs are the expensive ones.`},
+    {k:1,html:`Now suppose we DNA-test just <b>one dog</b>, the white diamond. Every <b style="color:#1d9bc4">glowing dot</b> is a dog with a close relative (a half-sibling or closer) among the tested dogs, so we can learn about it through that relative. From one test, that is <b>${inTen(f[0])} of every 10</b> dogs.`},
+    {k:k10,html:`Test <b>${k10} dogs</b> and <b>${inTen(f[k10-1])} of every 10</b> dogs have a tested close relative. Each new test lights up a new part of the breed.`},
+    {k:k90,html:`Test <b>${k90} dogs</b> and <b>9 of every 10</b> dogs have a tested close relative. Every new test helps a little less than the last, so the last few dogs are the expensive ones.`},
     {k:k10,html:`<b>Your turn.</b> Drag the slider to test any number of dogs and watch the map light up.`}
   ]
 }
