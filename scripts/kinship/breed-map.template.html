@@ -164,7 +164,7 @@ body.pre .stage .read,body.pre .curvebox{display:none}
       </select>
     </label>
     <label>Born up to <input type="range" id="year" aria-describedby="yv"><output id="yv"></output></label>
-    <button id="find" type="button" aria-pressed="true">Litter labels</button>
+    <button id="find" type="button" aria-pressed="false">Show our dogs</button>
     <button id="shake" type="button">Shake</button>
     <button id="alive" type="button" aria-pressed="false">Keep moving</button>
     
@@ -607,7 +607,8 @@ function showStory(i){
   const st=storySteps();story=Math.max(0,Math.min(st.length-1,i))
   const last=story===st.length-1
   document.body.classList.toggle('pre',story<3)
-  showOurs=story<=2||last;if(!showOurs)closeOurs()
+  showOurs=story===2;if(!showOurs)closeOurs()
+  $('find').setAttribute('aria-pressed',showOurs)
   $('sstep').textContent=last?'Explore':`Step ${story+1} of ${st.length-1}`
   $('storytxt').innerHTML=st[story].html
   $('sback').style.visibility=story?'visible':'hidden'
@@ -618,7 +619,7 @@ function showStory(i){
   rampTo(Math.max(+$('nseq').min,st[story].k))
   legend();dirty=true
 }
-function endStory(){showOurs=true;clearInterval(rampT);story=-1;$('story').hidden=true;document.body.classList.remove('pre');$('seq').hidden=false}
+function endStory(){showOurs=false;closeOurs();$('find').setAttribute('aria-pressed','false');legend();clearInterval(rampT);story=-1;$('story').hidden=true;document.body.classList.remove('pre');$('seq').hidden=false}
 function seqRange(){
   const p=strat==='p'
   $('nseq').min=p?1:0
@@ -672,7 +673,7 @@ const resetView=()=>{closeOurs();select(-1);fit()}
 $('zreset').addEventListener('click',resetView)
 $('zin').addEventListener('click',()=>zoomBy(1.6))
 $('zout').addEventListener('click',()=>zoomBy(1/1.6))
-$('find').addEventListener('click',e=>{spot=!spot;e.currentTarget.setAttribute('aria-pressed',spot);dirty=true})
+$('find').addEventListener('click',e=>{showOurs=!showOurs;if(!showOurs)closeOurs();e.currentTarget.setAttribute('aria-pressed',showOurs);legend();dirty=true})
 addEventListener('resize',fit)
 const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches
 if(reduce){$('alive').hidden=true;$('shake').hidden=true}
