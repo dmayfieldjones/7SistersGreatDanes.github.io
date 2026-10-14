@@ -105,10 +105,29 @@ th:first-child,td:first-child{text-align:left}
 body.pre .stage .read,body.pre .curvebox{display:none}
 [hidden]{display:none!important}
 @media (max-width:640px){.storytxt{font-size:1.02rem;min-height:0}.story{padding:12px 14px}.storynav button{padding:7px 14px}}
+@media (max-width:640px){
+  /* phone layout: the map comes first and the tour card sits right under it, so the picture and the words are on screen together */
+  .wrap{display:flex;flex-direction:column;padding:12px 12px 40px}
+  .wrap>*{order:5}
+  .wrap>h1{order:0;margin-bottom:6px}.wrap>.sub{display:none}
+  .wrap>.mappanel{order:1}
+  .wrap>.story,.wrap>.seqbar{order:2;margin:10px 0 0}
+  .stage{height:min(100vw,56vh);margin:0}
+  .stage .read{display:none}
+  .storytxt{font-size:1.05rem;line-height:1.38}
+  .storynav button,.seqbar button,.seqbar select{min-height:44px}
+  .storynav .link{min-height:44px}
+  .seqbar input[type=range]{height:32px}
+  select,button{font-size:16px}
+  .legend{font-size:.8rem;gap:4px 12px;padding:8px 10px}
+  canvas,button{-webkit-tap-highlight-color:transparent}
+  .zoom button{width:44px;height:44px}.zoom #zreset{height:34px}
+  .card{bottom:8px;left:8px;right:8px}
+}
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="wrap" style="padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env(safe-area-inset-right))">
   <h1>The Living Great Dane Family Map</h1>
   <p class="sub">A look at the whole breed, one dot per dog, and a question: how few dogs could we DNA-test and still learn about most of them?</p>
 
@@ -129,7 +148,7 @@ body.pre .stage .read,body.pre .curvebox{display:none}
     <div class="bigwrap"><div class="big" id="cov-big">&mdash;</div><div class="biglab" id="cov-lab">of dogs have a close relative (a half-sibling or closer) among the dogs tested</div></div>
   </section>
 
-  <div class="panel">
+  <div class="panel mappanel">
     <div class="stage" id="stage">
       <canvas id="cv" role="img" aria-label="Map of Great Dane families by pedigree relatedness. A table of family summaries follows below."></canvas>
       <canvas id="ov" aria-hidden="true"></canvas>
@@ -342,7 +361,7 @@ function drawOverlay(t){
   // family labels, biggest first; a label is skipped if it would sit on one already placed
   const placed=[],base=Math.min(W,H)/(2*ext*1.02),zoom=T.k/base
   for(const f of LABEL_ORDER){
-    if(story===0)break
+    if(story===0||(story>=3&&story<6&&W<500))break  // keep the small map clean once the lit-up story starts
     if(!f.n||f.cx===undefined)continue
     const x=f.cx*T.k+T.x,y=f.cy*T.k+T.y,rr=f.sp*T.k
     if(x<-60||x>W+60||y<-20||y>H+20)continue
@@ -393,13 +412,13 @@ function drawOverlay(t){
         for(let bi=0;bi<B;bi++){
           const u=bi/(B-1)
           // edges: a wide soft halo under a bright core
-          for(const [lw,al] of (bi>=2?[[2.6+4*u,.05+.14*u],[.8+1.3*u,.12+.55*u]]:[[.8+1.3*u,.12+.55*u]])){
+          for(const [lw,al] of (bi>=(W<500?3:2)?[[2.6+4*u,.05+.14*u],[.8+1.3*u,.12+.55*u]]:[[.8+1.3*u,.12+.55*u]])){
             octx.strokeStyle=`rgba(140,225,255,${al})`;octx.lineWidth=lw;octx.beginPath()
             for(let i=0;i<spokes[bi].length;i+=2){octx.moveTo(x,y);octx.lineTo(spokes[bi][i],spokes[bi][i+1])}
             octx.stroke()
           }
           // nodes: big soft halo, mid glow, bright core
-          for(const [rr,al] of (bi>=2?[[7+11*u,.10+.16*u],[4+5*u,.2+.3*u]]:[[4+5*u,.2+.3*u]])){
+          for(const [rr,al] of (bi>=(W<500?3:2)?[[7+11*u,.10+.16*u],[4+5*u,.2+.3*u]]:[[4+5*u,.2+.3*u]])){
             octx.fillStyle=`rgba(150,232,255,${al})`;octx.beginPath()
             for(let i=0;i<dots[bi].length;i+=2){octx.moveTo(dots[bi][i]+rr,dots[bi][i+1]);octx.arc(dots[bi][i],dots[bi][i+1],rr,0,6.2832)}
             octx.fill()
