@@ -594,7 +594,7 @@ function storySteps(){
   const f=COV.g.frac,at=t=>{const i=f.findIndex(v=>v>=t);return i<0?f.length:i+1}
   const k10=Math.min(10,f.length),k90=at(.9)
   return[
-    {k:0,html:`Every dot is one <b>Great Dane</b> born 2012&ndash;2020. That is about ${(Math.round(n/100)*100).toLocaleString()} dogs, the breed as it is today.`},
+    {k:0,html:`Every dot is one <b>Great Dane</b> born 2012&ndash;2020, to look at recent, living examples of the population. That is about ${(Math.round(n/100)*100).toLocaleString()} dogs.`},
     {k:0,html:`Dogs that are <b>close relatives</b> sit close together. That is why the dots gather into big clumps: <b>families</b>.`},
     {k:0,html:`The <b style="color:#bf141c">red dots</b> are <b>our dogs</b> and litters. Tap one to see where it comes from.`},
     {k:1,html:`Now suppose we DNA-test just <b>one dog</b>, the white diamond. Every <b style="color:#1d9bc4">glowing dot</b> has a close relative (a half-sibling or closer) that was tested. That is <b>${inTen(f[0])} in 10</b> dogs from a single test.`},
