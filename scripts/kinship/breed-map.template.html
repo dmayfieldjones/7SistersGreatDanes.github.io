@@ -32,7 +32,7 @@ input[type=range]{width:min(220px,50vw);accent-color:var(--ink)}
 #ov{pointer-events:none}
 .tip{position:absolute;pointer-events:none;background:rgba(15,17,25,.94);color:#f0efec;border:1px solid #3a3d4a;border-radius:8px;padding:6px 9px;font-size:.8rem;line-height:1.35;display:none;white-space:nowrap;z-index:3}
 .hint{position:absolute;left:12px;bottom:10px;max-width:40%;font-size:.75rem;color:#8b8ea0;z-index:2}
-.card{position:absolute;right:12px;top:12px;width:min(260px,70%);background:rgba(15,17,25,.9);border:1px solid #3a3d4a;border-radius:10px;padding:12px 14px;font-size:.85rem;display:none;z-index:3}
+.card{position:absolute;right:56px;top:12px;width:min(260px,70%);background:rgba(15,17,25,.9);border:1px solid #3a3d4a;border-radius:10px;padding:12px 14px;font-size:.85rem;display:none;z-index:3}
 .card h2{font-size:1rem;margin:0 0 6px}
 .card dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:2px 12px}
 .card dt{color:#9a9db0}.card dd{margin:0;text-align:right}
@@ -48,7 +48,7 @@ input[type=range]{width:min(220px,50vw);accent-color:var(--ink)}
 .seqbar .stepper{display:inline-flex;gap:4px}
 .seqbar .stepper button{padding:5px 9px}
 .seqbar output{min-width:2ch;font-variant-numeric:tabular-nums;color:var(--ink)}
-.seqbar .big{font-size:1.5rem;white-space:nowrap}
+.seqbar .big{font-size:1.9rem;white-space:nowrap;font-weight:700}
 .stage .read{position:absolute;left:12px;bottom:30px;max-width:min(380px,60%);background:rgba(15,17,25,.82);border:1px solid #2c2f3c;border-radius:10px;padding:8px 11px;font-size:.82rem;line-height:1.4;color:#d8d9e2;margin:0;z-index:2;pointer-events:none}
 .curvebox{position:absolute;right:12px;bottom:12px;width:min(300px,46%);background:rgba(15,17,25,.82);border:1px solid #2c2f3c;border-radius:10px;padding:6px 6px 2px;z-index:2}
 #curve,.stage .curvebox canvas{position:static;inset:auto;width:100%;height:150px;display:block}
@@ -56,7 +56,7 @@ input[type=range]{width:min(220px,50vw);accent-color:var(--ink)}
   .curvebox{display:none}.hint{display:none}
   .stage{height:min(118vw,68vh);min-height:0}
   .stage .read{max-width:calc(100% - 24px);font-size:.74rem;padding:6px 9px;bottom:10px}
-  .seqbar{gap:8px 12px}.seqbar>*{order:3}.seqbar .sl{min-width:0;max-width:100%}.seqbar .sl:not(.grow){order:1;flex:1 1 100%}.seqbar .sl select{flex:1;min-width:0;max-width:100%}.seqbar .grow{min-width:100%;order:2}
+  .seqbar{gap:8px 12px}.seqbar>*{order:3}.seqbar .sl{min-width:0;max-width:100%}.seqbar .grow{order:1}.bigwrap{max-width:none;flex:1 1 100%;order:4;margin:0}.seqbar .big{font-size:1.5rem}.nudge{font-size:.78rem;padding:5px 10px}.card{top:auto;bottom:10px;left:12px;right:12px;width:auto}.stage .read{bottom:10px}
   .seqbar .big{font-size:1.25rem;margin-left:auto}
   h1{font-size:1.3rem}.sub{font-size:.92rem}
   .controls{gap:8px 12px}.controls input[type=range]{width:100%}
@@ -81,28 +81,30 @@ table{border-collapse:collapse;width:100%;margin-top:8px;font-size:.88rem}
 th,td{text-align:right;padding:5px 8px;border-bottom:1px solid var(--grid)}
 th:first-child,td:first-child{text-align:left}
 .note{color:var(--ink2);font-size:.85rem;max-width:70ch;margin-top:16px}
+.zoom{position:absolute;right:12px;top:12px;display:flex;flex-direction:column;gap:6px;z-index:4}
+.zoom button{width:38px;height:38px;border-radius:10px;border:1px solid #3a3d4a;background:rgba(15,17,25,.88);color:#e8e8ee;font:600 1.15rem system-ui,sans-serif;cursor:pointer;padding:0}
+.zoom #zreset{font-size:.68rem;height:30px}
+.nudge{position:absolute;left:50%;top:14px;transform:translateX(-50%);max-width:calc(100% - 130px);text-align:center;background:rgba(15,17,25,.88);border:1px solid #5a7bd6;color:#e8e8ee;border-radius:999px;padding:6px 14px;font-size:.85rem;z-index:3;pointer-events:none;animation:nudge 1.6s ease-in-out infinite;white-space:normal}
+@keyframes nudge{50%{transform:translateX(-50%) translateY(-4px)}}
+@media (prefers-reduced-motion:reduce){.nudge{animation:none}}
+.seqbar .grow{flex-wrap:wrap}.seqbar .grow .lt{flex:0 0 100%;font-weight:600;color:var(--ink)}
+.card[style*="display: block"]~.read{display:none}
+.bigwrap{display:flex;align-items:center;gap:10px;margin-left:auto;max-width:300px}
+.biglab{font-size:.78rem;line-height:1.25;color:var(--ink2)}
+.more .controls{border:0;padding:8px 0 0;margin:0}
+.card p{margin:0 0 8px;color:#c8cad6}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>Breed relatedness map</h1>
-  <p class="sub">Every Great Dane born 2012&ndash;2020, a stand-in for the population alive and breeding today. Pick who counts, then slide to choose how many dogs to sequence.</p>
+  <h1>How many Great Danes would we need to DNA-test?</h1>
+  <p class="sub">Each dot is a Great Dane born 2012&ndash;2020, the dogs around today. Dogs close together are close relatives. Test one dog and you also learn about its relatives. <b>Drag the slider</b> to see how far a few dogs go.</p>
 
   <section class="panel seqbar" id="seq" hidden>
-    <label class="sl">Strategy
-      <select id="strat" title="How the dogs to sequence are chosen">
-        <option value="p">Split into k groups</option>
-        <option value="g">Best next dog, one at a time</option>
-        <option value="f">One stand-in per family</option>
-      </select>
-    </label>
-    <label class="sl">Who counts
-      <select id="tgt" title="Which dogs the coverage is measured over"></select>
-    </label>
-    <label class="sl grow">Dogs to sequence <input type="range" id="nseq" min="0" max="40" value="0"><output id="nv">0</output></label>
+    <label class="sl grow"><span class="lt">Dogs we DNA-test</span> <input type="range" id="nseq" min="0" max="40" value="0" aria-describedby="cov-lab"><output id="nv">0</output></label>
     <span class="stepper"><button id="prev" type="button" aria-label="One fewer dog">&#9664;</button><button id="next" type="button" aria-label="One more dog">&#9654;</button></span>
     <button id="play" type="button">Play</button>
-    <div class="big" id="cov-big" title="Share of dogs with a sequenced dog at half-sibling level or closer">&mdash;</div>
+    <div class="bigwrap"><div class="big" id="cov-big">&mdash;</div><div class="biglab" id="cov-lab">of dogs have a close relative (a half-sibling or closer) among the dogs tested</div></div>
   </section>
 
   <div class="panel">
@@ -113,12 +115,27 @@ th:first-child,td:first-child{text-align:left}
       <div class="card" id="card"></div>
       <div class="read" id="cov-read"></div>
       <div class="curvebox"><canvas id="curve" role="img" aria-label="Share of dogs with a sequenced close relative, against number of dogs sequenced, for the three strategies"></canvas></div>
-      <div class="hint">Scroll to zoom &middot; drag to pan &middot; click an island for its numbers</div>
+      <div class="zoom"><button id="zin" type="button" aria-label="Zoom in">+</button><button id="zout" type="button" aria-label="Zoom out">&minus;</button><button id="zreset" type="button" aria-label="Show the whole map">Reset</button></div>
+      <div class="nudge" id="nudge">Drag the slider to test more dogs</div>
+      <div class="hint">Tap or hover a dot to learn about it</div>
     </div>
     <div class="legend" id="legend"></div>
   </div>
 
-  <div class="panel controls" style="margin:12px 0 0">
+  <details class="panel more" id="more">
+    <summary>More options</summary>
+    <div class="controls">
+      <label>How to pick
+        <select id="strat" title="How the dogs to test are chosen">
+          <option value="p">Split into groups</option>
+          <option value="g">Best next dog, one at a time</option>
+          <option value="f">One stand-in per family</option>
+        </select>
+      </label>
+      <label>Which dogs count
+        <select id="tgt" title="Which dogs the coverage is measured over"></select>
+      </label>
+
     <label>Color by
       <select id="mode">
         <option value="fam">Coat family</option>
@@ -130,8 +147,9 @@ th:first-child,td:first-child{text-align:left}
     <button id="find" type="button" aria-pressed="true">Litter labels</button>
     <button id="shake" type="button">Shake</button>
     <button id="alive" type="button" aria-pressed="false">Keep moving</button>
-    <button id="reset" type="button">Reset view</button>
-  </div>
+    
+      </div>
+  </details>
 
 
 
@@ -221,11 +239,21 @@ function fit(){
   T={k:Math.min(W,H)/(2*ext*1.02),x:W/2,y:H/2};dirty=true
 }
 const toW=(x,y)=>[(x-T.x)/T.k,(y-T.y)/T.k]
+const baseK=()=>Math.min(W,H)/(2*ext*1.02)
+// keep the map in view: no zooming out past the whole map, no panning it away
+function clampT(){
+  const b=baseK();T.k=Math.max(b,Math.min(b*40,T.k))
+  T.x=Math.max(W/2-ext*T.k,Math.min(W/2+ext*T.k,T.x));T.y=Math.max(H/2-ext*T.k,Math.min(H/2+ext*T.k,T.y))
+}
+function zoomBy(f){const k=T.k;T.k=k*f;clampT();const r=T.k/k;T.x=W/2-(W/2-T.x)*r;T.y=H/2-(H/2-T.y)*r;clampT();dirty=true}
+const isZoomed=()=>T.k>baseK()*1.08
 const vis=d=>d.yr<=year
 const colorOf=d=>mode==='fam'?COATC[d.fam]:mode==='F'?ramp(d.F/0.3):ramp((d.yr-minY)/(maxY-minY||1))
 
 function draw(){
   dirty=false
+  const ta=isZoomed()?'none':'pan-y';if(cv.style.touchAction!==ta)cv.style.touchAction=ta
+  $('zreset').style.opacity=isZoomed()?1:.55
   ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H)
   // family glows: soft discs under each island
   ctx.globalCompositeOperation='lighter'
@@ -285,7 +313,7 @@ function drawOverlay(t){
     if(W<500&&f.n<400&&zoom<2)continue
     if(f.n<90&&zoom<2.4)continue
     const fs=Math.max(10,Math.min(15,10+Math.log2(f.n/60)*1.4))*(W<500?.82:1)
-    const tag=f.name.replace(/&amp;/g,'&'),txt=tag+' \u00b7 '+f.n.toLocaleString()
+    const tag=f.name.replace(/&amp;/g,'&'),txt=tag+' \u00b7 '+f.n.toLocaleString()+' dogs'
     octx.font=`600 ${fs}px system-ui,sans-serif`
     const w=octx.measureText(txt).width,h=fs+4,ly=y-Math.min(rr,60*zoom+30)-h*.4
     const lx=Math.max(w/2+8,Math.min(W-w/2-8,x))
@@ -345,6 +373,7 @@ function drawOverlay(t){
     mine.sort((p,q)=>p.y-q.y)
     octx.font=`600 ${W<500?10.5:12}px system-ui,sans-serif`;octx.textAlign='left';octx.textBaseline='middle'
     const boxes=[]
+    pills=[]
     for(const m of mine){
       // litters only; Mia stands for her litter of five. Individual names show on hover.
       const nm=m.o&&m.o.name||'',from=(m.o&&m.o.note||'').match(/^From the (.*litter)/i)
@@ -355,7 +384,7 @@ function drawOverlay(t){
       if(lx+w>W-6)lx=m.x-16-w
       ly=Math.max(14,Math.min(H-14,ly))
       for(let k=0;k<40&&boxes.some(q=>lx<q[2]&&lx+w>q[0]&&ly-10<q[3]&&ly+10>q[1]);k++)ly+=22
-      boxes.push([lx,ly-10,lx+w,ly+10])
+      boxes.push([lx,ly-10,lx+w,ly+10]);pills.push([lx-4,ly-14,lx+w+4,ly+14,m.d])
       octx.strokeStyle='rgba(255,255,255,.6)';octx.lineWidth=1
       octx.beginPath();octx.moveTo(m.x,m.y);octx.lineTo(lx<m.x?lx+w:lx,ly);octx.stroke()
       octx.fillStyle='#bf141c';octx.beginPath();octx.roundRect(lx,ly-10,w,20,10);octx.fill()
@@ -392,10 +421,10 @@ function startSim(){
 }
 function wake(a){if(!sim)return;sim.alphaTarget(alive?0.03:0).alpha(Math.max(sim.alpha(),a));sim.restart()}
 
-function pick(mx,my){
+function pick(mx,my,touch){
   const [wx,wy]=toW(mx,my)
-  for(const d of nodes){if(!d.our||!vis(d))continue;const dx=(d.x-wx)*T.k,dy=(d.y-wy)*T.k;if(dx*dx+dy*dy<18*18)return d}
-  let best=null,bd=(10/T.k)**2
+  for(const d of nodes){if(!d.our||!vis(d))continue;const dx=(d.x-wx)*T.k,dy=(d.y-wy)*T.k;if(dx*dx+dy*dy<(touch?30:18)**2)return d}
+  let best=null,bd=((touch?16:10)/T.k)**2
   for(const d of nodes){if(!vis(d))continue;const dx=d.x-wx,dy=d.y-wy,q=dx*dx+dy*dy;if(q<bd){bd=q;best=d}}
   return best
 }
@@ -405,19 +434,24 @@ function famAt(mx,my){
   return best
 }
 const pos=e=>{const r=cv.getBoundingClientRect();return[e.clientX-r.left,e.clientY-r.top]}
-let down=null
+let down=null,ourSel=null,pills=[]
 cv.addEventListener('pointerdown',e=>{
   if(anim)return
-  const [mx,my]=pos(e);cv.setPointerCapture(e.pointerId);down={mx,my,moved:false}
-  const d=pick(mx,my)
-  if(d){dragNode=d;d.fx=d.x;d.fy=d.y}else panning={mx,my,x:T.x,y:T.y}
-  cv.classList.add('drag')
+  const mouse=e.pointerType==='mouse'
+  const [mx,my]=pos(e);down={mx,my,moved:false,mouse}
+  if(mouse){
+    cv.setPointerCapture(e.pointerId)
+    const d=pick(mx,my)
+    if(d&&!d.our){dragNode=d;d.fx=d.x;d.fy=d.y}else panning={mx,my,x:T.x,y:T.y}
+    cv.classList.add('drag')
+  }else if(isZoomed()){cv.setPointerCapture(e.pointerId);panning={mx,my,x:T.x,y:T.y}}
 })
 cv.addEventListener('pointermove',e=>{
   const [mx,my]=pos(e)
-  if(down&&(Math.abs(mx-down.mx)+Math.abs(my-down.my)>4))down.moved=true
+  if(down&&(Math.abs(mx-down.mx)+Math.abs(my-down.my)>6))down.moved=true
   if(dragNode){if(down.moved){const [wx,wy]=toW(mx,my);dragNode.fx=wx;dragNode.fy=wy;wake(.3)}return}
-  if(panning){T.x=panning.x+mx-panning.mx;T.y=panning.y+my-panning.my;dirty=true;return}
+  if(panning){T.x=panning.x+mx-panning.mx;T.y=panning.y+my-panning.my;clampT();dirty=true;return}
+  if(e.pointerType!=='mouse'||ourSel)return
   const h=anim?null:pick(mx,my)
   hover=h;showTip(h,mx,my)
 })
@@ -425,15 +459,31 @@ function end(e){
   const wasClick=down&&!down.moved
   if(dragNode){dragNode.fx=dragNode.fy=null;dragNode=null;wake(.2)}
   panning=null;cv.classList.remove('drag')
-  if(wasClick&&e&&e.type==='pointerup'){const [mx,my]=pos(e);select(famAt(mx,my))}
+  if(wasClick&&e&&e.type==='pointerup'){
+    const [mx,my]=pos(e),pl=pills.find(q=>mx>=q[0]&&mx<=q[2]&&my>=q[1]&&my<=q[3])
+    const d=pl?pl[4]:pick(mx,my,e.pointerType!=='mouse')
+    if(d&&d.our)openOurs(d)
+    else{closeOurs();select(famAt(mx,my))}
+  }
   down=null
 }
 cv.addEventListener('pointerup',end);cv.addEventListener('pointercancel',end)
-cv.addEventListener('pointerleave',()=>{hover=null;tip.style.display='none'})
+cv.addEventListener('pointerleave',()=>{if(!ourSel){hover=null;tip.style.display='none'}})
 cv.addEventListener('wheel',e=>{
-  e.preventDefault();const [mx,my]=pos(e),f=Math.exp(-e.deltaY*.0015),k=Math.max(.2,Math.min(60,T.k*f))
-  T.x=mx-(mx-T.x)*(k/T.k);T.y=my-(my-T.y)*(k/T.k);T.k=k;dirty=true
+  e.preventDefault();const [mx,my]=pos(e),f=Math.exp(-e.deltaY*.0015),k=T.k
+  T.k=k*f;clampT();const r=T.k/k;T.x=mx-(mx-T.x)*r;T.y=my-(my-T.y)*r;clampT();dirty=true
 },{passive:false})
+// our dogs and litters: a plain-language card, no zoom
+function openOurs(d){
+  const o=OURS.get(d.i);if(!o)return
+  ourSel=d;hover=d;tip.style.display='none';sel=-1
+  const c={};o.rel.forEach(([j])=>{const f=FAMS[nodes[j].cl].name.replace(/&amp;/g,'&');c[f]=(c[f]||0)+1})
+  const top=Object.entries(c).sort((a,b)=>b[1]-a[1])
+  const lit=/litter/i.test(o.name)
+  card.innerHTML=`<h2>${o.name}</h2>${o.note?`<p>${o.note}</p>`:''}<p>${lit?'This litter':'This dog'} sits in <b>${FAMS[d.cl].name.replace(/&amp;/g,'&')}</b>, a family of ${FAMS[d.cl].n.toLocaleString()} dogs. The lines on the map reach its ${o.rel.length} closest relatives${top.length?`: ${top.slice(0,3).map(([f,k])=>k+' in '+f).join(', ')}`:''}.</p><button type="button" id="close">Close</button>`
+  card.style.display='block';$('close').onclick=closeOurs;dirty=true
+}
+function closeOurs(){if(!ourSel)return;ourSel=null;hover=null;card.style.display='none';dirty=true}
 function showTip(d,mx,my){
   if(!d){tip.style.display='none';return}
   const o=d.our&&OURS.get(d.i)
@@ -448,12 +498,12 @@ function showTip(d,mx,my){
 }
 function select(c){
   sel=c<0||c===sel?-1:c
-  if(sel<0){card.style.display='none';dirty=true;return}
+  if(sel<0){if(!ourSel)card.style.display='none';dirty=true;return}
+  ourSel=null;hover=null
   const f=FAMS[sel];let hi=0,cnt=0
   for(const d of nodes)if(d.cl===sel&&vis(d)){cnt++;if(d.F>=.125)hi++}
-  card.innerHTML=`<h2>${f.name}</h2><dl><dt>Dogs</dt><dd>${f.n.toLocaleString()}</dd><dt>Average inbreeding</dt><dd>${f.F.toFixed(1)}%</dd><dt>Above 12.5%</dt><dd>${(100*hi/(cnt||1)).toFixed(0)}%</dd><dt>Median birth year</dt><dd>${f.yr||'n/a'}</dd><dt>Most common coat</dt><dd>${COATS[f.coat]}</dd>${f.ours?'<dt>Includes</dt><dd>our dogs</dd>':''}</dl><button type="button" id="close">Clear</button>`
+  card.innerHTML=`<h2>${f.name}</h2><dl><dt>Dogs</dt><dd>${f.n.toLocaleString()}</dd><dt>Inbreeding (parents' relatedness)</dt><dd>${f.F.toFixed(1)}%</dd><dt>Above 12.5% (half-sibling mating)</dt><dd>${(100*hi/(cnt||1)).toFixed(0)}%</dd><dt>Median birth year</dt><dd>${f.yr||'n/a'}</dd><dt>Most common coat</dt><dd>${COATS[f.coat]}</dd>${f.ours?'<dt>Includes</dt><dd>our dogs</dd>':''}</dl><button type="button" id="close">Clear</button>`
   card.style.display='block';$('close').onclick=()=>select(-1)
-  zoomTo(f.cx,f.cy,Math.min(W,H)/(Math.max(f.sp,f.r)*3))
   dirty=true
 }
 function zoomTo(x,y,k){
@@ -493,22 +543,23 @@ function seqReadout(){
   if(!COV)return
   $('nv').textContent=NSEQ
   const big=$('cov-big'),rd=$('cov-read')
-  if(NSEQ===0&&strat!=='p'){big.textContent='0%';rd.textContent='Nothing sequenced yet. Slide right or press Play.'}
+  if(NSEQ===0&&strat!=='p'){big.textContent='0%';rd.textContent='No dogs tested yet. Slide right, or press Play.'}
   else if(strat==='p'){
     const k=Math.max(1,NSEQ),gk=groupsAt(k),cnt=new Array(k).fill(0)
     for(let i=0;i<n;i++)if(gk[i]<k)cnt[gk[i]]++
-    const v=GRP.frac[k-1],mv=GRP.mean[k-1],sz=cnt.slice().sort((a,b)=>b-a)
-    big.textContent=(100*v).toFixed(0)+'% covered'
-    let msg=`Sequence the ${k} dog${k>1?'s':''} marked by diamonds and ${(100*v).toFixed(0)}% of the ${COV.n.toLocaleString()} dogs that count have a close relative (half-sibling level or nearer) among them.`
-    if(k>1){const a=cnt[GRP.parent[k-1]],b=cnt[k-1];msg+=` Newest split: a group of ${(a+b).toLocaleString()} became ${a.toLocaleString()} and ${b.toLocaleString()}.`}
+    const v=GRP.frac[k-1]
+    big.textContent=(100*v).toFixed(0)+'%'
+    let msg=`Test the ${k} dog${k>1?'s':''} marked with diamonds and ${(100*v).toFixed(0)}% of the ${COV.n.toLocaleString()} dogs have a close relative among them.`
+    if(k>1)msg+=` The newest diamond (${k}) stands in for ${cnt[k-1].toLocaleString()} dogs that had none.`
     rd.textContent=msg}
-  else{const v=COV[strat].frac[NSEQ-1],nw=COV[strat].new[NSEQ-1],tot=COV.n
-    big.textContent=(100*v).toFixed(0)+'% covered'
-    rd.textContent=`Sequence the ${NSEQ} dog${NSEQ>1?'s':''} marked by diamonds and ${(100*v).toFixed(0)}% of the ${COV.n.toLocaleString()} dogs that count have a close relative (half-sibling level or nearer) among them. The newest pick added ${nw.toLocaleString()} dogs.`}
+  else{const v=COV[strat].frac[NSEQ-1],nw=COV[strat].new[NSEQ-1]
+    big.textContent=(100*v).toFixed(0)+'%'
+    rd.textContent=`Test the ${NSEQ} dog${NSEQ>1?'s':''} marked with diamonds and ${(100*v).toFixed(0)}% of the ${COV.n.toLocaleString()} dogs have a close relative among them. Dog ${NSEQ} added ${nw.toLocaleString()} more.`}
   drawCurve()
 }
 let playT=null
-function setN(k){NSEQ=Math.max(+$('nseq').min,Math.min(+$('nseq').max,k));$('nseq').value=NSEQ;seqReadout();dirty=true}
+function setN(k){const nd=$('nudge');if(nd&&nd.style.display!=='none'&&k!==NSEQ)nd.style.display='none'
+  NSEQ=Math.max(+$('nseq').min,Math.min(+$('nseq').max,k));$('nseq').value=NSEQ;seqReadout();dirty=true}
 function seqRange(){
   const p=strat==='p'
   $('nseq').min=p?1:0
@@ -542,8 +593,8 @@ function stats(){
     b.y.sort((p,q)=>p-q);return`<tr><td>${f.name}</td><td>${b.n.toLocaleString()}</td><td>${(100*b.f/b.n).toFixed(1)}%</td><td>${b.y[b.y.length>>1]}</td></tr>`}).join('')
 }
 function legend(){
-  const L=$('legend'),our='<span><i style="background:#bf141c;box-shadow:0 0 0 2px var(--surface),0 0 0 3.5px var(--ink)"></i>Our dogs &amp; litters (squares)</span>'
-  if(strat==='p'&&GRP)L.innerHTML='<span><i style="background:#fff;border:1.5px solid #333;border-radius:2px;transform:rotate(45deg) scale(.85)"></i>Dog to sequence for its group</span><span>Each color is one group of close kin</span><span><i style="background:#6a6f84"></i>Born before the chosen cutoff, not counted</span>'+our
+  const L=$('legend'),our='<span><i style="background:#bf141c;box-shadow:0 0 0 2px var(--surface),0 0 0 3.5px var(--ink)"></i>Our dogs &amp; litters (red)</span>'
+  if(strat==='p'&&GRP)L.innerHTML='<span><i style="background:#fff;border:1.5px solid #333;border-radius:2px;transform:rotate(45deg) scale(.85)"></i>The dog to test for its group</span><span>Each color is one group of relatives</span><span><i style="background:#6a6f84"></i>Not counted (born earlier)</span>'+our
   else if(mode==='fam')L.innerHTML=COATS.map((f,i)=>`<span><i style="background:${COATC[i]}"></i>${f}</span>`).join('')+our
   else{const g=`linear-gradient(90deg,${ramp(0)},${ramp(.5)},${ramp(1)})`
     L.innerHTML=mode==='F'?`<span>Inbreeding 0%<span class="ramp" style="background:${g}"></span>30%+</span>${our}`:`<span>Born ${minY}<span class="ramp" style="background:${g}"></span>${maxY}</span>${our}`}
@@ -553,7 +604,10 @@ $('mode').addEventListener('change',e=>{mode=e.target.value;refresh()})
 yearEl.addEventListener('input',e=>{year=+e.target.value;refresh()})
 $('shake').addEventListener('click',()=>{if(!sim)return;for(const d of nodes){d.vx+=(Math.random()-.5)*6;d.vy+=(Math.random()-.5)*6}wake(.6)})
 $('alive').addEventListener('click',e=>{alive=!alive;e.currentTarget.setAttribute('aria-pressed',alive);if(sim){wake(alive?.2:0);if(!alive)sim.alphaTarget(0)}})
-$('reset').addEventListener('click',()=>{select(-1);fit()})
+const resetView=()=>{closeOurs();select(-1);fit()}
+$('zreset').addEventListener('click',resetView)
+$('zin').addEventListener('click',()=>zoomBy(1.6))
+$('zout').addEventListener('click',()=>zoomBy(1/1.6))
 $('find').addEventListener('click',e=>{spot=!spot;e.currentTarget.setAttribute('aria-pressed',spot);dirty=true})
 addEventListener('resize',fit)
 const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches
