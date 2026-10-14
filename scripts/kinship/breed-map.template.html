@@ -227,7 +227,7 @@ function groupsAt(k){
 }
 if(TG.length)setTarget(Math.max(0,TG.findIndex(t=>t.frm===2016)))
 const OURS=new Map((DATA.ours||[]).map(o=>[o.i,o]))
-let spot=true
+let spot=true,showOurs=true
 let strat='g',NSEQ=0
 const E=d64(DATA.e,Uint16Array),EW=d64(DATA.ew,Uint8Array)
 const COATS=['Mixed / unrecorded','Fawn & brindle','Blue','Harlequin & mantle','Black']
@@ -363,7 +363,7 @@ function drawOverlay(t){
     }
   }
   // where a hovered dog of ours comes from: lines to its closest relatives
-  if(hover&&hover.our&&OURS.has(hover.i)){
+  if(showOurs&&hover&&hover.our&&OURS.has(hover.i)){
     const o=OURS.get(hover.i),hx=hover.x*T.k+T.x,hy=hover.y*T.k+T.y
     for(const [j,w] of o.rel){
       const q=nodes[j];if(!vis(q))continue
@@ -377,7 +377,7 @@ function drawOverlay(t){
   const RED='#bf141c',REDL='#ff3b44',pulse=(Math.sin(t/450)+1)/2
   const mine=[]
   for(const d of nodes){
-    if(!d.our||!vis(d))continue
+    if(!d.our||!showOurs||!vis(d))continue
     const o=OURS.get(d.i),x=d.x*T.k+T.x,y=d.y*T.k+T.y,lit=o&&/litter/i.test(o.name)
     mine.push({d,o,x,y})
     const gr=octx.createRadialGradient(x,y,0,x,y,13+5*pulse)
@@ -443,7 +443,7 @@ function wake(a){if(!sim)return;sim.alphaTarget(alive?0.03:0).alpha(Math.max(sim
 
 function pick(mx,my,touch){
   const [wx,wy]=toW(mx,my)
-  for(const d of nodes){if(!d.our||!vis(d))continue;const dx=(d.x-wx)*T.k,dy=(d.y-wy)*T.k;if(dx*dx+dy*dy<(touch?30:18)**2)return d}
+  for(const d of nodes){if(!d.our||!showOurs||!vis(d))continue;const dx=(d.x-wx)*T.k,dy=(d.y-wy)*T.k;if(dx*dx+dy*dy<(touch?30:18)**2)return d}
   let best=null,bd=((touch?16:10)/T.k)**2
   for(const d of nodes){if(!vis(d))continue;const dx=d.x-wx,dy=d.y-wy,q=dx*dx+dy*dy;if(q<bd){bd=q;best=d}}
   return best
@@ -607,6 +607,7 @@ function showStory(i){
   const st=storySteps();story=Math.max(0,Math.min(st.length-1,i))
   const last=story===st.length-1
   document.body.classList.toggle('pre',story<3)
+  showOurs=story<=2||last;if(!showOurs)closeOurs()
   $('sstep').textContent=last?'Explore':`Step ${story+1} of ${st.length-1}`
   $('storytxt').innerHTML=st[story].html
   $('sback').style.visibility=story?'visible':'hidden'
@@ -617,7 +618,7 @@ function showStory(i){
   rampTo(Math.max(+$('nseq').min,st[story].k))
   legend();dirty=true
 }
-function endStory(){clearInterval(rampT);story=-1;$('story').hidden=true;document.body.classList.remove('pre');$('seq').hidden=false}
+function endStory(){showOurs=true;clearInterval(rampT);story=-1;$('story').hidden=true;document.body.classList.remove('pre');$('seq').hidden=false}
 function seqRange(){
   const p=strat==='p'
   $('nseq').min=p?1:0
@@ -655,7 +656,7 @@ function stats(){
     b.y.sort((p,q)=>p-q);return`<tr><td>${f.name}</td><td>${b.n.toLocaleString()}</td><td>${(100*b.f/b.n).toFixed(1)}%</td><td>${b.y[b.y.length>>1]}</td></tr>`}).join('')
 }
 function legend(){
-  const L=$('legend'),our='<span><i style="background:#bf141c;box-shadow:0 0 0 2px var(--surface),0 0 0 3.5px var(--ink)"></i>Our dogs &amp; litters (red)</span>'
+  const L=$('legend'),our=!showOurs?'':'<span><i style="background:#bf141c;box-shadow:0 0 0 2px var(--surface),0 0 0 3.5px var(--ink)"></i>Our dogs &amp; litters (red)</span>'
   if(strat==='p'&&GRP)L.innerHTML='<span><i style="background:#fff;border:1.5px solid #333;border-radius:2px;transform:rotate(45deg) scale(.85)"></i>The dog to test for its group</span><span>Each color is one group of relatives</span><span><i style="background:#6a6f84"></i>Not counted (born earlier)</span>'+our
   else if((strat==='g'||strat==='f')&&NSEQ>0)L.innerHTML='<span><i style="background:#fff;border:1.5px solid #333;border-radius:2px;transform:rotate(45deg) scale(.85)"></i>A dog we test</span><span><i style="background:#7fe3ff"></i>Has a tested close relative</span><span><i style="background:#555a6a"></i>Not yet</span>'+our
   else if(mode==='fam')L.innerHTML=COATS.map((f,i)=>`<span><i style="background:${COATC[i]}"></i>${f}</span>`).join('')+our
