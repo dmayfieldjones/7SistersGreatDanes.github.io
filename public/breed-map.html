@@ -364,9 +364,22 @@ function drawOverlay(t){
     const rk=COV[strat].rank
     for(const d of nodes){
       const r=rk[d.i];if(!r||r>NSEQ||!vis(d))continue
-      const x=d.x*T.k+T.x,y=d.y*T.k+T.y,s=6
+      const x=d.x*T.k+T.x,y=d.y*T.k+T.y,spot1=story===3&&r===1,s=spot1?9:6
+      if(spot1){
+        // the one tested dog in the tour: a breathing glow and an expanding ring
+        const ph=(t%1600)/1600,gr=octx.createRadialGradient(x,y,0,x,y,34)
+        gr.addColorStop(0,'rgba(255,255,255,.85)');gr.addColorStop(.35,'rgba(160,230,255,.35)');gr.addColorStop(1,'rgba(160,230,255,0)')
+        octx.globalAlpha=.55+.45*Math.sin(t/260);octx.fillStyle=gr;octx.beginPath();octx.arc(x,y,34,0,6.2832);octx.fill();octx.globalAlpha=1
+        octx.strokeStyle=`rgba(255,255,255,${1-ph})`;octx.lineWidth=2;octx.beginPath();octx.arc(x,y,10+40*ph,0,6.2832);octx.stroke()
+      }
       octx.fillStyle='#fff';octx.strokeStyle='#0a0c12';octx.lineWidth=1.5
       octx.beginPath();octx.moveTo(x,y-s);octx.lineTo(x+s,y);octx.lineTo(x,y+s);octx.lineTo(x-s,y);octx.closePath();octx.fill();octx.stroke()
+      if(spot1){
+        octx.font='700 12px system-ui,sans-serif';const w=octx.measureText('The tested dog').width+16,lx=Math.min(W-w-6,x+16),ly=Math.max(16,y-30)
+        octx.fillStyle='rgba(15,17,25,.9)';octx.strokeStyle='#fff';octx.lineWidth=1;octx.beginPath();octx.roundRect(lx,ly-11,w,22,11);octx.fill();octx.stroke()
+        octx.fillStyle='#fff';octx.textAlign='left';octx.fillText('The tested dog',lx+8,ly);octx.textAlign='center'
+        continue
+      }
       if(NSEQ<=12){octx.font='600 11px system-ui,sans-serif';octx.fillStyle='#fff';octx.fillText(String(r),x,y-s-8)}
     }
   }
