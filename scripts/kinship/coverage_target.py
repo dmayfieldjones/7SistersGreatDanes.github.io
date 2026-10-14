@@ -77,6 +77,12 @@ for _ in range(args.steps):
         break
 res_g = curves(order)
 
+# a typical dog: the candidate whose reach is the median of all candidates, for the "what one dog speaks for" comparison
+deg = C.sum(axis=0)
+jt = int(np.argsort(deg)[len(deg) // 2])
+typical = dict(dog=jt, n=int(deg[jt]), best=int(deg.max()), median=int(np.median(deg)),
+               covered=[int(T[i]) for i in np.where(C[:, jt])[0] if T[i] != jt])
+
 # f: one stand-in per target family
 fam_ids = sorted({c for c in cl[T] if c > 0}, key=lambda c: -int((cl[T] == c).sum()))
 reps = []
@@ -170,7 +176,7 @@ res_p = dict(final=final.tolist(), parent=parent,
              rep0=int(center(T)) if False else None, frac=frac, mean=mean, steps=steps)
 # level-1 representative = the first group's representative before any split
 res_p['rep0'] = int(center(T))
-json.dump(dict(frm=args.from_year, close=close, n=int(len(T)), g=res_g, f=res_f, p=res_p),
+json.dump(dict(frm=args.from_year, close=close, n=int(len(T)), g=res_g, f=res_f, p=res_p, typical=typical),
           open(os.path.join(args.dir, f'target_{args.from_year}.json'), 'w'))
 print(args.from_year, len(T), 'g95', next((i + 1 for i, v in enumerate(res_g['frac']) if v >= .95), None),
       'f', res_f['frac'][-1], 'p@60', res_p['frac'][min(59, len(frac) - 1)])

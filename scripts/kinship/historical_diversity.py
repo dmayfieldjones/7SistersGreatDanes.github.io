@@ -129,7 +129,7 @@ trace = reached & (q < 0.1 * eq)
 sq = np.sort(q[reached])[::-1]
 cs = np.cumsum(sq)
 conc = dict(cut=Y, cohort=M, ancestors=K, effective=round(float(1 / np.sum(q ** 2)), 1),
-            n50=int(np.searchsorted(cs, 0.5)) + 1, n90=int(np.searchsorted(cs, 0.9)) + 1,
+            n50=int(np.searchsorted(cs, 0.5 * cs[-1])) + 1, n90=int(np.searchsorted(cs, 0.9 * cs[-1])) + 1,
             trace_ancestors=int(trace.sum()), trace_share_of_ancestors=round(float(trace.sum() / K), 3),
             trace_genome_share=round(float(q[trace].sum()), 4), median_known_share=round(float(np.median(known)), 3))
 log(conc)

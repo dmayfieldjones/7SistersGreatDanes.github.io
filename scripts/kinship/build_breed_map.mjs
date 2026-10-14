@@ -131,6 +131,7 @@ const tg = tgFiles.map(f => {
   const t = JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8'))
   const st = r => ({ first: b64(pack(r.first)), rank: b64(pack(r.rank)), frac: r.frac, mean: r.mean, new: r.new })
   return { frm: t.frm, n: t.n, close: t.close, g: st(t.g), f: st(t.f),
+    typical: t.typical && { dog: remap[t.typical.dog], covered: t.typical.covered.map(j => remap[j]), n: t.typical.n, best: t.typical.best, median: t.typical.median },
     p: { final: b64(pack(t.p.final)), parent: t.p.parent, rep0: remap[t.p.rep0], steps: t.p.steps.map(s => s.map(j => remap[j])), frac: t.p.frac, mean: t.p.mean } }
 })
 // our dogs: display name and closest relatives (anonymous indices into the shuffled list)
