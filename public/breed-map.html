@@ -413,12 +413,16 @@ function drawOverlay(t){
     if(!d.our||!showOurs||!vis(d))continue
     const o=OURS.get(d.i),x=d.x*T.k+T.x,y=d.y*T.k+T.y,lit=o&&/litter/i.test(o.name)
     mine.push({d,o,x,y})
-    const gr=octx.createRadialGradient(x,y,0,x,y,13+5*pulse)
-    gr.addColorStop(0,'rgba(255,59,68,.4)');gr.addColorStop(1,'rgba(255,59,68,0)')
-    octx.fillStyle=gr;octx.beginPath();octx.arc(x,y,13+5*pulse,0,6.2832);octx.fill()
+    // a breathing red glow and a ring that keeps expanding; each dot on its own beat
+    const ph=((t+mine.length*370)%1800)/1800,R0=lit?8:6.5
+    const gr=octx.createRadialGradient(x,y,0,x,y,30)
+    gr.addColorStop(0,'rgba(255,59,68,.75)');gr.addColorStop(.35,'rgba(255,59,68,.3)');gr.addColorStop(1,'rgba(255,59,68,0)')
+    octx.globalAlpha=.55+.45*Math.sin(t/330+mine.length)
+    octx.fillStyle=gr;octx.beginPath();octx.arc(x,y,30,0,6.2832);octx.fill();octx.globalAlpha=1
+    octx.strokeStyle=`rgba(255,90,98,${.9*(1-ph)})`;octx.lineWidth=2.2
+    octx.beginPath();octx.arc(x,y,R0+4+30*ph,0,6.2832);octx.stroke()
     octx.fillStyle=RED;octx.strokeStyle='#fff';octx.lineWidth=2
-    octx.beginPath()
-    if(lit){octx.rect(x-6,y-6,12,12)}else{octx.arc(x,y,6.5,0,6.2832)}
+    octx.beginPath();octx.arc(x,y,R0,0,6.2832)
     octx.fill();octx.stroke()
   }
   if(spot&&mine.length){
@@ -690,7 +694,7 @@ function stats(){
     b.y.sort((p,q)=>p-q);return`<tr><td>${f.name}</td><td>${b.n.toLocaleString()}</td><td>${(100*b.f/b.n).toFixed(1)}%</td><td>${b.y[b.y.length>>1]}</td></tr>`}).join('')
 }
 function legend(){
-  const L=$('legend'),our=!showOurs?'':'<span><i style="background:#bf141c;box-shadow:0 0 0 2px var(--surface),0 0 0 3.5px var(--ink)"></i>Our dogs &amp; litters (red)</span>'
+  const L=$('legend'),our=!showOurs?'':'<span><i style="background:#bf141c;box-shadow:0 0 0 2px var(--surface),0 0 0 3.5px var(--ink)"></i>Our dogs &amp; litters</span>'
   if(strat==='p'&&GRP)L.innerHTML='<span><i style="background:#fff;border:1.5px solid #333;border-radius:2px;transform:rotate(45deg) scale(.85)"></i>The dog to test for its group</span><span>Each color is one group of relatives</span><span><i style="background:#6a6f84"></i>Not counted (born earlier)</span>'+our
   else if((strat==='g'||strat==='f')&&NSEQ>0)L.innerHTML='<span><i style="background:#fff;border:1.5px solid #333;border-radius:2px;transform:rotate(45deg) scale(.85)"></i>A dog we test</span><span><i style="background:#7fe3ff"></i>Has a tested close relative</span><span><i style="background:#555a6a"></i>Not yet</span>'+our
   else if(mode==='fam')L.innerHTML=COATS.map((f,i)=>`<span><i style="background:${COATC[i]}"></i>${f}</span>`).join('')+our
