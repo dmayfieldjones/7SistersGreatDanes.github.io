@@ -60,6 +60,7 @@ input[type=range]{width:min(220px,50vw);accent-color:var(--ink)}
   .seqbar .big{font-size:1.25rem;margin-left:auto}
   h1{font-size:1.3rem}.sub{font-size:.92rem}
   .controls{gap:8px 12px}.controls input[type=range]{width:100%}
+  .more .controls label{flex-wrap:wrap;max-width:100%;min-width:0}.more .controls select{max-width:100%;min-width:0}
 }
 .seq h2{font-size:1.05rem;margin:0 0 2px}
 .seq p{margin:0 0 10px;color:var(--ink2);font-size:.88rem;max-width:70ch}
@@ -281,7 +282,7 @@ const colorOf=d=>mode==='fam'?COATC[d.fam]:mode==='F'?ramp(d.F/0.3):ramp((d.yr-m
 let tNow=0
 // tour step 2: each family swells and relaxes on its own beat, so the clumps read as families
 const RM=matchMedia('(prefers-reduced-motion:reduce)').matches
-function breath(c){return story===1&&c>0&&!RM?1+.075*Math.sin(tNow/650+c*1.7):1}
+function breath(c){return story===1&&c>0&&!RM?1+.03*Math.sin(tNow/700+c*1.9):1}
 function draw(){
   dirty=false
   const bs=FAMS.map((f,c)=>breath(c))
@@ -297,7 +298,7 @@ function draw(){
     const x=(f.cx??f.x)*T.k+T.x,y=(f.cy??f.y)*T.k+T.y,r=Math.max(f.r,f.sp||0)*T.k*1.3*(1+(bs[f.c]-1)*2)
     if(x<-r||y<-r||x>W+r||y>H+r)continue
     const g=ctx.createRadialGradient(x,y,0,x,y,r)
-    const a=((sel<0||sel===f.c)?0.16:0.05)+(story===1&&!RM&&f.c>0?.12*(bs[f.c]-1)/.075:0)
+    const a=((sel<0||sel===f.c)?0.16:0.05)+(story===1&&!RM&&f.c>0?.12*(bs[f.c]-1)/.03:0)
     g.addColorStop(0,`rgba(120,150,255,${a})`);g.addColorStop(1,'rgba(120,150,255,0)')
     ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r,0,6.2832);ctx.fill()
   }
@@ -344,7 +345,8 @@ function drawOverlay(t){
     if(!f.n||f.cx===undefined)continue
     const x=f.cx*T.k+T.x,y=f.cy*T.k+T.y,rr=f.sp*T.k
     if(x<-60||x>W+60||y<-20||y>H+20)continue
-    if(f.n<150&&zoom<1.5)continue
+    const tour=story===1
+    if(f.n<150&&zoom<1.5&&!(tour&&f.n>=100))continue
     if(W<500&&f.n<400&&zoom<2)continue
     if(f.n<90&&zoom<2.4)continue
     const fs=Math.max(10,Math.min(15,10+Math.log2(f.n/60)*1.4))*(W<500?.82:1)
@@ -355,7 +357,10 @@ function drawOverlay(t){
     const box=[lx-w/2-4,ly-h/2,lx+w/2+4,ly+h/2]
     if(placed.some(q=>box[0]<q[2]&&box[2]>q[0]&&box[1]<q[3]&&box[3]>q[1]))continue
     placed.push(box)
-    octx.fillStyle='rgba(8,10,16,.55)';octx.fillRect(box[0],box[1],box[2]-box[0],box[3]-box[1])
+    const sw=story===1&&!RM?1+.32*(Math.sin(tNow/700+f.c*1.9)+1)/2:1
+    if(sw>1){octx.font=`700 ${fs*sw}px system-ui,sans-serif`}
+    const bw=w*sw+8,bh=h*sw
+    octx.fillStyle='rgba(8,10,16,.62)';octx.fillRect(lx-bw/2,ly-bh/2,bw,bh)
     octx.fillStyle=sel<0||sel===f.c?'rgba(240,242,252,.95)':'rgba(240,242,252,.35)'
     octx.fillText(txt,lx,ly)
   }
@@ -616,9 +621,9 @@ function seqReadout(){
     let msg=`Test the ${k} dog${k>1?'s':''} marked with diamonds and ${(100*v).toFixed(0)}% of the ${COV.n.toLocaleString()} dogs have a close relative among them.`
     if(k>1)msg+=` The newest diamond (${k}) stands in for ${cnt[k-1].toLocaleString()} dogs that had none.`
     rd.textContent=msg}
-  else{const v=COV[strat].frac[NSEQ-1],nw=COV[strat].new[NSEQ-1]
+  else{const v=COV[strat].frac[NSEQ-1]
     big.textContent=(100*v).toFixed(0)+'%'
-    rd.textContent=`Test the ${NSEQ} dog${NSEQ>1?'s':''} marked with diamonds and ${(100*v).toFixed(0)}% of the ${COV.n.toLocaleString()} dogs have a close relative among them. Dog ${NSEQ} added ${nw.toLocaleString()} more.`}
+    rd.textContent=`Test the ${NSEQ} dog${NSEQ>1?'s':''} marked with diamonds and ${(100*v).toFixed(0)}% of the ${COV.n.toLocaleString()} dogs have a close relative among them.`}
   drawCurve()
 }
 let playT=null
