@@ -366,13 +366,13 @@ function drawOverlay(t){
     const x=f.cx*T.k+T.x,y=f.cy*T.k+T.y,rr=f.sp*T.k
     if(x<-60||x>W+60||y<-20||y>H+20)continue
     if(f.n<150&&zoom<1.5)continue
-    if(W<500&&f.n<400&&zoom<2)continue
+    if(W<500&&f.n<(story===1?160:400)&&zoom<2)continue
     if(f.n<90&&zoom<2.4)continue
     const fs=Math.max(10,Math.min(15,10+Math.log2(f.n/60)*1.4))*(W<500?.82:1)
     const tag=f.name.replace(/&amp;/g,'&'),txt=tag+' \u00b7 '+f.n.toLocaleString()+' dogs'
     octx.font=`600 ${fs}px system-ui,sans-serif`
     const w=octx.measureText(txt).width,h=fs+4,ly=y-Math.min(rr,60*zoom+30)-h*.4
-    const lx=Math.max(w/2+8,Math.min(W-w/2-8,x))
+    const lx=Math.max(w*.62+6,Math.min(W-w*.62-6,x))
     const box=[lx-w/2-4,ly-h/2,lx+w/2+4,ly+h/2]
     if(placed.some(q=>box[0]<q[2]&&box[2]>q[0]&&box[1]<q[3]&&box[3]>q[1]))continue
     placed.push(box)
