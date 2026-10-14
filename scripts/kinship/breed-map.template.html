@@ -93,12 +93,33 @@ th:first-child,td:first-child{text-align:left}
 .biglab{font-size:.78rem;line-height:1.25;color:var(--ink2)}
 .more .controls{border:0;padding:8px 0 0;margin:0}
 .card p{margin:0 0 8px;color:#c8cad6}
+.story{padding:14px 16px;margin:0 0 12px}
+.storystep{font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2);margin-bottom:4px}
+.storytxt{font-size:1.15rem;line-height:1.4;min-height:3.9em;max-width:60ch}
+.storytxt b{white-space:nowrap}
+.storynav{display:flex;gap:10px;align-items:center;margin-top:10px;flex-wrap:wrap}
+.storynav button{font:inherit;font-size:.95rem;border:1px solid var(--rule);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 18px;cursor:pointer}
+.storynav .primary{background:var(--ink);color:var(--surface);border-color:var(--ink);font-weight:600}
+.storynav .link{border:0;background:none;color:var(--ink2);text-decoration:underline;padding:8px 4px}
+body.pre .stage .read,body.pre .curvebox{display:none}
+[hidden]{display:none!important}
+@media (max-width:640px){.storytxt{font-size:1.02rem;min-height:0}.story{padding:12px 14px}.storynav button{padding:7px 14px}}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>How many Great Danes would we need to DNA-test?</h1>
-  <p class="sub">Each dot is a Great Dane born 2012&ndash;2020, the dogs around today. Dogs close together are close relatives. Test one dog and you also learn about its relatives, so a handful of dogs can stand in for thousands. <b>Drag the slider</b> to see how far.</p>
+  <h1>The Great Dane family map</h1>
+  <p class="sub">A look at the whole breed, one dot per dog, and a question: how few dogs could we DNA-test and still learn about most of them?</p>
+
+  <section class="panel story" id="story" hidden>
+    <div class="storystep" id="sstep"></div>
+    <div class="storytxt" id="storytxt"></div>
+    <div class="storynav">
+      <button id="sback" type="button">Back</button>
+      <button id="snext" type="button" class="primary">Next</button>
+      <button id="sskip" type="button" class="link">Skip the tour</button>
+    </div>
+  </section>
 
   <section class="panel seqbar" id="seq" hidden>
     <label class="sl grow"><span class="lt">Dogs we DNA-test</span> <input type="range" id="nseq" min="0" max="40" value="0" aria-describedby="cov-lab"><output id="nv">0</output></label>
@@ -116,7 +137,6 @@ th:first-child,td:first-child{text-align:left}
       <div class="read" id="cov-read"></div>
       <div class="curvebox"><canvas id="curve" role="img" aria-label="Share of dogs with a sequenced close relative, against number of dogs sequenced, for the three strategies"></canvas></div>
       <div class="zoom"><button id="zin" type="button" aria-label="Zoom in">+</button><button id="zout" type="button" aria-label="Zoom out">&minus;</button><button id="zreset" type="button" aria-label="Show the whole map">Reset</button></div>
-      <div class="nudge" id="nudge">Drag the slider to test more dogs</div>
       <div class="hint">Tap or hover a dot to learn about it</div>
     </div>
     <div class="legend" id="legend"></div>
@@ -286,8 +306,8 @@ function draw(){
     let dim=sel>=0&&d.cl!==sel
     let c
     if(strat==='p'&&GRP){const gg=groupsAt(Math.max(1,NSEQ))[d.i];if(gg===255){c='#6a6f84';dim=true}else c=gcolor(gg)}
-    else{if(COV&&NSEQ>0){const f=COV[strat].first[d.i];if(!(f>0&&f<=NSEQ))dim=true}
-      c=colorOf(d)}
+    else{c=colorOf(d)
+      if(COV&&NSEQ>0){const f=COV[strat].first[d.i];if(f>0&&f<=NSEQ)c='#7fe3ff';else dim=true}}
     const key=c+(dim?'d':'')
     let a=byColor.get(key);if(!a){a={c,dim,p:[]};byColor.set(key,a)}
     a.p.push(x,y)
@@ -558,8 +578,46 @@ function seqReadout(){
   drawCurve()
 }
 let playT=null
-function setN(k){const nd=$('nudge');if(nd&&nd.style.display!=='none'&&k!==NSEQ)nd.style.display='none'
+function setN(k){setTimeout(legend,0)
+  const nd=$('nudge');if(nd&&nd.style.display!=='none'&&k!==NSEQ)nd.style.display='none'
   NSEQ=Math.max(+$('nseq').min,Math.min(+$('nseq').max,k));$('nseq').value=NSEQ;seqReadout();dirty=true}
+// guided tour: plain steps that drive the same slider
+let story=-1,rampT=null
+function rampTo(k){
+  clearInterval(rampT)
+  if(k===NSEQ)return
+  const dir=k>NSEQ?1:-1,gap=Math.max(25,Math.min(140,1400/Math.abs(k-NSEQ)))
+  rampT=setInterval(()=>{if(NSEQ===k){clearInterval(rampT);return}setN(NSEQ+dir)},gap)
+}
+const inTen=v=>Math.round(v*10)
+function storySteps(){
+  const f=COV.g.frac,at=t=>{const i=f.findIndex(v=>v>=t);return i<0?f.length:i+1}
+  const k10=Math.min(10,f.length),k90=at(.9)
+  return[
+    {k:0,html:`Every dot is one <b>Great Dane</b> born 2012&ndash;2020. That is about ${(Math.round(n/100)*100).toLocaleString()} dogs, the breed as it is today.`},
+    {k:0,html:`Dogs that are <b>close relatives</b> sit close together. That is why the dots gather into big clumps: <b>families</b>.`},
+    {k:0,html:`The <b style="color:#bf141c">red dots</b> are <b>our dogs</b> and litters. Tap one to see where it comes from.`},
+    {k:1,html:`Now suppose we DNA-test just <b>one dog</b>, the white diamond. Every <b style="color:#1d9bc4">glowing dot</b> has a close relative (a half-sibling or closer) that was tested. That is <b>${inTen(f[0])} in 10</b> dogs from a single test.`},
+    {k:k10,html:`Test <b>${k10} dogs</b> and it is <b>${inTen(f[k10-1])} in 10</b> dogs. Each new test lights up a new part of the breed.`},
+    {k:k90,html:`Test <b>${k90} dogs</b> and it is <b>9 in 10</b>. Every new test helps a little less than the last, so the last few dogs are the expensive ones.`},
+    {k:k10,html:`<b>Your turn.</b> Drag the slider to test any number of dogs and watch the map light up.`}
+  ]
+}
+function showStory(i){
+  const st=storySteps();story=Math.max(0,Math.min(st.length-1,i))
+  const last=story===st.length-1
+  document.body.classList.toggle('pre',story<3)
+  $('sstep').textContent=last?'Explore':`Step ${story+1} of ${st.length-1}`
+  $('storytxt').innerHTML=st[story].html
+  $('sback').style.visibility=story?'visible':'hidden'
+  $('snext').style.display=last?'none':''
+  $('sskip').style.display=last?'none':''
+  $('seq').hidden=!last
+  strat='g';$('strat').value='g';seqRange()
+  rampTo(Math.max(+$('nseq').min,st[story].k))
+  legend();dirty=true
+}
+function endStory(){clearInterval(rampT);story=-1;$('story').hidden=true;document.body.classList.remove('pre');$('seq').hidden=false}
 function seqRange(){
   const p=strat==='p'
   $('nseq').min=p?1:0
@@ -570,8 +628,12 @@ if(COV){
   const T=$('tgt');TG.forEach((t,i)=>{const o=document.createElement('option');o.value=i
     o.textContent=t.frm<=2012?`Whole window, born 2012+ (${t.n.toLocaleString()} dogs)`:`Born ${t.frm} or later (${t.n.toLocaleString()} dogs)`;T.appendChild(o)});T.value=TI
   T.addEventListener('change',e=>{stopPlay();setTarget(+e.target.value);seqRange();setN(Math.min(Math.max(NSEQ,+$('nseq').min),+$('nseq').max));legend()})
-  strat='p';$('strat').value='p';seqRange();NSEQ=1;$('nseq').value=1;seqReadout();legend()
-  $('nseq').addEventListener('input',e=>{stopPlay();setN(+e.target.value)})
+  strat='g';$('strat').value='g';seqRange();NSEQ=0;$('nseq').value=0;seqReadout();legend()
+  $('story').hidden=false;showStory(0)
+  $('snext').addEventListener('click',()=>showStory(story+1))
+  $('sback').addEventListener('click',()=>showStory(story-1))
+  $('sskip').addEventListener('click',()=>{endStory();rampTo(10)})
+  $('nseq').addEventListener('input',e=>{clearInterval(rampT);stopPlay();setN(+e.target.value)})
   $('strat').addEventListener('change',e=>{stopPlay();strat=e.target.value;seqRange();setN(Math.max(+$('nseq').min,Math.min(NSEQ,+$('nseq').max)));legend()})
   function stopPlay(){if(playT){clearInterval(playT);playT=null;$('play').textContent='Play'}}
   $('prev').addEventListener('click',()=>{stopPlay();setN(NSEQ-1)})
@@ -595,6 +657,7 @@ function stats(){
 function legend(){
   const L=$('legend'),our='<span><i style="background:#bf141c;box-shadow:0 0 0 2px var(--surface),0 0 0 3.5px var(--ink)"></i>Our dogs &amp; litters (red)</span>'
   if(strat==='p'&&GRP)L.innerHTML='<span><i style="background:#fff;border:1.5px solid #333;border-radius:2px;transform:rotate(45deg) scale(.85)"></i>The dog to test for its group</span><span>Each color is one group of relatives</span><span><i style="background:#6a6f84"></i>Not counted (born earlier)</span>'+our
+  else if((strat==='g'||strat==='f')&&NSEQ>0)L.innerHTML='<span><i style="background:#fff;border:1.5px solid #333;border-radius:2px;transform:rotate(45deg) scale(.85)"></i>A dog we test</span><span><i style="background:#7fe3ff"></i>Has a tested close relative</span><span><i style="background:#555a6a"></i>Not yet</span>'+our
   else if(mode==='fam')L.innerHTML=COATS.map((f,i)=>`<span><i style="background:${COATC[i]}"></i>${f}</span>`).join('')+our
   else{const g=`linear-gradient(90deg,${ramp(0)},${ramp(.5)},${ramp(1)})`
     L.innerHTML=mode==='F'?`<span>Inbreeding 0%<span class="ramp" style="background:${g}"></span>30%+</span>${our}`:`<span>Born ${minY}<span class="ramp" style="background:${g}"></span>${maxY}</span>${our}`}
