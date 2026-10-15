@@ -7,14 +7,17 @@
 //   <script src="/private-gate.js" data-key="kinship" data-codes="1887"></script>
 // A code unlocks the page for the rest of the browser tab (sessionStorage).
 // The hub's code (1887) unlocks every private page; the hub sets 'pv-ok-all'.
+// Add data-strict="true" for a page that needs its own code on top of that.
 ;(function () {
   var script = document.currentScript
   var key = 'pv-ok-' + (script.dataset.key || location.pathname)
   var codes = (script.dataset.codes || '1887').split(',')
+  // data-strict="true": the hub code does not unlock this page, only its own code does
+  var strict = script.dataset.strict === 'true'
 
   function unlocked() {
     try {
-      return sessionStorage.getItem('pv-ok-all') === '1' || sessionStorage.getItem(key) === '1'
+      return (!strict && sessionStorage.getItem('pv-ok-all') === '1') || sessionStorage.getItem(key) === '1'
     } catch (e) {
       return false
     }
@@ -60,7 +63,7 @@
         return
       }
       try {
-        sessionStorage.setItem(input.value.trim() === '1887' ? 'pv-ok-all' : key, '1')
+        sessionStorage.setItem(!strict && input.value.trim() === '1887' ? 'pv-ok-all' : key, '1')
       } catch (e2) {}
       lock.remove()
       root.classList.remove('pv-locked')
