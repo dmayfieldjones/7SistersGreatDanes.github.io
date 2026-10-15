@@ -44,7 +44,6 @@ const tools = [
   },
   {
     href: '/DogShows',
-    img: '/img/private/dogshows.jpg',
     title: 'Dog Show Finder',
     desc: 'Upcoming Great Dane shows by AKC division, searchable by zip code. This page asks for a different access code than the one you just entered.',
   },
@@ -111,7 +110,9 @@ const tools = [
         {
           tools.map(link => (
             <a class="pv-card" href={link.href}>
-              <img class="pv-thumb" src={link.img} alt="" loading="lazy" />
+              {link.img && (
+                <img class="pv-thumb" src={link.img} alt="" loading="lazy" />
+              )}
               <span class="pv-card-title">{link.title}</span>
               <span class="pv-card-desc">{link.desc}</span>
             </a>
