@@ -1,35 +1,45 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro'
 
-const links = [
+const project = [
   {
+    n: '1',
     href: '/breed-map.html',
     img: '/img/private/breed-map.jpg',
-    title: 'The Living Great Dane Family Map',
-    desc: 'Start here. A guided, anonymous tour of 7,000+ Great Danes by pedigree: how few dogs could we DNA-test to learn about most of the breed?',
+    title: 'The Map',
+    role: 'The picture',
+    desc: 'A guided tour of 7,000+ Great Danes by pedigree. How related are they, and how few dogs could we DNA-test to learn about most of the breed?',
   },
   {
+    n: '2',
     href: '/breeding-history.html',
     img: '/img/private/breeding-history.jpg',
-    title: '140 Years of Great Dane Breeding',
-    desc: 'A six-step story of how wars, a new continent and new color rules changed the breed, from the pedigree records.',
+    title: 'The History',
+    role: 'How we got here',
+    desc: 'Six steps through 140 years of records: two wars, a new continent, inbreeding peaks and new color rules.',
   },
   {
-    href: '/sequencing-proposal.html',
-    img: '/img/private/sequencing-proposal.jpg',
-    title: 'Sequencing Proposal (draft)',
-    desc: 'The ask: why and which dogs to sequence to preserve Great Dane genetic diversity, plus a pilot genome. Working draft.',
-  },
-  {
+    n: '3',
     href: '/private/kinship-study',
     img: '/img/private/kinship-study.jpg',
-    title: 'Great Dane Kinship Study',
-    desc: 'The evidence behind the map: methods, inbreeding, 140 years of breeding choices and data quality. Research draft.',
+    title: 'The Evidence',
+    role: 'The details behind 1 and 2',
+    desc: 'The Kinship Study: methods, numbers and data quality, for anyone who wants to check the work.',
   },
+  {
+    n: '4',
+    href: '/sequencing-proposal.html',
+    img: '/img/private/sequencing-proposal.jpg',
+    title: 'The Plan',
+    role: 'What we would do about it',
+    desc: 'The sequencing proposal: which dogs to sequence to preserve the breed’s genetic diversity, with a pilot genome. Working draft.',
+  },
+]
+const tools = [
   {
     href: '/ezra-mia-pedigree.html',
     img: '/img/private/ezra-mia.jpg',
-    title: 'Ezra × Mia — Pedigree Explorer',
+    title: 'Ezra × Mia: Pedigree Explorer',
     desc: 'Exploratory 10-generation pedigree analysis, not an announced litter.',
   },
   {
@@ -72,10 +82,33 @@ const links = [
 
   <div class="pv-content pv-hidden" id="pv-content">
     <div class="pv-wrap">
-      <h1>Private</h1>
+      <h1>Preserving Great Dane genetic diversity</h1>
+      <p class="pv-intro">
+        A working project: use pedigree records to see how related today's
+        Great Danes are, and decide which few dogs to DNA-sequence to learn
+        the most about the breed. The four pages below tell it in order. Start
+        with the map.
+      </p>
+      <ol class="pv-links pv-steps">
+        {
+          project.map(link => (
+            <li>
+              <a class="pv-card" href={link.href}>
+                <img class="pv-thumb" src={link.img} alt="" loading="lazy" />
+                <span class="pv-card-title">
+                  <span class="pv-num">{link.n}</span> {link.title}
+                  <span class="pv-role">{link.role}</span>
+                </span>
+                <span class="pv-card-desc">{link.desc}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ol>
+      <h2 class="pv-sub">Other tools</h2>
       <div class="pv-links">
         {
-          links.map(link => (
+          tools.map(link => (
             <a class="pv-card" href={link.href}>
               <img class="pv-thumb" src={link.img} alt="" loading="lazy" />
               <span class="pv-card-title">{link.title}</span>
@@ -188,6 +221,39 @@ const links = [
     border-radius: 8px;
     border: 1px solid rgba(0, 0, 0, 0.12);
     margin-bottom: 0.6rem;
+  }
+  .pv-intro {
+    text-align: center;
+    color: #52514e;
+    margin: -0.75rem auto 1.75rem;
+    max-width: 34rem;
+  }
+  .pv-steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .pv-num {
+    display: inline-block;
+    width: 1.5em;
+    height: 1.5em;
+    line-height: 1.5em;
+    text-align: center;
+    border-radius: 50%;
+    background: #bf141c;
+    color: #fff;
+    font-size: 0.85em;
+  }
+  .pv-role {
+    display: block;
+    font-weight: 400;
+    font-size: 0.82rem;
+    color: #52514e;
+  }
+  .pv-sub {
+    font-size: 1.1rem;
+    margin: 2rem 0 0.75rem;
+    text-align: center;
   }
   .pv-card-title {
     font-weight: 700;
