@@ -13,9 +13,9 @@
     var nav = document.createElement('nav')
     nav.setAttribute('aria-label', 'Great Dane diversity project')
     nav.className = 'pj-nav'
-    var html = '<a class="pj-home" href="/private">Project overview</a><ol>'
+    var html = '<a class="pj-home" href="/private"><span class="pj-long">Project overview</span><span class="pj-short">&larr; Overview</span></a><ol>'
     steps.forEach(function (s) {
-      html += '<li' + (s[0] === cur ? ' class="on" aria-current="page"' : '') + '><a href="' + s[3] + '" title="' + s[4] + '"><b>' + s[1] + '</b> ' + s[2] + '</a></li>'
+      html += '<li' + (s[0] === cur ? ' class="on" aria-current="page"' : '') + '><a href="' + s[3] + '" title="' + s[4] + '"><b>' + s[1] + '</b><span class="pj-l"> ' + s[2] + '</span></a></li>'
     })
     nav.innerHTML = html + '</ol>'
     var st = document.createElement('style')
@@ -27,7 +27,8 @@
       '.pj-nav li a b{display:inline-block;width:1.4em;text-align:center;border-radius:50%;background:rgba(128,128,128,.25);margin-right:2px}' +
       '.pj-nav li.on a{border-color:#0b0b0b;font-weight:600}.pj-nav li.on a b{background:#bf141c;color:#fff}' +
       '@media (prefers-color-scheme:dark){.pj-nav{background:#141413;color:#f0efec}.pj-nav .pj-home{color:#c3c2b7}.pj-nav li.on a{border-color:#f0efec}}' +
-      '@media (max-width:640px){.pj-nav{padding:8px 12px}.pj-nav li a{padding:6px 8px}}'
+      '.pj-short{display:none}' +
+      '@media (max-width:640px){.pj-nav{flex-wrap:nowrap;gap:8px;padding:6px 10px;overflow:hidden}.pj-long{display:none}.pj-short{display:inline;white-space:nowrap}.pj-nav ol{flex-wrap:nowrap;gap:2px;margin-left:auto}.pj-nav li a{padding:5px 6px;white-space:nowrap;min-height:34px;display:inline-flex;align-items:center}.pj-nav li:not(.on) .pj-l{display:none}.pj-nav li.on .pj-l{display:inline}}'
     document.head.appendChild(st)
     document.body.insertBefore(nav, document.body.firstChild)
   }
