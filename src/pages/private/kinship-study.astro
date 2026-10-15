@@ -66,7 +66,8 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
   canonical="https://7sistersgreatdanes.com/private/kinship-study"
 >
   <meta name="robots" content="noindex, nofollow" slot="head" />
-  <script is:inline src="/private-gate.js" data-key="kinship" data-codes="1887,1959" slot="head"></script>
+  <script is:inline src="/private-gate.js" data-key="kinship" data-codes="1887" slot="head"></script>
+  <script is:inline src="/project-nav.js" data-current="study" defer slot="head"></script>
 
   <article class="ks-root">
     <header class="ks-head">
@@ -77,6 +78,12 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
         2012–2020, using {fmt(study.dogs_loaded)} pedigree records. The goal
         is to cluster the breed by relatedness and pick a small set of dogs
         whose DNA sequences would tell us the most about the whole population.
+      </p>
+      <p class="ks-lede">
+        New to this? <a href="/breed-map.html">Start with the Family Map</a>, a
+        guided tour of the same data. This page is the full evidence. The{' '}
+        <a href="/sequencing-proposal.html">sequencing proposal</a> is the plan
+        that follows from it.
       </p>
       <p class="ks-byline">
         Dustin Mayfield-Jones, 7 Sisters Great Danes
@@ -175,6 +182,7 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
         <h2>1. Population structure</h2>
         <span class="ks-gist">{assigned.length} lines that follow the color families; kinship is 3–4× higher inside a line than between lines.</span>
       </summary>
+      <p class="ks-note">For a guided, interactive version of this picture, see <a href="/breed-map.html">the Family Map</a>. The figure and table below are the detail behind it.</p>
       <p>
         Each dot is one dog, placed by the two strongest axes of the
         relationship matrix (principal coordinates; they explain{' '}
@@ -455,6 +463,7 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
         <h2>4. Choosing dogs to sequence</h2>
         <span class="ks-gist">Two ways to choose {DS.coverage.final.k} dogs, what each is good for, and why we recommend combining them.</span>
       </summary>
+      <p class="ks-note">The Family Map shows coverage step by step for one dog, ten dogs and sixty dogs. This section compares the three designs in full. The <a href="/sequencing-proposal.html">sequencing proposal</a> builds on it.</p>
       <p>
         There are two defensible ways to choose {DS.coverage.final.k}{' '}
         genomes. They answer different questions and pick nearly opposite
@@ -745,6 +754,7 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
         <h2>6. Breeding choices through history</h2>
         <span class="ks-gist">140 years of registry growth, inbreeding, litter size and color pairings.</span>
       </summary>
+      <p class="ks-note">Prefer a short walk-through? <a href="/breeding-history.html">140 Years of Great Dane Breeding</a> tells this section as six steps.</p>
       <p>
         The pedigree records reach back to the 1880s, so they show how
         breeders' choices changed. Everything here uses {fmt(H.dated)} dogs
