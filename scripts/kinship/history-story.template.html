@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>140 Years of Great Dane Breeding | 7Sisters Farm</title>
+<script src="/private-gate.js" data-key="breeding-history" data-codes="1887"></script>
+<style>
+:root{--page:#f9f9f7;--surface:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--grid:#e1e0d9;--rule:#c3c2b7;
+  --c1:#2a6f97;--c2:#c8553d;--c3:#6a994e;--c4:#8d8a80;--war:rgba(120,118,108,.14)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--page:#0d0d0d;--surface:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--grid:#2c2c2a;--rule:#383835;
+  --c1:#6fb3d9;--c2:#ef8a73;--c3:#9bc87e;--c4:#a9a69a;--war:rgba(200,198,188,.1)}}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{margin:0;background:var(--page);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:900px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:1.5rem;margin:0 0 4px}
+.sub{color:var(--ink2);margin:0 0 16px;max-width:64ch}
+.panel{background:var(--surface);border:1px solid var(--grid);border-radius:12px}
+.chart{padding:10px 10px 4px;margin-bottom:12px}
+svg{width:100%;height:auto;display:block}
+.axis text{fill:var(--muted);font-size:12px}
+.axis line,.axis path{stroke:var(--grid)}
+.lab{font-size:13px;font-weight:600;fill:var(--ink)}
+.ann{font-size:12.5px;fill:var(--ink2)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;padding:4px 8px 8px;font-size:.85rem;color:var(--ink2)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.story{padding:14px 18px}
+.step{font-size:.78rem;letter-spacing:.04em;text-transform:uppercase;color:var(--ink2);margin:0 0 6px}
+.txt{font-size:1.12rem;line-height:1.45;margin:0;min-height:5.6em}
+.nav{display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap}
+.nav button,.nav a{font:inherit;font-size:.95rem;border:1px solid var(--rule);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 18px;cursor:pointer;text-decoration:none}
+.nav .primary{background:var(--ink);color:var(--surface);border-color:var(--ink);font-weight:600}
+.nav .link{border:0;background:none;color:var(--ink2);text-decoration:underline;padding:8px 4px}
+.end{margin-top:16px;color:var(--ink2);font-size:.92rem}
+.end a{color:var(--ink)}
+[hidden]{display:none!important}
+@media (max-width:640px){.wrap{padding:12px 12px 40px}.txt{font-size:1.04rem;min-height:0}.nav button,.nav a{min-height:44px;display:inline-flex;align-items:center}.sub{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap" style="padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env(safe-area-inset-right))">
+<h1>140 Years of Great Dane Breeding</h1>
+<p class="sub">What the pedigree records show about how breeders' choices, two wars and new rules changed the breed. Anonymous summaries only.</p>
+<div class="panel chart"><div class="legend" id="legend"></div><svg id="svg" viewBox="0 0 900 400" role="img" aria-label="Chart for the current step"></svg></div>
+<div class="panel story">
+  <p class="step" id="step"></p>
+  <p class="txt" id="txt"></p>
+  <div class="nav"><button id="back">Back</button><button class="primary" id="next">Next</button><a class="link" id="study" href="/private/kinship-study#history" hidden>Full detail in the Kinship Study</a></div>
+</div>
+<p class="end">Also see <a href="/breed-map.html">the Family Map</a> and <a href="/sequencing-proposal.html">the sequencing proposal</a>.</p>
+</div>
+<script>
+const D=/*DATA*/null
+const WARS=[[1914,1918],[1939,1945]]
+const X0=1890,X1=2020,W=900,Hh=400,M={l:52,r:18,t:16,b:30}
+const px=y=>M.l+(y-X0)/(X1-X0)*(W-M.l-M.r)
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches
+const $=id=>document.getElementById(id)
+const roll=(a,k)=>a.map((_,i)=>{const s=a.slice(Math.max(0,i-k),i+k+1);return s.reduce((p,v)=>p+v,0)/s.length})
+const fmt=n=>Math.round(n).toLocaleString()
+const ry=D.region_years.filter(r=>r.y>=X0)
+const tot=ry.map(r=>r.us+r.eu+r.au+r.rest)
+const COL={us:'var(--c1)',eu:'var(--c2)',au:'var(--c3)',rest:'var(--c4)'}
+const NAME={us:'United States',eu:'Continental Europe',au:'Australia',rest:'Other or unrecorded'}
+const at=(arr,y,k)=>(arr.find(r=>r.y===y)||{})[k]
+const STEPS=[
+ {chart:{type:'stack',keys:['eu','us','au','rest'],note:[{y:1996,t:`1996: ${fmt(D.counts['1996'])} dogs`}]},
+  text:`The records start in the 1880s with a few dozen dogs a year. Each band here is the dogs born in a year, by the registry they were entered in. The record grows to a peak of about ${fmt(D.counts['1996'])} dogs for 1996 alone. Both wars cut the numbers sharply (the grey bands).`},
+ {chart:{type:'share'},
+  text:`Who was breeding changed too. Until the 1920s, over 80% of recorded dogs were European, mostly German stud-book dogs. After the Second World War the United States took over: by the 2010s about 65% were American and 8% European. These are dogs in this database, so the shares also reflect how completely each era was entered.`},
+ {chart:{type:'line',series:[{k:'good',label:'Average inbreeding (ten generations)',c:'--c2',mult:100}],data:'coi',unit:'%',ymax:16,note:[{y:1949,s:0,t:'1949: 13.7%',up:1},{y:2020,s:0,t:'2020: 6.5%'}]},
+  text:`Inbreeding rose and then fell. Counting only the ten generations behind each dog, so eras compare fairly, the average dog was 8% inbred around 1920, 13.7% inbred around 1949, just after the war, and 6.5% by 2020. For comparison, a half-sibling mating gives 12.5%.`},
+ {chart:{type:'line',series:[{k:'close',label:'Dogs bred as closely as full siblings or closer',c:'--c1',mult:1}],data:'coi',unit:'%',ymax:14,note:[{y:1949,s:0,t:'1949: 12.6%',up:1},{y:2020,s:0,t:'2020: 0.9%'}]},
+  text:`The closest matings became rare. Dogs whose parents were as related as full siblings, or closer, were 12.6% of well-documented dogs born around 1949 and 0.9% by 2020. The post-war peak reflects wartime losses and a breed being rebuilt on a new continent.`},
+ {chart:{type:'line',series:[{k:'cross',label:'Litters crossing color families',c:'--c2',mult:1},{k:'black_fawn',label:'Black × fawn',c:'--c1',mult:1}],data:'color',unit:'%',ymax:20,events:[1959,2000,2015,2019],note:[{y:1895,s:0,t:'1895: 18%'},{y:2020,s:0,t:'2020: 12%'}]},
+  text:`Breed clubs have asked breeders to keep three color families apart. Around 1895, crosses between families were common, 18% of litters. They nearly disappeared, staying between about 2% and 6% from the 1930s to the 1990s. Since the mid-2000s they have climbed to 12% by 2020, mostly black × fawn. Dashed lines mark 1959, 2000, 2015 and 2019.`},
+ {chart:{type:'line',series:[{k:'mantle',label:'Recorded as mantle',c:'--c1',mult:1},{k:'merle',label:'Recorded as merle',c:'--c2',mult:1}],data:'recording',unit:'%',ymax:40,events:[2000,2015,2019],note:[{y:2020,s:0,t:'2020: 32%'},{y:2020,s:1,t:'12%'}]},
+  text:`The records changed with the rules. Mantle, approved in 2000, went from 8% of harlequin-family dogs in 1950 to 32% by 2020. Merle was recorded even while it was a fault, and rose after the 2015 vote. So some color trends are about what breeders were able to record, not only what they bred. Dashed lines mark 2000, 2015 and 2019.`},
+ {chart:{type:'line',series:[{k:'good',label:'Average inbreeding (ten generations)',c:'--c2',mult:100}],data:'coi',unit:'%',ymax:16,note:[{y:1949,s:0,t:'1949: 13.7%',up:1},{y:2020,s:0,t:'2020: 6.5%'}]},
+  text:`Put together: breeders' choices, two wars, a new continent and new rules each left a mark. The pedigree shows what was chosen. Sequencing living dogs would show what the genome kept: how much diversity each era left behind.`,end:true}
+]
+let step=0
+function el(n,a,p){const e=document.createElementNS('http://www.w3.org/2000/svg',n);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e}
+function axes(s,ymax,unit,yfmt){
+  const g=el('g',{class:'axis'},s),py=v=>Hh-M.b-(v/ymax)*(Hh-M.t-M.b)
+  WARS.forEach(([a,b])=>{if(b>X0)el('rect',{x:px(Math.max(a,X0)),y:M.t,width:px(b+1)-px(Math.max(a,X0)),height:Hh-M.t-M.b,fill:'var(--war)'},s)})
+  const n=4
+  for(let i=0;i<=n;i++){const v=ymax*i/n,y=py(v);el('line',{x1:M.l,x2:W-M.r,y1:y,y2:y},g);const t=el('text',{x:M.l-8,y:y+4,'text-anchor':'end'},g);t.textContent=yfmt(v)+(unit&&i?unit:'')}
+  for(let y=1900;y<=2020;y+=20){const x=px(y);const t=el('text',{x,y:Hh-8,'text-anchor':'middle'},g);t.textContent=y}
+  return py
+}
+function reveal(path){
+  if(RM)return
+  const L=path.getTotalLength?path.getTotalLength():0
+  if(!L)return
+  path.style.strokeDasharray=L;path.style.strokeDashoffset=L
+  path.getBoundingClientRect()
+  path.style.transition='stroke-dashoffset 1.4s ease-out';path.style.strokeDashoffset=0
+}
+function draw(c){
+  const s=$('svg');s.innerHTML='';const lg=$('legend');lg.innerHTML=''
+  if(c.type==='stack'){
+    const ymax=3000,py=axes(s,ymax,'',v=>fmt(v))
+    const sm={};c.keys.forEach(k=>sm[k]=ry.map(r=>r[k]))
+    const base=ry.map(()=>0)
+    c.keys.forEach(k=>{
+      const top=sm[k].map((v,i)=>base[i]+v)
+      const pts=ry.map((r,i)=>[px(r.y),py(top[i])]).concat(ry.map((r,i)=>[px(r.y),py(base[i])]).reverse())
+      const p=el('path',{d:'M'+pts.map(q=>q.join(',')).join('L')+'Z',fill:COL[k],opacity:.85},s)
+      if(!RM){p.style.opacity=0;p.style.transition='opacity .9s';requestAnimationFrame(()=>p.style.opacity=.85)}
+      top.forEach((v,i)=>base[i]=v)
+      lg.insertAdjacentHTML('beforeend',`<span><i style="background:${COL[k]}"></i>${NAME[k]}</span>`)
+    })
+    c.note.forEach(n=>{const i=ry.findIndex(r=>r.y===n.y);const x=px(n.y),y=py(base[i]);el('circle',{cx:x,cy:y,r:4,fill:'var(--ink)'},s);const t=el('text',{x:x-8,y:y-8,'text-anchor':'end',class:'lab'},s);t.textContent=n.t})
+  }else if(c.type==='share'){
+    const py=axes(s,100,'%',v=>Math.round(v))
+    ;[['eu',COL.eu],['us',COL.us]].forEach(([k,col],j)=>{
+      const v=roll(ry.map((r,i)=>100*r[k]/Math.max(1,tot[i])),3)
+      const p=el('path',{d:'M'+ry.map((r,i)=>[px(r.y),py(v[i])].join(',')).join('L'),fill:'none',stroke:col,'stroke-width':3,'stroke-linejoin':'round'},s);reveal(p)
+      lg.insertAdjacentHTML('beforeend',`<span><i style="background:${col}"></i>${NAME[k]}</span>`)
+    })
+  }else{
+    const data=D[c.data].filter(r=>r.y>=X0),py=axes(s,c.ymax,c.unit,v=>Math.round(v))
+    ;(c.events||[]).forEach(y=>{el('line',{x1:px(y),x2:px(y),y1:M.t,y2:Hh-M.b,stroke:'var(--rule)','stroke-dasharray':'4 4'},s)})
+    c.series.forEach((ser,j)=>{
+      const col=`var(${ser.c})`,pts=data.filter(r=>r[ser.k]!=null).map(r=>[px(r.y),py(r[ser.k]*ser.mult)])
+      const p=el('path',{d:'M'+pts.map(q=>q.join(',')).join('L'),fill:'none',stroke:col,'stroke-width':3,'stroke-linejoin':'round','stroke-linecap':'round'},s);reveal(p)
+      lg.insertAdjacentHTML('beforeend',`<span><i style="background:${col}"></i>${ser.label}</span>`)
+    })
+    ;(c.note||[]).forEach(n=>{
+      const ser=c.series[n.s||0],r=data.find(q=>q.y===n.y);if(!r)return
+      const x=px(n.y),y=py(r[ser.k]*ser.mult)
+      const d=el('circle',{cx:x,cy:y,r:4.5,fill:`var(${ser.c})`,stroke:'var(--surface)','stroke-width':2},s)
+      if(!RM){d.style.opacity=0;d.style.transition='opacity .4s 1.2s';requestAnimationFrame(()=>d.style.opacity=1)}
+      const t=el('text',{x:x+(x>W-130?-8:8),y:y+(n.up?-10:4),'text-anchor':x>W-130?'end':'start',class:'lab'},s);t.textContent=n.t
+    })
+  }
+  WARS.forEach(([a,b],i)=>{if(i===0&&c.type!=='stack'&&c.type!=='share')return})
+}
+function show(i){
+  step=Math.max(0,Math.min(STEPS.length-1,i));const st=STEPS[step]
+  $('step').textContent=`Step ${step+1} of ${STEPS.length}`
+  $('txt').textContent=st.text
+  $('back').style.visibility=step?'visible':'hidden'
+  $('next').style.display=st.end?'none':''
+  $('study').hidden=!st.end
+  draw(st.chart)
+}
+$('next').addEventListener('click',()=>show(step+1))
+$('back').addEventListener('click',()=>show(step-1))
+show(0)
+</script>
+</body>
+</html>
