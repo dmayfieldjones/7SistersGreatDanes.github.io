@@ -399,7 +399,7 @@ function drawOverlay(t){
     const rk=COV[strat].rank
     for(const d of nodes){
       const r=rk[d.i];if(!r||r>NSEQ||!vis(d))continue
-      const x=d.x*T.k+T.x,y=d.y*T.k+T.y,spot1=story===4&&r===1,waveDog=spot1||(story===5&&r===NSEQ),waveFirst=story===4?1:NSEQ,s=spot1?9:7
+      const x=d.x*T.k+T.x,y=d.y*T.k+T.y,spot1=story===4&&r===1,newest=(story===5||story===6)&&r===NSEQ,age=newest?Math.min(1,(t-nChg)/900):1,waveDog=spot1||newest,waveFirst=story===4?1:NSEQ,s=spot1?9:newest?7+6*(1-age):7
       if(story===7){
         // the comparison: the best-connected dog's reach (cyan) and a typical dog's (amber)
         octx.globalCompositeOperation='lighter'
@@ -441,6 +441,16 @@ function drawOverlay(t){
           for(let i=0;i<dots[bi].length;i+=2){octx.moveTo(dots[bi][i]+rc,dots[bi][i+1]);octx.arc(dots[bi][i],dots[bi][i+1],rc,0,6.2832)}
           octx.fill()
         }
+        octx.globalCompositeOperation='source-over'
+      }
+      if(newest&&age<1){
+        // a new dog just arrived: a ring leaves it and the dots it newly reaches flare, then settle
+        octx.globalCompositeOperation='lighter'
+        octx.strokeStyle=`rgba(255,255,255,${.9*(1-age)})`;octx.lineWidth=3;octx.beginPath();octx.arc(x,y,12+90*age,0,6.2832);octx.stroke()
+        octx.fillStyle=`rgba(255,255,255,${.5*(1-age)})`;octx.beginPath()
+        const hr=6+10*(1-age)
+        for(const q of nodes){if(COV.g.first[q.i]!==NSEQ||q===d||!vis(q))continue;const qx=q.x*T.k+T.x,qy=q.y*T.k+T.y;octx.moveTo(qx+hr,qy);octx.arc(qx,qy,hr,0,6.2832)}
+        octx.fill()
         octx.globalCompositeOperation='source-over'
       }
       if(spot1){
@@ -716,9 +726,9 @@ function seqReadout(){
 let playT=null
 function setN(k){setTimeout(legend,0)
   const nd=$('nudge');if(nd&&nd.style.display!=='none'&&k!==NSEQ)nd.style.display='none'
-  NSEQ=Math.max(+$('nseq').min,Math.min(+$('nseq').max,k));$('nseq').value=NSEQ;seqReadout();dirty=true}
+  const was=NSEQ;NSEQ=Math.max(+$('nseq').min,Math.min(+$('nseq').max,k));if(NSEQ!==was)nChg=performance.now();$('nseq').value=NSEQ;seqReadout();dirty=true}
 // guided tour: plain steps that drive the same slider
-let story=-1,rampT=null
+let story=-1,rampT=null,nChg=0
 function rampTo(k){
   clearTimeout(rampT)
   if(k===NSEQ)return
@@ -727,7 +737,7 @@ function rampTo(k){
   const tick=()=>{
     if(NSEQ===k)return
     setN(NSEQ+dir);i++
-    rampT=setTimeout(tick,count<=12?700:Math.max(70,520*Math.pow(.9,i)))
+    rampT=setTimeout(tick,count<=12?700:Math.max(170,520*Math.pow(.93,i)))
   }
   rampT=setTimeout(tick,400)
 }
