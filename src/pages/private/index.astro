@@ -4,37 +4,37 @@ import BaseLayout from '../../layouts/BaseLayout.astro'
 const links = [
   {
     href: '/breed-map.html',
-    icon: '🕸️',
+    img: '/img/private/breed-map.jpg',
     title: 'The Living Great Dane Family Map',
     desc: 'Start here. A guided, anonymous tour of 7,000+ Great Danes by pedigree: how few dogs could we DNA-test to learn about most of the breed?',
   },
   {
     href: '/breeding-history.html',
-    icon: '📜',
+    img: '/img/private/breeding-history.jpg',
     title: '140 Years of Great Dane Breeding',
     desc: 'A six-step story of how wars, a new continent and new color rules changed the breed, from the pedigree records.',
   },
   {
     href: '/sequencing-proposal.html',
-    icon: '🧬',
+    img: '/img/private/sequencing-proposal.jpg',
     title: 'Sequencing Proposal (draft)',
     desc: 'The ask: why and which dogs to sequence to preserve Great Dane genetic diversity, plus a pilot genome. Working draft.',
   },
   {
     href: '/private/kinship-study',
-    icon: '🧬',
+    img: '/img/private/kinship-study.jpg',
     title: 'Great Dane Kinship Study',
     desc: 'The evidence behind the map: methods, inbreeding, 140 years of breeding choices and data quality. Research draft.',
   },
   {
     href: '/ezra-mia-pedigree.html',
-    icon: '🐾',
+    img: '/img/private/ezra-mia.jpg',
     title: 'Ezra × Mia — Pedigree Explorer',
     desc: 'Exploratory 10-generation pedigree analysis, not an announced litter.',
   },
   {
     href: '/DogShows',
-    icon: '📅',
+    img: '/img/private/dogshows.jpg',
     title: 'Dog Show Finder',
     desc: 'Upcoming Great Dane shows by AKC division, searchable by zip code.',
   },
@@ -77,9 +77,7 @@ const links = [
         {
           links.map(link => (
             <a class="pv-card" href={link.href}>
-              <span class="pv-icon" aria-hidden="true">
-                {link.icon}
-              </span>
+              <img class="pv-thumb" src={link.img} alt="" loading="lazy" />
               <span class="pv-card-title">{link.title}</span>
               <span class="pv-card-desc">{link.desc}</span>
             </a>
@@ -181,8 +179,15 @@ const links = [
     border-color: #bf141c;
     background: #fdf2f2;
   }
-  .pv-icon {
-    font-size: 1.5rem;
+  .pv-thumb {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    object-position: top;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    margin-bottom: 0.6rem;
   }
   .pv-card-title {
     font-weight: 700;
