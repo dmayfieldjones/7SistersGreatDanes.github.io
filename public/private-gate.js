@@ -4,7 +4,7 @@
 // page source. It keeps casual visitors out; it is not access control.
 //
 // Usage, in <head>:
-//   <script src="/private-gate.js" data-key="kinship" data-codes="1887,1959"></script>
+//   <script src="/private-gate.js" data-key="kinship" data-codes="1887"></script>
 // A code unlocks the page for the rest of the browser tab (sessionStorage).
 // The hub's code (1887) unlocks every private page; the hub sets 'pv-ok-all'.
 ;(function () {
