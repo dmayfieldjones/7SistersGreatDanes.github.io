@@ -38,6 +38,15 @@ jobs:
       - name: Check posts (no placeholders in published posts)
         run: node scripts/check-posts.mjs
 
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::668705846399:role/7sisters-site-data-reader
+          aws-region: us-east-2
+
+      - name: Fetch site data
+        run: aws s3 cp s3://7sistersgreatdanes-site-data/dog-shows.json public/data/dog-shows.json --only-show-errors
+
       - name: Build
         run: pnpm build
 

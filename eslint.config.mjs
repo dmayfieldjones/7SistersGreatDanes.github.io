@@ -11,7 +11,6 @@ export default tseslint.config(
       'eslint.config.mjs',
       'getGeneLocations.ts',
       'updateCategories.ts',
-      'scripts/fetch-dog-shows.mjs',
     ],
   },
   eslint.configs.recommended,

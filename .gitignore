@@ -31,3 +31,6 @@ pedigree_db.csv
 public/data/dog10k-svs-12breeds.vcf.bgz
 public/data/dog10k-svs-12breeds.vcf.bgz.tbi
 __pycache__/
+
+# Fetched from private storage at build time
+public/data/dog-shows.json
