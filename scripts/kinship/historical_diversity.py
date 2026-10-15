@@ -111,7 +111,18 @@ for i in range(N):
             rows.append(i)
             cols.append(p)
 P = sp.csr_matrix((np.full(len(rows), 0.5), (rows, cols)), shape=(N, N))
-cur = sp.csr_matrix((np.ones(M), (np.arange(M), cohort)), shape=(M, N))
+# optional extra dogs, traced the same way: the best-connected and a typical dog from an earlier coverage run
+extra = []
+if args.coverage_picks and args.reference:
+    _t = json.load(open(args.coverage_picks))
+    _ref = list(csv.DictReader(open(args.reference, encoding='utf-8')))
+    _pos = {d: i for i, d in enumerate(order)}
+    _best = _ref[int(np.where(np.array(_t['g']['rank']) == 1)[0][0])]['id']
+    extra = [_pos[_best]]
+    if _t.get('typical'):
+        extra.append(_pos[_ref[_t['typical']['dog']]['id']])
+src = np.concatenate([cohort, np.array(extra, dtype=int)]) if extra else cohort
+cur = sp.csr_matrix((np.ones(len(src)), (np.arange(len(src)), src)), shape=(len(src), N))
 tot = cur.copy()
 for _ in range(100):
     cur = cur @ P
@@ -119,7 +130,8 @@ for _ in range(100):
         break
     tot = tot + cur
 term = np.where((yr > 0) & (yr < Y))[0]
-C = tot[:, term].tocsr()
+Call = tot[:, term].tocsr()
+C = Call[:M]
 q = C.sum(axis=0).A1 / M
 reached = q > 0
 K = int(reached.sum())
@@ -194,5 +206,13 @@ if args.coverage_picks and args.reference:
         cc.append(float((1 - m2)[reached].sum()))
     out['coverage_picks_in_cohort'] = dict(count=len(sel), retained={n: round(cc[n - 1], 1) for n in (1, 5, 10, 25, 50, 100) if n <= len(cc)})
 
+if extra:
+    # what the best-connected dog is made of: its share of genome from the ancestors who supply half of the cohort's
+    top = np.argsort(q)[::-1][:conc['n50']]
+    share = C[:, top].sum(axis=1).A1
+    names = ['best_connected', 'typical'][:len(extra)]
+    out['key_ancestors'] = dict(count=int(conc['n50']), cohort_median_share=round(float(np.median(share)), 3),
+                                **{f'{n}_share': round(float(Call[M + i][:, top].sum()), 3) for i, n in enumerate(names)},
+                                best_connected_percentile=round(float((share < Call[M][:, top].sum()).mean() * 100), 1))
 json.dump(out, open(os.path.join(args.out, 'historical_diversity.json'), 'w'), indent=1)
 print(json.dumps(out, indent=1))
