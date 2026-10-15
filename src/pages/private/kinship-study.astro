@@ -111,17 +111,29 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
 
     <section>
       <h2>Key findings</h2>
-      <p>
-        Two measures are used throughout. <em>Kinship</em> measures how
-        closely two dogs are related through shared ancestors. It is 0 for
-        unrelated dogs, about 0.06 for first cousins, 0.125 for half
-        siblings and 0.25 for full siblings or a parent and its puppy.{' '}
-        <em>Inbreeding</em> (F) is the kinship between a dog's sire and dam,
-        so a puppy from a half-sibling mating has F = 0.125.
+      <p class="ks-note">Open a card for the detail.</p>
+      <div class="ks-scale" aria-label="How kinship numbers map to relatives">
+        <span><b>0</b> unrelated</span>
+        <span><b>0.06</b> first cousins</span>
+        <span><b>0.125</b> half siblings</span>
+        <span><b>0.25</b> full siblings, or parent and puppy</span>
+      </div>
+      <p class="ks-note">
+        <em>Kinship</em> is how closely two dogs are related through shared
+        ancestors. <em>Inbreeding</em> (F) is the kinship between a dog's sire
+        and dam, so a puppy from a half-sibling mating has F = 0.125.
       </p>
-      <ol class="ks-findings">
-        <li>
-          <strong>The breed is several populations, not one.</strong> Sorting
+      <div class="ks-findings">
+        <details class="ks-finding" open>
+          <summary>
+            <span class="ks-fnum">1</span>
+            <span class="ks-fhead">
+              <strong>The breed is several populations, not one.</strong>
+              <span>Kinship is 3–4× higher inside a cluster than between clusters.</span>
+            </span>
+            <span class="ks-fstat">3–4×</span>
+          </summary>
+          <p>Sorting
           dogs by how related they are splits the breed into clusters.
           Kinship inside a cluster is {range(within)}, against{' '}
           {range(between)} between a cluster and everyone else, a 3–4× gap.
@@ -129,10 +141,18 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
           cousins to half siblings, and two dogs from different clusters are
           more distant than first cousins. The clusters match the color
           families fawn/brindle, harlequin/mantle and blue/black, which are
-          largely bred as separate lines.
-        </li>
-        <li>
-          <strong>Inbreeding is high and flat.</strong> Mean F is{' '}
+          largely bred as separate lines.</p>
+        </details>
+        <details class="ks-finding">
+          <summary>
+            <span class="ks-fnum">2</span>
+            <span class="ks-fhead">
+              <strong>Inbreeding is high and flat.</strong>
+              <span>The average dog is as inbred as a puppy from a half-sibling mating.</span>
+            </span>
+            <span class="ks-fstat">F = {study.mean_F.toFixed(3)}</span>
+          </summary>
+          <p>Mean F is{' '}
           {study.mean_F.toFixed(3)}, so the average Great Dane is as inbred
           as a puppy from a half-sibling mating. Mean F stays between{' '}
           {Math.min(...years.map(([, v]) => v.F)).toFixed(3)} and{' '}
@@ -142,10 +162,18 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
           across the whole population is {study.mean_kinship.toFixed(3)}, so
           puppies from sires and dams paired at random across the breed
           would be less than half as inbred. Most of the inbreeding therefore
-          comes from breeding within lines.
-        </li>
-        <li>
-          <strong>A few dogs cover a lot, but not evenly.</strong> A
+          comes from breeding within lines.</p>
+        </details>
+        <details class="ks-finding">
+          <summary>
+            <span class="ks-fnum">3</span>
+            <span class="ks-fhead">
+              <strong>A few dogs cover a lot, but not evenly.</strong>
+              <span>Two well-chosen dogs cover {pct(at(2).all)} of the population; forty cover {pct(at(40).all)}.</span>
+            </span>
+            <span class="ks-fstat">{pct(at(40).all)}</span>
+          </summary>
+          <p>A
           sequenced dog's DNA also describes much of its close relatives'
           DNA, so a dog counts as covered when one of the sequenced dogs is
           at least as closely related to it as a half sibling. Two
@@ -154,11 +182,18 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
           ancestors several times over. Picking purely for coverage favors
           the large fawn/brindle line. After ten picks,{' '}
           {pct(at(10).fawn)} of fawn/brindle dogs are covered and{' '}
-          {pct(at(10).blue)} of blue/black dogs.
-        </li>
-        <li>
-          <strong>Little of the founding diversity is left, and how much of
-          it we sequence depends on which dogs we pick.</strong> The
+          {pct(at(10).blue)} of blue/black dogs.</p>
+        </details>
+        <details class="ks-finding">
+          <summary>
+            <span class="ks-fnum">4</span>
+            <span class="ks-fhead">
+              <strong>Little founding diversity is left, and the dogs we pick decide how much we capture.</strong>
+              <span>{FO.n50} ancestors account for half of the gene pool.</span>
+            </span>
+            <span class="ks-fstat">{FO.n50}</span>
+          </summary>
+          <p>The
           2012–2020 dogs trace back to {fmt(FO.founders)} founders
           (ancestors whose parents are not recorded). Founders contributed
           very unequally, and {FO.n50} ancestors account for half of the
@@ -167,9 +202,9 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
           have the equivalent of {DS.coverage.final.fge.toFixed(1)}, because
           those picks are related to one another. Forty chosen to be as
           unrelated as possible have {DS.diversity.final.fge.toFixed(1)},
-          but they cover few dogs. A combined design keeps most of both.
-        </li>
-      </ol>
+          but they cover few dogs. A combined design keeps most of both.</p>
+        </details>
+      </div>
     </section>
 
     <div class="ks-toolbar" id="sections">
@@ -2150,8 +2185,90 @@ const earlyCol = (c: string) => FO.early_colors.find(r => r.color === c)!
     color: var(--ink-2);
     line-height: 1.35;
   }
-  .ks-findings li {
-    margin-bottom: 0.6rem;
+  .ks-scale {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.6rem;
+    margin: 0.5rem 0 0.75rem;
+    font-size: 0.85rem;
+  }
+  .ks-scale span {
+    background: var(--plane);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.2rem 0.75rem;
+    color: var(--ink-2);
+  }
+  .ks-scale b {
+    color: var(--ink);
+    margin-right: 0.25rem;
+  }
+  .ks-findings {
+    display: grid;
+    gap: 0.6rem;
+    margin-top: 0.75rem;
+  }
+  .ks-finding {
+    background: var(--plane);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0 1rem;
+  }
+  .ks-finding > summary {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 0.9rem;
+    align-items: center;
+    padding: 0.9rem 0;
+    cursor: pointer;
+    list-style: none;
+  }
+  .ks-finding > summary::-webkit-details-marker {
+    display: none;
+  }
+  .ks-fnum {
+    width: 1.9rem;
+    height: 1.9rem;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--plane);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 650;
+    font-size: 0.9rem;
+  }
+  .ks-fhead {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+  .ks-fhead strong {
+    font-size: 1.1rem;
+    line-height: 1.3;
+  }
+  .ks-fhead span {
+    color: var(--ink-2);
+    font-size: 0.92rem;
+  }
+  .ks-fstat {
+    font-size: 1.4rem;
+    font-weight: 650;
+    white-space: nowrap;
+  }
+  .ks-finding[open] > summary {
+    border-bottom: 1px solid var(--border);
+  }
+  .ks-finding > p {
+    margin: 0.75rem 0 1rem;
+  }
+  @media (max-width: 560px) {
+    .ks-finding > summary {
+      grid-template-columns: auto 1fr;
+    }
+    .ks-fstat {
+      grid-column: 2;
+    }
   }
   .ks-note {
     font-size: 0.9rem;
