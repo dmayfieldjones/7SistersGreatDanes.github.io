@@ -335,7 +335,7 @@ function draw(){
     let c
     if(strat==='p'&&GRP){const gg=groupsAt(Math.max(1,NSEQ))[d.i];if(gg===255){c='#6a6f84';dim=true}else c=gcolor(gg)}
     else{c=colorOf(d)
-      if(COV&&NSEQ>0){const f=COV[strat].first[d.i];if(f>0&&f<=NSEQ)c=(f===NSEQ&&NSEQ>1&&NSEQ<=60&&story>=4)?'#f2fdff':'#7fe3ff';else dim=true}}
+      if(COV&&NSEQ>0){const f=COV[strat].first[d.i];if(f>0&&f<=NSEQ)c=(f===NSEQ&&NSEQ>1&&NSEQ<=60&&story>=5)?'#f2fdff':'#7fe3ff';else dim=true}}
     const key=c+(dim?'d':'')
     let a=byColor.get(key);if(!a){a={c,dim,p:[]};byColor.set(key,a)}
     a.p.push(x,y)
@@ -354,7 +354,7 @@ function drawOverlay(t){
   // family labels, biggest first; a label is skipped if it would sit on one already placed
   const placed=[],base=Math.min(W,H)/(2*ext*1.02),zoom=T.k/base
   for(const f of LABEL_ORDER){
-    if(story===0||(story>=3&&story<7&&W<500))break  // keep the small map clean once the lit-up story starts
+    if(story===0||(story>=4&&story<8&&W<500))break  // keep the small map clean once the lit-up story starts
     if(!f.n||f.cx===undefined)continue
     const x=f.cx*T.k+T.x,y=f.cy*T.k+T.y,rr=f.sp*T.k
     if(x<-60||x>W+60||y<-20||y>H+20)continue
@@ -390,8 +390,8 @@ function drawOverlay(t){
     const rk=COV[strat].rank
     for(const d of nodes){
       const r=rk[d.i];if(!r||r>NSEQ||!vis(d))continue
-      const x=d.x*T.k+T.x,y=d.y*T.k+T.y,spot1=story===3&&r===1,waveDog=spot1||(story===4&&r===NSEQ),waveFirst=story===3?1:NSEQ,s=spot1?9:7
-      if(story===6){
+      const x=d.x*T.k+T.x,y=d.y*T.k+T.y,spot1=story===4&&r===1,waveDog=spot1||(story===5&&r===NSEQ),waveFirst=story===4?1:NSEQ,s=spot1?9:7
+      if(story===7){
         // the comparison: the best-connected dog's reach (cyan) and a typical dog's (amber)
         octx.globalCompositeOperation='lighter'
         octx.strokeStyle='rgba(127,227,255,.2)';octx.lineWidth=.8;octx.beginPath()
@@ -515,7 +515,7 @@ function drawOverlay(t){
     }
     octx.textAlign='center'
   }
-  if(story===6&&TYP){
+  if(story===7&&TYP){
     const td=nodes[TYP.dog],tx=td.x*T.k+T.x,ty=td.y*T.k+T.y
     octx.globalCompositeOperation='lighter'
     octx.strokeStyle='rgba(255,176,60,.5)';octx.lineWidth=1;octx.beginPath()
@@ -731,6 +731,7 @@ function storySteps(){
     {k:0,html:`Every dot is one <b>Great Dane</b> born 2012&ndash;2020, to look at recent, living examples of the population. That is about ${(Math.round(n/100)*100).toLocaleString()} dogs.`},
     {k:0,html:`Dogs that are <b>close relatives</b> sit close together. That is why the dots gather into big clumps: <b>families</b>.`},
     {k:0,html:`The <b style="color:#bf141c">red dots</b> are <b>our dogs</b> and litters. Tap one to see where it comes from.`},
+    {k:0,html:`<b>If you could read the DNA of only one dog, which would you pick?</b> A random dog would tell you little beyond itself. A better pick is a dog that shares many ancestors with many other dogs, because what we learn from its DNA then applies to them too. We can find that dog because we know the family tree behind every dot on this map, so we can count how much each dog's ancestry overlaps with all the rest.`},
     {k:1,html:`Suppose we read the full DNA of just one dog, the white diamond. Almost every Great Dane descends from the same small group of old dogs, so most dogs share some of the same ancestors. This dog shares more of them than most. Each line goes to a dog that is at least as related to it as a half-sibling would be. Those dogs <b style="color:#1d9bc4">glow</b>, because this one test tells us a lot about them: <b>${pct(f[0])}%</b> of all the dogs on this map, from one test.`},
     {k:k10,html:`Watch us add ${k10-1} more dogs, one at a time. Each is chosen because it is related to a part of the breed that is not lit yet. The lines show the dots that dog newly reaches, and they flash white. Together the <b>${k10} dogs</b> are close relatives of <b>${pct(f[k10-1])}%</b> of all the dogs on this map.`},
     {k:k90,html:`With <b>${k90} dogs</b> tested, <b>90%</b> of all the dogs on this map have a tested close relative. Each new dog lights up fewer new dots than the one before, because the big families are already lit. The last few dogs have no close relatives, so each needs its own test.`},
@@ -741,7 +742,7 @@ function storySteps(){
 function showStory(i){
   const st=storySteps();story=Math.max(0,Math.min(st.length-1,i))
   const last=story===st.length-1
-  document.body.classList.toggle('pre',story<3)
+  document.body.classList.toggle('pre',story<4)
   showOurs=story===2;if(!showOurs)closeOurs()
   $('find').setAttribute('aria-pressed',showOurs)
   $('sstep').textContent=last?'Explore':`Step ${story+1} of ${st.length-1}`
@@ -751,8 +752,8 @@ function showStory(i){
   $('sskip').style.display=last?'none':''
   $('seq').hidden=!last
   strat='g';$('strat').value='g';seqRange()
-  if(story===4){clearTimeout(rampT);setN(0)}  // step 5 always starts from an unlit map
-  if(story===6){clearTimeout(rampT);setN(1)}  // the Zoey step compares just two single dogs
+  if(story===5){clearTimeout(rampT);setN(0)}  // step 6 always starts from an unlit map
+  if(story===7){clearTimeout(rampT);setN(1)}  // the Zoey step compares just two single dogs
   rampTo(Math.max(+$('nseq').min,st[story].k))
   legend();dirty=true
 }
