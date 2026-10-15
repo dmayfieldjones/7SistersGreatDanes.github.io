@@ -98,7 +98,7 @@ a{color:var(--ink)}
 
 <h2>Pilot genome</h2>
 <p>One dog from our own program anchors the design: an assembled, public Great Dane genome linked to a deep pedigree. The rest of the sample is chosen by the pedigree scoring above, not by who we happen to own. One dog of ours is included because we can control the sample, the consent and the release, not because the scoring picked it, and the proposal says so.</p>
-<p>The dog is Mia. By the pedigree she is at the 90th percentile of recent dogs for how much of her genome comes from the 58 key ancestors (71%, against 51% for the typical dog). She represents the core of the population. She is not a rare-lineage dog, and we do not claim she is.</p>
+<p>The dog is Mia. By the pedigree she is at the 90th percentile of recent dogs for how much of her genome comes from the 58 key ancestors (71%, against 51% for the typical dog). She represents the core of the population. On rare-lineage score she sits at the 25th percentile, below the median of the cohort. She is not a rare-lineage dog, and we do not claim she is.</p>
 <ul>
 <li><b>Mia:</b> long-read sequencing (about 30x HiFi, or ultra-long nanopore) and a scaffolding library, assembled de novo and compared with the Zoey reference.</li>
 <li><b>Her parents, Rolex and Piper (optional):</b> short reads only. With them the assembly separates into a paternal and a maternal haplotype (trio binning), so one assembly also shows two ancestral contributions.</li>
@@ -121,6 +121,24 @@ a{color:var(--ink)}
 <tr><td>Stored material</td><td>Whether semen or tissue from older dogs exists to sample</td><td>To find out</td></tr>
 </tbody></table></div>
 <p>The pedigree work already gives the dog list, ranked and screened for pedigree completeness, so the lab only needs to receive samples.</p>
+
+<h2>For the core lab: sample sheet</h2>
+<p>One row per dog for the pilot. Status cells are blank on purpose until each is confirmed.</p>
+<div class="tw"><table>
+<thead><tr><th>Dog</th><th>Role</th><th>Sequencing</th><th>Sample</th><th>Owner consent</th></tr></thead>
+<tbody>
+<tr><td>Mia</td><td>Pilot dog</td><td>Long reads (about 30x HiFi or ultra-long nanopore) plus scaffolding</td><td>Fresh blood in EDTA for high-molecular-weight DNA. To confirm</td><td>Ours. To confirm</td></tr>
+<tr><td>Rolex</td><td>Sire of Mia (optional)</td><td>Short reads</td><td>To confirm</td><td>To confirm</td></tr>
+<tr><td>Piper</td><td>Dam of Mia (optional)</td><td>Short reads</td><td>To confirm</td><td>To confirm</td></tr>
+</tbody></table></div>
+<p>What we would bring to the first conversation:</p>
+<ul>
+<li>What we want: one de novo assembly and, if the parents are included, two haplotypes from trio binning.</li>
+<li>Platform and depth, and whether a Hi-C or similar scaffolding library is worth adding.</li>
+<li>Sample handling the lab requires: collection tube, volume, shipping, and how fresh the blood must be.</li>
+<li>Data release: reads, assembly and annotation public, with the sequenced dog's pedigree.</li>
+<li>A quote per dog and for the whole run, and who is listed as an author.</li>
+</ul>
 
 <h2>Limits and risks</h2>
 <ul>
