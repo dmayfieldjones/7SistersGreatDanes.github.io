@@ -11,7 +11,7 @@
   ]
   function build() {
     var nav = document.createElement('nav')
-    nav.setAttribute('aria-label', 'Great Dane diversity project')
+    nav.setAttribute('aria-label', 'Great Dane Population Genomics')
     nav.className = 'pj-nav'
     var html = '<a class="pj-home" href="/private"><span class="pj-long">Project overview</span><span class="pj-short">&larr; Overview</span></a><ol>'
     steps.forEach(function (s) {
