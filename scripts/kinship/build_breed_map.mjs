@@ -46,7 +46,7 @@ const [head, ...body] = parseCsv(fs.readFileSync(path.join(dir, 'reference_dogs.
 const col = Object.fromEntries(head.map((h, i) => [h, i]))
 // ours.txt lines: id|display name. Only these dogs ever carry a name in the page.
 const oursNames = new Map(fs.readFileSync(oursFile, 'utf8').split('\n').map(s => s.trim()).filter(Boolean)
-  .map(l => { const [id, name, note] = l.split('|'); return [id, { name: name || '', note: note || '' }] }))
+  .map(l => { const [id, name, note, kind] = l.split('|'); return [id, { name: name || '', note: note || '', friend: kind === 'friend' ? 1 : 0 }] }))
 const ours = new Set(oursNames.keys())
 const dogs = body.filter(r => r.length > 5).map(r => ({
   id: r[col.id], year: +r[col.year] || 0, F: +r[col.F] || 0,
@@ -142,7 +142,7 @@ dogs.forEach((d, old) => {
   if (!d.ours) return
   const rel = (relRaw[d.id] || []).map(([j, w]) => [remap[j], w])
   const o = oursNames.get(d.id) || {}
-  oursOut.push({ i: remap[old], name: o.name || '', note: o.note || '', rel })
+  oursOut.push({ i: remap[old], name: o.name || '', note: o.note || '', ...(o.friend ? { friend: 1 } : {}), rel })
 })
 const data = { ours: oursOut, tg, n, m: edges.length, ext, x: b64(X), y: b64(Y), yr: b64(yr), F: b64(F), fam: b64(fam), our: b64(our), cl: b64(CL), fams: fams.map(f => {
     const ys = f.years.filter(Boolean).sort((a, b) => a - b)
