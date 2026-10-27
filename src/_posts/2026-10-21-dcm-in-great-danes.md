@@ -61,6 +61,13 @@ A cardiologist screens with an echocardiogram and a 24-hour Holter monitor. Bloo
   </div>
 </div>
 
+<figure style="margin: 1.5rem 0;">
+  <img src="/img/dcm-great-dane-preclinical-echo.jpg" alt="Four ultrasound panels of a Great Dane's heart with preclinical DCM: two four-chamber views (A and B) and a short-axis view with an M-mode trace (C and D). The left ventricle is dilated." width="1274" height="882" loading="lazy" style="max-width: 100%; height: auto; border-radius: 4px;">
+  <figcaption style="font-size: 0.9rem; line-height: 1.5; margin-top: 0.5rem;">
+    <strong>Echocardiogram of a Great Dane with preclinical (hidden-stage) DCM.</strong> A and B are four-chamber views of the left ventricle (LV) in diastole and systole. The ventricle is dilated and its area barely changes between the two. C and D show a short-axis view and an M-mode trace, where the wall movement is weak. Figure 5 from <a href="https://livrepository.liverpool.ac.uk/3188893/">Davis, Crosland &amp; Dukes-McEwan, <em>In Practice</em> 2024</a>, used under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+  </figcaption>
+</figure>
+
 ## What Can I Watch for at Home?
 
 A smartphone ECG such as KardiaMobile records a 30-second rhythm strip. In a [2019 study (Vezzosi et al.)](https://pubmed.ncbi.nlm.nih.gov/30559174/), 89% of owner-made tracings were readable, though most of the dogs already had heart disease. It does not replace a Holter.
@@ -141,7 +148,7 @@ The seminar also showed the Nationals results year by year. Rates mostly sit bet
 The presenters wanted heart volumes measured by Simpson's method of discs.
 
 - **Echo method matters.** M-mode (Teichholz) volumes are unreliable in a dilated heart, so numbers from different methods cannot be compared directly.
-- **Holter counts.** The presenters described fewer than 50 ventricular premature complexes (VPCs) in 24 hours as normal and more than 300 as diagnostic, with 50 to 300 on two recordings within a year also diagnostic. Published studies often use a 100 VPC cutoff instead (for example, [Stephenson et al.](https://pubmed.ncbi.nlm.nih.gov/22882627/)), so check which cutoff your cardiologist uses.
+- **Holter counts.** The presenters described fewer than 50 ventricular premature complexes (VPCs) in 24 hours as normal and more than 300 as diagnostic, with 50 to 300 on two recordings within a year also diagnostic. [Davis et al.](https://livrepository.liverpool.ac.uk/3188893/) give these as the accepted criteria for Dobermans, so treat them as borrowed from that breed. Published studies often use a 100 VPC cutoff instead (for example, [Stephenson et al.](https://pubmed.ncbi.nlm.nih.gov/22882627/)), so check which cutoff your cardiologist uses.
 - **Blood tests.** NT-proBNP and troponin I are supporting tests. They can miss different forms of the disease.
 
 </details>
@@ -159,7 +166,7 @@ The presenters estimated survival at about 6 to 12 months after heart failure de
 <summary><strong>What Is Different in Danes</strong></summary>
 
 - The presenters said that up to 70% of Danes are in atrial fibrillation when heart failure is diagnosed, and up to 50% have ventricular arrhythmias. We have not found a published source for those percentages.
-- A Dane's Holter should be read for atrial rhythm as well as VPC counts.
+- A Dane's Holter should be read for atrial rhythm as well as VPC counts. [Davis et al.](https://livrepository.liverpool.ac.uk/3188893/) show an ECG and a Holter recording from Great Danes with no symptoms and atrial fibrillation (Figures 1 and 2).
 - Many screening and treatment numbers came from Dobermans. The main pimobendan trial (PROTECT, [Summerfield et al., *Journal of Veterinary Internal Medicine*, 2012](https://pmc.ncbi.nlm.nih.gov/articles/PMC3546380/)) enrolled 76 Dobermans, and its body-size table stops at about 50 kg. Many adult Danes weigh more.
 - An in-office ECG tends to overestimate heart rate, so the target for rate control is usually judged on a monitored average.
 
@@ -215,7 +222,7 @@ The [juvenile DCM test for Portuguese Water Dogs](https://netapps.vet.upenn.edu/
 ## Sources
 
 <details>
-<summary><strong>15 sources</strong></summary>
+<summary><strong>16 sources</strong></summary>
 
 - Summerfield NJ, et al. Efficacy of pimobendan in the prevention of congestive heart failure or sudden death in Doberman Pinschers with preclinical dilated cardiomyopathy (the PROTECT study). *J Vet Intern Med* 2012;26(6):1337–1349. [PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC3546380/)
 - Meurs KM, Miller MW, Wright NA. Clinical features of dilated cardiomyopathy in Great Danes and results of a pedigree analysis: 17 cases (1990–2000). *JAVMA* 2001;218(5):729–732. [AKC Canine Health Foundation summary](https://www.akcchf.org/research/research-portfolio/0093.html)
@@ -229,6 +236,7 @@ The [juvenile DCM test for Portuguese Water Dogs](https://netapps.vet.upenn.edu/
 - Kolicheski AL. Detection and characterization of genomic regions associated to dilated cardiomyopathy in Great Danes. Master's thesis, Swedish University of Agricultural Sciences, Uppsala, 2012. [SLU repository](https://stud.epsilon.slu.se/5101/)
 - Meurs KM, Stern JA, Sisson DD, et al. Association of dilated cardiomyopathy with the striatin mutation genotype in boxer dogs. *J Vet Intern Med* 2013;27(6):1437–1440. [PubMed](https://pubmed.ncbi.nlm.nih.gov/24033487/)
 - University of Pennsylvania PennGen. Juvenile dilated cardiomyopathy test for Portuguese Water Dogs (linked marker). [Test listing](https://netapps.vet.upenn.edu/PennGen/SampleTesting/GeneticsTest.aspx?testid=16)
+- Davis W, Crosland A, Dukes-McEwan J. Canine dilated cardiomyopathy. Part 1: screening, diagnosis and management of preclinical DCM. *In Practice* 2024;46(9):473–484. [Open-access manuscript](https://livrepository.liverpool.ac.uk/3188893/) (CC BY 4.0), [publisher](https://doi.org/10.1002/inpr.486). Figure 5 is reproduced from this article.
 - Orthopedic Foundation for Animals. Cardiac disease and the Advanced Cardiac Database (procedures, echocardiogram requirement, one-year adult-onset clearance, release of abnormal results). [ofa.org](https://ofa.org/diseases/cardiac-disease/)
 - Sunpongsri S, Roos T, Gerhing R, Zandvliet M, Santarelli G. Doxorubicin-induced cardiotoxicity in dogs: a narrative review. *Vet Comp Oncol* 2026. [PubMed](https://pubmed.ncbi.nlm.nih.gov/42893846/)
 - Great Dane Club of America National Specialty health clinic, cardiology presentation, October 20, 2026. The 1.53% (19 of 1,238) and 3.9% prevalence figures, the year-by-year Nationals results, and the survival estimate come from this seminar.
