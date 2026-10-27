@@ -76,8 +76,6 @@ A smartphone ECG such as KardiaMobile records a 30-second rhythm strip. In a [20
 
 At 7Sisters Farm in the Champaign-Urbana area of Illinois, we have a veterinary cardiologist examine our breeding dogs for the [OFA advanced cardiac database](https://ofa.org/diseases/cardiac-disease/), which requires an echocardiogram, and we post the results. Each dog's OFA record lets you look up its relatives, so you can see the whole family and not only one dog. Our litter pages link to the parents' OFA results, for example [Ezra × Mia](/EzraxMia).
 
-OFA publishes normal results automatically, and it releases abnormal ones only with the owner's permission. Its adult-onset clearance is valid for one year, because heart disease can appear after a normal exam. When you talk to any breeder, ask whether they publish every result and how often they repeat the exam.
-
 ## How to Help
 
 Report any later heart diagnosis back to your dog's breeder, so the breeder can see what happens in a litter over time. You can also contribute to the [Great Dane DCM genetics study at NC State](https://hospital.cvm.ncsu.edu/services/small-animals/genetics/great-dane-dilated-cardiomyopathy/) (Dr. Kate Meurs, Veterinary Cardiac Genetics Laboratory).
@@ -237,7 +235,7 @@ The [juvenile DCM test for Portuguese Water Dogs](https://netapps.vet.upenn.edu/
 - Meurs KM, Stern JA, Sisson DD, et al. Association of dilated cardiomyopathy with the striatin mutation genotype in boxer dogs. *J Vet Intern Med* 2013;27(6):1437–1440. [PubMed](https://pubmed.ncbi.nlm.nih.gov/24033487/)
 - University of Pennsylvania PennGen. Juvenile dilated cardiomyopathy test for Portuguese Water Dogs (linked marker). [Test listing](https://netapps.vet.upenn.edu/PennGen/SampleTesting/GeneticsTest.aspx?testid=16)
 - Davis W, Crosland A, Dukes-McEwan J. Canine dilated cardiomyopathy. Part 1: screening, diagnosis and management of preclinical DCM. *In Practice* 2024;46(9):473–484. [Open-access manuscript](https://livrepository.liverpool.ac.uk/3188893/) (CC BY 4.0), [publisher](https://doi.org/10.1002/inpr.486). Figure 5 is reproduced from this article.
-- Orthopedic Foundation for Animals. Cardiac disease and the Advanced Cardiac Database (procedures, echocardiogram requirement, one-year adult-onset clearance, release of abnormal results). [ofa.org](https://ofa.org/diseases/cardiac-disease/)
+- Orthopedic Foundation for Animals. Cardiac disease and the Advanced Cardiac Database (procedures and the echocardiogram requirement). [ofa.org](https://ofa.org/diseases/cardiac-disease/)
 - Sunpongsri S, Roos T, Gerhing R, Zandvliet M, Santarelli G. Doxorubicin-induced cardiotoxicity in dogs: a narrative review. *Vet Comp Oncol* 2026. [PubMed](https://pubmed.ncbi.nlm.nih.gov/42893846/)
 - Great Dane Club of America National Specialty health clinic, cardiology presentation, October 20, 2026. The 1.53% (19 of 1,238) and 3.9% prevalence figures, the year-by-year Nationals results, and the survival estimate come from this seminar.
 
