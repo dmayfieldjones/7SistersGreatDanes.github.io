@@ -21,15 +21,13 @@ const readingTime = getReadingTime(id)
 
 const trimmedDescription = typeof description === 'string' ? description.trim() : ''
 
+// Prefer the post's own front matter; fall back to the derived category.
+const articleSection = categories?.[0] ?? category
 const keywords = [
   'Great Dane',
   'dog breeding',
   'dog care',
-  category.toLowerCase(),
-  ...title
-    .toLowerCase()
-    .split(' ')
-    .filter(word => word.length > 3),
+  ...(tags && tags.length > 0 ? tags : [category.toLowerCase()]),
 ]
 
 const structuredData = {
@@ -57,8 +55,8 @@ const structuredData = {
     '@type': 'WebPage',
     '@id': `https://7sistersgreatdanes.com/posts/${id}`,
   },
-  articleSection: category,
-  keywords: ['Great Dane', 'dog breeding', 'dog care', category.toLowerCase()],
+  articleSection,
+  keywords,
   timeRequired: readingTime,
   inLanguage: 'en-US',
 }

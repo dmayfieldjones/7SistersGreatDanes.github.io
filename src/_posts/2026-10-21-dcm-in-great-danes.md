@@ -40,11 +40,11 @@ If you are bringing home a puppy, there is nothing for you to do about DCM yet. 
   <strong>Call your vet today</strong> for fainting, collapse, a swollen belly, or labored breathing.
 </div>
 
-## Screening
+## How Is DCM Screened in Great Danes?
 
 A cardiologist screens with an echocardiogram and a 24-hour Holter monitor. Blood tests help but do not replace them. Chest X-rays confirm heart failure, and they do not screen for DCM, because an early-stage heart can look normal.
 
-## The Stages
+## What Are the Stages of DCM?
 
 <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; margin: 1.5rem 0;">
   <div style="flex: 1 1 200px; border: 1px solid #e0e0e0; border-top: 4px solid #d9d9d9; border-radius: 4px; padding: 0.75rem;">
@@ -61,13 +61,13 @@ A cardiologist screens with an echocardiogram and a 24-hour Holter monitor. Bloo
   </div>
 </div>
 
-## At Home
+## What Can I Watch for at Home?
 
 A smartphone ECG such as KardiaMobile records a 30-second rhythm strip. In a [2019 study (Vezzosi et al.)](https://pubmed.ncbi.nlm.nih.gov/30559174/), 89% of owner-made tracings were readable, though most of the dogs already had heart disease. It does not replace a Holter.
 
 ## What We Do at 7 Sisters
 
-We have a veterinary cardiologist examine our breeding dogs for the [OFA advanced cardiac database](https://ofa.org/diseases/cardiac-disease/), which requires an echocardiogram, and we post the results. Each dog's OFA record lets you look up its relatives, so you can see the whole family and not only one dog. Our litter pages link to the parents' OFA results, for example [Ezra × Mia](/EzraxMia).
+At 7Sisters Farm in the Champaign-Urbana area of Illinois, we have a veterinary cardiologist examine our breeding dogs for the [OFA advanced cardiac database](https://ofa.org/diseases/cardiac-disease/), which requires an echocardiogram, and we post the results. Each dog's OFA record lets you look up its relatives, so you can see the whole family and not only one dog. Our litter pages link to the parents' OFA results, for example [Ezra × Mia](/EzraxMia).
 
 OFA publishes normal results automatically, and it releases abnormal ones only with the owner's permission. Its adult-onset clearance is valid for one year, because heart disease can appear after a normal exam. When you talk to any breeder, ask whether they publish every result and how often they repeat the exam.
 
