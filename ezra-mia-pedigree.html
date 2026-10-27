@@ -133,6 +133,82 @@ h1 span{font-style:italic;color:var(--accent);}
 .accordion-item.open .accordion-header{background:var(--accent-light);border-left-color:var(--accent);}
 .accordion-content{display:none;padding:18px 20px;background:var(--bg);border-top:1px solid var(--border);}
 .accordion-item.open .accordion-content{display:block;}
+
+.sc-more{display:none;}
+.stats.show-more .sc-more{display:block;}
+.stats-toggle{display:block;margin:-8px auto 16px;background:none;border:none;color:var(--accent);font-weight:600;font-size:14px;cursor:pointer;text-decoration:underline;font-family:Arial,sans-serif;}
+.tool-intro-lead{font-size:20px !important;margin-bottom:8px !important;}
+.tool-intro{padding:16px 20px !important;font-size:16px !important;}
+.tool-intro details{margin-top:10px;font-size:15px;}
+.tool-intro summary{cursor:pointer;color:var(--accent);font-weight:600;}
+.tool-intro details p{margin-top:10px !important;}
+.pt-wrap{overflow-x:auto;padding-bottom:6px;-webkit-overflow-scrolling:touch;}
+.pt-label{font-family:Arial,sans-serif;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text2);margin:14px 0 6px;}
+.pt{display:flex;align-items:center;}
+.pt-kids{display:flex;flex-direction:column;justify-content:space-around;}
+.pt-box{width:190px;min-width:190px;margin:3px 10px 3px 0;padding:5px 8px;border-radius:6px;border:1px solid var(--border);background:var(--bg2);font-size:12.5px;line-height:1.35;user-select:text;-webkit-user-select:text;cursor:text;}
+.pt-box b{display:block;font-weight:700;}
+.pt-box i{display:block;font-style:normal;font-size:11px;color:var(--text2);}
+.pt-box.E{background:var(--e-bg);border-color:var(--e-bd);color:var(--e-tx);}
+.pt-box.P{background:var(--p-bg);border-color:var(--p-bd);color:var(--p-tx);}
+.pt-box.ca{background:var(--ca-bg);border:2px solid var(--ca-bd);color:var(--ca-tx);}
+.pt-box.int{background:var(--int-bg);border:1px dashed var(--int-bd);color:var(--int-tx);}
+.pt-box.E i,.pt-box.P i,.pt-box.ca i,.pt-box.int i{color:inherit;opacity:.8;}
+.pt-more{margin-top:14px;}
+.copy-btn{margin-left:auto;}
+.lock-name,.lock-meta{user-select:text;-webkit-user-select:text;}
+.search-panel{background:var(--accent-light);border:1px solid var(--accent);border-radius:8px;padding:12px 14px;margin-bottom:12px;}
+.search-title{font-family:Arial,sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:2px;}
+.search-sub{font-size:14px;color:var(--text2);margin-bottom:8px;}
+.search-panel .search-bar{margin-bottom:8px;}
+.search-panel .search-input{flex:1 1 320px;min-width:0;font-size:16px;padding:10px 12px;border:2px solid var(--accent);border-radius:6px;}
+.search-panel .search-input::placeholder{color:var(--text3);opacity:1;}
+.search-try{font-size:13px;color:var(--text2);margin-right:2px;}
+.view-toggle{display:flex;gap:10px;margin-bottom:16px;}
+.vt-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:12px 10px;background:var(--bg2);border:2px solid var(--border);border-radius:8px;cursor:pointer;font-family:Arial,sans-serif;color:var(--text);transition:all .15s;}
+.vt-btn:hover{border-color:var(--accent);}
+.vt-btn.active{background:var(--accent-light);border-color:var(--accent);}
+.vt-title{font-size:17px;font-weight:700;}
+.vt-sub{font-size:13px;color:var(--text2);}
+.vt-btn.active .vt-title{color:var(--accent);}
+.view-panel{display:none;padding:4px 0 8px;}
+.view-panel.active{display:block;}
+@media (max-width:600px){.vt-title{font-size:15px;}.vt-sub{font-size:12px;}}
+@media (max-width:600px){
+.container{padding-top:12px;}
+.back-bar{padding:8px 14px;}
+header{margin-bottom:12px;padding-bottom:10px;}
+.logo-img{height:38px;}
+.header-logo{margin-bottom:4px;}
+.stats{gap:6px;margin-bottom:12px;}
+.sc{padding:8px 6px;}
+.sc .num{font-size:22px;}
+.sc .lbl{font-size:10.5px;letter-spacing:.03em;}
+.sc .lbl-sub{display:none;}
+.stats-toggle{margin:-4px auto 10px;}
+.coi-note{margin-bottom:10px;font-size:13px;}
+.tool-intro{padding:12px 14px !important;margin-bottom:14px !important;font-size:14px !important;}
+.tool-intro-lead{font-size:17px !important;margin-bottom:4px !important;}
+.view-toggle{gap:8px;}
+.vt-btn{padding:10px 6px;}
+.vt-title{font-size:14px;}
+.vt-sub{font-size:11.5px;}
+.pt-wrap{overflow-x:visible;}
+.pt{display:block;}
+.pt-kids{display:block;margin-left:12px;padding-left:8px;border-left:2px solid var(--border);}
+.pt-box{width:auto;min-width:0;margin:4px 0;font-size:13px;}
+.pt-box b{font-size:13.5px;}
+}
+@media (max-width:600px){
+.legend{gap:4px 14px;padding:8px 10px;margin-bottom:8px;}
+.li{font-size:12.5px;gap:6px;}
+.cv-hint{display:none;}
+.search-panel{padding:10px;}
+.search-title{font-size:15px;}
+.search-sub{font-size:13px;}
+.search-panel .search-input{flex-basis:100%;}
+.pt-wrap{margin-top:4px;}
+}
 </style>
 </head>
 <body>
@@ -151,36 +227,48 @@ h1 span{font-style:italic;color:var(--accent);}
   <div class="sc"><div class="num">5.42%</div><div class="lbl">Cross COI (Wright's)</div><div class="lbl-sub">9 gen depth</div></div>
   <div class="sc"><div class="num">7.25%</div><div class="lbl">Mia's Own COI</div><div class="lbl-sub">9 gen depth</div></div>
   <div class="sc"><div class="num">1.68%</div><div class="lbl">Ezra's Own COI</div><div class="lbl-sub">9 gen depth</div></div>
-  <div class="sc"><div class="num">10</div><div class="lbl">Generations Shown</div></div>
+  <div class="sc sc-more"><div class="num">10</div><div class="lbl">Generations Shown</div></div>
   <div class="sc"><div class="num">135</div><div class="lbl">Common Ancestors</div></div>
-  <div class="sc"><div class="num">821</div><div class="lbl">Cross-COI Paths</div></div>
-  <div class="sc"><div class="num">1,022</div><div class="lbl">Ancestors Traced</div><div class="lbl-sub">of 1,022 possible</div></div>
+  <div class="sc sc-more"><div class="num">821</div><div class="lbl">Cross-COI Paths</div></div>
+  <div class="sc sc-more"><div class="num">1,022</div><div class="lbl">Ancestors Traced</div><div class="lbl-sub">of 1,022 possible</div></div>
 </div>
+<button type="button" class="stats-toggle" onclick="var st=document.querySelector('.stats');st.classList.toggle('show-more');this.textContent=st.classList.contains('show-more')?'Fewer numbers':'More numbers'">More numbers</button>
 <p class="coi-note">All COI values calculated from full 9-generation pedigree. <a href="/posts/2025-06-24-laying-the-foundation#how-coi-is-calculated" target="_top">How to calculate COI</a></p>
 
 <div class="tool-intro">
   <p class="tool-intro-lead">Pedigrees alone can be hard. This tool helps.</p>
+  <p>A pedigree-based estimate, not a measure of actual shared DNA.</p>
+  <details><summary>About this tool</summary>
   <p>Highlight common ancestors, trace shared kennels, and see each ancestor&apos;s pedigree-predicted contribution to the cross. <strong>Without sequencing the dogs directly, this does not replace genetic analysis</strong> — it is a pedigree-based estimate, not a measure of actual shared DNA.</p>
   <p class="tool-intro-hint">The 10-generation approach was inspired by the 2025 PNAS Special Feature on canine genetics—particularly the German Shepherd genomic time series showing how breeding decisions accumulate across decades. <a href="https://doi.org/10.1073/pnas.2421755122" target="_blank" rel="noopener">Scarsbrook et al., <i>A 120-y time series of genomes reveals the consequences of closed breeding in German Shepherd Dogs</i>, PNAS (2025)</a></p>
+  </details>
 </div>
 
-<div class="accordion">
-<div class="accordion-item open" data-accordion>
-  <button type="button" class="accordion-header" onclick="toggleAccordion(this)">
-    <span>Visual Pedigree Tree</span>
-    <span class="accordion-icon">▼</span>
-  </button>
-  <div class="accordion-content">
-<h2 class="section-title">Visual Pedigree Tree</h2>
-<p class="section-desc">The tree loads fit to your screen width. Ezra × Mia are on the left; scroll right for deeper generations. Gens 1–7 show full names; gens 8–9 show abbreviated names or colored bars. On a phone, pinch with two fingers to zoom; tap a dog to highlight every place it appears (the bar below shows which box you tapped). Use Fit all for a bird&apos;s-eye view.</p>
+<div class="view-toggle" role="tablist">
+  <button type="button" class="vt-btn active" id="vt-close" role="tab" onclick="setView('close')"><span class="vt-title">Closest relatives</span><span class="vt-sub">Parents to great-great-grandparents, easy to read</span></button>
+  <button type="button" class="vt-btn" id="vt-full" role="tab" onclick="setView('full')"><span class="vt-title">Full 10-generation tree</span><span class="vt-sub">Every ancestor, with search and zoom</span></button>
+</div>
+<div class="view-panel active" id="view-close">
+<p class="section-desc">Parents through great-great-grandparents. Select any name to copy it. Gold boxes are common ancestors. To search dogs and kennels across all 10 generations, open the full tree.</p>
+<div class="legend">
+  <div class="li"><div class="ls e"></div>Ezra's lines</div>
+  <div class="li"><div class="ls p"></div>Mia's lines</div>
+  <div class="li"><div class="ls ca"></div>Common ancestor</div>
+  <div class="li"><div class="ls int"></div>Repeats within one parent's pedigree</div>
+</div>
+<div class="pt-wrap" id="ptwrap"></div>
+<button type="button" class="zbtn pt-more" onclick="setView('full');document.getElementById('vt-full').scrollIntoView({behavior:'smooth',block:'start'})">Show the full 10-generation tree →</button>
+</div>
+<div class="view-panel" id="view-full">
+<p class="section-desc">Scroll right for deeper generations. Search by dog or kennel name, or click a dog to lock highlights on every place it appears and copy its name.</p>
 
 <div class="legend">
   <div class="li"><div class="ls e"></div>Ezra's lines</div>
   <div class="li"><div class="ls p"></div>Mia's lines (via her sire Rolex and dam Piper)</div>
-  <div class="li"><div class="ls ca"></div>Common ancestor — appears in both Ezra&apos;s and Mia&apos;s pedigrees; contributes to the 5.42% cross COI</div>
+  <div class="li"><div class="ls ca"></div>Common ancestor — in both pedigrees; contributes to the 5.42% cross COI</div>
   <div class="li"><div class="ls int"></div>Internal repeat — same dog appears multiple times within one parent&apos;s pedigree</div>
 </div>
-<p class="cv-hint">← Scroll right for deeper generations · Scroll down for more dogs · Click any dog to lock highlights · Pinch with two fingers to zoom (phone/tablet) · Ctrl+scroll to zoom (desktop) →</p>
+<p class="cv-hint">Click a dog to lock highlights · Pinch or Ctrl+scroll to zoom</p>
 
 <div class="zoom-bar">
   <button class="zbtn" onclick="zoomTo(zoomLevel/1.4)" title="Zoom out">−</button>
@@ -191,15 +279,16 @@ h1 span{font-style:italic;color:var(--accent);}
   <button class="zbtn" onclick="zoomFitWidth()">Fit width</button>
   <button class="zbtn" onclick="zoomFitAll()">Fit all</button>
   <button class="zbtn" id="zfithl" style="display:none" onclick="zoomFitHighlights()">Zoom to selection</button>
-  <div class="zsep"></div>
-  <span style="font-size:13px;color:var(--text3)">Ctrl+scroll to zoom · Click to lock</span>
-</div>
+  </div>
+<div class="search-panel">
+<div class="search-title">🔍 Search the full tree</div>
+<div class="search-sub">Type a dog or kennel name to highlight every match across all 10 generations.</div>
 <div class="search-bar">
-  <input class="search-input" id="searchbox" type="text" placeholder="Search names, kennels, titles (e.g. Elan, Honey Lane, Longo)…" autocomplete="off">
+  <input class="search-input" id="searchbox" type="text" placeholder="Dog or kennel, e.g. Elan" autocomplete="off">
   <span class="search-meta" id="searchmeta"></span>
   <button class="zbtn" id="searchzoom" style="display:none" onclick="zoomFitSearch()">Zoom to matches</button>
   <button class="zbtn" id="searchclear" style="display:none" onclick="clearSearch()">Clear</button>
-  <div class="search-pills">
+  <div class="search-pills"><span class="search-try">Popular kennels:</span>
     <span class="spill" onclick="doSearch('Rolex')">Rolex</span>
     <span class="spill" onclick="doSearch('Legado')">Legado</span>
     <span class="spill" onclick="doSearch('Elan')">Elan</span>
@@ -214,18 +303,20 @@ h1 span{font-style:italic;color:var(--accent);}
     <span class="spill" onclick="doSearch('Grand Fawns')">Grand Fawns</span>
   </div>
 </div>
+</div>
 <div id="lockbar" class="lock-bar">
   <span class="lock-icon">📌</span>
   <span class="lock-name" id="lockname"></span>
   <span class="lock-meta" id="lockmeta"></span>
   <div class="lock-actions">
+    <button class="zbtn" id="copyname" onclick="copyLockedName(this)">Copy name</button>
     <button class="zbtn" id="zfithl2" onclick="zoomFitHighlights()">Zoom to all</button>
     <button class="lock-close" onclick="clearLock()" title="Clear selection">✕</button>
   </div>
 </div>
 <div class="cv-wrap" id="cvwrap" style="position:relative"><div id="zoominner" style="transform-origin:0 0"><canvas id="cv"></canvas><canvas id="ov" style="position:absolute;top:0;left:0;pointer-events:none"></canvas></div></div>
-  </div>
 </div>
+<div class="accordion">
 <div class="accordion-item" data-accordion>
   <button type="button" class="accordion-header" onclick="toggleAccordion(this)">
     <span>Wright's COI Path Table</span>
@@ -1980,6 +2071,50 @@ searchbox.addEventListener('keydown', function(e) {
 });
 
 // ─── ACCORDION ───────────────────────────────────────────────────────────────
+
+// ─── CLOSEST RELATIVES (plain HTML, selectable text) ────────────────────────
+function ptNode(pos, maxPos) {
+  const nd = N[pos];
+  const wrap = document.createElement('div'); wrap.className = 'pt';
+  const box = document.createElement('div');
+  box.className = 'pt-box ' + (nd && nd.side ? nd.side : '') + (nd && nd.ca ? ' ca' : '') + (nd && nd.int ? ' int' : '');
+  const b = document.createElement('b'); b.textContent = nd ? nd.n : 'Unknown';
+  box.appendChild(b);
+  if (nd && nd.r) { const i = document.createElement('i'); i.textContent = nd.r; box.appendChild(i); }
+  wrap.appendChild(box);
+  if (pos * 2 + 1 <= maxPos) {
+    const kids = document.createElement('div'); kids.className = 'pt-kids';
+    kids.appendChild(ptNode(pos * 2, maxPos));
+    kids.appendChild(ptNode(pos * 2 + 1, maxPos));
+    wrap.appendChild(kids);
+  }
+  return wrap;
+}
+(function buildClosest() {
+  const host = document.getElementById('ptwrap');
+  [[2, "Ezra's side"], [3, "Mia's side"]].forEach(function(x) {
+    const l = document.createElement('div'); l.className = 'pt-label'; l.textContent = x[1];
+    host.appendChild(l);
+    host.appendChild(ptNode(x[0], 31));
+  });
+})();
+
+function setView(v) {
+  document.getElementById('view-close').classList.toggle('active', v === 'close');
+  document.getElementById('view-full').classList.toggle('active', v === 'full');
+  document.getElementById('vt-close').classList.toggle('active', v === 'close');
+  document.getElementById('vt-full').classList.toggle('active', v === 'full');
+  if (v === 'full') requestAnimationFrame(function() { zoomFitWidth(); cvWrap.scrollLeft = 0; cvWrap.scrollTop = 0; });
+}
+
+function copyLockedName(btn) {
+  const nd = N[lockedPos] || {};
+  const text = nd.n || '';
+  const done = function() { const o = btn.textContent; btn.textContent = 'Copied'; setTimeout(function() { btn.textContent = 'Copy name'; }, 1200); };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, function() {});
+  else { const r = document.createRange(); r.selectNodeContents(lockname); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); }
+}
+
 function toggleAccordion(btn) {
   var item = btn.closest('.accordion-item');
   var accordion = item.closest('.accordion');
