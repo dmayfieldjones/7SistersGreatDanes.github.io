@@ -209,6 +209,11 @@ header{margin-bottom:12px;padding-bottom:10px;}
 .search-panel .search-input{flex-basis:100%;}
 .pt-wrap{margin-top:4px;}
 }
+@media (max-width:520px){
+.stats{grid-template-columns:repeat(2,1fr);}
+.stats.show-more .sc:last-child{grid-column:1/-1;}
+.sc .lbl{font-size:11px;}
+}
 </style>
 </head>
 <body>
