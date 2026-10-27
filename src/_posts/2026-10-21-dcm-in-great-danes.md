@@ -1,8 +1,8 @@
 ---
-title: "DCM in Great Danes: Screening, Look-Alikes, and What Is Still Unknown"
+title: "DCM in Great Danes: What Owners and Buyers Should Know"
 date: 2026-10-21
 updated: 2026-10-27
-description: "A reference page on dilated cardiomyopathy in Great Danes: how screening works, how Danes differ from Dobermans, the non-genetic causes that mimic it, and the genetics that remain unresolved."
+description: "What dilated cardiomyopathy (DCM) is in Great Danes, how screening works, the early signs to watch for, and what researchers still do not know."
 categories: ["Health", "Genetics"]
 tags: ["DCM", "Cardiology", "Health Testing"]
 ---
@@ -32,7 +32,7 @@ If you are bringing home a puppy, there is nothing for you to do about DCM yet. 
 
 > **Breeding dogs:** the presenters recommended a yearly echocardiogram plus a 24-hour Holter monitor from a veterinary cardiologist, starting around age 2 to 3.
 >
-> **Pet owners:** most Danes do not get this. If you want screening, ask your vet for a referral to a veterinary cardiologist. A physical exam alone does not catch hidden-stage disease.
+> **Pet owners:** this is the standard for breeding dogs. If you want screening for a pet, ask your vet for a referral to a veterinary cardiologist. A physical exam alone does not catch hidden-stage disease.
 >
 > **Count at home.** Breaths per minute while your dog sleeps, staying above about 30 to 35, is an early sign of fluid in the lungs. Call your vet.
 
@@ -64,6 +64,12 @@ A cardiologist screens with an echocardiogram and a 24-hour Holter monitor. Bloo
 ## At Home
 
 A smartphone ECG such as KardiaMobile records a 30-second rhythm strip. In a [2019 study (Vezzosi et al.)](https://pubmed.ncbi.nlm.nih.gov/30559174/), 89% of owner-made tracings were readable, though most of the dogs already had heart disease. It does not replace a Holter.
+
+## What We Do at 7 Sisters
+
+We have a veterinary cardiologist examine our breeding dogs for the [OFA advanced cardiac database](https://ofa.org/diseases/cardiac-disease/), which requires an echocardiogram, and we post the results. Each dog's OFA record lets you look up its relatives, so you can see the whole family and not only one dog. Our litter pages link to the parents' OFA results, for example [Ezra × Mia](/EzraxMia).
+
+OFA publishes normal results automatically, and it releases abnormal ones only with the owner's permission. Its adult-onset clearance is valid for one year, because heart disease can appear after a normal exam. When you talk to any breeder, ask whether they publish every result and how often they repeat the exam.
 
 ## How to Help
 
@@ -110,7 +116,7 @@ Published prevalence numbers range from about 1.5% to 47%. The spread mostly ref
 
 The 1.53% figure comes from one-time exams, mostly of young show dogs, so it sits at the bottom of the range. DCM shows up with age, so a clear exam at 2 says little about the dog at 7.
 
-If lifetime risk lands anywhere near the upper range, eliminating carriers is not a realistic goal. Selecting for later onset and for longer-lived families becomes the goal instead.
+If lifetime risk is anywhere near the upper range, we think removing every carrier from breeding is not realistic. Selecting for later onset and for longer-lived families looks like the better goal.
 
 <details>
 <summary><strong>Sources and details for each bar</strong></summary>
@@ -167,7 +173,7 @@ These can look like genetic DCM on an echocardiogram:
 - **Infections**, including Chagas disease, tick-borne diseases, and viral illness.
 - **Low thyroid**, which can reduce heart contraction but is rarely the sole cause of heart failure.
 - **A sustained fast heart rate.** Atrial fibrillation can itself drive the heart to dilate.
-- **Doxorubicin**, a chemotherapy drug whose damage is dose-dependent and irreversible. It matters for giant breeds treated for osteosarcoma or lymphoma.
+- **Doxorubicin**, a chemotherapy drug that can damage the heart. A [2026 review](https://pubmed.ncbi.nlm.nih.gov/42893846/) lists higher cumulative dose, breeds prone to DCM, and higher body weight as risk factors in dogs, so it matters for giant breeds treated for lymphoma or sarcoma.
 - **Diet.** In its [2019 update](https://dvm360.com/view/fda-targets-peas-lentils-potatoes-investigation-grain-free-diets-and-dcm) the FDA reported that 93% of the reported products contained peas and/or lentils, and it said no causal link had been identified. See our [feeding guide](/posts/2025-07-17-feeding-your-growing-great-dane) for how we apply this.
 
 An affected dog should be screened for these before anyone counts the case as genetic. An infection-damaged heart can look identical to genetic DCM on an echo, and counting those dogs as affected dilutes the signal in pedigree studies and genome scans.
@@ -194,7 +200,7 @@ One documented affected sire with affected sons would argue against pure X-linka
 
 ### A caution from other breeds
 
-The [juvenile DCM test for Portuguese Water Dogs](https://netapps.vet.upenn.edu/PennGen/SampleTesting/GeneticsTest.aspx?testid=16) detects a linked marker, not the causal mutation, and the lab notes that a small share of results can be wrong in either direction. In a [2013 study](https://pubmed.ncbi.nlm.nih.gov/24033487/), 3 of 33 Boxers with DCM did not carry the striatin deletion, so at least one other cause exists. If breeds with simpler inheritance have run into gaps like these, Danes, with adult onset and incomplete penetrance, are likely messier. Waiting on a single DNA test is not a plan.
+The [juvenile DCM test for Portuguese Water Dogs](https://netapps.vet.upenn.edu/PennGen/SampleTesting/GeneticsTest.aspx?testid=16) detects a linked marker, not the causal mutation, and the lab notes that a small share of results can be wrong in either direction. In a [2013 study](https://pubmed.ncbi.nlm.nih.gov/24033487/), 3 of 33 Boxers with DCM did not carry the striatin deletion, so at least one other cause exists. Breeds with simpler inheritance have run into gaps like these. Danes, with adult onset and incomplete penetrance, may be harder still, so we would not rely on one DNA test.
 
 </details>
 
@@ -209,7 +215,7 @@ The [juvenile DCM test for Portuguese Water Dogs](https://netapps.vet.upenn.edu/
 ## Sources
 
 <details>
-<summary><strong>13 sources</strong></summary>
+<summary><strong>15 sources</strong></summary>
 
 - Summerfield NJ, et al. Efficacy of pimobendan in the prevention of congestive heart failure or sudden death in Doberman Pinschers with preclinical dilated cardiomyopathy (the PROTECT study). *J Vet Intern Med* 2012;26(6):1337–1349. [PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC3546380/)
 - Meurs KM, Miller MW, Wright NA. Clinical features of dilated cardiomyopathy in Great Danes and results of a pedigree analysis: 17 cases (1990–2000). *JAVMA* 2001;218(5):729–732. [AKC Canine Health Foundation summary](https://www.akcchf.org/research/research-portfolio/0093.html)
@@ -223,6 +229,8 @@ The [juvenile DCM test for Portuguese Water Dogs](https://netapps.vet.upenn.edu/
 - Kolicheski AL. Detection and characterization of genomic regions associated to dilated cardiomyopathy in Great Danes. Master's thesis, Swedish University of Agricultural Sciences, Uppsala, 2012. [SLU repository](https://stud.epsilon.slu.se/5101/)
 - Meurs KM, Stern JA, Sisson DD, et al. Association of dilated cardiomyopathy with the striatin mutation genotype in boxer dogs. *J Vet Intern Med* 2013;27(6):1437–1440. [PubMed](https://pubmed.ncbi.nlm.nih.gov/24033487/)
 - University of Pennsylvania PennGen. Juvenile dilated cardiomyopathy test for Portuguese Water Dogs (linked marker). [Test listing](https://netapps.vet.upenn.edu/PennGen/SampleTesting/GeneticsTest.aspx?testid=16)
+- Orthopedic Foundation for Animals. Cardiac disease and the Advanced Cardiac Database (procedures, echocardiogram requirement, one-year adult-onset clearance, release of abnormal results). [ofa.org](https://ofa.org/diseases/cardiac-disease/)
+- Sunpongsri S, Roos T, Gerhing R, Zandvliet M, Santarelli G. Doxorubicin-induced cardiotoxicity in dogs: a narrative review. *Vet Comp Oncol* 2026. [PubMed](https://pubmed.ncbi.nlm.nih.gov/42893846/)
 - Great Dane Club of America National Specialty health clinic, cardiology presentation, October 20, 2026. The 1.53% (19 of 1,238) and 3.9% prevalence figures, the year-by-year Nationals results, and the survival estimate come from this seminar.
 
 [← Back to Blog Archive](/archive)
