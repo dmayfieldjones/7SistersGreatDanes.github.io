@@ -1007,3 +1007,70 @@ body:has(.homepage-container) {
     min-height: 100vh;
   }
 }
+
+/* Homepage trust strip */
+.home-below-hero > .home-trust {
+  width: 100%;
+  max-width: 46rem;
+  margin: 2rem auto 0;
+  padding: 1.5rem 1rem;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.home-trust-title {
+  margin: 0 0 1rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #555;
+}
+
+.home-trust-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .home-trust-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.home-trust-item > a,
+.home-trust-item > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.2rem;
+  height: 100%;
+  padding: 0.75rem 0.5rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #111;
+  transition: border-color 0.2s ease;
+}
+
+.home-trust-item > a:hover {
+  border-color: #bf141c;
+}
+
+.home-trust-name {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #bf141c;
+}
+
+.home-trust-note {
+  font-size: 0.8rem;
+  color: #555;
+  line-height: 1.3;
+}
