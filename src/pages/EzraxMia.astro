@@ -3,6 +3,14 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 import '../styles/litter.css'
 import { SITE_TIKTOK_URL } from '../lib/site'
 
+const puppies = [
+  { collar: 'Black', sex: 'Boy', color: '#111111' },
+  { collar: 'Red', sex: 'Boy', color: '#d11f26' },
+  { collar: 'Blue', sex: 'Boy', color: '#1f5fd1' },
+  { collar: 'Pink', sex: 'Girl', color: '#f06fa8' },
+  { collar: 'Purple', sex: 'Girl', color: '#7b3fb5' },
+]
+
 const keywords = [
   'Ezra Mia Great Dane litter',
   'Great Dane Futurity nominated litter',
@@ -16,7 +24,7 @@ const keywords = [
 
 <BaseLayout
   title="Ezra × Mia Litter | 7Sisters Farm — Futurity Nominated Great Dane Litter"
-  description="Ezra × Mia litter at 7Sisters Farm: a 2027 Futurity nominated Great Dane litter due October 16th, 2026. CHIC-certified, health-tested parents. Inquiries welcome. Central Illinois Great Dane breeders."
+  description="Ezra × Mia litter at 7Sisters Farm: a 2027 Futurity nominated Great Dane litter born October 17th, 2026: three boys and two girls. CHIC-certified, health-tested parents. Inquiries welcome. Central Illinois Great Dane breeders."
   keywords={keywords}
   image="https://7sistersgreatdanes.com/img/EzraxMia.jpg"
   canonical="https://7sistersgreatdanes.com/EzraxMia"
@@ -43,24 +51,20 @@ const keywords = [
         />
       </section>
       <section class="advertisement-section">
-        <a
-          href={SITE_TIKTOK_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="ad-link"
-          aria-label="Follow 7Sisters Great Danes on TikTok"
-        >
-          <img
-            src="/img/EzraxMia.jpg"
-            alt="Ezra X Mia litter advertisement: 2027 Futurity nominated litter due October 16th"
-            class="ad-image"
-            width="1999"
-            height="1500"
-            loading="eager"
-          />
-        </a>
+        <img
+          src="/img/EzraxMia.jpg"
+          alt="Ezra X Mia litter advertisement: 2027 Futurity nominated litter due October 16th"
+          class="ad-image"
+          width="1999"
+          height="1500"
+          loading="eager"
+        />
         <p class="ad-caption">
-          Follow along on TikTok, or <a href="/contact">contact us</a> to ask
+          Follow along on <a
+            href={SITE_TIKTOK_URL}
+            target="_blank"
+            rel="noopener noreferrer">TikTok</a
+          >, or <a href="/contact">contact us</a> to ask
           about a puppy.
         </p>
       </section>
@@ -70,11 +74,15 @@ const keywords = [
           <div class="info-grid">
             <div class="info-item">
               <span class="label">Status:</span>
-              <span class="value">Expected — inquiries welcome</span>
+              <span class="value">Born — inquiries welcome</span>
             </div>
             <div class="info-item">
-              <span class="label">Due:</span>
-              <span class="value">October 16, 2026</span>
+              <span class="label">Puppies:</span>
+              <span class="value">Five total — three boys, two girls</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Whelped:</span>
+              <span class="value">October 17, 2026</span>
             </div>
             <div class="info-item">
               <span class="label">Futurity:</span>
@@ -152,6 +160,29 @@ const keywords = [
             >DCM in Great Danes: What Owners and Buyers Should Know</a
           >.
         </p>
+      </section>
+      <section class="offspring-section">
+        <h2 class="section-title">Puppies</h2>
+        <p class="pedigree-intro">
+          Names and registration numbers are coming. For now, each puppy goes
+          by the color of the collar.
+        </p>
+        <div class="puppies-list">
+          {
+            puppies.map((p) => (
+              <div class="puppy-card">
+                <p class="puppy-name">
+                  <span
+                    aria-hidden="true"
+                    style={`display:inline-block;width:0.9em;height:0.9em;border-radius:50%;background:${p.color};margin-right:0.5em;vertical-align:-0.1em;`}
+                  />
+                  {p.collar} collar — {p.sex}
+                </p>
+                <p class="puppy-reg">Name and registration number to come</p>
+              </div>
+            ))
+          }
+        </div>
       </section>
     </main>
   </div>
