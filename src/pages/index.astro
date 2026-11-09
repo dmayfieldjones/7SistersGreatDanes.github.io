@@ -7,12 +7,11 @@ const HERO_VIDEO_POSTER = '/img/hero-bg-poster.jpg'
 const HERO_MOBILE_PHOTO = '/img/hero-options/hero-option-1m12s.jpg'
 
 const trustBadges = [
-  { name: 'GDCA', note: 'Great Dane Club of America member', href: 'https://www.gdca.org' },
-  { name: 'Illini Great Dane Club', note: 'Local club member', href: '' },
-  { name: 'OFA', note: 'Orthopedic & cardiac health testing', href: 'https://ofa.org' },
-  { name: 'CHIC', note: 'Canine Health Information Center', href: 'https://ofa.org/chic-programs/' },
-  { name: 'Puppy Culture', note: 'Early-development program', href: 'https://www.puppyculture.com' },
-  { name: 'Good Dog', note: 'Verified breeder profile', href: 'https://www.gooddog.com/breeders/7sisters-great-danes-illinois' },
+  { name: 'Great Dane Club of America', href: 'https://www.gdca.org', logo: '/img/gdca-logo.jpg' },
+  { name: 'Illini Great Dane Club', href: 'https://www.illinigreatdaneclub.com/Officers.html', logo: '/img/illini-great-dane-club-logo.jpg' },
+  { name: 'OFA', href: 'https://ofa.org', logo: '/img/ofa-logo.svg' },
+  { name: 'CHIC', href: 'https://ofa.org/chic-programs/', logo: '/img/chic-logo.png' },
+  { name: 'Puppy Culture', href: 'https://www.puppyculture.com', logo: '/img/puppy-culture-logo.png' },
 ]
 
 const keywords = [
@@ -127,21 +126,19 @@ const keywords = [
 
       <section class="home-trust" aria-labelledby="home-trust-title">
         <h2 id="home-trust-title" class="home-trust-title">
-          Memberships &amp; health programs
+          Memberships &amp; Programs
         </h2>
         <ul class="home-trust-list">
           {
             trustBadges.map((b) => (
               <li class="home-trust-item">
                 {b.href ? (
-                  <a href={b.href} target="_blank" rel="noopener noreferrer">
-                    <span class="home-trust-name">{b.name}</span>
-                    <span class="home-trust-note">{b.note}</span>
+                  <a href={b.href} target="_blank" rel="noopener noreferrer" aria-label={b.name}>
+                    <img src={b.logo} alt={b.name} class="home-trust-logo" loading="lazy" />
                   </a>
                 ) : (
                   <div>
-                    <span class="home-trust-name">{b.name}</span>
-                    <span class="home-trust-note">{b.note}</span>
+                    <img src={b.logo} alt={b.name} class="home-trust-logo" loading="lazy" />
                   </div>
                 )}
               </li>
