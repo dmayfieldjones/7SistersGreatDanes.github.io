@@ -45,6 +45,7 @@ h1{font-size:1.5rem;margin:0 0 2px;letter-spacing:.01em}
 .legend{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:10px;font-size:.85rem;color:var(--ink2);min-height:1.4em;align-items:center}
 .legend i{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:6px;vertical-align:-1px}
 .legend .ramp{display:inline-block;width:150px;height:10px;border-radius:5px;margin:0 6px;vertical-align:-1px}
+.legend .lg{font:inherit;font-size:.85rem;color:var(--ink2);background:#151826;border:1px solid #343850;border-radius:999px;padding:3px 11px;cursor:pointer}.legend .lg:hover{border-color:#5a6080;color:var(--ink)}.legend .lg small{color:var(--mute)}.legend .lgh{font-size:.78rem;color:var(--mute)}
 .notes{margin:14px 0 0;color:var(--mute);font-size:.82rem;max-width:90ch}
 .notes b{color:var(--ink2)}
 .nogl{padding:40px 20px;text-align:center;color:var(--ink2)}
@@ -146,10 +147,11 @@ const ramp=(stops,t)=>{t=Math.max(0,Math.min(1,t));const k=t*(stops.length-1),i=
 const ERA=[[255,178,77],[77,178,255],[204,102,255]],INB=[[60,200,190],[255,224,100],[255,70,70]]
 const colorOf={
   era:i=>ramp(ERA,(year[i]-1880)/(2022-1880)),
-  coat:i=>COATC[meta[i]&7]||COATC[0],
+  coat:i=>{const c=COATC[meta[i]&7]||COATC[0];if(!COATSEL.size)return c;return COATSEL.has(meta[i]&7)?c.map(v=>Math.min(255,v*1.15)):c.map(v=>v*.1)},
   inb:i=>ramp(INB,f8[i]*0.5/255/0.125)
 }
 let mode='era'
+const COATSEL=new Set()   // coat categories picked in the legend; empty = all
 
 
 // --- kennels ---
@@ -365,10 +367,15 @@ $('play').onclick=()=>{if(playing){playing=false;flash=0;$('play').textContent='
 $('reset').onclick=reset
 const LEG={
   era:()=>`<span>Born earlier</span><i class="ramp" style="background:linear-gradient(90deg,rgb(255,178,77),rgb(77,178,255),rgb(204,102,255))"></i><span>later</span>`,
-  coat:()=>COATS.slice(1).map((n,k)=>`<span><i style="background:rgb(${COATC[k+1]})"></i>${n}</span>`).join('')+`<span><i style="background:rgb(${COATC[0]})"></i>Unknown</span>`,
+  coat:()=>{const n=new Array(6).fill(0);for(let i=0;i<N;i++)n[meta[i]&7]++
+    const b=(c,label)=>`<button type="button" class="lg" data-c="${c}" aria-pressed="${COATSEL.has(c)}" style="${COATSEL.has(c)?`border-color:rgb(${COATC[c]});color:#fff`:''}"><i style="background:rgb(${COATC[c]})"></i>${label} <small>${n[c].toLocaleString()}</small></button>`
+    return [1,2,3,4,5].map(c=>b(c,COATS[c])).join('')+b(0,'Unknown')+(COATSEL.size?'<button type="button" class="lg" data-c="all">Show all</button>':'')+'<span class="lgh">Click a coat to light it up while it plays.</span>'},
   inb:()=>`<span>Inbreeding 0%</span><i class="ramp" style="background:linear-gradient(90deg,rgb(60,200,190),rgb(255,224,100),rgb(255,70,70))"></i><span>12.5% or more (half-sibling mating)</span>`
 }
 function setMode(m){mode=m;for(const b of document.querySelectorAll('#modes button'))b.setAttribute('aria-pressed',b.dataset.m===m);$('legend').innerHTML=LEG[m]();recolor();draw()}
+$('legend').addEventListener('click',e=>{const b=e.target.closest('button.lg');if(!b||mode!=='coat')return
+  const c=b.dataset.c;if(c==='all')COATSEL.clear();else{const k=+c;COATSEL.has(k)?COATSEL.delete(k):COATSEL.add(k)}
+  $('legend').innerHTML=LEG.coat();recolor();draw()})
 $('modes').addEventListener('click',e=>{const b=e.target.closest('button');if(b)setMode(b.dataset.m)})
 new ResizeObserver(()=>{if(trace||K>1){fit();draw()}else reset();spark()}).observe(stage)
 addEventListener('resize',()=>{reset();spark()})
