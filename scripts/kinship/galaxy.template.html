@@ -62,7 +62,7 @@ h1{font-size:1.5rem;margin:0 0 2px;letter-spacing:.01em}
 .kres{position:absolute;left:0;right:0;top:100%;margin:4px 0 0;padding:4px;list-style:none;background:#10131d;border:1px solid #3a3e52;border-radius:8px;z-index:6;max-height:300px;overflow:auto;display:none}
 .kres li{padding:6px 10px;border-radius:6px;cursor:pointer;font-size:.88rem;display:flex;justify-content:space-between;gap:12px}
 .kres li:hover,.kres li.on{background:#1c2032}.kres small{color:var(--mute)}
-.kg{margin:8px 0 0}.kg h3{font-size:.78rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--mute);margin:0 0 5px}
+.kg{margin:8px 0 0}.kg summary{cursor:pointer;font-size:.78rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--mute);margin:0 0 6px;list-style:revert}.kg summary small{font-weight:400}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
 .chip{font:inherit;font-size:.82rem;color:var(--ink2);background:#151826;border:1px solid #343850;border-radius:999px;padding:3px 11px;cursor:pointer}
 .chip:hover{border-color:#5a6080;color:var(--ink)}
@@ -97,7 +97,7 @@ h1{font-size:1.5rem;margin:0 0 2px;letter-spacing:.01em}
   <div class="legend" id="legend"></div>
   <section class="kp" id="kp">
     <h2>Highlight a kennel</h2>
-    <p class="kd">Pick up to four. A kennel here is the name a dog carries at the start of its registered name, or after &ldquo;of&rdquo; or &ldquo;von&rdquo; at the end. Matching is by name only: it can include other breeders who use the same word and misses spelling variants.</p>
+    <p class="kd">Pick up to four, from the buttons or the search (the search covers more names than the buttons). A kennel here is the name a dog carries at the start of its registered name, or after &ldquo;of&rdquo; or &ldquo;von&rdquo; at the end. Matching is by name only: it can include other breeders who use the same word and misses spelling variants.</p>
     <div class="ksearch"><input id="ksearch" type="search" placeholder="Search all kennels" autocomplete="off" aria-label="Search kennels"><ul class="kres" id="kres"></ul></div>
     <div id="kgroups"></div>
     <div class="ksel" id="ksel"></div>
@@ -179,8 +179,11 @@ function toggleK(i){
   else{if(SEL.length>=4)SEL.shift();const used=SEL.map(s=>s.col),col=KCOL.find(c=>!used.includes(c));SEL.push({i,k:KN[i],col,st:kstats(KN[i])})}
   renderSel();draw()
 }
-{const G=[['Ours and friends',k=>k.cur&&/^(7Sisters|Leggo|Legado)$/.test(k.name)],['Mostly from the mid-1990s on',k=>k.cur&&k.med>=1995&&!/^(7Sisters|Leggo|Legado)$/.test(k.name)],['Mostly before the mid-1990s',k=>k.cur&&k.med<1995&&!/^(7Sisters|Leggo|Legado)$/.test(k.name)]]
- $('kgroups').innerHTML=G.map(([h,f])=>{const items=KN.map((k,i)=>[k,i]).filter(([k])=>f(k)).sort((a,b)=>a[0].name.localeCompare(b[0].name));return items.length?`<div class="kg"><h3>${h}</h3><div class="chips">${items.map(([k,i])=>`<button type="button" class="chip" data-i="${i}" aria-pressed="false" title="${k.n} dogs, median birth ${k.med}">${k.name}</button>`).join('')}</div></div>`:''}).join('')}
+{const OURS=k=>/^(7Sisters|Leggo|Legado)$/.test(k.name)
+ const G=[['Ours and friends',k=>k.cur&&OURS(k)]]
+ const BUCKETS=[['Mostly before 1960',0,1960],['Mostly 1960s',1960,1970],['Mostly 1970s',1970,1980],['Mostly 1980s',1980,1990],['Mostly 1990s',1990,2000],['Mostly 2000s',2000,2010],['Mostly 2010 and later',2010,9999]]
+ for(const [h,lo,hi] of BUCKETS)G.push([h,k=>k.cur&&!OURS(k)&&k.med>=lo&&k.med<hi])
+ $('kgroups').innerHTML=G.map(([h,f],gi)=>{const items=KN.map((k,i)=>[k,i]).filter(([k])=>f(k)).sort((a,b)=>a[0].name.localeCompare(b[0].name));return items.length?`<details class="kg" open><summary>${h} <small>${items.length}</small></summary><div class="chips">${items.map(([k,i])=>`<button type="button" class="chip" data-i="${i}" aria-pressed="false" title="${k.n} dogs, median birth ${k.med}">${k.name}</button>`).join('')}</div></details>`:''}).join('')}
 $('kp').addEventListener('click',e=>{const c=e.target.closest('.chip');if(c){toggleK(+c.dataset.i);return}
   const x=e.target.closest('button[data-x]');if(x)toggleK(+x.dataset.x)})
 const ks=$('ksearch'),kr=$('kres')

@@ -97,3 +97,15 @@ EXCLUDE = set(filter(None, os.environ.get('KENNEL_EXCLUDE', '').lower().split(',
 
 def clean(name):
     return re.sub(r'^"[^"]*"\s*', '', name).strip().lower()
+
+
+def word_counts(dogs, ids):
+    """token -> number of dogs whose cleaned name contains it (anywhere)."""
+    tok = collections.Counter()
+    for d in ids:
+        for t in {norm(t) for t in re.findall(r"[^\W\d_][\w'’\-]*", clean(dogs[d]['name']))}:
+            tok[t] += 1
+    return tok
+
+
+CHIPS = 500   # buttons on the page; everything else with 15+ dogs is search-only

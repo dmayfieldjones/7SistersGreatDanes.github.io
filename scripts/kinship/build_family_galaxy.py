@@ -132,9 +132,21 @@ def main():
         rows = rows_of(arr)
         if len(rows) == 0: log(f'  kennel {label}: no dogs in the file'); continue
         add(label, rows, True); used.add(label.lower())
-    for k, arr in mem.items():
-        if k in K.EXCLUDE or k.title().lower() in used or len(arr) < 15: continue
-        add(k.title(), rows_of(arr), False)
+    # fill the rest of the buttons with kennel-like names: a word that mostly appears as a
+    # kennel affix, not scattered through other dogs' names (filters Sheba, Midnight, Tara...)
+    wc = K.word_counts(D, ids)
+    cands = sorted(((len(arr), k, arr) for k, arr in mem.items()
+                    if k not in K.EXCLUDE and len(arr) >= 15 and k.title().lower() not in used),
+                   key=lambda t: -t[0])
+    room = K.CHIPS - len(kn)
+    for n, k, arr in cands:
+        kennel_like = n / max(1, wc[k]) >= 0.6
+        rows = rows_of(arr)
+        if len(rows) < 15: continue
+        if kennel_like and room > 0:
+            add(k.title(), rows, True); room -= 1
+        else:
+            add(k.title(), rows, False)
     log(f'{sum(1 for x in kn if x[2])} picked kennels, {len(kn)} searchable')
     b64 = lambda x: base64.b64encode(x.tobytes()).decode()
     data = dict(n=len(keep), left=round(100 * (1 - len(keep) / N)), aspect=float((hi - lo)[1] / span), x=b64(q[:, 0]), y=b64(q[:, 1]), yr=b64(yr),
