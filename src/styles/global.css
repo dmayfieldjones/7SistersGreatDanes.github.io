@@ -1010,6 +1010,7 @@ body:has(.homepage-container) {
 
 /* Homepage trust strip */
 .home-below-hero > .home-trust {
+  box-sizing: border-box;
   width: 100%;
   max-width: 46rem;
   margin: 2rem auto 0;
