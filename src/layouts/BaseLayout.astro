@@ -105,8 +105,27 @@ const breadcrumbSchema =
         // eslint-disable-next-line prefer-rest-params
         window.dataLayer.push(arguments)
       }
+      window.gtag = gtag
+      // Skip analytics on private pages and in browsers that opted out.
+      // Visit any page with ?notrack=1 to opt out (?notrack=0 to undo).
+      try {
+        var q = new URLSearchParams(location.search).get('notrack')
+        if (q === '1') localStorage.setItem('ga-optout', '1')
+        if (q === '0') localStorage.removeItem('ga-optout')
+        if (
+          localStorage.getItem('ga-optout') === '1' ||
+          location.pathname.indexOf('/private') === 0
+        ) {
+          window['ga-disable-' + gaId] = true
+        }
+      } catch (e) {}
       gtag('js', new Date())
       gtag('config', gaId)
+      // Count clicks on email links as inquiries.
+      document.addEventListener('click', function (e) {
+        var a = e.target && e.target.closest ? e.target.closest('a[href^="mailto:"]') : null
+        if (a) gtag('event', 'email_click', { link_location: location.pathname })
+      })
     </script>
   </head>
   <body>

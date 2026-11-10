@@ -27,6 +27,12 @@ interface Part1Data {
   howDidYouHear: string
 }
 
+// Reports a completed inquiry to Google Analytics (no personal data sent).
+function trackInquiry() {
+  const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag
+  gtag?.('event', 'generate_lead', { form: 'contact' })
+}
+
 export default function ContactForm() {
   const [part1Submitted, setPart1Submitted] = useState(false)
 
@@ -255,15 +261,18 @@ export default function ContactForm() {
         result2.message?.includes('confirmation')
 
       if (response1.ok && result1.success && response2.ok && result2.success) {
+        trackInquiry()
         setPart1Submitted(true)
         setSubmitStatus('success')
         setIsSubmitting(false)
       } else if (needsVerification) {
+        trackInquiry()
         setPart1Submitted(true)
         setSubmitStatus('success')
         setIsSubmitting(false)
         console.log('Verification emails have been sent. Please check your inbox.')
       } else if ((response1.ok && result1.success) || (response2.ok && result2.success)) {
+        trackInquiry()
         setPart1Submitted(true)
         setSubmitStatus('success')
         setIsSubmitting(false)
