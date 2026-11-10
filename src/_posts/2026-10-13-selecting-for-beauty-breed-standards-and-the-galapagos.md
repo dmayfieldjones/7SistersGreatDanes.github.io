@@ -79,15 +79,15 @@ featured: true
 
 <div class="gd-car gd-bleed" id="gd-car" aria-roledescription="carousel" aria-label="Photos from the trip">
   <div class="gd-stage">
-    <figure class="gd-slide is-active"><img src="/img/galapagos/gallery/marine-iguana-portrait.jpg" alt="A marine iguana close-up on black lava" /><figcaption>A marine iguana close-up on black lava</figcaption></figure>
-    <figure class="gd-slide"><img data-src="/img/galapagos/gallery/blue-footed-booby.jpg" alt="A blue-footed booby standing on its nest ground" /><figcaption>A blue-footed booby standing on its nest ground</figcaption></figure>
-    <figure class="gd-slide"><img data-src="/img/galapagos/gallery/sea-lion-underwater.jpg" alt="A sea lion twisting over the reef" /><figcaption>A sea lion twisting over the reef</figcaption></figure>
+    <figure class="gd-slide is-active"><img src="/img/galapagos/gallery/hammerhead-school-2.jpg" alt="A school of hammerheads in the hazy blue" /><figcaption>A school of hammerheads in the hazy blue</figcaption></figure>
     <figure class="gd-slide"><img data-src="/img/galapagos/gallery/sally-lightfoot.jpg" alt="A Sally Lightfoot crab in the spray" /><figcaption>A Sally Lightfoot crab in the spray</figcaption></figure>
+    <figure class="gd-slide"><img data-src="/img/galapagos/gallery/sea-lion-underwater.jpg" alt="A sea lion twisting over the reef" /><figcaption>A sea lion twisting over the reef</figcaption></figure>
+    <figure class="gd-slide"><img data-src="/img/galapagos/gallery/marine-iguana-portrait.jpg" alt="A marine iguana close-up on black lava" /><figcaption>A marine iguana close-up on black lava</figcaption></figure>
+    <figure class="gd-slide"><img data-src="/img/galapagos/gallery/sea-lion-chair.jpg" alt="A sea lion fast asleep on a lounge chair" /><figcaption>A sea lion fast asleep on a lounge chair</figcaption></figure>
+    <figure class="gd-slide"><img data-src="/img/galapagos/gallery/blue-footed-booby.jpg" alt="A blue-footed booby standing on its nest ground" /><figcaption>A blue-footed booby standing on its nest ground</figcaption></figure>
     <figure class="gd-slide"><img data-src="/img/galapagos/gallery/marine-iguanas.jpg" alt="A pile of marine iguanas warming on a stone ledge" /><figcaption>A pile of marine iguanas warming on a stone ledge</figcaption></figure>
-    <figure class="gd-slide"><img data-src="/img/galapagos/gallery/hammerhead-school-2.jpg" alt="A school of hammerheads in the hazy blue" /><figcaption>A school of hammerheads in the hazy blue</figcaption></figure>
     <figure class="gd-slide"><img data-src="/img/galapagos/gallery/green-turtle.jpg" alt="A green turtle working the sand" /><figcaption>A green turtle working the sand</figcaption></figure>
     <figure class="gd-slide"><img data-src="/img/galapagos/gallery/young-frigatebird.jpg" alt="A young frigatebird beside a bush" /><figcaption>A young frigatebird beside a bush</figcaption></figure>
-    <figure class="gd-slide"><img data-src="/img/galapagos/gallery/sea-lion-chair.jpg" alt="A sea lion fast asleep on a lounge chair" /><figcaption>A sea lion fast asleep on a lounge chair</figcaption></figure>
     <figure class="gd-slide"><img data-src="/img/galapagos/gallery/prickly-pear.jpg" alt="A tree-sized Galápagos prickly pear against a stormy sky" /><figcaption>A tree-sized Galápagos prickly pear against a stormy sky</figcaption></figure>
     <figure class="gd-slide"><img data-src="/img/galapagos/gallery/iguana-lava.jpg" alt="A marine iguana on lava rock" /><figcaption>A marine iguana on lava rock</figcaption></figure>
     <figure class="gd-slide"><img data-src="/img/galapagos/gallery/hammerhead-single.jpg" alt="A hammerhead cruising over rocky reef" /><figcaption>A hammerhead cruising over rocky reef</figcaption></figure>
