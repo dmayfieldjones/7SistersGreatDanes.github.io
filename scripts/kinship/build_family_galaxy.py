@@ -132,8 +132,8 @@ def main():
         rows = rows_of(arr)
         if len(rows) == 0: log(f'  kennel {label}: no dogs in the file'); continue
         add(label, rows, True); used.add(label.lower())
-    # every kennel-like name (a word that mostly appears as a kennel affix, not scattered
-    # through other dogs' names) gets a button from MIN_CHIP_DOGS dogs and is searchable from
+    # every kennel-like name (its dogs are related to each other, and the word is mostly used as
+    # an affix) gets a button from MIN_CHIP_DOGS dogs and is searchable from
     # MIN_SEARCH_DOGS. Names whose dogs are mostly already in a picked kennel are skipped
     # (a one-word 'Divine' next to the picked 'Divine Acres').
     wc = K.word_counts(D, ids)
@@ -142,7 +142,8 @@ def main():
                     if k not in K.EXCLUDE and len(arr) >= K.MIN_SEARCH_DOGS and k.title().lower() not in used),
                    key=lambda t: -t[0])
     for n, k, arr in cands:
-        if n / max(1, wc[k]) < 0.6: continue
+        coh = K.cohesion(arr, sire, dam)
+        if coh < K.MIN_COHESION or (n / max(1, wc[k]) < 0.6 and coh < 0.8): continue
         rows = rows_of(arr)
         if len(rows) < K.MIN_SEARCH_DOGS: continue
         rs = set(rows.tolist())

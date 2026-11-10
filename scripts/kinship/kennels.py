@@ -110,3 +110,23 @@ def word_counts(dogs, ids):
 
 MIN_CHIP_DOGS = 25     # a kennel-like name with this many dogs gets a button
 MIN_SEARCH_DOGS = 5    # ...and with this many it is findable by search
+
+
+MIN_COHESION = 0.5   # share of a name's dogs that have a relative carrying it
+
+
+def cohesion(rows, sire, dam):
+    """Share of the dogs carrying a name that have a first-degree relative among them:
+    a parent, an offspring, or a littermate or half-sibling (shared sire or dam).
+    A kennel breeds its own dogs, so most of its dogs are linked this way; dogs that
+    merely share a call name (Sheba, Cora) mostly are not."""
+    s = set(int(i) for i in rows)
+    sc = collections.Counter(int(sire[i]) for i in s if sire[i] >= 0)
+    dc = collections.Counter(int(dam[i]) for i in s if dam[i] >= 0)
+    haskid = {int(p) for i in s for p in (sire[i], dam[i]) if p >= 0 and int(p) in s}
+    ok = 0
+    for i in s:
+        if ((sire[i] >= 0 and (int(sire[i]) in s or sc[int(sire[i])] > 1)) or
+                (dam[i] >= 0 and (int(dam[i]) in s or dc[int(dam[i])] > 1)) or i in haskid):
+            ok += 1
+    return ok / len(s)
