@@ -112,7 +112,7 @@ featured: true
 
 <div class="gd-intro">
   <p class="gd-kicker">Galápagos · Darwin &amp; Wolf · Isabela · Santa Cruz</p>
-  <h2>Darwin used dogs to help explain evolution. In the Galápagos, organisms sometimes choose mates for beauty, and so do dog breeders.</h2>
+  <h2>Dog breeders select for beauty, and Darwin used their work to help explain natural selection. Wild animals choose mates for beauty too, and we watched it in the Galápagos.</h2>
   <p style="color:#666;font-size:.95rem;font-style:italic;margin-top:1rem">Photos and videos taken from our trip.</p>
 </div>
 
