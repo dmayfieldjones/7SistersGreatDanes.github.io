@@ -70,6 +70,13 @@ h1{font-size:1.5rem;margin:0 0 2px;letter-spacing:.01em}
 .ksel{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 .kc{flex:1 1 240px;max-width:380px;background:#121522;border:1px solid var(--line);border-left-width:4px;border-radius:8px;padding:8px 11px;font-size:.82rem;color:var(--ink2)}
 .kc b{color:var(--ink);font-size:.92rem}.kc button{float:right;font:inherit;font-size:.75rem;color:var(--mute);background:none;border:none;cursor:pointer;padding:0}
+
+.methods{margin-top:18px;padding:16px 18px;background:#0d0f17;border:1px solid var(--line);border-radius:12px;max-width:100%}
+.methods h2{font-size:1.05rem;margin:0 0 8px}
+.methods h3{font-size:.9rem;margin:14px 0 4px;color:var(--ink)}
+.methods p,.methods li{font-size:.88rem;color:var(--ink2);max-width:92ch;margin:0 0 6px}
+.methods ul{margin:0 0 6px;padding-left:1.2rem}
+.methods b{color:var(--ink)}
 </style>
 </head>
 <body>
@@ -97,10 +104,32 @@ h1{font-size:1.5rem;margin:0 0 2px;letter-spacing:.01em}
   <div class="legend" id="legend"></div>
   <section class="kp" id="kp">
     <h2>Highlight a kennel</h2>
-    <p class="kd">Pick up to four, from the buttons or the search (the search covers more names than the buttons). A kennel here is the name a dog carries at the start of its registered name, or after &ldquo;of&rdquo; or &ldquo;von&rdquo; at the end. Matching is by name only: it can include other breeders who use the same word and misses spelling variants.</p>
-    <div class="ksearch"><input id="ksearch" type="search" placeholder="Search all kennels" autocomplete="off" aria-label="Search kennels"><ul class="kres" id="kres"></ul></div>
+    <p class="kd">Pick up to four. The sections list every kennel with at least 25 dogs; the search also finds kennels with as few as 5. A kennel here is the name a dog carries at the start of its registered name, or after &ldquo;of&rdquo; or &ldquo;von&rdquo; at the end. Matching is by name only: it can include other breeders who use the same word and misses spelling variants.</p>
+    <div class="ksearch"><input id="ksearch" type="search" placeholder="Search kennels" autocomplete="off" aria-label="Search kennels"><ul class="kres" id="kres"></ul></div>
     <div id="kgroups"></div>
     <div class="ksel" id="ksel"></div>
+  </section>
+  <section class="methods" id="methods">
+    <h2>Methods behind the graphic</h2>
+    <h3>The data</h3>
+    <p>The starting point is a pedigree export of <span id="m-all"></span> dogs, with sire, dam, birth date, coat color and registered name. We added our own dogs and litters from our litter pages, along with their ancestors, so Piper, Mia and their puppies connect to the rest of the breed. The page carries only anonymous fields for each dog: its position, a birth year, a coat family, a 10-generation inbreeding value, its sire and dam as row numbers in a shuffled order, and which kennel names it carries. It holds no dog names or registration numbers.</p>
+    <h3>Which dogs are shown</h3>
+    <p>A dog needs a place in the picture, and a place comes from its links to relatives. <b><span id="m-n"></span> dogs</b> are shown: every dog connected through parents or offspring to the main pedigree, and with a birth year (recorded or estimated). Left out are small separate pedigrees (a dog with no known relatives, or a tiny family) and dogs with no date and no dated relatives, about <span id="m-left"></span>% of the file.</p>
+    <h3>The layout</h3>
+    <p>Every sire and dam link is an edge in one network. A force-directed layout (DrL, from the igraph library) was run once, ahead of time: linked dogs pull together and unlinked dogs push apart. Dogs with many shared ancestors end up near each other, so <b>distance is the only thing that means anything</b>. The axes and the shape of the whole do not. The threads are the parent links themselves.</p>
+    <h3>Birth years</h3>
+    <p>About <span id="m-dated"></span>% of dogs have a recorded birth year. For the rest, the year is estimated from relatives: a dog's parents are placed about 4 years before it, and its offspring about 4 years after, repeated until no more dogs can be dated. Estimated years are marked in the tooltip. They are good to a few years at best, so treat a single estimated dog's date loosely and the overall shape with more trust.</p>
+    <h3>The time-lapse</h3>
+    <p>A dog appears when the clock reaches its birth year. The clock runs partly by calendar and partly by the number of dogs born, so the thin early decades are not slow and the busy ones are not rushed. The records thin out after about <span id="m-ex"></span>. Later years hold only our own litters and their ancestors, shown in blue on the timeline.</p>
+    <h3>Coat color</h3>
+    <p>The export records coat as free text. We group it by keyword into fawn or brindle, blue, harlequin, merle or mantle, black, and other. About <span id="m-nocoat"></span>% of dogs have no coat recorded at all, mostly in the 1990s, and appear as &ldquo;Not recorded&rdquo;.</p>
+    <h3>Inbreeding</h3>
+    <p>Inbreeding is the coefficient of inbreeding computed from the pedigree out to 10 generations: the chance that a dog inherited the same ancestral gene copy through both parents. Ancestors beyond 10 generations are treated as unrelated. Early dogs have shorter pedigrees, so their values are lower than their true inbreeding. The figure in the corner is the average for dogs born within two years of the clock.</p>
+    <h3>Tracing a dog</h3>
+    <p>Clicking a dog follows its parent links upward to every known ancestor and downward to every known descendant. Generations are counted along the shortest route. Descendants only include dogs that are in the file, which stops being complete around 2020.</p>
+    <h3>Kennels</h3>
+    <p>The export has no kennel field, so a kennel is read from registered names: the first word of a name, or the word after &ldquo;of&rdquo;, &ldquo;von&rdquo;, &ldquo;de&rdquo; and similar near the end. To keep dog call names out, a word must appear mainly as such an affix and not scattered through other dogs&rsquo; names. Every kennel-like name on at least 25 dogs gets a button, about <span id="m-chips"></span> in all, and names on at least 5 dogs can be found by search. Names are grouped by the median birth year of the dogs that carry them. Our own kennels and Leggo, a friend&rsquo;s, are listed first. The 7Sisters group is picked by registration, since our dogs&rsquo; names mostly come from other kennels&rsquo; affixes.</p>
+    <p><b>Limits.</b> Matching is by name only. Different breeders who use the same word are merged, and spelling variants of one kennel are split. A breeder with no affix is missed, and a few common words still slip through as kennels. Counts of kennels are therefore estimates: roughly 6,000 names appear on three or more dogs, of which a few thousand are real kennels with a lasting presence. &ldquo;Descendants in the file&rdquo; is how many dogs have a kennel&rsquo;s dog somewhere in their pedigree, including the kennel&rsquo;s own dogs.</p>
   </section>
   <p class="notes"><b>How to read it.</b> Position comes from a force layout of the whole pedigree: dogs that share many ancestors end up near each other, so the axes mean nothing and only distance does. The oldest dogs (amber in Era view) sit along the right edge. About <span id="imp"></span> of dogs have no recorded birth year; theirs is estimated from their parents and offspring, and the tooltip says so. After about 2020 the records thin out, so the later years hold only our own litters and their ancestors. Inbreeding is the 10-generation figure and is lower for early dogs only because their pedigrees are shorter. About <span id="left"></span> of the file sits in small disconnected pedigrees and is left out. The page holds no dog names or registration numbers; kennel names are matched from registered names and stored only as which dogs carry them.</p>
 </div>
@@ -171,7 +200,7 @@ function renderSel(){
   $('ksel').innerHTML=SEL.map(s=>{const t=s.st;return `<div class="kc" style="border-left-color:${s.col}"><button type="button" data-x="${s.i}" aria-label="Remove">remove</button><b>${s.k.name}</b><br>${t.n.toLocaleString()} dogs carry the name, mostly born ${t.y0}&ndash;${t.y1}.<br>Their descendants in the file: <b>${t.desc.toLocaleString()}</b>, including ${(v=>v<1?v.toFixed(1):v.toFixed(0))(100*t.rec/t.recAll)}% of dogs born since 2010.${t.y1>DATA.ex?`<br><i>Some of these were born after ${DATA.ex}, when the records thin out. For this kennel only, they bring its dogs up to date; other breeders&rsquo; dogs from those years are not in the file.</i>`:''}</div>`}).join('')
   for(const c of document.querySelectorAll('.chip'))c.style.cssText='';
   for(const c of document.querySelectorAll('.chip')){const s=SEL.find(x=>x.i===+c.dataset.i);c.setAttribute('aria-pressed',!!s);if(s){c.style.background=s.col;c.style.borderColor=s.col}}
-  const kd=$('ksearch');kd.placeholder=SEL.length?'Add another kennel':'Search all kennels'
+  const kd=$('ksearch');kd.placeholder=SEL.length?'Add another kennel':'Search '+KN.length.toLocaleString()+' kennels'
 }
 function toggleK(i){
   const at=SEL.findIndex(s=>s.i===i)
@@ -183,7 +212,7 @@ function toggleK(i){
  const G=[['Ours and friends',k=>k.cur&&OURS(k)]]
  const BUCKETS=[['Mostly before 1960',0,1960],['Mostly 1960s',1960,1970],['Mostly 1970s',1970,1980],['Mostly 1980s',1980,1990],['Mostly 1990s',1990,2000],['Mostly 2000s',2000,2010],['Mostly 2010 and later',2010,9999]]
  for(const [h,lo,hi] of BUCKETS)G.push([h,k=>k.cur&&!OURS(k)&&k.med>=lo&&k.med<hi])
- $('kgroups').innerHTML=G.map(([h,f],gi)=>{const items=KN.map((k,i)=>[k,i]).filter(([k])=>f(k)).sort((a,b)=>a[0].name.localeCompare(b[0].name));return items.length?`<details class="kg" open><summary>${h} <small>${items.length}</small></summary><div class="chips">${items.map(([k,i])=>`<button type="button" class="chip" data-i="${i}" aria-pressed="false" title="${k.n} dogs, median birth ${k.med}">${k.name}</button>`).join('')}</div></details>`:''}).join('')}
+ $('kgroups').innerHTML=G.map(([h,f],gi)=>{const items=KN.map((k,i)=>[k,i]).filter(([k])=>f(k)).sort((a,b)=>a[0].name.localeCompare(b[0].name));return items.length?`<details class="kg"${gi===0?' open':''}><summary>${h} <small>${items.length}</small></summary><div class="chips">${items.map(([k,i])=>`<button type="button" class="chip" data-i="${i}" aria-pressed="false" title="${k.n} dogs, median birth ${k.med}">${k.name}</button>`).join('')}</div></details>`:''}).join('')}
 $('kp').addEventListener('click',e=>{const c=e.target.closest('.chip');if(c){toggleK(+c.dataset.i);return}
   const x=e.target.closest('button[data-x]');if(x)toggleK(+x.dataset.x)})
 const ks=$('ksearch'),kr=$('kres')
@@ -383,6 +412,11 @@ $('modes').addEventListener('click',e=>{const b=e.target.closest('button');if(b)
 new ResizeObserver(()=>{if(trace||K>1){fit();draw()}else reset();spark()}).observe(stage)
 addEventListener('resize',()=>{reset();spark()})
 
+
+{const nd=DATA.all-DATA.n;$('m-all').textContent=(Math.round(DATA.all/100)*100).toLocaleString();$('m-n').textContent=N.toLocaleString()
+ $('m-left').textContent=DATA.left;$('m-dated').textContent=Math.round(100*(N-nImp)/N);$('m-ex').textContent=DATA.ex
+ let nc=0;for(let i=0;i<N;i++)if((meta[i]&7)===0)nc++;$('m-nocoat').textContent=Math.round(100*nc/N)
+ $('m-chips').textContent=KN.filter(k=>k.cur).length.toLocaleString()}
 reset();setMode('era');spark();readout()
 requestAnimationFrame(()=>{reset();setMode(mode);requestAnimationFrame(()=>draw())})
 document.addEventListener('visibilitychange',()=>{if(!document.hidden){last=performance.now();draw()}})

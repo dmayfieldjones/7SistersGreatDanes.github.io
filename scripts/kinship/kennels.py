@@ -108,4 +108,5 @@ def word_counts(dogs, ids):
     return tok
 
 
-CHIPS = 500   # buttons on the page; everything else with 15+ dogs is search-only
+MIN_CHIP_DOGS = 25     # a kennel-like name with this many dogs gets a button
+MIN_SEARCH_DOGS = 5    # ...and with this many it is findable by search

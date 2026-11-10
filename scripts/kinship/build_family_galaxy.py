@@ -120,7 +120,7 @@ def main():
     yrk = year[keep]
     kn = []; used = set()
     def add(label, rows, curated):
-        if len(rows) < (1 if curated else 15): return
+        if len(rows) < 1: return
         kn.append([label, int(np.median(yrk[rows])), 1 if curated else 0, rows.astype('<i4')])
     for pick in K.PICKS:
         if isinstance(pick, tuple):
@@ -132,24 +132,25 @@ def main():
         rows = rows_of(arr)
         if len(rows) == 0: log(f'  kennel {label}: no dogs in the file'); continue
         add(label, rows, True); used.add(label.lower())
-    # fill the rest of the buttons with kennel-like names: a word that mostly appears as a
-    # kennel affix, not scattered through other dogs' names (filters Sheba, Midnight, Tara...)
+    # every kennel-like name (a word that mostly appears as a kennel affix, not scattered
+    # through other dogs' names) gets a button from MIN_CHIP_DOGS dogs and is searchable from
+    # MIN_SEARCH_DOGS. Names whose dogs are mostly already in a picked kennel are skipped
+    # (a one-word 'Divine' next to the picked 'Divine Acres').
     wc = K.word_counts(D, ids)
+    picked_sets = [set(x[3].tolist()) for x in kn]
     cands = sorted(((len(arr), k, arr) for k, arr in mem.items()
-                    if k not in K.EXCLUDE and len(arr) >= 15 and k.title().lower() not in used),
+                    if k not in K.EXCLUDE and len(arr) >= K.MIN_SEARCH_DOGS and k.title().lower() not in used),
                    key=lambda t: -t[0])
-    room = K.CHIPS - len(kn)
     for n, k, arr in cands:
-        kennel_like = n / max(1, wc[k]) >= 0.6
+        if n / max(1, wc[k]) < 0.6: continue
         rows = rows_of(arr)
-        if len(rows) < 15: continue
-        if kennel_like and room > 0:
-            add(k.title(), rows, True); room -= 1
-        else:
-            add(k.title(), rows, False)
+        if len(rows) < K.MIN_SEARCH_DOGS: continue
+        rs = set(rows.tolist())
+        if any(len(rs & ps) >= 0.8 * len(rs) for ps in picked_sets): continue
+        add(k.title(), rows, n >= K.MIN_CHIP_DOGS)
     log(f'{sum(1 for x in kn if x[2])} picked kennels, {len(kn)} searchable')
     b64 = lambda x: base64.b64encode(x.tobytes()).decode()
-    data = dict(n=len(keep), left=round(100 * (1 - len(keep) / N)), aspect=float((hi - lo)[1] / span), x=b64(q[:, 0]), y=b64(q[:, 1]), yr=b64(yr),
+    data = dict(n=len(keep), all=N, left=round(100 * (1 - len(keep) / N)), aspect=float((hi - lo)[1] / span), x=b64(q[:, 0]), y=b64(q[:, 1]), yr=b64(yr),
                 meta=b64(meta), f=b64(f8), sire=b64(s), dam=b64(d), y0=1870, ex=a.export_end,
                 kn=[[k[0], k[1], k[2], len(k[3]), b64(k[3])] for k in kn])
     html = open(a.template, encoding='utf-8').read().replace('/*DATA*/null', json.dumps(data, separators=(',', ':')))
