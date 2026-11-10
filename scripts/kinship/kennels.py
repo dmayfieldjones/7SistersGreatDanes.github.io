@@ -76,6 +76,7 @@ def reach(sire, dam, members, keys, mask, chunk=64):
 PICKS = [
     ('7Sisters', r'\b(7|seven)\s?sisters\b'),
     'leggo',
+    ('Legado', r'legado'),
     ('Divine Acres', r'^divine acres\b'),
     ('Velocity', r"^velocity\b"),
     'chanoz', 'daynakin', 'divadanes', 'saravilla', 'wysiwyg', 'katcrew', 'northernaire', 'moonriver',
@@ -89,7 +90,7 @@ PICKS = [
     'walkmyll', 'clausentum', 'ouborough', 'moonsfield', 'roxdane', 'winome', 'vakeck', 'treseder',
     'tallbrook',
 ]
-OURS = {'7Sisters', 'Leggo'}
+OURS = {'7Sisters', 'Leggo', 'Legado'}
 import os
 EXCLUDE = set(filter(None, os.environ.get('KENNEL_EXCLUDE', '').lower().split(',')))   # affixes never listed (set in the shell, not in the repo)
 

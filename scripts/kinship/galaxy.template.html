@@ -179,7 +179,7 @@ function toggleK(i){
   else{if(SEL.length>=4)SEL.shift();const used=SEL.map(s=>s.col),col=KCOL.find(c=>!used.includes(c));SEL.push({i,k:KN[i],col,st:kstats(KN[i])})}
   renderSel();draw()
 }
-{const G=[['Ours and friends',k=>k.cur&&/^(7Sisters|Leggo)$/.test(k.name)],['Mostly from the mid-1990s on',k=>k.cur&&k.med>=1995&&!/^(7Sisters|Leggo)$/.test(k.name)],['Mostly before the mid-1990s',k=>k.cur&&k.med<1995&&!/^(7Sisters|Leggo)$/.test(k.name)]]
+{const G=[['Ours and friends',k=>k.cur&&/^(7Sisters|Leggo|Legado)$/.test(k.name)],['Mostly from the mid-1990s on',k=>k.cur&&k.med>=1995&&!/^(7Sisters|Leggo|Legado)$/.test(k.name)],['Mostly before the mid-1990s',k=>k.cur&&k.med<1995&&!/^(7Sisters|Leggo|Legado)$/.test(k.name)]]
  $('kgroups').innerHTML=G.map(([h,f])=>{const items=KN.map((k,i)=>[k,i]).filter(([k])=>f(k)).sort((a,b)=>a[0].name.localeCompare(b[0].name));return items.length?`<div class="kg"><h3>${h}</h3><div class="chips">${items.map(([k,i])=>`<button type="button" class="chip" data-i="${i}" aria-pressed="false" title="${k.n} dogs, median birth ${k.med}">${k.name}</button>`).join('')}</div></div>`:''}).join('')}
 $('kp').addEventListener('click',e=>{const c=e.target.closest('.chip');if(c){toggleK(+c.dataset.i);return}
   const x=e.target.closest('button[data-x]');if(x)toggleK(+x.dataset.x)})
