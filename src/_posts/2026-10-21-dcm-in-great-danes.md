@@ -26,6 +26,13 @@ tags: ["DCM", "Cardiology", "Health Testing"]
   </div>
 </div>
 
+<figure style="margin: 1.5rem 0;">
+  <img src="/img/dcm-great-dane-preclinical-echo.jpg" alt="Four ultrasound panels of a Great Dane's heart with preclinical DCM: two four-chamber views (A and B) and a short-axis view with an M-mode trace (C and D). The left ventricle is dilated." width="1274" height="882" loading="lazy" style="max-width: 100%; height: auto; border-radius: 4px;">
+  <figcaption style="font-size: 0.9rem; line-height: 1.5; margin-top: 0.5rem;">
+    <strong>A heart ultrasound of a Great Dane with hidden-stage DCM.</strong> This dog had no outward signs of illness. The dark space labeled LV is the main pumping chamber of the heart. In the top-left picture (A) the heart is relaxed, and in the bottom-left picture (B) it is squeezing. In a healthy heart, that chamber gets much smaller with each squeeze. Here it is stretched wide and barely changes size. The two pictures on the right (C and D) show the heart in cross-section and a trace of the heart walls moving, and the walls move only weakly. Image: Figure 5 from <a href="https://livrepository.liverpool.ac.uk/3188893/">Davis, Crosland &amp; Dukes-McEwan, <em>In Practice</em> 2024</a>, used under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+  </figcaption>
+</figure>
+
 If you are bringing home a puppy, there is nothing for you to do about DCM yet. This page is here so you know what to watch for later.
 
 *Written from the cardiology presentation at the 2026 Great Dane Club of America National Specialty and checked against published sources. Where we could not find one, we say so. It is not veterinary advice; your dog's veterinarian or cardiologist makes the clinical decisions.*
@@ -60,13 +67,6 @@ A cardiologist screens with an echocardiogram and a 24-hour Holter monitor. Bloo
     Fluid in the lungs or belly, weakness, or fainting.
   </div>
 </div>
-
-<figure style="margin: 1.5rem 0;">
-  <img src="/img/dcm-great-dane-preclinical-echo.jpg" alt="Four ultrasound panels of a Great Dane's heart with preclinical DCM: two four-chamber views (A and B) and a short-axis view with an M-mode trace (C and D). The left ventricle is dilated." width="1274" height="882" loading="lazy" style="max-width: 100%; height: auto; border-radius: 4px;">
-  <figcaption style="font-size: 0.9rem; line-height: 1.5; margin-top: 0.5rem;">
-    <strong>A heart ultrasound of a Great Dane with hidden-stage DCM.</strong> This dog had no outward signs of illness. The dark space labeled LV is the main pumping chamber of the heart. In the top-left picture (A) the heart is relaxed, and in the bottom-left picture (B) it is squeezing. In a healthy heart, that chamber gets much smaller with each squeeze. Here it is stretched wide and barely changes size. The two pictures on the right (C and D) show the heart in cross-section and a trace of the heart walls moving, and the walls move only weakly. Image: Figure 5 from <a href="https://livrepository.liverpool.ac.uk/3188893/">Davis, Crosland &amp; Dukes-McEwan, <em>In Practice</em> 2024</a> 2024, used under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
-  </figcaption>
-</figure>
 
 ## What Can I Watch for at Home?
 
