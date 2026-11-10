@@ -4,10 +4,11 @@
 ;(function () {
   var cur = document.currentScript && document.currentScript.dataset.current
   var steps = [
-    ['map', '1', 'The Map', '/breed-map.html', 'See who is related to whom'],
-    ['history', '2', 'The History', '/breeding-history.html', 'How the breed got here'],
-    ['study', '3', 'The Evidence', '/private/kinship-study', 'Methods and numbers'],
-    ['proposal', '4', 'The Plan', '/sequencing-proposal.html', 'What we would sequence and why']
+    ['galaxy', '1', 'The Galaxy', '/breed-galaxy.html', 'Every dog in the file, over time'],
+    ['map', '2', 'The Recent Map', '/breed-map.html', 'See who is related to whom today'],
+    ['history', '3', 'The History', '/breeding-history.html', 'How the breed got here'],
+    ['study', '4', 'The Evidence', '/private/kinship-study', 'Methods and numbers'],
+    ['proposal', '5', 'The Plan', '/sequencing-proposal.html', 'What we would sequence and why']
   ]
   function build() {
     var nav = document.createElement('nav')

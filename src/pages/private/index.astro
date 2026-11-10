@@ -4,14 +4,22 @@ import BaseLayout from '../../layouts/BaseLayout.astro'
 const project = [
   {
     n: '1',
-    href: '/breed-map.html',
-    img: '/img/private/breed-map.jpg',
-    title: 'The Map',
-    role: 'The picture',
-    desc: 'A guided tour of 7,000+ Great Danes by pedigree. How related are they, and how few dogs could we DNA-test to learn about most of the breed?',
+    href: '/breed-galaxy.html',
+    img: '/img/private/breed-galaxy.jpg',
+    title: 'The Galaxy',
+    role: 'The whole breed',
+    desc: 'Every connected dog in the pedigree file, about 110,000, as one animated picture. Watch the breed grow from the 1880s, color it by coat or inbreeding, and highlight a kennel or trace any dog’s ancestry.',
   },
   {
     n: '2',
+    href: '/breed-map.html',
+    img: '/img/private/breed-map.jpg',
+    title: 'The Recent Map',
+    role: 'The close-up',
+    desc: 'A guided tour of 7,000+ Great Danes born 2012 to 2020. How related are they, and how few dogs could we DNA-test to learn about most of the breed?',
+  },
+  {
+    n: '3',
     href: '/breeding-history.html',
     img: '/img/private/breeding-history.jpg',
     title: 'The History',
@@ -19,7 +27,7 @@ const project = [
     desc: 'Six steps through 140 years of records: two wars, a new continent, inbreeding peaks and new color rules.',
   },
   {
-    n: '3',
+    n: '4',
     href: '/private/kinship-study',
     img: '/img/private/kinship-study.jpg',
     title: 'The Evidence',
@@ -27,7 +35,7 @@ const project = [
     desc: 'The Kinship Study: methods, numbers and data quality, for anyone who wants to check the work.',
   },
   {
-    n: '4',
+    n: '5',
     href: '/sequencing-proposal.html',
     img: '/img/private/sequencing-proposal.jpg',
     title: 'The Plan',
@@ -36,11 +44,6 @@ const project = [
   },
 ]
 const tools = [
-  {
-    href: '/breed-galaxy.html',
-    title: 'The Galaxy',
-    desc: 'Every dog in the pedigree file (about 110,000) as one animated picture: watch the breed grow from the 1880s, color by coat or inbreeding, and click a dog to light up its ancestors and descendants.',
-  },
   {
     href: '/DogShows',
     title: 'Dog Show Finder',
@@ -85,8 +88,8 @@ const tools = [
       <p class="pv-intro">
         Here is how today's Great Danes are related, how the breed came to be
         this way, and which dogs would teach us the most if we sequenced them.
-        It starts from pedigree records and aims at the genome. The four pages
-        tell it in order. Start with the map.
+        It starts from pedigree records and aims at the genome. The five pages
+        tell it in order. Start with the galaxy.
       </p>
       <ol class="pv-links pv-steps">
         {
