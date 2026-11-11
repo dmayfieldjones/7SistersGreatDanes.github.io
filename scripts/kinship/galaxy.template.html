@@ -97,10 +97,10 @@ h1{font-size:1.5rem;margin:0 0 2px;letter-spacing:.01em}
     <button id="play" type="button">Play</button>
     <div class="tl"><canvas id="spark"></canvas><input id="scrub" type="range" min="1875" max="2024" step="0.1" value="2024" aria-label="Birth year"></div>
     <div class="seg" id="modes" role="group" aria-label="Color by">
-      <button type="button" data-m="era" aria-pressed="true">Era</button>
+      <button type="button" data-m="con" aria-pressed="true">Kennel Constellations</button>
+      <button type="button" data-m="era" aria-pressed="false">Era</button>
       <button type="button" data-m="coat" aria-pressed="false">Coat</button>
       <button type="button" data-m="inb" aria-pressed="false">Inbreeding</button>
-      <button type="button" data-m="con" aria-pressed="false">Kennel Constellations</button>
     </div>
     <button id="reset" type="button">Reset view</button>
   </div>
@@ -188,7 +188,7 @@ function stats(y){
  const med=a=>{const s=Array.from(a).sort((x,y)=>x-y);return s[s.length>>1]}
  CS.forEach((c,k)=>{const r=by[k],mx=med(r.map(i=>px[i])),my=med(r.map(i=>py[i]));let b=r[0],bd=1e9
    for(const i of r){const d=(px[i]-mx)**2+(py[i]-my)**2;if(d<bd){bd=d;b=i}}c.x=px[b];c.y=py[b]*ASPECT
-   let f=0;for(const i of r)f+=f8[i];c.f=f/r.length*.5/255*100;c.rows=r})}
+   let f=0;for(const i of r)f+=f8[i];c.f=f/r.length*.5/255*100;c.rows=r;c.y20=r.map(i=>year[i]).sort((a,b)=>a-b)[Math.floor(r.length*.2)]})}
 
 // --- colors ---
 const ramp=(stops,t)=>{t=Math.max(0,Math.min(1,t));const k=t*(stops.length-1),i=Math.min(stops.length-2,Math.floor(k)),u=k-i,a=stops[i],b=stops[i+1];return [a[0]+(b[0]-a[0])*u,a[1]+(b[1]-a[1])*u,a[2]+(b[2]-a[2])*u]}
@@ -199,7 +199,7 @@ const colorOf={
   inb:i=>ramp(INB,f8[i]*0.5/255/0.125),
   con:i=>{const c=CCOL[CL[i]];if(!CSEL.size)return c;return CSEL.has(CL[i])?c.map(v=>Math.min(255,v*1.15)):c.map(v=>v*.1)}
 }
-let mode='era'
+let mode='con'
 const COATSEL=new Set()   // coat categories picked in the legend; empty = all
 
 
@@ -306,7 +306,7 @@ let cur=MAXY,playing=false,flash=0,trace=null,hover=-1
 function draw(){
   gl.viewport(0,0,cv.width,cv.height);gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT)
   gl.enable(gl.BLEND);gl.blendFunc(gl.ONE,gl.ONE)
-  const dim=(trace||SEL.length)?.28:1
+  const dim=trace?.28:SEL.length?(mode==='con'?.1:.28):1
   const set=(p,extra)=>{gl.useProgram(p)
     gl.uniform2f(U(p,'res'),W*dpr,H*dpr);gl.uniform2f(U(p,'off'),TX*dpr,TY*dpr);gl.uniform1f(U(p,'scale'),S()*dpr)
     gl.uniform1f(U(p,'cur'),cur);gl.uniform1f(U(p,'dpr'),dpr);gl.uniform1f(U(p,'zoom'),K);gl.uniform1f(U(p,'dim'),dim);gl.uniform1f(U(p,'flash'),flash)}
@@ -346,6 +346,7 @@ function drawLabels(){
   const s=S(),placed=[],big=CS[0].n
   octx.textAlign='center';octx.textBaseline='middle';octx.lineJoin='round';octx.lineWidth=3
   for(const c of CS){if(CSEL.size&&!CSEL.has(c.i))continue
+    if(cur<c.y20)continue   // name appears once a fifth of its dogs are born
     const x=c.x*s+TX,y=c.y*s+TY;if(x<0||y<0||x>W||y>H)continue
     const fs=Math.round(10+5*Math.sqrt(c.n/big)+(CSEL.has(c.i)?2:0));octx.font=`600 ${fs}px system-ui,sans-serif`
     const w=octx.measureText(c.name).width+6,h=fs+4,r=[x-w/2,y-h/2,x+w/2,y+h/2]
@@ -358,9 +359,13 @@ function drawOverlay(){
   octx.setTransform(dpr,0,0,dpr,0,0);octx.clearRect(0,0,W,H)
   const s0=S(),X0=i=>px[i]*s0+TX,Y0=i=>py[i]*ASPECT*s0+TY
   octx.globalCompositeOperation='lighter'
-  for(const sl of SEL){const r=rowsOf(sl.k);octx.fillStyle=sl.col;const rad=Math.min(4,1.6+K*.4)
-    octx.globalAlpha=.22;for(const i of r){if(year[i]>cur)continue;octx.beginPath();octx.arc(X0(i),Y0(i),rad*2.6,0,6.283);octx.fill()}
-    octx.globalAlpha=1;for(const i of r){if(year[i]>cur)continue;octx.beginPath();octx.arc(X0(i),Y0(i),rad,0,6.283);octx.fill()}}
+  for(const sl of SEL){const r=rowsOf(sl.k);octx.fillStyle=sl.col;const few=r.length<150   // a small kennel gets bigger, ringed dots so it shows against the colors
+    const rad=few?Math.min(7,4+K*.3):Math.min(4,1.6+K*.4)
+    if(few)octx.globalCompositeOperation='source-over'
+    octx.globalAlpha=few?.16:.3;for(const i of r){if(year[i]>cur)continue;octx.beginPath();octx.arc(X0(i),Y0(i),rad*(few?2:2.8),0,6.283);octx.fill()}
+    octx.globalAlpha=1;for(const i of r){if(year[i]>cur)continue;octx.beginPath();octx.arc(X0(i),Y0(i),rad,0,6.283);octx.fill()}
+    if(few){octx.globalCompositeOperation='source-over';octx.strokeStyle='#fff';octx.lineWidth=1.5;for(const i of r){if(year[i]>cur)continue;octx.beginPath();octx.arc(X0(i),Y0(i),rad+1.5,0,6.283);octx.stroke()}}
+    octx.globalCompositeOperation='lighter'}
   octx.globalAlpha=1;octx.globalCompositeOperation='source-over'
   if(mode==='con')drawLabels()
   if(!trace)return
@@ -456,7 +461,7 @@ addEventListener('resize',()=>{reset();spark()})
 {const sw=DATA.csweep,b=sw.reduce((x,y)=>y.modularity>x.modularity?y:x)
  $('m-ncon').textContent=NC;$('m-q').textContent=b.modularity.toFixed(3);$('m-nmi').textContent=b.stability.toFixed(2)
  $('m-sweep').innerHTML=sw.map(r=>`<li>Setting ${r.resolution}: ${r.groups} groups, modularity ${r.modularity.toFixed(3)}${r===b?' <b>(best)</b>':''}</li>`).join('')}
-reset();setMode('era');spark();readout()
+reset();setMode('con');spark();readout()
 requestAnimationFrame(()=>{reset();setMode(mode);requestAnimationFrame(()=>draw())})
 document.addEventListener('visibilitychange',()=>{if(!document.hidden){last=performance.now();draw()}})
 if(!matchMedia('(prefers-reduced-motion: reduce)').matches){cur=MINY;pg=0;scrub.value=cur;playing=true;flash=1;$('play').textContent='Pause';last=performance.now();setTimeout(()=>{last=performance.now();requestAnimationFrame(tick)},900)}
