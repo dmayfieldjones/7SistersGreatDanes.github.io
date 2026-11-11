@@ -46,6 +46,8 @@ h1{font-size:1.5rem;margin:0 0 2px;letter-spacing:.01em}
 .legend i{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:6px;vertical-align:-1px}
 .legend .ramp{display:inline-block;width:150px;height:10px;border-radius:5px;margin:0 6px;vertical-align:-1px}
 .legend .lg{font:inherit;font-size:.85rem;color:var(--ink2);background:#151826;border:1px solid #343850;border-radius:999px;padding:3px 11px;cursor:pointer}.legend .lg:hover{border-color:#5a6080;color:var(--ink)}.legend .lg small{color:var(--mute)}.legend .lgh{font-size:.78rem;color:var(--mute)}
+.legend.con{max-height:11.5rem;overflow:auto;padding:2px 0}
+.legend .lgh.full{flex-basis:100%}
 .notes{margin:14px 0 0;color:var(--mute);font-size:.82rem;max-width:90ch}
 .notes b{color:var(--ink2)}
 .nogl{padding:40px 20px;text-align:center;color:var(--ink2)}
@@ -98,6 +100,7 @@ h1{font-size:1.5rem;margin:0 0 2px;letter-spacing:.01em}
       <button type="button" data-m="era" aria-pressed="true">Era</button>
       <button type="button" data-m="coat" aria-pressed="false">Coat</button>
       <button type="button" data-m="inb" aria-pressed="false">Inbreeding</button>
+      <button type="button" data-m="con" aria-pressed="false">Constellations</button>
     </div>
     <button id="reset" type="button">Reset view</button>
   </div>
@@ -130,6 +133,10 @@ h1{font-size:1.5rem;margin:0 0 2px;letter-spacing:.01em}
     <h3>Kennels</h3>
     <p>The export has no kennel field, so a kennel is read from registered names: the first word of a name, or the word after &ldquo;of&rdquo;, &ldquo;von&rdquo;, &ldquo;de&rdquo; and similar near the end. To keep dog call names out, the dogs carrying a name must be related to each other: at least half of them have a parent, an offspring, or a littermate or half-sibling that carries it too, because a kennel breeds its own dogs, while dogs that merely share a call name usually do not. Every kennel-like name on at least 25 dogs gets a button, about <span id="m-chips"></span> in all, and names on at least 5 dogs can be found by search. Names are grouped by the median birth year of the dogs that carry them. Our own kennels and Leggo, a friend&rsquo;s, are listed first. The 7Sisters group is picked by registration, since our dogs&rsquo; names mostly come from other kennels&rsquo; affixes.</p>
     <p><b>Limits.</b> Matching is by name only. Different breeders who use the same word are merged, and spelling variants of one kennel are split. A breeder with no affix is missed, and a few names that are really a breeder&rsquo;s own dog line, not a kennel, can pass. Counts of kennels are therefore estimates: roughly 6,000 names appear on three or more dogs, of which a few thousand are real kennels with a lasting presence. &ldquo;Descendants in the file&rdquo; is how many dogs have a kennel&rsquo;s dog somewhere in their pedigree, including the kennel&rsquo;s own dogs.</p>
+    <h3>Constellations</h3>
+    <p>A constellation is a group of dogs that belong to the same lines of descent. They come from the pedigree network itself: the Leiden method (a refinement of Louvain) cuts the network where parent links are sparse between groups and dense inside them. The number of groups is not picked by hand. <b>Modularity</b> measures how much more of the network&rsquo;s links fall inside groups than chance would put there, and the method was run at a range of settings, from coarse to fine, with three random starts each. Too coarse and unrelated lines are lumped together; too fine and one family is cut into pieces. Modularity peaks in between, at <span id="m-ncon"></span> constellations (modularity <span id="m-q"></span>). Groups under 150 dogs were folded into the group they share the most links with, and the three starts agree closely on the result (agreement <span id="m-nmi"></span> on a scale of 0 to 1). The sweep:</p>
+    <ul id="m-sweep"></ul>
+    <p>Each constellation is named for its most characteristic kennel: the kennel name whose dogs fill the most of the group while sitting mostly inside it, so a kennel with a few dogs in many groups does not win. Each kennel names at most one constellation, and a group with no fitting kennel is just numbered. The name says where a line is concentrated, not that every dog in it came from that kennel. The clusters are a mathematical convenience: the breed is one continuous tangle of lines, and many dogs sit between two constellations.</p>
   </section>
   <p class="notes"><b>How to read it.</b> Position comes from a force layout of the whole pedigree: dogs that share many ancestors end up near each other, so the axes mean nothing and only distance does. The oldest dogs (amber in Era view) sit along the right edge. About <span id="imp"></span> of dogs have no recorded birth year; theirs is estimated from their parents and offspring, and the tooltip says so. After about 2020 the records thin out, so the later years hold only our own litters and their ancestors. Inbreeding is the 10-generation figure and is lower for early dogs only because their pedigrees are shorter. About <span id="left"></span> of the file sits in small disconnected pedigrees and is left out. The page holds no dog names or registration numbers; kennel names are matched from registered names and stored only as which dogs carry them.</p>
 </div>
@@ -146,6 +153,11 @@ const qx=unb(DATA.x,Uint16Array),qy=unb(DATA.y,Uint16Array),yrs=unb(DATA.yr,Uint
 const sire=unb(DATA.sire,Int32Array),dam=unb(DATA.dam,Int32Array)
 const px=new Float32Array(N),py=new Float32Array(N),year=new Float32Array(N)
 for(let i=0;i<N;i++){px[i]=qx[i]/65535;py[i]=qy[i]/65535;year[i]=yrs[i]+Y0}
+const CL=unb(DATA.cl,Uint8Array),CS=DATA.cs.map(([name,n,med,share],i)=>({name:name||('Group '+(i+1)),named:!!name,n,med,share,i}))
+const NC=CS.length
+const hsl=(h,s,l)=>{s/=100;l/=100;const a=s*Math.min(l,1-l),f=n=>{const k=(n+h/30)%12;return l-a*Math.max(-1,Math.min(k-3,9-k,1))};return [Math.round(f(0)*255),Math.round(f(8)*255),Math.round(f(4)*255)]}
+const CCOL=CS.map((_,c)=>hsl((c*137.508)%360,74,[64,54,73][c%3]))
+const CSEL=new Set()   // constellations picked in the legend; empty = all
 const COATS=['Unknown coat','Fawn / brindle','Blue','Harlequin / merle','Black','Other coat']
 const COATC=[[128,133,144],[255,192,77],[77,166,255],[244,244,255],[176,92,255],[125,215,150]]
 $('total').textContent=(Math.round(N/1000)*1000).toLocaleString()
@@ -171,13 +183,21 @@ function stats(y){
   return {n:cum[k],f:c?f/c:0}
 }
 
+// --- constellation label spots: the member nearest the group's median position ---
+{const by=CS.map(()=>[]);for(let i=0;i<N;i++)by[CL[i]].push(i)
+ const med=a=>{const s=Array.from(a).sort((x,y)=>x-y);return s[s.length>>1]}
+ CS.forEach((c,k)=>{const r=by[k],mx=med(r.map(i=>px[i])),my=med(r.map(i=>py[i]));let b=r[0],bd=1e9
+   for(const i of r){const d=(px[i]-mx)**2+(py[i]-my)**2;if(d<bd){bd=d;b=i}}c.x=px[b];c.y=py[b]*ASPECT
+   let f=0;for(const i of r)f+=f8[i];c.f=f/r.length*.5/255*100;c.rows=r})}
+
 // --- colors ---
 const ramp=(stops,t)=>{t=Math.max(0,Math.min(1,t));const k=t*(stops.length-1),i=Math.min(stops.length-2,Math.floor(k)),u=k-i,a=stops[i],b=stops[i+1];return [a[0]+(b[0]-a[0])*u,a[1]+(b[1]-a[1])*u,a[2]+(b[2]-a[2])*u]}
 const ERA=[[255,178,77],[77,178,255],[204,102,255]],INB=[[60,200,190],[255,224,100],[255,70,70]]
 const colorOf={
   era:i=>ramp(ERA,(year[i]-1880)/(2022-1880)),
   coat:i=>{const c=COATC[meta[i]&7]||COATC[0];if(!COATSEL.size)return c;return COATSEL.has(meta[i]&7)?c.map(v=>Math.min(255,v*1.15)):c.map(v=>v*.1)},
-  inb:i=>ramp(INB,f8[i]*0.5/255/0.125)
+  inb:i=>ramp(INB,f8[i]*0.5/255/0.125),
+  con:i=>{const c=CCOL[CL[i]];if(!CSEL.size)return c;return CSEL.has(CL[i])?c.map(v=>Math.min(255,v*1.15)):c.map(v=>v*.1)}
 }
 let mode='era'
 const COATSEL=new Set()   // coat categories picked in the legend; empty = all
@@ -317,12 +337,23 @@ function showCard(){
   c.innerHTML=`<h2>One dog, born ${Math.round(year[t.i])}${est}</h2>
   <p><span class="sw" style="background:#ffc04d"></span>${t.anc.size>1?`<b>${t.anc.size-1}</b> known ancestors over <b>${maxA}</b> generations, back to ${Math.round(old)}.`:'No parents on record.'}</p>
   <p><span class="sw" style="background:#5ad7ff"></span>${t.desc.size>1?`<b>${t.desc.size-1}</b> known descendants over <b>${maxD}</b> generations, as late as ${Math.round(late)}.`:'No offspring on record.'}</p>
+  <p><span class="sw" style="background:rgb(${CCOL[CL[t.i]]})"></span>In the <b>${CS[CL[t.i]].name}</b> constellation, ${CS[CL[t.i]].n.toLocaleString()} dogs.</p>
   <button type="button" id="clr">Clear</button>`
   $('clr').onclick=()=>{trace=null;showCard();draw()}
 }
 let ovDirty=false
+function drawLabels(){
+  const s=S(),placed=[],big=CS[0].n
+  octx.textAlign='center';octx.textBaseline='middle';octx.lineJoin='round';octx.lineWidth=3
+  for(const c of CS){if(CSEL.size&&!CSEL.has(c.i))continue
+    const x=c.x*s+TX,y=c.y*s+TY;if(x<0||y<0||x>W||y>H)continue
+    const fs=Math.round(10+5*Math.sqrt(c.n/big)+(CSEL.has(c.i)?2:0));octx.font=`600 ${fs}px system-ui,sans-serif`
+    const w=octx.measureText(c.name).width+6,h=fs+4,r=[x-w/2,y-h/2,x+w/2,y+h/2]
+    if(placed.some(q=>r[0]<q[2]&&r[2]>q[0]&&r[1]<q[3]&&r[3]>q[1]))continue
+    placed.push(r);octx.strokeStyle='rgba(5,6,10,.9)';octx.strokeText(c.name,x,y);octx.fillStyle='#fff';octx.fillText(c.name,x,y)}
+}
 function drawOverlay(){
-  if(!trace&&!SEL.length){if(ovDirty){octx.setTransform(dpr,0,0,dpr,0,0);octx.clearRect(0,0,W,H);ovDirty=false}return}
+  if(!trace&&!SEL.length&&mode!=='con'){if(ovDirty){octx.setTransform(dpr,0,0,dpr,0,0);octx.clearRect(0,0,W,H);ovDirty=false}return}
   ovDirty=true
   octx.setTransform(dpr,0,0,dpr,0,0);octx.clearRect(0,0,W,H)
   const s0=S(),X0=i=>px[i]*s0+TX,Y0=i=>py[i]*ASPECT*s0+TY
@@ -331,6 +362,7 @@ function drawOverlay(){
     octx.globalAlpha=.22;for(const i of r){if(year[i]>cur)continue;octx.beginPath();octx.arc(X0(i),Y0(i),rad*2.6,0,6.283);octx.fill()}
     octx.globalAlpha=1;for(const i of r){if(year[i]>cur)continue;octx.beginPath();octx.arc(X0(i),Y0(i),rad,0,6.283);octx.fill()}}
   octx.globalAlpha=1;octx.globalCompositeOperation='source-over'
+  if(mode==='con')drawLabels()
   if(!trace)return
   const s=S(),X=i=>px[i]*s+TX,Yy=i=>py[i]*ASPECT*s+TY
   const line=(map,col)=>{octx.strokeStyle=col;octx.lineWidth=1;octx.beginPath()
@@ -370,7 +402,7 @@ cv.addEventListener('pointerleave',()=>{$('tip').style.display='none'})
 function zoomAt(mx,my,f){const nk=Math.max(1,Math.min(60,K*f));f=nk/K;TX=mx-(mx-TX)*f;TY=my-(my-TY)*f;K=nk;draw()}
 cv.addEventListener('wheel',e=>{e.preventDefault();zoomAt(e.offsetX,e.offsetY,Math.exp(-e.deltaY*.0015))},{passive:false})
 function showTip(i,x,y){const t=$('tip');if(i<0){t.style.display='none';return}
-  t.innerHTML=`Born ${Math.round(year[i])}${meta[i]&8?' (estimated)':''} &middot; ${COATS[meta[i]&7]}<br>Inbreeding ${(f8[i]*.5/255*100).toFixed(1)}%`
+  t.innerHTML=`Born ${Math.round(year[i])}${meta[i]&8?' (estimated)':''} &middot; ${COATS[meta[i]&7]}<br>Inbreeding ${(f8[i]*.5/255*100).toFixed(1)}%<br>Constellation: ${CS[CL[i]].name}`
   t.style.display='block';const w=t.offsetWidth;t.style.left=Math.min(x+14,W-w-8)+'px';t.style.top=Math.max(8,y-44)+'px'}
 
 // --- timeline + controls ---
@@ -402,10 +434,14 @@ const LEG={
   coat:()=>{const n=new Array(6).fill(0);for(let i=0;i<N;i++)n[meta[i]&7]++
     const b=(c,label)=>`<button type="button" class="lg" data-c="${c}" aria-pressed="${COATSEL.has(c)}" style="${COATSEL.has(c)?`border-color:rgb(${COATC[c]});color:#fff`:''}"><i style="background:rgb(${COATC[c]})"></i>${label} <small>${n[c].toLocaleString()}</small></button>`
     return [1,2,3,4,5].map(c=>b(c,COATS[c])).join('')+b(0,'Not recorded')+(COATSEL.size?'<button type="button" class="lg" data-c="all">Show all</button>':'')+'<span class="lgh">Click a coat to light it up while it plays. About '+Math.round(100*n[0]/N)+'% of dogs have no coat recorded in the file, most of all in the 1990s.</span>'},
+  con:()=>CS.map(c=>`<button type="button" class="lg" data-k="${c.i}" aria-pressed="${CSEL.has(c.i)}" title="Median birth ${c.med}, average inbreeding ${c.f.toFixed(1)}%${c.named?`, ${c.share}% of its dogs carry the ${c.name} name`:''}" style="${CSEL.has(c.i)?`border-color:rgb(${CCOL[c.i]});color:#fff`:''}"><i style="background:rgb(${CCOL[c.i]})"></i>${c.name} <small>${c.n.toLocaleString()}</small></button>`).join('')+(CSEL.size?'<button type="button" class="lg" data-k="all">Show all</button>':'')+'<span class="lgh full">Each constellation is a family of dogs joined by lines of descent, named for the kennel most typical of it. Click one to light it up.</span>',
   inb:()=>`<span>Inbreeding 0%</span><i class="ramp" style="background:linear-gradient(90deg,rgb(60,200,190),rgb(255,224,100),rgb(255,70,70))"></i><span>12.5% or more (half-sibling mating)</span>`
 }
-function setMode(m){mode=m;for(const b of document.querySelectorAll('#modes button'))b.setAttribute('aria-pressed',b.dataset.m===m);$('legend').innerHTML=LEG[m]();recolor();draw()}
-$('legend').addEventListener('click',e=>{const b=e.target.closest('button.lg');if(!b||mode!=='coat')return
+function setMode(m){mode=m;$('legend').classList.toggle('con',m==='con');for(const b of document.querySelectorAll('#modes button'))b.setAttribute('aria-pressed',b.dataset.m===m);$('legend').innerHTML=LEG[m]();recolor();draw()}
+$('legend').addEventListener('click',e=>{const b=e.target.closest('button.lg');if(!b)return
+  if(mode==='con'){const k=b.dataset.k;if(k==='all')CSEL.clear();else{const v=+k;CSEL.has(v)?CSEL.delete(v):CSEL.add(v)}
+    const top=$('legend').scrollTop;$('legend').innerHTML=LEG.con();$('legend').scrollTop=top;recolor();draw();return}
+  if(mode!=='coat')return
   const c=b.dataset.c;if(c==='all')COATSEL.clear();else{const k=+c;COATSEL.has(k)?COATSEL.delete(k):COATSEL.add(k)}
   $('legend').innerHTML=LEG.coat();recolor();draw()})
 $('modes').addEventListener('click',e=>{const b=e.target.closest('button');if(b)setMode(b.dataset.m)})
@@ -417,6 +453,9 @@ addEventListener('resize',()=>{reset();spark()})
  $('m-left').textContent=DATA.left;$('m-dated').textContent=Math.round(100*(N-nImp)/N);$('m-ex').textContent=DATA.ex
  let nc=0;for(let i=0;i<N;i++)if((meta[i]&7)===0)nc++;$('m-nocoat').textContent=Math.round(100*nc/N)
  $('m-chips').textContent=KN.filter(k=>k.cur).length.toLocaleString()}
+{const sw=DATA.csweep,b=sw.reduce((x,y)=>y.modularity>x.modularity?y:x)
+ $('m-ncon').textContent=NC;$('m-q').textContent=b.modularity.toFixed(3);$('m-nmi').textContent=b.stability.toFixed(2)
+ $('m-sweep').innerHTML=sw.map(r=>`<li>Setting ${r.resolution}: ${r.groups} groups, modularity ${r.modularity.toFixed(3)}${r===b?' <b>(best)</b>':''}</li>`).join('')}
 reset();setMode('era');spark();readout()
 requestAnimationFrame(()=>{reset();setMode(mode);requestAnimationFrame(()=>draw())})
 document.addEventListener('visibilitychange',()=>{if(!document.hidden){last=performance.now();draw()}})

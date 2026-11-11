@@ -26,6 +26,7 @@ import numpy as np
 import history
 from history import coi10, color_family
 import kennels as K
+import constellations as CN
 from pedigree_kinship import ancestors_order, drop_impossible_links, load, log
 
 COATS = [None, 'fawn', 'blue', 'harlequin', 'black', 'other']
@@ -90,6 +91,12 @@ def main():
         random.seed(3); np.random.seed(3)
         xy = np.array(g.subgraph(keep).layout_drl().coords); np.save(cache, xy)
 
+    log('constellations: sweeping Leiden resolutions')
+    sg = g.subgraph(keep)
+    clab, csweep = CN.sweep(sg, log)
+    clab = CN.merge_small(sg, clab)
+    log(f'{int(clab.max()) + 1} constellations')
+
     # inbreeding to 10 generations (same as the history script)
     dated_ids = [ids[i] for i in keep]
     history.DOGS = D
@@ -101,7 +108,7 @@ def main():
 
     # shuffle, quantize, pack
     perm = np.random.RandomState(11).permutation(len(keep))
-    keep = keep[perm]; xy = xy[perm]
+    keep = keep[perm]; xy = xy[perm]; clab = clab[perm]
     row = {int(k): i for i, k in enumerate(keep)}
     lo, hi = xy.min(axis=0), xy.max(axis=0)   # full range: nothing clipped at the edges
     span = (hi - lo).max()
@@ -150,10 +157,20 @@ def main():
         if any(len(rs & ps) >= 0.8 * len(rs) for ps in picked_sets): continue
         add(k.title(), rows, n >= K.MIN_CHIP_DOGS)
     log(f'{sum(1 for x in kn if x[2])} picked kennels, {len(kn)} searchable')
+    # names kept off the kennel buttons (KENNEL_EXCLUDE) may still name a constellation
+    extra = [(k.title(), rows_of(mem[k])) for k in K.EXCLUDE if k in mem]
+    cnames, cshare = CN.name_groups(clab, [(x[0], x[3]) for x in kn] + extra)
+    ncl = int(clab.max()) + 1
+    cs = []
+    for c in range(ncl):
+        r = np.where(clab == c)[0]
+        cs.append([cnames[c], len(r), int(np.median(yrk[r])), round(100 * cshare[c])])
+        log(f'  constellation {c + 1}: {cs[-1]}')
     b64 = lambda x: base64.b64encode(x.tobytes()).decode()
     data = dict(n=len(keep), all=N, left=round(100 * (1 - len(keep) / N)), aspect=float((hi - lo)[1] / span), x=b64(q[:, 0]), y=b64(q[:, 1]), yr=b64(yr),
                 meta=b64(meta), f=b64(f8), sire=b64(s), dam=b64(d), y0=1870, ex=a.export_end,
-                kn=[[k[0], k[1], k[2], len(k[3]), b64(k[3])] for k in kn])
+                kn=[[k[0], k[1], k[2], len(k[3]), b64(k[3])] for k in kn],
+                cl=b64(clab.astype('u1')), cs=cs, csweep=csweep)
     html = open(a.template, encoding='utf-8').read().replace('/*DATA*/null', json.dumps(data, separators=(',', ':')))
     open(a.out, 'w', encoding='utf-8').write(html)
     log(f'wrote {a.out} {len(html)//1024} KB')
