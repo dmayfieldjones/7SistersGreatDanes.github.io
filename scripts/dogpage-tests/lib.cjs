@@ -15,7 +15,7 @@ exports.make=function({nopriv=false,host='localhost'}={}){
     w.HTMLCanvasElement.prototype.getContext=function(){return ctx};
     const b64=o=>Buffer.from(JSON.stringify(o)).toString('base64').replace(/=/g,'').replace(/\+/g,'-').replace(/\//g,'_');
     const token=(u,name)=>b64({alg:'none'})+'.'+b64({'cognito:username':u,name,exp:Math.floor(Date.now()/1000)+3600})+'.sig';
-    const NAMES={dustin:'Dustin Mayfield-Jones','trial-member':'Trial member',someone:'Someone Else'};
+    const NAMES={dmj:'Dustin Mayfield-Jones','trial-member':'Trial member',someone:'Someone Else'};
     w.fetch=(u,opt)=>{u=String(u);
       if(u.includes('cognito-idp')){ // behaves like the real user pool: a temporary password must be replaced at first sign-in
         const target=(opt.headers['X-Amz-Target']||'').split('.').pop(),body=JSON.parse(opt.body),bad=()=>Promise.resolve({ok:false,json:()=>Promise.resolve({__type:'com.amazonaws.cognito#NotAuthorizedException',message:'Incorrect username or password.'})});

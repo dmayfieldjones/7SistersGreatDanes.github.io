@@ -8,7 +8,7 @@ const {make}=require('./lib.cjs');let pass=0,fail=0;const ok=(c,m)=>{if(c)pass++
  ok(!d.getElementById('signin').hidden&&d.getElementById('new-rec').parentNode.hidden,'a visitor cannot add');
  const login=async(u,p,p2)=>{click(d.getElementById('signinbtn'));d.getElementById('lg-user').value=u;d.getElementById('lg-pass').value=p;submit(d.getElementById('loginform'));await wait(300);if(p2){d.getElementById('lg-pass2').value=p2;submit(d.getElementById('loginform'));await wait(1300)}};
  console.log('--- sign-in');
- await login('dustin','wrong-password');ok(/Incorrect username or password/.test(T('lg-msg')),'a wrong password is refused with a plain message');
+ await login('dmj','wrong-password');ok(/Incorrect username or password/.test(T('lg-msg')),'a wrong password is refused with a plain message');
  ok(d.getElementById('signoutbtn').hidden,'still signed out after a wrong password');
  d.getElementById('lg-pass').value='Temp-pass-1234';submit(d.getElementById('loginform'));await wait(300);
  ok(d.getElementById('lg-new').style.display==='grid'&&/temporary password/.test(T('lg-new')),'a temporary password asks for a new one');

@@ -36,7 +36,7 @@
   var TITLE = /^(AM|CAN|INT|MEX|NORD|EST|SWD|FIN|JPN|UKC|AKC|CH|GCH\w*|BISS?|BIS|ROM|HOF|AOM|&)$/i;
   var AKCNO = /^[A-Z]{2}\d{6,}$/;
   // Demo only: which sign-in names map to which demo identity. The real server maps a verified token to a member; nothing here is a security control.
-  var LOGINS = { 'dustin': 0, 'trial-member': 9 };
+  var LOGINS = { 'dmj': 0, 'trial-member': 9 };
   var shortName = function (label) { var p = String(label).trim().split(/\s+/); return p.length < 2 ? label : p[0] + ' ' + p[p.length - 1].charAt(0) + '.'; };
   var NOW = function () { return new Date().toISOString().slice(0, 10); };
   var fail = function (code, message) { return Promise.reject({ code: code, message: message }); };
