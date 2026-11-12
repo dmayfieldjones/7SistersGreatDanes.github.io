@@ -15,9 +15,11 @@ let pass=0,fail=0;const ok=(c,m)=>{if(c){pass++}else{fail++;console.log('  FAIL:
  ok([...d.querySelectorAll('#offspring button')].length===2,'Piper has 2 offspring in our records');
  ok(d.querySelectorAll('#pedgrid .pn').length===31,'pedigree draws 31 boxes at 4 generations');
  ok(/9522 known ancestors/.test(T('galfacts')),'galaxy facts for Piper');
- ok([...d.querySelectorAll('#dog-regs a')].some(a=>a.href.includes('quicksearch=WS69691106')),'OFA link built from the number');
+ ok([...d.querySelectorAll('#dog-screens a')].filter(a=>a.href.includes('quicksearch=WS69691106')).length===2,'OFA and CHIC numbers both link to the same OFA search, built from the AKC number');
+ ok(/OFA OFA25G/.test(T('dog-screens'))&&/CHIC CHIC181340/.test(T('dog-screens'))&&!/OFA25G/.test(T('dog-regs')),'medical screens are their own section, apart from registrations');
  ok(/Quintessa Pedigree/.test(T('dog-ped'))&&/River Rock Pedigree/.test(T('dog-ped')),'also-on links');
  await find('WS81418801');ok(T('dog-call').includes('Mia'),'find Mia by number');
+ await find('WS84850303');ok(/None listed on AKC yet/.test(T('dog-screens')),"Cora has no medical screens listed, as on AKC");await find('WS81418801');
  ok(/Earlier owners \(3\)/.test(T('dog-owners'))===false&&/Earlier owners \(3\)/.test(T('own-hist'))===false,'(ownership history is a collapsed note, not in the header)');
  ok(T('own-hist').split(' to ').length-1===3,'Mia has 3 closed ownership periods in the note');
  await find('OFA30F');ok(T('dog-call').includes('Mia'),'find Mia by her OFA number');

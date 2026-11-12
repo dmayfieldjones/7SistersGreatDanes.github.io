@@ -109,6 +109,7 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
     <dl class="facts">
       <dt>Call name</dt><dd id="dog-call"></dd>
       <dt>Registrations</dt><dd id="dog-regs"></dd>
+      <dt>Medical screens</dt><dd id="dog-screens"></dd>
       <dt>Breeders</dt><dd id="dog-breeders"></dd>
       <dt>Claimed by</dt><dd id="dog-owners"></dd>
       <span id="dog-facts" style="display:contents"></span>
@@ -340,7 +341,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   // Cross-references: a link is built from a registration number and a template.
   // OFA's own search box submits GET /advanced-search?quicksearch=<number>. The CHIC number has no page of its own (its status is part of the OFA record).
   // AKC still needs its public address pattern before it becomes a link. AKC's report store has a free Points Progression report (needs an AKC login).
-  var XREF={OFA:'https://ofa.org/advanced-search/?quicksearch={id}',AKC:'',CHIC:'',AKCPTS:'https://shop.akc.org/collections/akc-reports-pedigree'};
+  var XREF={OFA:'https://ofa.org/advanced-search/?quicksearch={id}',AKC:'',CHIC:'https://ofa.org/advanced-search/?quicksearch={id}',AKCPTS:'https://shop.akc.org/collections/akc-reports-pedigree'};
   var XLABEL={OFA:'OFA Results',AKC:'AKC record',AKCPTS:'AKC points report (free AKC login; enter this number)'};
   function xurl(c){return XREF[c.name]&&c.value?XREF[c.name].replace('{id}',encodeURIComponent(c.value)):c.url}
   var CAUSES=['Old age','Heart disease','Bloat (GDV)','Cancer','Wobbler or neurologic','Musculoskeletal (euthanized for mobility loss)','Accident','Infectious disease','Other','Unknown'];
@@ -489,11 +490,16 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     function oline(c){return pn(c.value)+(c.co&&c.co.length?' <span class="meta">with</span> '+c.co.map(pn).join(', '):'')+' <span class="meta">&middot; '+(c.end?esc(c.start)+' to '+esc(c.end):'since '+esc(c.start))+'</span>'}
     $('own-hist').innerHTML=ow.length?ow.map(oline).join('<br>'):'<span class="meta">None recorded.</span>';
     $('dog-call').textContent=d.call?'“'+d.call+'”':'No call name recorded';
-    $('dog-regs').innerHTML=S.identifiers.map(function(i){
+    // Registrations (AKC and others) and Medical screens (OFA and CHIC numbers, as AKC lists them) are separate, like on AKC's own page.
+    // A dog's CHIC status is part of its OFA record, so the OFA and CHIC numbers both open the same OFA search, by the AKC number.
+    function idline(i){
       var t=XREF[i.registry],u=t?t.replace('{id}',encodeURIComponent((i.registry==='OFA'||i.registry==='CHIC')?akc:i.number)):'';
       var txt=esc(i.registry)+' '+esc(i.number);
       return u?'<a href="'+esc(u)+'" target="_blank" rel="noopener" title="Opens the OFA search for '+esc(akc)+'">'+txt+' &#8599;</a>':txt;
-    }).join('<br>');
+    }
+    var screens=S.identifiers.filter(function(i){return i.registry==='OFA'||i.registry==='CHIC'});
+    $('dog-regs').innerHTML=S.identifiers.filter(function(i){return i.registry!=='OFA'&&i.registry!=='CHIC'}).map(idline).join('<br>');
+    $('dog-screens').innerHTML=screens.length?screens.map(idline).join('<br>')+' <span class="chip doc">AKC record</span>':'<span class="meta">None listed on AKC yet</span>';
   }
   function renderModel(){
     $('model-dog').textContent=JSON.stringify(S.dog,null,2);
