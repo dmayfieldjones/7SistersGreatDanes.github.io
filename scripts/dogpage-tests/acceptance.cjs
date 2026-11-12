@@ -82,6 +82,9 @@ let pass=0,fail=0;const ok=(c,m)=>{if(c){pass++}else{fail++;console.log('  FAIL:
  ok((T('dog-facts').match(/Born([0-9-]+)/)||[])[1]==='2016-06-06','born date from pedigree data');
  ok(/River Rock photo/.test(T('dog-hero')),'photo tile for a dog with a photo elsewhere');
  ok(/Not checked yet/.test(T('dog-screens'))&&!/None listed on AKC/.test(T('dog-screens')),'a page generated from the pedigree does not claim AKC has no screens');ok(/OFA Results/.test(T('links')),'a generated ancestor page carries the OFA link');
+ ok(/Not confirmed by a member yet/.test(T('dog-confirm'))&&!/Sample Importer/.test(T('links')+T('dog-confirm'))&&/Dustin Mayfield-Jones/.test(T('links')),'a generated page is shown as unconfirmed and authored by Dustin for the demo, with no importer named');
+ ok(!!d.querySelector('[data-confirm]')&&/does not say you own or bred/.test(T('dog-confirm')),'a signed-in member can confirm, and is told that is not owning or breeding');
+ click(d.querySelector('[data-confirm]'));await wait(900);ok(/Confirmed/.test(T('dog-confirm'))&&!d.querySelector('[data-confirm]'),'the member is listed as having confirmed, and can confirm only once');
  ok(/Back to Piper/.test(T('backrow')),'back link');
  const sireName=T('dog-name');click(d.querySelector('#pedgrid a.nm[data-anc="4"]'));await wait(1500);ok(T('dog-name')!==sireName&&T('dog-name').length>5&&T('backrow').includes('Back to'),'one generation deeper opens a different dog, with a way back');
  click(d.querySelector('#backrow a'));await wait(800);click(d.querySelector('#backrow a'));await wait(800);ok(/Legado N Danekraaft/.test(T('dog-name')),'back twice returns to Piper');

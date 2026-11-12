@@ -187,6 +187,7 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
       <dt>Medical screens</dt><dd id="dog-screens"></dd>
       <dt>Breeders</dt><dd id="dog-breeders"></dd>
       <dt>Claimed by</dt><dd id="dog-owners"></dd>
+      <dt>Details</dt><dd id="dog-confirm"></dd>
       <span id="dog-facts" style="display:contents"></span>
       <dt>Also on</dt><dd id="dog-ped"></dd>
       <dt>Genetic data</dt><dd>Commercial DNA test ordered, results pending</dd>
@@ -579,6 +580,12 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     var ow=S.claims.filter(function(c){return c.type==='ownership'&&c.status==='visible'}).sort(function(x,y){return x.start<y.start?1:-1});
     function oline(c){return pn(c.value)+(c.co&&c.co.length?' <span class="meta">with</span> '+c.co.map(pn).join(', '):'')+' <span class="meta">&middot; '+(c.end?esc(c.start)+' to '+esc(c.end):'since '+esc(c.start))+'</span>'}
     $('own-hist').innerHTML=ow.length?ow.map(oline).join('<br>'):'<span class="meta">None recorded.</span>';
+    (function(){var c=S.confirm||{},by=c.by||[],h='';
+      if(c.auto)h+='<span class="meta">Filled in automatically from pedigree data (loaded by Dustin Mayfield-Jones for this demo).</span> ';
+      h+=by.length?'<span class="chip doc">Confirmed</span> <span class="meta">by '+by.map(function(x){return esc(A(x.author).name)+' ('+esc(x.date)+')'}).join(', ')+'</span>':(c.auto?'<span class="chip self">Not confirmed by a member yet</span>':'<span class="meta">Entered by a member.</span>');
+      if(c.canConfirm)h+=' <button class="sm" type="button" data-confirm="1">I checked these details</button><div class="meta">Confirms the name, registration number and birth date match a source. It does not say you own or bred this dog.</div>';
+      else if(c.auto&&!S.perm.loggedIn)h+='<div class="meta">Sign in to confirm these details and add your name to this record.</div>';
+      $('dog-confirm').innerHTML=h})();
     $('dog-call').textContent=d.call?'“'+d.call+'”':'No call name recorded';
     // Registrations (AKC and others) and Medical screens (OFA and CHIC numbers, as AKC lists them) are separate, like on AKC's own page.
     // A dog's CHIC status is part of its OFA record, so the OFA and CHIC numbers both open the same OFA search, by the AKC number.
@@ -814,6 +821,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     if(t.dataset.copywanted){DogAPI.wanted().then(function(w){if(navigator.clipboard)navigator.clipboard.writeText(w.map(function(x){return x.reg}).join('\n'))}).catch(function(e){say(e&&e.message)});return}
     var dm=t.closest&&t.closest('[data-demo]');   // a card holds several inner spans; a click on any of them counts
     if(dm){goTo(dm.dataset.demo);return}
+    if(t.dataset.confirm){run(DogAPI.confirmDog(S.dog.id));return}
     if(t.dataset.claim){run(DogAPI.claimDog(S.dog.id));return}
     if(t.dataset.landing){ev.preventDefault();showLanding();return}
     var gt=t.closest&&t.closest('[data-goto]');

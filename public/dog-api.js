@@ -22,6 +22,7 @@
  *   authors()                       {authorId: {name, role, status}}
  *   lookup(number)                  find a dog by any registration number (members: or create a stub and log it as wanted; visitors: only public dogs)
  *   ourDogs()                       the public dogs grouped for the "Our dogs" list: the foundation bitch, then each litter
+ *   confirmDog(dogId)               a member confirms the name, number and birth date on a page that was filled in automatically; says nothing about owning or breeding the dog
  *   claimDog(dogId)                 a member says "this dog is mine" (only while it is unclaimed); the dog starts members-only and its owner can then make it public
  *   setVisibility(dogId, v)         'public' (everyone with the code) or 'members' (signed in only): the member who claimed the dog, or an administrator
  *   noteGalaxy(dogId, inGalaxy)     the page reports whether the galaxy file has the dog; the server updates the stub and the wanted list
@@ -338,6 +339,8 @@
       var snap = {
         dog: { id: d.id, title: d.title || '', titleSuffix: d.titleSuffix || '', registered: d.registered || '', call: d.call, short: d.short || d.call || '', sex: d.sex, color: d.color, photo: d.photo, ext: !!d.ext, pending: !!d.pending, generated: !!d.generated, inGalaxy: !!d.inGalaxy, hasLitter: !!L, photoReg: photoRegOf(reg), visibility: d.visibility || 'members' },
         identifiers: copy(idsOf(dogId)),
+        // pages filled in automatically start unconfirmed; members who checked them against a source are listed here
+        confirm: { auto: !!d.generated, by: (d.confirmedBy || []).map(function (x) { return { author: x.author, date: x.date }; }), canConfirm: isMember() && !!d.generated && !(d.confirmedBy || []).some(function (x) { return x.author === authorOf(actorId); }) },
         claims: claims.filter(function (c) { return c.dog === dogId; }).map(annotate),
         litter: L ? copy(L) : null,
         parents: par.rows, parentsRestricted: par.restricted,
@@ -381,9 +384,9 @@
       if (ex !== null) return Promise.resolve({ dogId: ex });
       var id = 'r:' + reg, sp = splitTitle(e[0]), sx = (parts[2] || '').trim();
       dogs[id] = { id: id, title: sp.title, titleSuffix: '', registered: sp.name, call: '', sex: sx === 'F' ? 'female' : (sx === 'M' ? 'male' : ''), color: (parts[1] || '').trim().toLowerCase(), photo: '', ext: true, litter: null, generated: true, gen: gen, visibility: 'public' };
-      identifiers.push({ dog: id, registry: AKCNO.test(reg) ? 'AKC' : 'Reg.', number: reg, author: 3, date: NOW() });
+      identifiers.push({ dog: id, registry: AKCNO.test(reg) ? 'AKC' : 'Reg.', number: reg, author: 1, auto: true, date: NOW() });
       var born = (parts[3] || '').trim();
-      if (/^\d{4}-\d{2}-\d{2}$/.test(born)) claims.push(C(nextId++, id, 'fact', 'Whelp date', born, { src: 'Pedigree data', author: 3, date: NOW() }));
+      if (/^\d{4}-\d{2}-\d{2}$/.test(born)) claims.push(C(nextId++, id, 'fact', 'Whelp date', born, { src: 'Pedigree data', author: 1, auto: true, date: NOW() }));
       priv.peds[id] = reroot(P, key);
       return Promise.resolve({ dogId: id });
     },
@@ -430,6 +433,15 @@
       if (!reason) return fail('invalid', 'A reason is required.');
       c.status = 'hidden'; c.reason = reason; logAction('Administrator hid record "' + c.name + '". Reason: ' + reason);
       return Promise.resolve(annotate(c));
+    },
+    confirmDog: function (dogId) {
+      var g = needMember(); if (g) return g;
+      var d = dogs[dogId]; if (!d) return fail('not_found', 'No such dog.');
+      d.confirmedBy = d.confirmedBy || [];
+      if (d.confirmedBy.some(function (x) { return x.author === authorOf(actorId); })) return Promise.resolve({ ok: true });
+      d.confirmedBy.push({ author: authorOf(actorId), date: NOW() });
+      logAction((((authors[actorId] || {}).name) || actorId) + ' confirmed the details on ' + (d.registered || primaryReg(dogId) || 'a dog'));
+      return Promise.resolve({ ok: true });
     },
     claimDog: function (dogId) {
       var g = needMember(); if (g) return g;
