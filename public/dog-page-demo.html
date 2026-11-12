@@ -617,8 +617,8 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
       out.push('Of its '+dn.toLocaleString()+' known descendants, '+Math.round(inC/dn*100)+'% stayed in '+esc2(cname(G,c))+(ok!==undefined&&oth[ok]/dn>=.1?' and '+Math.round(oth[ok]/dn*100)+'% went on to '+esc2(cname(G,ok)):'')+'.');
     }
     // inbreeding versus the breed
-    var fr=rank(S2.fs,G.f8[row]);
-    out.push(G.f8[row]===0?'No inbreeding shows up in its recorded pedigree.':'Its inbreeding coefficient is higher than '+Math.round(fr*100)+'% of dogs in the galaxy.');
+    var fv=G.f8[row],lo=rank(S2.fs,fv),hi=rank(S2.fs,fv+1),moreInbred=Math.round((1-hi)*100),lessInbred=Math.round(lo*100);
+    out.push(fv===0?'No inbreeding shows up in its recorded pedigree, which is true of '+Math.round((hi-lo)*100)+'% of dogs in the galaxy.':moreInbred>=50?'It is less inbred than '+moreInbred+'% of dogs in the galaxy.':'It is more inbred than '+lessInbred+'% of dogs in the galaxy.');
     return out.map(function(x){return '<p style="margin:.4em 0">'+x+'</p>'}).join('');
   }
   function renderGalaxy(){
