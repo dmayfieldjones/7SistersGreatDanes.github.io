@@ -575,7 +575,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     var screens=S.identifiers.filter(function(i){return i.registry==='OFA'||i.registry==='CHIC'});
     var regs=S.identifiers.filter(function(i){return i.registry!=='OFA'&&i.registry!=='CHIC'});
     $('dog-regs').innerHTML=regs.length?regs.map(idline).join('<br>'):'<span class="meta">Name and registration number to come</span>';
-    $('dog-screens').innerHTML=screens.length?screens.map(idline).join('<br>')+' <span class="chip doc">AKC record</span>':'<span class="meta">None listed on AKC yet</span>';
+    $('dog-screens').innerHTML=screens.length?screens.map(idline).join('<br>')+' <span class="chip doc">AKC record</span>':(d.generated?'<span class="meta">Not checked yet. This page was generated from the pedigree; the OFA link below searches for this dog.</span>':'<span class="meta">None listed on AKC yet</span>');
   }
   function renderModel(){
     $('model-dog').textContent=JSON.stringify(S.dog,null,2);

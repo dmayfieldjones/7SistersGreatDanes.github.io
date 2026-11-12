@@ -333,7 +333,7 @@
       var L = litters[d.litter], par = parentsOf(dogId);
       var reg = primaryReg(dogId);
       var snap = {
-        dog: { id: d.id, title: d.title || '', titleSuffix: d.titleSuffix || '', registered: d.registered || '', call: d.call, short: d.short || d.call || '', sex: d.sex, color: d.color, photo: d.photo, ext: !!d.ext, pending: !!d.pending, inGalaxy: !!d.inGalaxy, hasLitter: !!L, photoReg: photoRegOf(reg), visibility: d.visibility || 'members' },
+        dog: { id: d.id, title: d.title || '', titleSuffix: d.titleSuffix || '', registered: d.registered || '', call: d.call, short: d.short || d.call || '', sex: d.sex, color: d.color, photo: d.photo, ext: !!d.ext, pending: !!d.pending, generated: !!d.generated, inGalaxy: !!d.inGalaxy, hasLitter: !!L, photoReg: photoRegOf(reg), visibility: d.visibility || 'members' },
         identifiers: copy(idsOf(dogId)),
         claims: claims.filter(function (c) { return c.dog === dogId; }).map(annotate),
         litter: L ? copy(L) : null,
@@ -369,7 +369,7 @@
       var parts = e[1].split(' · '), reg = regOf(parts[0]), ex = dogByNumber(reg);
       if (ex !== null) return Promise.resolve({ dogId: ex });
       var id = 'r:' + reg, sp = splitTitle(e[0]), sx = (parts[2] || '').trim();
-      dogs[id] = { id: id, title: sp.title, titleSuffix: '', registered: sp.name, call: '', sex: sx === 'F' ? 'female' : (sx === 'M' ? 'male' : ''), color: (parts[1] || '').trim().toLowerCase(), photo: '', ext: true, litter: null, visibility: 'members' };
+      dogs[id] = { id: id, title: sp.title, titleSuffix: '', registered: sp.name, call: '', sex: sx === 'F' ? 'female' : (sx === 'M' ? 'male' : ''), color: (parts[1] || '').trim().toLowerCase(), photo: '', ext: true, litter: null, generated: true, visibility: 'members' };
       identifiers.push({ dog: id, registry: AKCNO.test(reg) ? 'AKC' : 'Reg.', number: reg, author: 3, date: NOW() });
       var born = (parts[3] || '').trim();
       if (/^\d{4}-\d{2}-\d{2}$/.test(born)) claims.push(C(nextId++, id, 'fact', 'Whelp date', born, { src: 'Pedigree data', author: 3, date: NOW() }));
