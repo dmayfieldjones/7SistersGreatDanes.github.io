@@ -459,7 +459,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   function renderLinks(){
     var rows=S.claims.filter(function(c){return c.type==='link'&&c.status==='visible'});
     S.identifiers.forEach(function(i){
-      if(i.registry==='AKC'){rows.unshift({name:'AKCPTS',value:i.number,url:'',author:i.author,date:i.date});rows.unshift({name:'AKC',value:i.number,url:'',author:i.author,date:i.date})}
+      if(i.registry==='AKC'){rows.unshift({name:'AKC',value:i.number,url:'',author:i.author,date:i.date})}
       if(i.registry==='AKC'||i.registry==='Reg.'){rows.unshift({name:'OFA',value:i.number,url:'',author:i.author,date:i.date})}
     });
     $('links').innerHTML=rows.length?rows.map(function(c){
