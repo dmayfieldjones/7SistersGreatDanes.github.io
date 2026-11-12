@@ -587,12 +587,12 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   if(window.matchMedia)matchMedia('(max-width:640px)').addEventListener('change',function(){if(S&&PED&&PED.nodes)renderPed()});
   // A name opens that dog's page only for signed-in members (ancestor pages are members only); a visitor sees plain text.
   function nameEl(k,name,openable){
-    var t=esc(name)+(openable&&S.perm.loggedIn?' – open this dog\'s page':'');
-    return S.perm.loggedIn?'<a class="nm" data-anc="'+k+'" title="'+t+'" href="#">'+esc(name)+'</a>':'<span class="nm" title="'+t+'">'+esc(name)+'</span>';
+    var t=esc(name)+(openable?' – open this dog\'s page':'');
+    return '<a class="nm" data-anc="'+k+'" title="'+t+'" href="#">'+esc(name)+'</a>';
   }
   function renderPed(){
     var D=Number($('gens').value),rows=1<<D,grid=$('pedgrid'),P=PED.nodes;
-    $('pednote').textContent=(S.perm.loggedIn||!P||!P[1])?'':'Sign in to open an ancestor\'s page.';
+    $('pednote').textContent='';
     function msg(t){grid.className='pedgrid';grid.style.cssText='';grid.innerHTML='<div class="empty" style="grid-column:1/-1">'+t+'</div>'}
     if(PED.error){msg(PED.error.code==='login_required'?'Sign in to see names in the pedigree.':esc(PED.error.message||'The pedigree could not be loaded.'));return}
     if(!P||!P[1]){msg(S.dog.inGalaxy?'The map above knows this dog\'s ancestry but not the names, so there is no pedigree to draw yet.':'No pedigree data for this dog yet.');return}
