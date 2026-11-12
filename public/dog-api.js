@@ -363,15 +363,18 @@
       if (out[1] && dogs[dogId].registered) out[1][0] = titled(dogs[dogId]);   // the root is the dog itself: its own title and registered name
       return Promise.resolve({ nodes: out });
     },
+    // Anyone can follow a public dog's pedigree back: an ancestor's page is generated from the pedigree data, and the people who see it
+    // are the people who may see the dog it was reached from. (A dog that is not public still needs a sign-in.)
     openAncestor: function (dogId, key) {
-      var g = needMember(); if (g) return g;
+      if (!dogs[dogId]) return fail('not_found', 'No such dog.');
+      if (!canSee(dogs[dogId])) return fail('login_required', 'Sign in to open an ancestor\'s page.');
       key = Number(key);
       var P = pedOf(dogId), e = P[key];
       if (!e || key === 1) return fail('not_found', 'No such ancestor.');
       var parts = e[1].split(' · '), reg = regOf(parts[0]), ex = dogByNumber(reg);
       if (ex !== null) return Promise.resolve({ dogId: ex });
       var id = 'r:' + reg, sp = splitTitle(e[0]), sx = (parts[2] || '').trim();
-      dogs[id] = { id: id, title: sp.title, titleSuffix: '', registered: sp.name, call: '', sex: sx === 'F' ? 'female' : (sx === 'M' ? 'male' : ''), color: (parts[1] || '').trim().toLowerCase(), photo: '', ext: true, litter: null, generated: true, visibility: 'members' };
+      dogs[id] = { id: id, title: sp.title, titleSuffix: '', registered: sp.name, call: '', sex: sx === 'F' ? 'female' : (sx === 'M' ? 'male' : ''), color: (parts[1] || '').trim().toLowerCase(), photo: '', ext: true, litter: null, generated: true, visibility: 'public' };
       identifiers.push({ dog: id, registry: AKCNO.test(reg) ? 'AKC' : 'Reg.', number: reg, author: 3, date: NOW() });
       var born = (parts[3] || '').trim();
       if (/^\d{4}-\d{2}-\d{2}$/.test(born)) claims.push(C(nextId++, id, 'fact', 'Whelp date', born, { src: 'Pedigree data', author: 3, date: NOW() }));
@@ -443,7 +446,7 @@
         var L = litters[lid];
         groups.push({ title: L.label + ', born ' + L.whelp, dogs: by[lid].sort(function (a, b) { return Number(a.id) - Number(b.id); }).map(function (d) { return card(d, d.registered ? '' : 'not yet registered'); }) });
       });
-      var shared = Object.keys(dogs).filter(function (id) { var d = dogs[id]; return !d.litter && d.visibility === 'public'; }).map(function (id) {
+      var shared = Object.keys(dogs).filter(function (id) { var d = dogs[id]; return !d.litter && !d.generated && d.visibility === 'public'; }).map(function (id) {
         var d = dogs[id], c = claimOf(d.id), who = c && people[c.value] ? people[c.value].label : '';
         return card(d, who ? 'shared by ' + who : '');
       });
