@@ -295,7 +295,10 @@
     },
     useLogin: function (id) {
       var u = String(id && id.username || '').toLowerCase();
-      if (!(u in LOGINS)) { actorId = null; return fail('forbidden', 'That account is not set up for the dog pages yet.'); }
+      if (!u) { actorId = null; return fail('forbidden', 'That account is not set up for the dog pages yet.'); }
+      // Demo only: the user pool is closed to self-sign-up (the administrator creates every account), so any account that signs in is a vetted
+      // member. A named account keeps its own identity; any other gets a member number of its own, so its records carry its name.
+      if (!(u in LOGINS)) { var nid = 100 + Object.keys(authors).filter(function (k) { return Number(k) >= 100; }).length; authors[nid] = { name: id.name || u, role: 'Member', status: 'active' }; LOGINS[u] = nid; }
       actorId = LOGINS[u]; loginName = id.name || u;
       return API.session();
     },

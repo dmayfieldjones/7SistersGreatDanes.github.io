@@ -30,9 +30,9 @@ const {make}=require('./lib.cjs');let pass=0,fail=0;const ok=(c,m)=>{if(c)pass++
  ok(/Signed in as Trial member/.test(T('whoami'))&&!/administrator/.test(T('whoami')),'signed in as a member');
  ok(!d.getElementById('new-rec').parentNode.hidden,'a member can add');
  click(d.querySelector('[data-tab="admin"]'));await wait(500);ok(/Administrator only/.test(T('wanted')),'a member does not get the admin tab');
- console.log('--- an account the pages do not know');
+ console.log('--- a new account made by the administrator');
  click(d.getElementById('signoutbtn'));await wait(500);
  await login('someone','Temp-pass-1234','My-chosen-password-1');
- ok(/not set up for the dog pages/.test(T('lg-msg')+T('status')),'a real login that is not set up gets no access');ok(!d.getElementById('signin').hidden,'and stays a visitor');
+ ok(/Signed in as Someone Else/.test(T('whoami'))&&d.getElementById('signin').hidden,'a new account signs in as a member under its own name');
  console.log('errors in the page:',errs.length?errs.join('; '):'none');ok(errs.length===0,'no page errors');
  console.log('\nRESULT (sign-in):',pass,'passed,',fail,'failed');process.exit(fail?1:0)})();
