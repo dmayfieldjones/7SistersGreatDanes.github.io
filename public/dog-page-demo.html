@@ -382,7 +382,7 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
 <script src="/dog-api.js"></script>
 <script>
 window.PEDDB_LABEL='River Rock Pedigree';
-function extphotofail(img){var a=img.parentNode;a.innerHTML='<span class="noimg" style="aspect-ratio:4/3;color:var(--info);font-weight:600">Photo could not load here. Open it on their site &#8599;</span>'}
+function extphotofail(img){var a=img.parentNode;a.innerHTML='<span class="noimg" style="aspect-ratio:4/3;color:var(--info);font-weight:600">Photo on their site &#8599;</span>'}
 function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp.textContent='Photo on '+window.PEDDB_LABEL;el.replaceWith(sp)}
 (function(){
   // This script only draws what DogAPI returns and sends actions back through it. It holds no dog data of its own.
@@ -486,7 +486,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     if(d.photo) hero='<img src="'+esc(d.photo)+'" alt="'+esc(d.call)+'">';
     else if(linked.length) hero='<a class="extphoto" href="'+esc(linked[0].url)+'" target="_blank" rel="noopener" title="Opens the photo on '+esc(linked[0].label)+' in a new tab"><img src="'+esc(linked[0].url)+'" alt="Photo of '+esc(d.registered||d.short||'this dog')+', hosted by '+esc(linked[0].label)+'" onerror="extphotofail(this)"><span class="extcap">Photo from '+esc(linked[0].label)+' &#8599;</span></a>';
     else hero='<div class="noimg" style="aspect-ratio:4/3">No photo yet</div>';
-    if(linked.length)hero+='<div class="meta" style="margin-top:4px">Link only: the picture stays on '+(linked.length>1?'those sites':'their site')+'; click it to open there.'+(linked.length>1?' Also at: '+linked.slice(1).map(function(x){return '<a href="'+esc(x.url)+'" target="_blank" rel="noopener">'+esc(x.label)+' &#8599;</a>'}).join(', ')+'.':'')+'</div>';
+    if(linked.length>1)hero+='<div class="meta" style="margin-top:4px">Also at '+linked.slice(1).map(function(x){return '<a href="'+esc(x.url)+'" target="_blank" rel="noopener">'+esc(x.label)+' &#8599;</a>'}).join(', ')+'</div>';
     var pl=[];
     if(d.id===412)[['piper.jpg','Piper as a puppy'],['piper-first-litter-5-fawn-puppies-4-boys-1-girl-breeding-female-mia.jpg','First litter puppies'],['piper-captain-mother-son-tiktok-star-sweetest-dog.jpg','Piper with her son'],['piper-second-litter-3-fawn-1-brindle-puppies-with-breeding-female-cora.jpg','Second litter puppies']].forEach(function(x){pl.push({src:'7 Sisters (this site)',file:x[0],note:x[1],url:'/img/'+x[0]})});
     if(pl.length){var cm='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg> ';
