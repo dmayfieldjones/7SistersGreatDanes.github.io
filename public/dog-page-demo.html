@@ -569,6 +569,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
         if(!e)return h+'<span class="m">Unknown</span></div>';
         var parts=e[1].split(' · '),born=(parts[3]||'').slice(0,4),color=parts[1]||'';
         h+=nameEl(k,e[0])+'<span class="m">'+esc(parts[0])+(born?' · '+born:'')+(color?' · '+esc(color):'')+'</span>';
+        if(e[3])h+='<a class="cam" href="'+esc(e[3].url)+'" target="_blank" rel="noopener" title="Photo submitted by '+esc(e[3].author)+'. Opens in a new tab."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>'+esc(e[3].author)+' photo &#8599;</a>';
         if(e[2])h+='<a class="cam" href="'+esc(photourl(e[2]))+'" target="_blank" rel="noopener">'+cam+'River Rock photo &#8599;</a>';
         h+='</div>';
         if(d<D&&(P[2*k]||P[2*k+1]))h+='<div class="kids">'+node(2*k,d+1)+node(2*k+1,d+1)+'</div>';
@@ -586,6 +587,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
       if(!e){h+='<div class="'+cls+'" style="'+st+'"><span class="m">Unknown</span></div>';continue}
       var parts=e[1].split(' · '),reg=parts[0],born=(parts[3]||'').slice(0,4),color=parts[1]||'';
       h+='<div class="'+cls+'" style="'+st+'">'+nameEl(k,e[0],k!==1)+'<span class="m">'+esc(reg)+(born?' · '+born:'')+(color?' · '+esc(color):'')+'</span>';
+      if(e[3])h+='<a class="cam" href="'+esc(e[3].url)+'" target="_blank" rel="noopener" title="Photo submitted by '+esc(e[3].author)+'. Opens in a new tab."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>'+esc(e[3].author)+' photo &#8599;</a>';
       if(e[2])h+='<a class="cam" href="'+esc(photourl(e[2]))+'" target="_blank" rel="noopener" title="Photo hosted at '+esc(DB.site)+' ('+esc(DB.label)+'). Opens in a new tab."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>River Rock photo &#8599;</a>';
       h+='</div>';
     }}
