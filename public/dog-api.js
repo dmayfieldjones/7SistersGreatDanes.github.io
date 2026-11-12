@@ -428,7 +428,7 @@
       return Promise.resolve({ ok: true });
     },
     ourDogs: function () {
-      var card = function (d, note) { return { id: d.id, label: d.short || d.call || d.registered || primaryReg(d.id) || 'Unnamed dog', call: d.call || '', registered: d.registered ? titled(d) : '', sex: d.sex || '', note: note || '' }; };
+      var card = function (d, note) { return { id: d.id, label: d.short || d.call || d.registered || primaryReg(d.id) || 'Unnamed dog', call: d.call || '', reg: primaryReg(d.id) || '', registered: d.registered ? titled(d) : '', sex: d.sex || '', note: note || '' }; };
       var groups = [{ title: 'Foundation', dogs: [card(dogs[412], 'the foundation bitch')] }], by = {};
       Object.keys(dogs).forEach(function (id) {
         var d = dogs[id]; if (!d.litter || d.litter === 'L412' || d.visibility !== 'public') return;
