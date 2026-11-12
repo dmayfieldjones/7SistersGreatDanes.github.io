@@ -11,6 +11,7 @@ let pass=0,fail=0;const ok=(c,m)=>{if(c){pass++}else{fail++;console.log('  FAIL:
  const groups=[...d.querySelectorAll('#landing-groups > div')].map(g=>g.textContent.replace(/\s+/g,' ').trim());
  ok(groups.length===5&&/Foundation/.test(groups[0])&&/Rolex × Piper/.test(groups[1])&&/Sean × Piper/.test(groups[2])&&/Ezra × Piper/.test(groups[3])&&/Ezra × Mia/.test(groups[4]),'five groups: Piper, then each litter');
  ok(d.querySelectorAll('#landing [data-demo]').length===21,'21 dogs listed: Piper, her 15 offspring, and Mia\'s 5 puppies');
+ click(d.querySelector('[data-demo="416"] .nm'));await wait(1800);ok(/Pumpkin/.test(T('dog-call'))&&d.getElementById('landing').hidden,'clicking the name text inside a card opens that dog (Pumpkin)');click(d.getElementById('ourdogsbtn'));await wait(400);
  click(d.querySelector('[data-demo="413"]'));await wait(1800);ok(T('dog-call').includes('Mia')&&d.getElementById('landing').hidden,'choosing a dog opens its page');
  click(d.getElementById('ourdogsbtn'));await wait(400);click(d.querySelector('[data-demo="412"]'));await wait(1800);
  console.log('--- title, registered name and call name are three separate things');

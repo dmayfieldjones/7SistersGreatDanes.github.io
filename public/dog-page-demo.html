@@ -794,7 +794,8 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     if(t.dataset.back){ev.preventDefault();var pv=NAV.pop();if(pv)goTo(pv.id,true);return}
     if(t.dataset.added){DogAPI.markAdded(t.dataset.added).then(renderAdmin);return}
     if(t.dataset.copywanted){DogAPI.wanted().then(function(w){if(navigator.clipboard)navigator.clipboard.writeText(w.map(function(x){return x.reg}).join('\n'))}).catch(function(e){say(e&&e.message)});return}
-    if(t.dataset.demo){goTo(t.dataset.demo);return}
+    var dm=t.closest&&t.closest('[data-demo]');   // a card holds several inner spans; a click on any of them counts
+    if(dm){goTo(dm.dataset.demo);return}
     if(t.dataset.claim){run(DogAPI.claimDog(S.dog.id));return}
     if(t.dataset.landing){ev.preventDefault();showLanding();return}
     var gt=t.closest&&t.closest('[data-goto]');
