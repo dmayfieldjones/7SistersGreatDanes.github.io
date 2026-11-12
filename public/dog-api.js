@@ -68,7 +68,7 @@
 
   var pupIds = [], pupFacts = [];
   var dogs = {
-    412: { id: 412, title: 'CH', registered: 'Legado N Danekraaft’s How Can I Tell You?', call: 'Piper', short: 'Piper', sex: 'female', color: 'fawn', photo: '/img/piper.jpg', photoAuthor: 1, ext: true, litter: 'L412', visibility: 'public' },
+    412: { id: 412, title: 'CH', registered: 'Legado N Danekraaft’s How Can I Tell You?', call: 'Piper', short: 'Piper', sex: 'female', color: 'fawn', photo: '/img/piper.jpg', photoAuthor: 1, photos: [{ title: 'Piper as a puppy', url: '/img/piper.jpg', author: 1 }, { title: 'First litter puppies, July 2023', url: '/img/piper-first-litter-5-fawn-puppies-4-boys-1-girl-breeding-female-mia.jpg', author: 1 }, { title: 'Piper with her son, Sept 2023', url: '/img/piper-captain-mother-son-tiktok-star-sweetest-dog.jpg', author: 2 }, { title: 'Second litter puppies, Aug 2024', url: '/img/piper-second-litter-3-fawn-1-brindle-puppies-with-breeding-female-cora.jpg', author: 1 }], ext: true, litter: 'L412', visibility: 'public' },
     413: { id: 413, title: 'CH', registered: '7sisters N Legado’s I Wanna Dance, I Wanna Win', call: 'Mia', short: 'Mia', sex: 'female', color: 'fawn', photo: '', ext: false, litter: 'L2023', visibility: 'public' },
     414: { id: 414, title: '', registered: '7sisters N Legado’s Heart Of Gold', call: 'Cora', short: 'Cora', sex: 'female', color: 'fawn', photo: '', ext: false, litter: 'L2024', visibility: 'public' }
   };
@@ -343,10 +343,15 @@
       if (!dogs[dogId]) return fail('not_found', 'No such dog.');
       if (!canSee(dogs[dogId])) return fail('login_required', 'Sign in to see names in the pedigree.');
       var P = pedOf(dogId), out = {};
-      // photos submitted by a member for a dog (shown in the pedigree under that member's name), keyed by registration number
+      // Every photo for a dog, as {title, author, url}: members' photos first (by whoever submitted them), then photos we only link to.
+      // Members' photos are links or small files on our own site; we do not copy other sites' images.
       var mine = {};
-      Object.keys(dogs).forEach(function (id) { var d = dogs[id], r = d.photo && primaryReg(d.id); if (r) mine[regOf(r)] = { url: d.photo, author: (authors[d.photoAuthor] || {}).name || 'Member' }; });
-      Object.keys(P).forEach(function (k) { var e = P[k], rg = regOf(e[1].split(' · ')[0]); out[k] = [e[0], e[1], photoRegOf(rg), mine[rg] || null]; });
+      Object.keys(dogs).forEach(function (id) { var d = dogs[id], r = d.photos && d.photos.length && primaryReg(d.id); if (r) mine[regOf(r)] = d.photos.map(function (x) { return { title: x.title, author: (authors[x.author] || {}).name || 'Member', url: x.url }; }); });
+      Object.keys(P).forEach(function (k) {
+        var e = P[k], rg = regOf(e[1].split(' · ')[0]), rr = photoRegOf(rg), list = (mine[rg] || []).slice();
+        if (rr) list.push({ title: rr + '.jpg', author: 'River Rock Pedigree', url: 'https://breedpedigrees.com/pedpoint/images/' + encodeURIComponent(rr) + '.jpg', linked: true });
+        out[k] = [e[0], e[1], rr, list];
+      });
       if (out[1] && dogs[dogId].registered) out[1][0] = titled(dogs[dogId]);   // the root is the dog itself: its own title and registered name
       return Promise.resolve({ nodes: out });
     },

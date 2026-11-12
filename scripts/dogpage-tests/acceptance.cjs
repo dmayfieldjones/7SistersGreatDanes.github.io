@@ -65,6 +65,11 @@ let pass=0,fail=0;const ok=(c,m)=>{if(c){pass++}else{fail++;console.log('  FAIL:
  await find('OFA30F');ok(T('dog-call').includes('Mia'),'find Mia by her OFA number');
  console.log('--- pedigree names open our own page');
  await find('WS69691106');
+ const camRoot=d.querySelector('#pedgrid .pn.root a.cam');
+ ok(camRoot&&camRoot.dataset.photos==='1'&&/^[0-9]+$/.test(camRoot.querySelector('.cnt').textContent),"Piper's pedigree box has one camera icon with a count of her photos");
+ click(camRoot);const pop=d.getElementById('photopop');
+ ok(!pop.hidden&&/Piper as a puppy/.test(pop.textContent)&&/Dustin Mayfield-Jones/.test(pop.textContent)&&/Karen Mayfield-Jones/.test(pop.textContent),'clicking the icon lists each photo by title with its author');
+ click(d.body);ok(pop.hidden,'clicking elsewhere closes the photo list');
  click(d.querySelector('#pedgrid a.nm[data-anc="2"]'));await wait(1500);
  ok(/PRF Fendane Have I Gone Mad/.test(T('dog-name')),"opens Piper's sire");
  ok(T('dog-call')==='No call name recorded','no call name for an ancestor');

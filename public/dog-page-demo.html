@@ -70,7 +70,7 @@ ul.plain{padding-left:1.1rem;margin:0 0 12px}
 .onsite{display:flex;align-items:center;justify-content:center;aspect-ratio:4/3;background:var(--surface);color:var(--info);font-size:.8rem;text-decoration:none;font-weight:600}
 .pedgrid.d6 .pn,.pedgrid.d7 .pn,.pedgrid.d8 .pn{padding:1px 6px;white-space:nowrap;overflow:hidden;flex-direction:row;align-items:center;gap:6px}
 .pedgrid.d6 .pn a.nm,.pedgrid.d7 .pn a.nm,.pedgrid.d8 .pn a.nm{overflow:hidden;text-overflow:ellipsis;font-size:.66rem;font-weight:500}
-.pedgrid.d6 .pn .m,.pedgrid.d7 .pn .m,.pedgrid.d8 .pn .m,.pedgrid.d6 .pn a.cam svg,.pedgrid.d7 .pn a.cam svg,.pedgrid.d8 .pn a.cam svg{display:none}
+.pedgrid.d6 .pn .m,.pedgrid.d7 .pn .m,.pedgrid.d8 .pn .m{display:none}
 .pedgrid.d7 .pn a.nm,.pedgrid.d8 .pn a.nm{font-size:.58rem}
 .pedgrid{display:grid;gap:4px;overflow-x:auto;padding-bottom:6px}
 .pn{background:var(--card);border:1px solid var(--grid);border-left:4px solid var(--info);border-radius:6px;padding:4px 8px;font-size:.78rem;line-height:1.25;display:flex;flex-direction:column;justify-content:center;min-width:0}
@@ -89,6 +89,9 @@ ul.plain{padding-left:1.1rem;margin:0 0 12px}
 .pn .m{color:var(--muted);font-size:.7rem}
 .pn a.cam{display:inline-flex;align-items:center;gap:3px;color:var(--info);font-size:.68rem;text-decoration:none;margin-top:2px}
 .pn a.cam svg{width:12px;height:12px}
+.pn a.cam .cnt{font-size:.62rem;line-height:1;background:var(--info);color:#fff;border-radius:8px;padding:1px 4px}
+#photopop{position:absolute;z-index:50;background:var(--card,#fff);border:1px solid var(--grid);border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,.18);padding:4px;max-width:20rem;font-size:.82rem}
+#photopop a{display:block;padding:5px 8px;border-radius:6px;color:var(--ink);text-decoration:none}#photopop a:hover{background:var(--grid)}
 .parents{display:grid;grid-template-columns:repeat(auto-fill,minmax(14rem,1fr));gap:10px}
 .pcard{background:var(--card);border:1px solid var(--grid);border-radius:10px;overflow:hidden}
 .pcard .ph{display:block}.pcard .ph img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
@@ -413,6 +416,16 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     }).join('');
   }
   function showLanding(){$('landing').hidden=false;$('dogview').hidden=true;renderTop();return DogAPI.ourDogs().then(renderLanding)}
+  var PH={};
+  var CAM='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>';
+  function camBtn(k,list){PH[k]=list;var one=list.length===1;
+    return '<a class="cam" href="'+(one?esc(list[0].url):'#')+'"'+(one?' target="_blank" rel="noopener"':' data-photos="'+k+'"')+' title="'+(one?esc(list[0].author)+': '+esc(list[0].title)+'. Opens in a new tab.':list.length+' photos. Click to choose one.')+'" aria-label="'+list.length+(one?' photo':' photos')+'">'+CAM+(one?'':'<b class="cnt">'+list.length+'</b>')+'</a>'}
+  function showPhotoPop(a){
+    var list=PH[a.dataset.photos]||[],pop=$('photopop');
+    pop.innerHTML=list.map(function(x){return '<a href="'+esc(x.url)+'" target="_blank" rel="noopener"><b>'+esc(x.title)+'</b><span class="meta"> '+esc(x.author)+(x.linked?' &middot; link only':'')+'</span></a>'}).join('');
+    var r=a.getBoundingClientRect();pop.hidden=false;
+    pop.style.left=Math.max(8,Math.min(window.innerWidth-pop.offsetWidth-8,r.left+window.scrollX))+'px';pop.style.top=(r.bottom+window.scrollY+4)+'px';
+  }
   function evChip(c){return c.ev==='doc'?'<span class="chip doc">Document attached</span>':'<span class="chip self">Link only</span>'}
   function renderHeader(){
     var d=S.dog, hero;
@@ -569,8 +582,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
         if(!e)return h+'<span class="m">Unknown</span></div>';
         var parts=e[1].split(' · '),born=(parts[3]||'').slice(0,4),color=parts[1]||'';
         h+=nameEl(k,e[0])+'<span class="m">'+esc(parts[0])+(born?' · '+born:'')+(color?' · '+esc(color):'')+'</span>';
-        if(e[3])h+='<a class="cam" href="'+esc(e[3].url)+'" target="_blank" rel="noopener" title="Photo submitted by '+esc(e[3].author)+'. Opens in a new tab."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>'+esc(e[3].author)+' photo &#8599;</a>';
-        if(e[2])h+='<a class="cam" href="'+esc(photourl(e[2]))+'" target="_blank" rel="noopener">'+cam+'River Rock photo &#8599;</a>';
+        if(e[3]&&e[3].length)h+=camBtn(k,e[3]);
         h+='</div>';
         if(d<D&&(P[2*k]||P[2*k+1]))h+='<div class="kids">'+node(2*k,d+1)+node(2*k+1,d+1)+'</div>';
         return h;
@@ -587,8 +599,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
       if(!e){h+='<div class="'+cls+'" style="'+st+'"><span class="m">Unknown</span></div>';continue}
       var parts=e[1].split(' · '),reg=parts[0],born=(parts[3]||'').slice(0,4),color=parts[1]||'';
       h+='<div class="'+cls+'" style="'+st+'">'+nameEl(k,e[0],k!==1)+'<span class="m">'+esc(reg)+(born?' · '+born:'')+(color?' · '+esc(color):'')+'</span>';
-      if(e[3])h+='<a class="cam" href="'+esc(e[3].url)+'" target="_blank" rel="noopener" title="Photo submitted by '+esc(e[3].author)+'. Opens in a new tab."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>'+esc(e[3].author)+' photo &#8599;</a>';
-      if(e[2])h+='<a class="cam" href="'+esc(photourl(e[2]))+'" target="_blank" rel="noopener" title="Photo hosted at '+esc(DB.site)+' ('+esc(DB.label)+'). Opens in a new tab."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>River Rock photo &#8599;</a>';
+      if(e[3]&&e[3].length)h+=camBtn(k,e[3]);
       h+='</div>';
     }}
     grid.innerHTML=h;
@@ -751,6 +762,9 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   });
   document.addEventListener('click',function(ev){
     var t=ev.target;
+    var ph=t.closest&&t.closest('[data-photos]');
+    if(ph){ev.preventDefault();var pp=$('photopop');if(!pp.hidden&&pp.dataset.for===ph.dataset.photos){pp.hidden=true;return}pp.dataset.for=ph.dataset.photos;showPhotoPop(ph);return}
+    if(!(t.closest&&t.closest('#photopop')))$('photopop').hidden=true;
     var an=t.closest&&t.closest('[data-anc]');
     if(an){ev.preventDefault();var k=Number(an.dataset.anc);if(k!==1)DogAPI.openAncestor(S.dog.id,k).then(function(r){return goTo(r.dogId)}).catch(function(e){say(e&&e.message)});return}
     if(t.dataset.back){ev.preventDefault();var pv=NAV.pop();if(pv)goTo(pv.id,true);return}
@@ -844,5 +858,6 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   });
 })();
 </script>
+<div id="photopop" hidden></div>
 </body>
 </html>
