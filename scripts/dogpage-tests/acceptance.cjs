@@ -21,7 +21,7 @@ let pass=0,fail=0;const ok=(c,m)=>{if(c){pass++}else{fail++;console.log('  FAIL:
  const rr=[...d.querySelectorAll('#dog-ped a')].find(a=>/breedpedigrees/.test(a.href));
  ok(rr&&/id=Legado%20N%20Danekraaft(%27|')s%20How%20Can%20I%20Tell%20You%3F&/.test(rr.href)&&!/id=CH/.test(rr.href),"the River Rock link is built from the registered name alone, with no title in it");
  ok(/Legado N Danekraaft’s How Can I Tell You\?/.test(T('model-dog'))&&/"title": "CH"/.test(T('model-dog'))&&/"call": "Piper"/.test(T('model-dog')),'the data model keeps title, registered name and call name apart');
- await find('WS81418803');ok(ttl().join()==='CH'&&/I Know A Guy At Cherryhill/.test(T('dog-name'))&&T('dog-call')==='No call name recorded','a puppy with the title CH: title apart, no call name invented');
+ await find('WS81418803');ok(ttl().join()==='CH'&&/I Know A Guy At Cherryhill/.test(T('dog-name'))&&/Pumpkin/.test(T('dog-call')),'a puppy with the title CH: title apart, call name from the litter page');
  await find('WS88963901');ok(ttl().join()==='CGC'&&/With This Ring CGC$/.test(T('dog-name')),'a puppy with a title after its name (CGC) keeps it apart too');
  await find('WS69691106');
  console.log('--- Piper\'s offspring and Mia\'s');

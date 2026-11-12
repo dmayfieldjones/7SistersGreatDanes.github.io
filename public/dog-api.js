@@ -143,7 +143,7 @@
     C(6, 412, 'fact', 'Whelp date', '2020-09-26', { src: 'AKC' }),
     C(25, 413, 'fact', 'Whelp date', '2023-07-09', { src: 'AKC' }),
     C(35, 414, 'fact', 'Whelp date', '2024-08-19', { src: 'AKC' }),
-    C(2, 412, 'link', 'Embark', 'pending'), C(28, 413, 'link', 'Embark', 'pending'), C(38, 414, 'link', 'Embark', 'pending'),
+    C(2, 412, 'link', 'DNA test', 'pending'), C(28, 413, 'link', 'DNA test', 'pending'), C(38, 414, 'link', 'DNA test', 'pending'),
     C(70, 412, 'claim', 'Claimed by', 'u2', { start: '2026-11-12' }),
     C(71, 413, 'claim', 'Claimed by', 'u2', { start: '2026-11-12' }),
     C(72, 414, 'claim', 'Claimed by', 'u2', { start: '2026-11-12' }),
