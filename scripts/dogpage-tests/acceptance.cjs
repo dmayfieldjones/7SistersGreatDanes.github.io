@@ -95,6 +95,9 @@ let pass=0,fail=0;const ok=(c,m)=>{if(c){pass++}else{fail++;console.log('  FAIL:
  await API.openAncestor(412,2).then(r=>ok(!!r.dogId,'a visitor can open an ancestor of one of our public dogs'),()=>ok(false,'visitor openAncestor should work for a public dog'));
  await API.openAncestor('r:WS54036904',2).then(r=>ok(!!r.dogId,'and can keep going back, ancestor of an ancestor'),()=>ok(false,'visitor scan back'));
  await API.ourDogs().then(g=>ok(!g.some(x=>/Shared by members/.test(x.title)),'generated ancestors do not show up as shared dogs'));
+ API.visitorGens=1;await API.openAncestor(412,2).then(r=>ok(!!r.dogId,'a visitor can go one generation back when the limit is one'),()=>ok(false,'one back'));
+ await API.openAncestor(412,4).then(()=>ok(false,'two back refused at limit one'),e=>ok(e.code==='login_required'&&/further back/.test(e.message),'and is asked to sign in to go further'));
+ API.visitorGens=10;
  ok(d.querySelectorAll('#pedgrid .pn').length===31,'the visitor still sees the pedigree after returning to a public dog');
  ok(d.querySelectorAll('#parents .pcard').length===2,"own litter's parents are public");
  ok(/Not recorded/.test(T('dog-facts')),'no fact forms for a visitor (Died not recorded)');

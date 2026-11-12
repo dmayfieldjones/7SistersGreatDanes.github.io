@@ -280,6 +280,7 @@
 
   // ---- the API ----------------------------------------------------------------------------------------------------------------
   var API = {
+    visitorGens: 10,     // how far back a visitor may follow a pedigree from one of our dogs
     init: function () {
       return Promise.all([
         fetch('/data/demo-authors.json').then(function (r) { return r.json(); }).then(function (j) { authors = j; }).catch(function () { }),
@@ -371,10 +372,13 @@
       key = Number(key);
       var P = pedOf(dogId), e = P[key];
       if (!e || key === 1) return fail('not_found', 'No such ancestor.');
+      // A visitor may follow the pedigree back this many generations from one of our dogs (counted along the whole trail); further back needs a sign-in.
+      var gen = (dogs[dogId].gen || 0) + Math.floor(Math.log(key) / Math.LN2);
+      if (!isMember() && gen > API.visitorGens) return fail('login_required', 'Sign in to go further back than ' + API.visitorGens + ' generations.');
       var parts = e[1].split(' · '), reg = regOf(parts[0]), ex = dogByNumber(reg);
       if (ex !== null) return Promise.resolve({ dogId: ex });
       var id = 'r:' + reg, sp = splitTitle(e[0]), sx = (parts[2] || '').trim();
-      dogs[id] = { id: id, title: sp.title, titleSuffix: '', registered: sp.name, call: '', sex: sx === 'F' ? 'female' : (sx === 'M' ? 'male' : ''), color: (parts[1] || '').trim().toLowerCase(), photo: '', ext: true, litter: null, generated: true, visibility: 'public' };
+      dogs[id] = { id: id, title: sp.title, titleSuffix: '', registered: sp.name, call: '', sex: sx === 'F' ? 'female' : (sx === 'M' ? 'male' : ''), color: (parts[1] || '').trim().toLowerCase(), photo: '', ext: true, litter: null, generated: true, gen: gen, visibility: 'public' };
       identifiers.push({ dog: id, registry: AKCNO.test(reg) ? 'AKC' : 'Reg.', number: reg, author: 3, date: NOW() });
       var born = (parts[3] || '').trim();
       if (/^\d{4}-\d{2}-\d{2}$/.test(born)) claims.push(C(nextId++, id, 'fact', 'Whelp date', born, { src: 'Pedigree data', author: 3, date: NOW() }));
