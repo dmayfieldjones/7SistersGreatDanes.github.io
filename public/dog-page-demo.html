@@ -730,7 +730,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     // rank of this constellation by size
     var sizes=G.cs.map(function(x){return x[1]}),bigger=sizes.filter(function(x){return x>sizes[c]}).length+1;
     var med=G.cs[c][2],gap=yr-med;
-    out.push('<b>'+esc2(cname(G,c))+' constellation.</b> It is the '+(bigger===1?'largest':'No. '+bigger+' largest')+' of '+K+' in the galaxy of '+G.N.toLocaleString()+' dogs (every dog in the pedigree study, 1870 to 2026), with '+G.cs[c][1].toLocaleString()+' of them and a median birth year of '+med+'. This dog was born '+(Math.abs(gap)<=3?'right in the middle of that era':Math.abs(gap)+' years '+(gap>0?'after':'before')+' the constellation\'s middle')+'.');
+    out.push('<b>'+esc2(cname(G,c))+' constellation.</b> It is the '+(bigger===1?'largest':'No. '+bigger+' largest')+' of '+K+' in the galaxy of '+G.N.toLocaleString()+' dogs (the pedigree study, 1870 to 2020, plus our dogs and some friends\' dogs), with '+G.cs[c][1].toLocaleString()+' of them and a median birth year of '+med+'. This dog was born '+(Math.abs(gap)<=3?'right in the middle of that era':Math.abs(gap)+' years '+(gap>0?'after':'before')+' the constellation\'s middle')+'.');
     // position within the constellation and nearest neighbor
     var pr=rank(S2.by[c],S2.dist[row]),px=G.qx[row]/65535,py=G.qy[row]/65535*G.asp,best=-1,bd=1e9;
     for(var k=0;k<K;k++){if(k===c)continue;var d=Math.hypot(px-S2.cx[k],py-S2.cy[k]);if(d<bd){bd=d;best=k}}
