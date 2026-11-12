@@ -142,6 +142,9 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
   <span class="meta" id="auth-src"></span>
 </div>
 
+<div id="status" class="meta" role="status" style="min-height:1.2em;margin:0 0 6px"></div>
+<p id="signin" class="meta" hidden>You are viewing as a visitor. Sign in to add records, dispute one, or see names in the pedigree.</p>
+
 <div class="tabs" role="tablist">
   <button role="tab" aria-selected="true" data-tab="rec">Records<span class="n" id="n-rec"></span></button>
   <button role="tab" aria-selected="false" data-tab="photos">Photos</button>
@@ -294,363 +297,221 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
 </section>
 </main>
 
+<script src="/dog-api.js"></script>
 <script>
 window.PEDDB_LABEL='River Rock Pedigree';
 function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp.textContent='Photo on '+window.PEDDB_LABEL;el.replaceWith(sp)}
 (function(){
-  var authors = {};
-  var DOG = 412; // sample internal ids: 412 Piper, 413 Mia, 414 Cora
-  var DOGS = {
-    412:{id:412, registered:'CH Legado N Danekraaft\u2019s How Can I Tell You?', listName:'Legado N Danekraaft\'s How Can I Tell You?', call:'Piper', sex:'female', color:'fawn', photo:'/img/piper.jpg', ext:true},
-    413:{id:413, registered:'CH 7sisters N Legado\u2019s I Wanna Dance, I Wanna Win', listName:'7sisters N Legado\'s I Wanna Dance, I Wanna Win', call:'Mia', sex:'female', color:'fawn', photo:'', ext:false},
-    414:{id:414, registered:'7sisters N Legado\u2019s Heart Of Gold', listName:'7sisters N Legado\'s Heart Of Gold', call:'Cora', sex:'female', color:'fawn', photo:'', ext:false}
-  };
-  // A litter is stored once: its sire, dam, whelp date and breeders. Each dog points to its litter, so parents, breeders and
-  // "offspring in our records" are derived and never repeated per puppy.
-  var LITTERS = {
-    L412:{whelp:'2020-09-26', src:'AKC', author:1, breeders:['p1','p2','p3','p4'],
-      sire:{reg:'WS54036904', name:'PRF Fendane Have I Gone Mad', title:'Am CH'}, dam:{reg:'WS59632103', name:'Danekraafts It\'s a Jungle Out Here', title:'UKC & Int Ch'}},
-    L2023:{whelp:'2023-07-09', src:'AKC', author:1, breeders:['u2','u1','p2','p1'],
-      sire:{reg:'WS66273805', name:'Fendanesylcrest N Diriso\'s This Is The Right Time', title:'GCHS CH'}, dam:{reg:'WS69691106', name:'Legado N Danekraaft\'s How Can I Tell You?', title:'CH'}},
-    L2024:{whelp:'2024-08-19', src:'AKC', author:1, breeders:['u2','u1','p2','p1'],
-      sire:{reg:'WS80095602', name:'Legado N Izya\'s Oops! I Did It Again', title:''}, dam:{reg:'WS69691106', name:'Legado N Danekraaft\'s How Can I Tell You?', title:'CH'}}
-  };
-  DOGS[412].litter='L412'; DOGS[413].litter='L2023'; DOGS[414].litter='L2024';
-  var dog = DOGS[DOG];
-  // External pedigree databases we link to. Each one gets its own labeled link, like this one. Add another by copying this entry.
-  // Pages here are addressed by registered name (titles dropped), photos by registration number.
-  var DB = {
-    label: 'River Rock Pedigree',
-    site: 'https://breedpedigrees.com/',
-    short: 'River Rock',
-    page: 'https://breedpedigrees.com/pedpoint/pp_pedigree.php?id={id}&db=pedigree&gens=9',
-    photo: 'https://breedpedigrees.com/pedpoint/images/{reg}.jpg'
-  };
-  // Quintessa: its pages use an internal index we cannot compute, but its search takes a registration number and lists the match
-  // (with links to the pedigree, photo and breeding page). The site asks that it be viewed by hand, so we only link to it.
-  var DBQ = {label:'Quintessa Pedigree', site:'https://www.quintessa.net.au/', search:'https://www.quintessa.net.au/cgi-bin/geneal.pl?gens=5&pattern={id}&db=Quintess.dbw&op=search'};
+  // This script only draws what DogAPI returns and sends actions back through it. It holds no dog data of its own.
+  var S=null, PED={nodes:null,error:null}, SESSION=null, authors={}, NAV=[], editing=null, galMode='all', galNoted={};
+
+  // External pedigree databases we link to. Each one gets its own labeled link. Add another by copying an entry.
+  var DB={label:'River Rock Pedigree',site:'https://breedpedigrees.com/',short:'River Rock',
+    page:'https://breedpedigrees.com/pedpoint/pp_pedigree.php?id={id}&db=pedigree&gens=9',
+    photo:'https://breedpedigrees.com/pedpoint/images/{reg}.jpg'};
+  // Quintessa's pages use an internal index we cannot compute, but its search takes a registration number. The site asks that it be viewed by hand, so we only link to it.
+  var DBQ={label:'Quintessa Pedigree',site:'https://www.quintessa.net.au/',search:'https://www.quintessa.net.au/cgi-bin/geneal.pl?gens=5&pattern={id}&db=Quintess.dbw&op=search'};
   function qurl(n){return DBQ.search.replace('{id}',encodeURIComponent(n))}
   function pedurl(n){return DB.page.replace('{id}',encodeURIComponent(n))}
   function photourl(r){return DB.photo.replace('{reg}',encodeURIComponent(r))}
-  // A dog can have two registration numbers ("FIN26965/97 / WP81315901"); the image is named with the American one.
-  function photoReg(r,list){var parts=String(r).split(' / ');for(var i=0;i<parts.length;i++){var t=parts[i].trim();if(/^[A-Z]{2}\d{6,}$/.test(t)&&(!list||list.indexOf(t)>-1))return t}return null}
-  var identifiers = [
-    {dog:DOG, registry:'AKC', number:'WS69691106', author:1, date:'2026-11-12'},
-    {dog:DOG, registry:'OFA', number:'OFA25G', author:1, date:'2026-11-12'},
-    {dog:DOG, registry:'CHIC', number:'CHIC181340', author:1, date:'2026-11-12'},
-    {dog:413, registry:'AKC', number:'WS81418801', author:1, date:'2026-11-12'},
-    {dog:413, registry:'OFA', number:'OFA30F', author:1, date:'2026-11-12'},
-    {dog:413, registry:'CHIC', number:'CHIC215182', author:1, date:'2026-11-12'},
-    {dog:414, registry:'AKC', number:'WS84850303', author:1, date:'2026-11-12'}
-  ];
-  function mine(){return claims.filter(function(c){return c.dog===DOG})}
-  function myIds(){return identifiers.filter(function(i){return i.dog===DOG})}
-  function dogByReg(r){var i=identifiers.filter(function(x){return x.number===r})[0];return i?i.dog:null}
-  function primaryReg(){var l=myIds();return (l.filter(function(x){return x.registry==='AKC'})[0]||l[0]||{}).number}
-  // People who can be credited as breeders or owners. Names are as AKC lists them; set consent:false on a person to show only a short form.
-  var PEOPLE = {
-    u1:{label:'Dustin Mayfield-Jones', member:1, consent:true},
-    u2:{label:'Karen Mayfield-Jones', member:2, consent:true},
-    p1:{label:'Jason L Dubman', member:null, consent:true},
-    p2:{label:'Francisco Camacho', member:null, consent:true},
-    p3:{label:'Priyanka Deshmuhk', member:null, consent:true},
-    p4:{label:'Phoebe Dubman', member:null, consent:true},
-    p5:{label:'Karen Martin', member:null, consent:true}
-  };
-  // Cross-references: the claim stores only the identifier, and the link is built from a template.
-  // AKC: add the lookup address pattern here ({id} = registration number) and the link switches on.
-  // OFA's own search box submits GET /advanced-search?quicksearch=<Reg#, Litter#, OFA#, name or kennel>. (Their old ?regnum= no longer works.)
-  // To verify: click the OFA link on a dog page and check that the record appears. The CHIC number has no page of its own: the CHIC status is part of the OFA record, so only the OFA line links.
-  // AKC still needs its public address pattern before it becomes a link.
-  var XREF = {OFA:'https://ofa.org/advanced-search/?quicksearch={id}', AKC:'', CHIC:'', AKCPTS:'https://shop.akc.org/collections/akc-reports-pedigree'};
-  // AKC's report store has a Points Progression report (needs a free AKC login): you enter the number there, so it is a link, not a per-dog page.
-  var XLABEL = {OFA:'OFA Results', AKC:'AKC record', AKCPTS:'AKC points report (free AKC login; enter this number)'};
-  function xurl(c){return XREF[c.name] && c.value ? XREF[c.name].replace('{id}',encodeURIComponent(c.value)) : c.url}
-  var claims = [
-    {id:25, dog:413, type:'fact', name:'Whelp date', value:'2023-07-09', url:'', src:'AKC', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
-    {id:28, dog:413, type:'link', name:'Embark', value:'pending', url:'', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
-    {id:35, dog:414, type:'fact', name:'Whelp date', value:'2024-08-19', url:'', src:'AKC', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
-    {id:38, dog:414, type:'link', name:'Embark', value:'pending', url:'', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
-    {id:17, dog:DOG, type:'ownership', name:'Ownership', value:'u2', co:['u1','p2','p1'], start:'2020-12-02', end:'', url:'', src:'AKC', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
-    {id:51, dog:413, type:'ownership', name:'Ownership', value:'u2', co:['u1','p2','p5'], start:'2026-08-01', end:'', url:'', src:'AKC', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
-    {id:52, dog:413, type:'ownership', name:'Ownership', value:'u2', co:['u1','p5'], start:'2026-02-26', end:'2026-08-01', url:'', src:'AKC', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
-    {id:53, dog:413, type:'ownership', name:'Ownership', value:'u2', co:['u1'], start:'2023-08-29', end:'2026-02-26', url:'', src:'AKC', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
-    {id:54, dog:413, type:'ownership', name:'Ownership', value:'u2', co:['u1','p2','p1'], start:'2023-07-09', end:'2023-08-29', url:'', src:'AKC', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
-    {id:55, dog:414, type:'ownership', name:'Ownership', value:'u2', co:['u1','p2','p5'], start:'2026-08-01', end:'', url:'', src:'AKC', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
-    {id:56, dog:414, type:'ownership', name:'Ownership', value:'u2', co:['u1','p5'], start:'2026-02-26', end:'2026-08-01', url:'', src:'AKC', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
-    {id:57, dog:414, type:'ownership', name:'Ownership', value:'u2', co:['u1'], start:'2025-01-17', end:'2026-02-26', url:'', src:'AKC', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
-    {id:58, dog:414, type:'ownership', name:'Ownership', value:'u2', co:['u1','p2','p1'], start:'2024-08-19', end:'2025-01-17', url:'', src:'AKC', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
-    {id:70, dog:412, type:'claim', name:'Claimed by', value:'u2', start:'2026-11-12', url:'', src:'', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
-    {id:71, dog:413, type:'claim', name:'Claimed by', value:'u2', start:'2026-11-12', url:'', src:'', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
-    {id:72, dog:414, type:'claim', name:'Claimed by', value:'u2', start:'2026-11-12', url:'', src:'', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
-    {id:6, dog:DOG, type:'fact', name:'Whelp date', value:'2020-09-26', url:'', src:'AKC', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
-    {id:7, dog:DOG, type:'litter', name:'Rolex', value:'Litter page', url:'/RolexXPiper', whelp:'2023-07-09', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
-    {id:8, dog:DOG, type:'litter', name:'Sean', value:'Litter page', url:'/SeanXPiper', whelp:'2024-08-19', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
-    {id:9, dog:DOG, type:'litter', name:'Ezra', value:'Litter page', url:'/EzraxPiper', whelp:'2026-03-23', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
-    {id:2, dog:DOG, type:'link', name:'Embark', value:'pending', url:'', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
-    {id:3, dog:DOG, type:'test', name:'Echocardiogram (sample)', value:'Normal', url:'https://example.org/sample-cert', ver:1, author:1, date:'2026-09-14', ev:'doc', status:'visible', flags:[
-      {author:2, reason:'Wrong date', evidence:'https://example.org/sample-report', date:'2026-09-16'}
-    ]},
-    {id:4, dog:DOG, type:'test', name:'Temperament test (sample)', value:'Pass', url:'https://example.org/sample-cert-2', ver:1, author:2, date:'2026-10-02', ev:'doc', status:'visible', flags:[]},
-    {id:5, dog:DOG, type:'win', name:'Sample specialty show', value:'Best of Winners', url:'https://example.org/sample-results', ver:1, author:1, date:'2026-10-20', ev:'link', status:'visible', flags:[]}
-  ];
-  var requests = [
-    {id:'r1', name:'Taylor Brooks', role:'Breeder', verify:'Kennel website and AKC breeder listing'},
-    {id:'r2', name:'xX_dane_lover_Xx', role:'Owner', verify:'None provided'}
-  ];
-  var NAV = [], WANTED = {}, logs = [], nextId = 80, me = 2, MAPPED = [0,1,2], editing = null, suggestions = [];
-  var CAUSES = ['Old age','Heart disease','Bloat (GDV)','Cancer','Wobbler or neurologic','Musculoskeletal (euthanized for mobility loss)','Accident','Infectious disease','Other','Unknown'];
-  var FACTS = [{name:'Whelp date',label:'Born',kind:'date'},{name:'Death date',label:'Died',kind:'date'},{name:'Cause of death',label:'Cause of death',kind:'cause'}];
+  // Cross-references: a link is built from a registration number and a template.
+  // OFA's own search box submits GET /advanced-search?quicksearch=<number>. The CHIC number has no page of its own (its status is part of the OFA record).
+  // AKC still needs its public address pattern before it becomes a link. AKC's report store has a free Points Progression report (needs an AKC login).
+  var XREF={OFA:'https://ofa.org/advanced-search/?quicksearch={id}',AKC:'',CHIC:'',AKCPTS:'https://shop.akc.org/collections/akc-reports-pedigree'};
+  var XLABEL={OFA:'OFA Results',AKC:'AKC record',AKCPTS:'AKC points report (free AKC login; enter this number)'};
+  function xurl(c){return XREF[c.name]&&c.value?XREF[c.name].replace('{id}',encodeURIComponent(c.value)):c.url}
+  var CAUSES=['Old age','Heart disease','Bloat (GDV)','Cancer','Wobbler or neurologic','Musculoskeletal (euthanized for mobility loss)','Accident','Infectious disease','Other','Unknown'];
+  var FACTS=[{name:'Whelp date',label:'Born',kind:'date'},{name:'Death date',label:'Died',kind:'date'},{name:'Cause of death',label:'Cause of death',kind:'cause'}];
+  var TITLE=/^(AM|CAN|INT|MEX|NORD|EST|SWD|FIN|JPN|UKC|AKC|CH|GCH\w*|BISS?|BIS|ROM|HOF|AOM|&)$/i;
 
+  function $(id){return document.getElementById(id)}
   function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
-  function today(){return new Date().toISOString().slice(0,10)}
-  function A(id){return authors[id] || {name:'Author #'+id, role:'', status:'unknown'}}
+  function A(id){return authors[id]||{name:'Author #'+id,role:'',status:'unknown'}}
   function who(id){var a=A(id);return '<span class="who">'+esc(a.name)+'</span> <span class="meta">#'+id+'</span>'+(a.role?' <span class="chip role">'+esc(a.role)+'</span>':'')}
-
-  function fillAuthors(){
-    document.querySelectorAll('[data-a]').forEach(function(el){el.textContent=A(el.dataset.a).name});
-    var sel=document.getElementById('me');
-    sel.innerHTML=MAPPED.map(function(i){var a=A(i);return '<option value="'+i+'">'+esc(a.name)+(i?' (#'+i+')':'')+'</option>'}).join('');
-    sel.value=me;
-    renderDog();
-    document.getElementById('model-authors').textContent=JSON.stringify(authors,null,2);
-  }
-
-  function evChip(c){
-    if(c.ev==='doc') return '<span class="chip doc">Document attached</span>';
-    return '<span class="chip self">Link only</span>';
-  }
-
-  function renderLinks(){
-    var rows=mine().filter(function(c){return c.type==='link'&&c.status==='visible'});
-    myIds().forEach(function(i){ if(i.registry==='AKC'){ rows.unshift({name:'AKCPTS',value:i.number,url:'',author:i.author,date:i.date}); rows.unshift({name:'AKC',value:i.number,url:'',author:i.author,date:i.date}); } if(i.registry==='AKC'||i.registry==='Reg.'){ rows.unshift({name:'OFA',value:i.number,url:'',author:i.author,date:i.date}); } });
-    document.getElementById('links').innerHTML = rows.length ? rows.map(function(c){
-      var u = xurl(c);
-      var target = u ? '<a href="'+esc(u)+'" target="_blank" rel="noopener">'+esc(c.value)+' '+esc(XLABEL[c.name]||c.name)+'</a>' : '<span>'+esc(c.name)+' <span class="chip self">'+esc(c.value||'none yet')+'</span></span>';
-      return '<div class="card linkout"><div class="row">'+target+'<span class="meta">added by</span> '+who(c.author)+'<span class="meta">'+c.date+'</span><span class="chip demo">Demo data</span></div></div>';
-    }).join('') : '<div class="empty">No links yet.</div>';
-  }
-
-  function myLitter(){return LITTERS[dog.litter]}
+  function pn(id){var pe=(S&&S.people||{})[id]||{label:'Unknown'};return '<span'+(pe.consent?'':' title="Short form shown until this person agrees to be listed"')+'>'+esc(pe.label)+'</span>'}
   function splitTitle(n){var t=String(n).split(' '),ti=[];while(t.length&&TITLE.test(t[0].replace(/,$/,''))){ti.push(t.shift())}return {title:ti.join(' '),name:t.join(' ')}}
-  function regOf(r){var parts=String(r).split(' / ');for(var i=0;i<parts.length;i++){var t=parts[i].trim();if(/^[A-Z]{2}\d{6,}$/.test(t))return t}return parts[0].trim()}
-  function parentRows(){
-    var L=myLitter();
-    if(L) return [{name:'Sire',p:L.sire,key:2,author:L.author,src:'litter record'},{name:'Dam',p:L.dam,key:3,author:L.author,src:'litter record'}];
-    var P=PEDS[DOG]||{};
-    return [[2,'Sire'],[3,'Dam']].filter(function(x){return P[x[0]]}).map(function(x){var e=P[x[0]],sp=splitTitle(e[0]);return {name:x[1],p:{reg:regOf(e[1].split(' · ')[0]),name:sp.name,title:sp.title},key:x[0],author:3,src:'pedigree data'}});
+  function labelOf(d){return d.call||splitTitle(d.registered).name||d.registered}
+  function idArg(v){return (typeof v==='string'&&v!==''&&!isNaN(+v))?Number(v):v}
+  function primaryReg(){var l=S.identifiers;return (l.filter(function(x){return x.registry==='AKC'})[0]||l[0]||{}).number}
+  function say(m){$('status').textContent=m||''}
+  // Run an API call, then refresh the page's snapshot. A refused call shows its message instead.
+  function run(p){return p.then(function(r){say('');return reload().then(function(){return r})}).catch(function(e){say(e&&e.message?e.message:'Something went wrong.')})}
+
+  // ---- loading ----
+  function load(id){
+    return DogAPI.getDog(id).then(function(s){S=s;return DogAPI.getPedigree(id,8).then(function(p){PED={nodes:p.nodes,error:null}},function(e){PED={nodes:null,error:e}})}).then(function(){editing=null;renderAll();renderGalaxy()}).catch(function(e){say(e&&e.message?e.message:'That dog could not be loaded.')});
+  }
+  function reload(){return DogAPI.getDog(S.dog.id).then(function(s){S=s;renderAll()})}
+  function goTo(id,back){
+    id=idArg(id);
+    if(!back&&S&&id!==S.dog.id){NAV.push({id:S.dog.id,label:labelOf(S.dog)});if(NAV.length>30)NAV.shift()}
+    return load(id);
+  }
+
+  // ---- drawing ----
+  function renderAll(){renderSession();renderHeader();renderFacts();renderLinks();renderParents();renderOffspring();renderLitters();renderEntries();renderDog();renderModel();renderPed();renderAdmin()}
+  function renderSession(){
+    var opts=[['v','Visitor (not signed in)']].concat([0,1,2].map(function(i){return [String(i),A(i).name+(i?' (#'+i+')':'')]}));
+    var cur=SESSION.actor===null?'v':String(SESSION.actor);
+    $('me').innerHTML=opts.map(function(o){return '<option value="'+o[0]+'">'+esc(o[1])+'</option>'}).join('');$('me').value=cur;
+    $('signin').hidden=S.perm.loggedIn;
+    ['new-litter','new-rec'].forEach(function(id){$(id).parentNode.hidden=!S.perm.canAdd});
+    document.querySelectorAll('[data-a]').forEach(function(el){el.textContent=A(el.dataset.a).name});
+  }
+  function evChip(c){return c.ev==='doc'?'<span class="chip doc">Document attached</span>':'<span class="chip self">Link only</span>'}
+  function renderHeader(){
+    var d=S.dog, hero;
+    $('dog-sub').innerHTML='Great Dane'+(d.sex?' &middot; '+esc(d.sex):'')+(d.color?' &middot; '+esc(d.color):'')+(d.hasLitter?' &middot; 7Sisters Farm':'');
+    if(d.photo) hero='<img src="'+esc(d.photo)+'" alt="'+esc(d.call)+'">';
+    else if(d.photoReg) hero='<a class="noimg" style="aspect-ratio:4/3;text-decoration:none;color:var(--info);font-weight:600" href="'+esc(photourl(d.photoReg))+'" target="_blank" rel="noopener" title="Photo hosted at '+esc(DB.site)+' ('+esc(DB.label)+'). Opens in a new tab.">'+esc(DB.short)+' photo &#8599;</a>';
+    else hero='<div class="noimg" style="aspect-ratio:4/3">No photo yet</div>';
+    $('dog-hero').innerHTML=hero;
+    $('photos-412').hidden=d.id!==412;$('photos-none').hidden=d.id===412;
+    var pn_=$('pendingnote');
+    if(d.pending){pn_.hidden=false;pn_.innerHTML='<b>We don\'t have this dog yet.</b> Your search has been noted so it can be considered for the next update to our data. Meanwhile, the links below go to the places that may have it.'}
+    else if(d.inGalaxy){pn_.hidden=false;pn_.innerHTML='<b>This dog is on the map, but we don\'t have its name or pedigree yet.</b> The map above shows its ancestry anonymously. Open it on Quintessa or River Rock to see names, or add its details to claim it.'}
+    else pn_.hidden=true;
+    $('backrow').innerHTML=NAV.length?'<a href="#" data-back="1">&larr; Back to '+esc(NAV[NAV.length-1].label)+'</a>':'';
+  }
+  function renderLinks(){
+    var rows=S.claims.filter(function(c){return c.type==='link'&&c.status==='visible'});
+    S.identifiers.forEach(function(i){
+      if(i.registry==='AKC'){rows.unshift({name:'AKCPTS',value:i.number,url:'',author:i.author,date:i.date});rows.unshift({name:'AKC',value:i.number,url:'',author:i.author,date:i.date})}
+      if(i.registry==='AKC'||i.registry==='Reg.'){rows.unshift({name:'OFA',value:i.number,url:'',author:i.author,date:i.date})}
+    });
+    $('links').innerHTML=rows.length?rows.map(function(c){
+      var u=xurl(c);
+      var target=u?'<a href="'+esc(u)+'" target="_blank" rel="noopener">'+esc(c.value)+' '+esc(XLABEL[c.name]||c.name)+'</a>':'<span>'+esc(c.name)+' <span class="chip self">'+esc(c.value||'none yet')+'</span></span>';
+      return '<div class="card linkout"><div class="row">'+target+'<span class="meta">added by</span> '+who(c.author)+'<span class="meta">'+c.date+'</span><span class="chip demo">Demo data</span></div></div>';
+    }).join(''):'<div class="empty">No links yet.</div>';
   }
   function renderParents(){
-    var rows=parentRows();
-    document.getElementById('parents').innerHTML=rows.map(function(r){
-      var c={name:r.name,value:r.p.name,reg:r.p.reg,title:r.p.title}, tgt=dogByReg(c.reg), ttl=(c.title?c.title+' ':'')+c.value;
-      var pr=photoReg(c.reg,HASPHOTO), attr=tgt!==null&&tgt!==undefined?'data-goto="'+tgt+'"':'data-anc="'+r.key+'"';
-      var tile=pr?'<a class="ph" href="'+esc(photourl(pr))+'" target="_blank" rel="noopener" title="Photo hosted at '+esc(DB.site)+' ('+esc(DB.label)+'). Opens in a new tab."><img src="'+esc(photourl(pr))+'" alt="'+esc(c.value)+'" loading="lazy" onerror="noimg(this)"></a>':'<a class="onsite" href="#" '+attr+'>Open this dog\'s page</a>';
-      return '<div class="pcard">'+tile+'<div class="pb"><span class="meta">'+esc(c.name)+'</span><b><a href="#" '+attr+'>'+esc(ttl)+'</a></b><span class="meta">'+esc(c.reg)+'</span><br><span class="meta">From the '+esc(r.src)+', added by </span>'+who(r.author)+'</div></div>';
+    if(S.parentsRestricted){$('parents').innerHTML='<div class="empty">Sign in to see parents from the pedigree data.</div>';return}
+    $('parents').innerHTML=S.parents.map(function(r){
+      var ttl=(r.title?r.title+' ':'')+r.name, attr=(r.dogId!==null&&r.dogId!==undefined)?'data-goto="'+r.dogId+'"':'data-anc="'+r.key+'"';
+      var tile=r.photoReg?'<a class="ph" href="'+esc(photourl(r.photoReg))+'" target="_blank" rel="noopener" title="Photo hosted at '+esc(DB.site)+' ('+esc(DB.label)+'). Opens in a new tab."><img src="'+esc(photourl(r.photoReg))+'" alt="'+esc(r.name)+'" loading="lazy" onerror="noimg(this)"></a>':'<a class="onsite" href="#" '+attr+'>Open this dog\'s page</a>';
+      return '<div class="pcard">'+tile+'<div class="pb"><span class="meta">'+esc(r.role)+'</span><b><a href="#" '+attr+'>'+esc(ttl)+'</a></b><span class="meta">'+esc(r.reg)+'</span><br><span class="meta">From the '+esc(r.src)+', added by </span>'+who(r.author)+'</div></div>';
     }).join('')||'<div class="empty">No parents recorded.</div>';
   }
   function renderOffspring(){
-    var reg=primaryReg(), kids={};
-    Object.keys(DOGS).forEach(function(id){var d=DOGS[id], L=LITTERS[d.litter]; if(!L||String(id)===String(DOG))return; if(L.dam.reg===reg)kids[id]='her'; else if(L.sire.reg===reg)kids[id]='his'});
-    var ids=Object.keys(kids);
-    document.getElementById('offspring').innerHTML=ids.length?ids.map(function(id){var d=DOGS[id];var w=(claims.filter(function(c){return String(c.dog)===String(id)&&c.type==='fact'&&c.name==='Whelp date'})[0]||{}).value||'';return '<button class="sm" data-goto="'+id+'" style="margin:0 6px 6px 0">'+esc(d.call)+' <span class="meta">('+kids[id]+' offspring, '+esc(w)+')</span></button>'}).join(''):'<div class="empty">None of this dog\'s offspring are in our records yet.</div>';
+    $('offspring').innerHTML=S.offspring.length?S.offspring.map(function(k){return '<button class="sm" data-goto="'+k.dogId+'" style="margin:0 6px 6px 0">'+esc(k.call)+' <span class="meta">('+k.role+' offspring, '+esc(k.whelp)+')</span></button>'}).join(''):'<div class="empty">None of this dog\'s offspring are in our records yet.</div>';
   }
   function renderLitters(){
-    var rows=mine().filter(function(c){return c.type==='litter'&&c.status==='visible'}).sort(function(a,b){return a.whelp<b.whelp?1:-1});
-    document.getElementById('litters').innerHTML=rows.length?'<div class="tw"><table><thead><tr><th>Whelped</th><th>Other parent</th><th>Link</th><th>Added by</th></tr></thead><tbody>'+rows.map(function(c){
+    var rows=S.claims.filter(function(c){return c.type==='litter'&&c.status==='visible'}).sort(function(a,b){return a.whelp<b.whelp?1:-1});
+    $('litters').innerHTML=rows.length?'<div class="tw"><table><thead><tr><th>Whelped</th><th>Other parent</th><th>Link</th><th>Added by</th></tr></thead><tbody>'+rows.map(function(c){
       return '<tr><td>'+esc(c.whelp)+'</td><td>'+esc(c.name)+'</td><td><a href="'+esc(c.url)+'" target="_blank" rel="noopener">'+esc(c.value)+'</a></td><td>'+who(c.author)+'</td></tr>';
     }).join('')+'</tbody></table></div>':'<div class="empty">No litters yet.</div>';
   }
   function renderEntries(){
-    var rows=mine().filter(function(c){return c.type==='test'||c.type==='win'});
-    document.getElementById('entries').innerHTML = rows.map(function(c){
-      var hidden=c.status==='hidden', old=c.status==='superseded';
+    var rows=S.claims.filter(function(c){return c.type==='test'||c.type==='win'});
+    $('entries').innerHTML=rows.map(function(c){
+      var hidden=c.status==='hidden',old=c.status==='superseded';
       var h='<article class="card'+(hidden?' hidden-entry':'')+(old?' old':'')+'">';
       h+='<div class="row">'+who(c.author)+'<span>'+c.date+'</span><span class="chip demo">Demo data</span>';
-      if(!hidden) h+=evChip(c);
-      if(c.ver>1) h+='<span class="chip self">v'+c.ver+'</span>';
-      if(old) h+='<span class="chip self">superseded</span>';
-      if(c.flags.length&&!old) h+='<span class="chip disp">'+c.flags.length+' flagged</span>';
+      if(!hidden)h+=evChip(c);
+      if(c.ver>1)h+='<span class="chip self">v'+c.ver+'</span>';
+      if(old)h+='<span class="chip self">superseded</span>';
+      if(c.flags.length&&!old)h+='<span class="chip disp">'+c.flags.length+' flagged</span>';
       h+='</div>';
-      if(hidden){
-        h+='<p class="val"><i>Hidden by administrator. Reason: '+esc(c.reason||'')+'</i></p><p class="meta">The record is kept. It is not deleted.</p>';
-      } else {
+      if(hidden){h+='<p class="val"><i>Hidden by administrator. Reason: '+esc(c.reason||'')+'</i></p><p class="meta">The record is kept. It is not deleted.</p>'}
+      else{
         h+='<div class="val"><span class="title">'+esc(c.name)+':</span> '+esc(c.value)+'</div>';
-        if(c.url) h+='<div class="meta"><a href="'+esc(c.url)+'" target="_blank" rel="noopener">evidence link</a></div>';
-        if(c.flags.length&&!old) h+='<ul class="plain meta">'+c.flags.map(function(f){return '<li>Flagged by '+esc(A(f.author).name)+' on '+f.date+': <b>'+esc(f.reason)+'</b>'+(f.evidence?' (<a href="'+esc(f.evidence)+'" target="_blank" rel="noopener">evidence</a>)':'')+'</li>'}).join('')+'</ul>';
-        if(!old){
-          h+='<div style="margin-top:6px"><form class="f" data-flag="'+c.id+'" style="display:inline-grid;grid-template-columns:auto auto auto;gap:6px;align-items:center"><select name="reason" aria-label="Reason"><option>Wrong dog</option><option>Wrong date</option><option>Wrong result</option><option>Duplicate</option></select><input type="url" name="ev" placeholder="Evidence link" required><button class="sm" type="submit">Flag as incorrect</button></form>';
-          if(me===c.author) h+=' <button class="sm" type="button" data-correct="'+c.id+'">Post correction (new version)</button>';
-          if(me===0) h+=' <button class="sm danger" type="button" data-hide="'+c.id+'">Hide (admin)</button>';
+        if(c.url)h+='<div class="meta"><a href="'+esc(c.url)+'" target="_blank" rel="noopener">evidence link</a></div>';
+        if(c.flags.length&&!old)h+='<ul class="plain meta">'+c.flags.map(function(f){return '<li>Flagged by '+esc(A(f.author).name)+' on '+f.date+': <b>'+esc(f.reason)+'</b>'+(f.evidence?' (<a href="'+esc(f.evidence)+'" target="_blank" rel="noopener">evidence</a>)':'')+'</li>'}).join('')+'</ul>';
+        if(!old&&(c.can.flag||c.can.correct||c.can.hide)){
+          h+='<div style="margin-top:6px">';
+          if(c.can.flag)h+='<form class="f" data-flag="'+c.id+'" style="display:inline-grid;grid-template-columns:auto auto auto;gap:6px;align-items:center"><select name="reason" aria-label="Reason"><option>Wrong dog</option><option>Wrong date</option><option>Wrong result</option><option>Duplicate</option></select><input type="url" name="ev" placeholder="Evidence link" required><button class="sm" type="submit">Flag as incorrect</button></form>';
+          if(c.can.correct)h+=' <button class="sm" type="button" data-correct="'+c.id+'">Post correction (new version)</button>';
+          if(c.can.hide)h+=' <button class="sm danger" type="button" data-hide="'+c.id+'">Hide (admin)</button>';
           h+='</div>';
         }
       }
       return h+'</article>';
     }).join('')||'<div class="empty">No entries yet.</div>';
-    document.getElementById('n-rec').textContent='('+mine().filter(function(c){return c.status==='visible'}).length+')';
+    $('n-rec').textContent='('+S.claims.filter(function(c){return c.status==='visible'}).length+')';
   }
-
-  function fact(n){return mine().filter(function(c){return c.type==='fact'&&c.name===n&&c.status==='visible'})[0]}
+  function fact(n){return S.claims.filter(function(c){return c.type==='fact'&&c.name===n&&c.status==='visible'})[0]}
   function factForm(f,cur){
-    var inp = f.kind==='text' ? '<input type="text" name="v" maxlength="60" required placeholder="Name or kennel" value="'+esc(cur?cur.value:'')+'"><label class="meta"><input type="checkbox" name="akc"'+(cur&&cur.src?' checked':'')+'> From AKC record</label>'
-      : f.kind==='date' ? '<input type="date" name="v" required value="'+esc(cur?cur.value:'')+'">'
-      : '<select name="v" required><option value="">Choose…</option>'+CAUSES.map(function(c){return '<option'+(cur&&cur.value===c?' selected':'')+'>'+esc(c)+'</option>'}).join('')+'</select><input type="text" name="other" maxlength="60" placeholder="Describe (short)" hidden>';
+    var inp=f.kind==='text'?'<input type="text" name="v" maxlength="60" required placeholder="Name or kennel" value="'+esc(cur?cur.value:'')+'"><label class="meta"><input type="checkbox" name="akc"'+(cur&&cur.src?' checked':'')+'> From AKC record</label>'
+      :f.kind==='date'?'<input type="date" name="v" required value="'+esc(cur?cur.value:'')+'">'
+      :'<select name="v" required><option value="">Choose…</option>'+CAUSES.map(function(c){return '<option'+(cur&&cur.value===c?' selected':'')+'>'+esc(c)+'</option>'}).join('')+'</select><input type="text" name="other" maxlength="60" placeholder="Describe (short)" hidden>';
     return '<form class="inline" data-fact="'+esc(f.name)+'" oninput="var o=this.elements.other;if(o){var sh=this.elements.v.value===\'Other\';o.hidden=!sh;o.required=sh}">'+inp+'<button class="sm primary" type="submit">Save</button>'+(cur?'<button class="sm" type="button" data-fcancel="1">Cancel</button>':'')+(f.kind==='cause'?' <button class="sm" type="button" data-suggest="1">Suggest a category</button>':'')+'</form>';
   }
   function renderFacts(){
-    document.getElementById('dog-facts').innerHTML=FACTS.map(function(f){
-      var c=fact(f.name), h='<dt>'+f.label+'</dt><dd>';
-      if(editing===f.name||!c){
-        h+=(c||!c&&true)?factForm(f,editing===f.name?c:null):'';
-      } else {
+    $('dog-facts').innerHTML=FACTS.map(function(f){
+      var c=fact(f.name),h='<dt>'+f.label+'</dt><dd>';
+      if(editing===f.name||!c){h+=S.perm.canAdd?factForm(f,editing===f.name?c:null):'<span class="meta">Not recorded</span>'}
+      else{
         h+=esc(c.value)+(c.src?' <span class="chip doc">'+esc(c.src)+' record</span>':'')+'<span class="fact-by">'+(c.url?'<a href="'+esc(c.url)+'">source</a> &middot; ':'')+'by '+esc(A(c.author).name)+' #'+c.author+(c.ver>1?' &middot; v'+c.ver:'')+'</span>';
-        if(c.flags.length) h+=' <span class="chip disp">'+c.flags.length+' disputed</span>';
-        if(me===c.author||me===0) h+=' <button class="sm" data-fedit="'+esc(f.name)+'">Correct</button>';
-        if(me!==c.author) h+=' <button class="sm" data-fflag="'+esc(f.name)+'">Dispute</button>';
+        if(c.flags.length)h+=' <span class="chip disp">'+c.flags.length+' disputed</span>';
+        if(c.can.correct)h+=' <button class="sm" data-fedit="'+esc(f.name)+'">Correct</button>';
+        if(c.can.flag)h+=' <button class="sm" data-fflag="'+esc(f.name)+'">Dispute</button>';
       }
       return h+'</dd>';
     }).join('');
   }
-  function labelOf(d){return d.call||splitTitle(d.registered).name||d.registered}
-  function renderHeader(){
-    var reg0=primaryReg(), pr=reg0?photoReg(reg0,HASPHOTO):null, hero;
-    document.getElementById('dog-sub').innerHTML='Great Dane'+(dog.sex?' &middot; '+esc(dog.sex):'')+(dog.color?' &middot; '+esc(dog.color):'')+(dog.litter?' &middot; 7Sisters Farm':'');
-    if(dog.photo) hero='<img src="'+esc(dog.photo)+'" alt="'+esc(dog.call)+'">';
-    else if(pr) hero='<a class="noimg" style="aspect-ratio:4/3;text-decoration:none;color:var(--info);font-weight:600" href="'+esc(photourl(pr))+'" target="_blank" rel="noopener" title="Photo hosted at '+esc(DB.site)+' ('+esc(DB.label)+'). Opens in a new tab.">'+esc(DB.short)+' photo &#8599;</a>';
-    else hero='<div class="noimg" style="aspect-ratio:4/3">No photo yet</div>';
-    document.getElementById('dog-hero').innerHTML=hero;
-    document.getElementById('photos-412').hidden=DOG!==412;
-    document.getElementById('photos-none').hidden=DOG===412;
-    var pn=document.getElementById('pendingnote');
-    if(dog.pending){pn.hidden=false;pn.innerHTML='<b>We don\'t have this dog yet.</b> Your search has been noted so it can be considered for the next update to our data. Meanwhile, the links below go to the places that may have it.'}
-    else if(dog.inGalaxy){pn.hidden=false;pn.innerHTML='<b>This dog is on the map, but we don\'t have its name or pedigree yet.</b> The map above shows its ancestry anonymously. Open it on Quintessa or River Rock to see names, or add its details to claim it.'}
-    else pn.hidden=true;
-    document.getElementById('backrow').innerHTML=NAV.length?'<a href="#" data-back="1">&larr; Back to '+esc(labelOf(DOGS[NAV[NAV.length-1]]))+'</a>':'';
-  }
-  function switchDog(id,back){
-    var nid=(typeof id==='string'&&isNaN(+id))?id:Number(id);
-    if(!back&&nid!==DOG){NAV.push(DOG);if(NAV.length>30)NAV.shift()}
-    DOG=nid;dog=DOGS[DOG];editing=null;
-    render();renderPed();fillAuthors();renderGalaxy();
-  }
-  // Wanted list: dogs people asked for that we do not fully have. In production this is a table the admin can export.
-  function logWanted(reg,how){var w=WANTED[reg]||(WANTED[reg]={count:0,first:today(),how:how});w.count++;w.last=today();w.how=how;renderAdmin()}
-  function reroot(src,k){var out={};for(var d=0;d<=8;d++){for(var off=0;off<(1<<d);off++){var from=k*(1<<d)+off;if(src[from])out[(1<<d)+off]=src[from]}}return out}
-  function openAncestor(k){
-    var e=(PEDS[DOG]||{})[k]; if(!e||k===1)return;
-    var parts=e[1].split(' · '), reg=regOf(parts[0]), ex=dogByReg(reg);
-    if(ex!==null&&ex!==undefined){switchDog(ex);return}
-    var id='r:'+reg;
-    if(!DOGS[id]){
-      var sp=splitTitle(e[0]), sx=(parts[2]||'').trim();
-      DOGS[id]={id:id,registered:e[0],listName:sp.name,call:'',sex:sx==='F'?'female':sx==='M'?'male':'',color:(parts[1]||'').trim().toLowerCase(),photo:'',ext:true,litter:null};
-      identifiers.push({dog:id,registry:/^[A-Z]{2}\d{6,}$/.test(reg)?'AKC':'Reg.',number:reg,author:3,date:today()});
-      var born=(parts[3]||'').trim();
-      if(/^\d{4}-\d{2}-\d{2}$/.test(born))claims.push({id:nextId++,dog:id,type:'fact',name:'Whelp date',value:born,url:'',src:'Pedigree data',ver:1,author:3,date:today(),ev:'link',status:'visible',flags:[]});
-      PEDS[id]=reroot(PEDS[DOG],k);
-    }
-    switchDog(id);
-  }
-  function openUnknown(raw){
-    var reg=raw.toUpperCase().replace(/\s+/g,''), ex=dogByReg(reg);
-    if(ex!==null&&ex!==undefined){switchDog(ex);return}
-    var id='r:'+reg;
-    DOGS[id]={id:id,registered:'Registration '+reg,listName:'',call:'',sex:'',color:'',photo:'',ext:false,litter:null,pending:true};
-    identifiers.push({dog:id,registry:/^[A-Z]{2}\d{6,}$/.test(reg)?'AKC':'Reg.',number:reg,author:0,date:today()});
-    PEDS[id]={};
-    switchDog(id);
-    loadGalaxy().then(function(G){
-      var h=fnv(reg.replace(/[^A-Z0-9]/g,'')), found=false;
-      if(G.rh)for(var i=0;i<G.N;i++)if(G.rh[i]===h){found=true;break}
-      var d=DOGS[id]; d.pending=!found; d.inGalaxy=found;
-      logWanted(reg,found?'names':'dog');
-      if(DOG===id){renderHeader();renderPed()}
-    }).catch(function(){logWanted(reg,'dog')});
-  }
   function renderDog(){
-    document.getElementById('dog-name').textContent=dog.registered;
-    var akcNo0=primaryReg();
-    document.getElementById('dog-ped').innerHTML=[akcNo0?'<a href="'+esc(qurl(akcNo0))+'" target="_blank" rel="noopener" title="Searches '+esc(DBQ.site)+' ('+esc(DBQ.label)+') for '+esc(akcNo0)+'. Opens in a new tab.">'+esc(DBQ.label)+' &#8599;</a>':'',dog.ext?'<a href="'+esc(pedurl(dog.listName))+'" target="_blank" rel="noopener" title="Opens the pedigree on '+esc(DB.site)+' ('+esc(DB.label)+'). Opens in a new tab.">'+esc(DB.label)+' &#8599;</a>':''].filter(Boolean).join(' &middot; ')||'<span class="meta">None</span>';
-    var L=myLitter();
-    function pn(id){var pe=PEOPLE[id]||{label:'Unknown'};return '<span'+(pe.consent?'':' title="Short form shown until this person agrees to be listed"')+'>'+esc(pe.label)+'</span>'}
-    document.getElementById('dog-breeders').innerHTML=L&&L.breeders.length?L.breeders.map(pn).join(', ')+' <span class="chip doc">'+esc(L.src)+' record</span><span class="fact-by">litter record, by '+esc(A(L.author).name)+' #'+L.author+'</span>':'<span class="meta">Not recorded</span>';
-    var cl=mine().filter(function(c){return c.type==='claim'&&c.status==='visible'})[0];
-    document.getElementById('dog-owners').innerHTML=cl?pn(cl.value)+' <span class="meta">&middot; member #'+(PEOPLE[cl.value]||{}).member+' &middot; since '+esc(cl.start)+'</span>':'<span class="meta">Unclaimed. A member can claim this dog to add records.</span>';
-    var ow=mine().filter(function(c){return c.type==='ownership'&&c.status==='visible'}).sort(function(x,y){return x.start<y.start?1:-1});
+    var d=S.dog,L=S.litter,akc=primaryReg();
+    $('dog-name').textContent=d.registered;
+    $('dog-ped').innerHTML=[akc?'<a href="'+esc(qurl(akc))+'" target="_blank" rel="noopener" title="Searches '+esc(DBQ.site)+' ('+esc(DBQ.label)+') for '+esc(akc)+'. Opens in a new tab.">'+esc(DBQ.label)+' &#8599;</a>':'',d.ext?'<a href="'+esc(pedurl(splitTitle(d.registered).name.replace(/’/g,"'")))+'" target="_blank" rel="noopener" title="Opens the pedigree on '+esc(DB.site)+' ('+esc(DB.label)+'). Opens in a new tab.">'+esc(DB.label)+' &#8599;</a>':''].filter(Boolean).join(' &middot; ')||'<span class="meta">None</span>';
+    $('dog-breeders').innerHTML=L&&L.breeders.length?L.breeders.map(pn).join(', ')+' <span class="chip doc">'+esc(L.src)+' record</span><span class="fact-by">litter record, by '+esc(A(L.author).name)+' #'+L.author+'</span>':'<span class="meta">Not recorded</span>';
+    var cl=S.claims.filter(function(c){return c.type==='claim'&&c.status==='visible'})[0];
+    $('dog-owners').innerHTML=cl?pn(cl.value)+' <span class="meta">&middot; member #'+((S.people[cl.value]||{}).member)+' &middot; since '+esc(cl.start)+'</span>':'<span class="meta">Unclaimed. A member can claim this dog to add records.</span>';
+    var ow=S.claims.filter(function(c){return c.type==='ownership'&&c.status==='visible'}).sort(function(x,y){return x.start<y.start?1:-1});
     function oline(c){return pn(c.value)+(c.co&&c.co.length?' <span class="meta">with</span> '+c.co.map(pn).join(', '):'')+' <span class="meta">&middot; '+(c.end?esc(c.start)+' to '+esc(c.end):'since '+esc(c.start))+'</span>'}
-    document.getElementById('own-hist').innerHTML=ow.length?ow.map(oline).join('<br>'):'<span class="meta">None recorded.</span>';
-    document.getElementById('dog-call').textContent=dog.call?'“'+dog.call+'”':'No call name recorded';
-    var akcNo=(myIds().filter(function(x){return x.registry==='AKC'})[0]||{}).number;
-    document.getElementById('dog-regs').innerHTML=myIds().map(function(i){
-      var t=XREF[i.registry], u=t?t.replace('{id}',encodeURIComponent((i.registry==='OFA'||i.registry==='CHIC')?akcNo:i.number)):'';
+    $('own-hist').innerHTML=ow.length?ow.map(oline).join('<br>'):'<span class="meta">None recorded.</span>';
+    $('dog-call').textContent=d.call?'“'+d.call+'”':'No call name recorded';
+    $('dog-regs').innerHTML=S.identifiers.map(function(i){
+      var t=XREF[i.registry],u=t?t.replace('{id}',encodeURIComponent((i.registry==='OFA'||i.registry==='CHIC')?akc:i.number)):'';
       var txt=esc(i.registry)+' '+esc(i.number);
-      return u?'<a href="'+esc(u)+'" target="_blank" rel="noopener" title="Opens the OFA search for '+esc(akcNo)+'">'+txt+' &#8599;</a>':txt;
+      return u?'<a href="'+esc(u)+'" target="_blank" rel="noopener" title="Opens the OFA search for '+esc(akc)+'">'+txt+' &#8599;</a>':txt;
     }).join('<br>');
-    document.getElementById('model-dog').textContent=JSON.stringify(dog,null,2);
-    document.getElementById('model-litters').textContent=JSON.stringify(LITTERS,null,1);
-    document.getElementById('model-ids').innerHTML=identifiers.map(function(i){return '<tr><td>'+i.dog+'</td><td>'+esc(i.registry)+'</td><td>'+esc(i.number)+'</td><td><b>'+i.author+'</b></td><td>'+i.date+'</td></tr>'}).join('');
   }
   function renderModel(){
-    renderDog();
-    document.getElementById('model-claims').innerHTML=claims.map(function(c){
-      return '<tr><td>'+c.id+'</td><td>'+c.dog+'</td><td>'+c.type+'</td><td>'+esc(c.name)+'</td><td>'+esc(c.value)+(c.co&&c.co.length?' + '+esc(c.co.join(',')):'')+(c.start?' ('+esc(c.start)+' to '+esc(c.end||'now')+')':'')+'</td><td>'+c.ver+'</td><td><b>'+c.author+'</b></td><td>'+c.date+'</td><td>'+c.status+'</td></tr>';
-    }).join('');
+    $('model-dog').textContent=JSON.stringify(S.dog,null,2);
+    $('model-litters').textContent=JSON.stringify(S.litter,null,1);
+    $('model-ids').innerHTML=S.identifiers.map(function(i){return '<tr><td>'+esc(S.dog.id)+'</td><td>'+esc(i.registry)+'</td><td>'+esc(i.number)+'</td><td><b>'+i.author+'</b></td><td>'+i.date+'</td></tr>'}).join('');
+    $('model-claims').innerHTML=S.claims.map(function(c){return '<tr><td>'+c.id+'</td><td>'+esc(S.dog.id)+'</td><td>'+c.type+'</td><td>'+esc(c.name)+'</td><td>'+esc(c.value)+(c.co&&c.co.length?' + '+esc(c.co.join(',')):'')+(c.start?' ('+esc(c.start)+' to '+esc(c.end||'now')+')':'')+'</td><td>'+c.ver+'</td><td><b>'+c.author+'</b></td><td>'+c.date+'</td><td>'+c.status+'</td></tr>'}).join('');
+    $('model-authors').textContent=JSON.stringify(authors,null,2);
   }
-
-  function renderAdmin(){
-    document.getElementById('requests').innerHTML=requests.length?requests.map(function(r){
-      return '<tr><td>'+esc(r.name)+'</td><td>'+esc(r.role)+'</td><td>'+esc(r.verify)+'</td><td><button class="sm" data-approve="'+r.id+'">Approve</button> <button class="sm danger" data-reject="'+r.id+'">Reject</button></td></tr>';
-    }).join(''):'<tr><td colspan="4" class="meta">No pending requests.</td></tr>';
-    var wk=Object.keys(WANTED);
-    document.getElementById('wanted').innerHTML=wk.length?wk.map(function(r){var w=WANTED[r];return '<tr><td>'+esc(r)+'</td><td>'+w.count+'&times; <span class="meta">last '+esc(w.last)+'</span></td><td>'+(w.how==='names'?'On the map, no names':'Not in our data')+'</td><td><a href="'+esc(qurl(r))+'" target="_blank" rel="noopener">Quintessa</a> &middot; <a href="'+esc(XREF.OFA.replace('{id}',encodeURIComponent(r)))+'" target="_blank" rel="noopener">OFA</a></td><td><button class="sm" data-added="'+esc(r)+'">Mark added</button></td></tr>'}).join(''):'<tr><td colspan="5" class="meta">Nothing yet. Search for a number we do not have to see it appear here.</td></tr>';
-    document.getElementById('log').innerHTML=logs.length?logs.map(function(l){return '<li><b>'+l.date+'</b> &middot; '+esc(l.text)+'</li>'}).join(''):'<li class="meta">No actions yet.</li>';
-  }
-  function log(t){logs.unshift({date:today(),text:t});renderAdmin()}
-  function render(){renderHeader();renderFacts();renderLinks();renderParents();renderOffspring();renderLitters();renderEntries();renderModel();renderAdmin()}
-
-  // Ancestry (names, numbers) and the list of dogs with a photo on the other site are NOT part of this page. They load from a private
-  // file at run time, which is not committed. In the real system this is a call to the members-only service. Without it the page still
-  // works, with no pedigree names.
-  var PEDS = {}, HASPHOTO = [];
-  function loadPrivate(){
-    return fetch('/data/private/ped-sample.json').then(function(r){if(!r.ok)throw new Error('no private data');return r.json()}).then(function(j){
-      PEDS[412]=j.piper; PEDS[413]=j.mia; HASPHOTO=j.hasphoto||[];
-      // Cora: her dam side is Piper's ancestry shifted one generation. Her sire side is not in the sample data.
-      PEDS[414]={1:['7Sisters N Legado\'s Heart Of Gold','WS84850303 · Fawn · F · 2024-08-19'],2:['Legado N Izya\'s Oops! I Did It Again','WS80095602 ·  · M · ']};
-      Object.keys(j.piper).forEach(function(kp){kp=Number(kp);var d=Math.floor(Math.log(kp)/Math.LN2),off=kp-(1<<d);PEDS[414][3*(1<<d)+off]=j.piper[kp]});
-    }).catch(function(){});
-  }
-  var TITLE = /^(AM|CAN|INT|MEX|NORD|EST|SWD|FIN|JPN|UKC|AKC|CH|GCH\w*|BISS?|BIS|ROM|HOF|AOM|&)$/i;
-  function plain(n){var t=String(n).split(' ');while(t.length&&TITLE.test(t[0].replace(/,$/,'')))t.shift();return t.join(' ')}
   function renderPed(){
-    var D=Number(document.getElementById('gens').value), rows=1<<D, grid=document.getElementById('pedgrid');
-    if(!PEDS[DOG]||!PEDS[DOG][1]){grid.className='pedgrid';grid.style.cssText='';grid.innerHTML='<div class="empty" style="grid-column:1/-1">'+(dog.inGalaxy?'The map above knows this dog\'s ancestry but not the names, so there is no pedigree to draw yet.':'No pedigree data for this dog yet.')+'</div>';return}
+    var D=Number($('gens').value),rows=1<<D,grid=$('pedgrid'),P=PED.nodes;
+    function msg(t){grid.className='pedgrid';grid.style.cssText='';grid.innerHTML='<div class="empty" style="grid-column:1/-1">'+t+'</div>'}
+    if(PED.error){msg(PED.error.code==='login_required'?'Sign in to see names in the pedigree.':esc(PED.error.message||'The pedigree could not be loaded.'));return}
+    if(!P||!P[1]){msg(S.dog.inGalaxy?'The map above knows this dog\'s ancestry but not the names, so there is no pedigree to draw yet.':'No pedigree data for this dog yet.');return}
     grid.style.gridTemplateColumns='repeat('+(D+1)+',minmax(9.5rem,1fr))';
     grid.className='pedgrid d'+D;
     grid.style.gridTemplateRows='repeat('+rows+',minmax('+(D<=5?30:D===6?17:D===7?12:9)+'px,auto))';
     var h='';
-    for(var d=0;d<=D;d++){
-      for(var off=0;off<(1<<d);off++){
-        var k=(1<<d)+off, e=(PEDS[DOG]||{})[k], span=1<<(D-d), start=off*span+1;
-        var cls='pn'+(d===0?' root':(k%2?' dam':''));
-        var st='grid-column:'+(d+1)+';grid-row:'+start+' / span '+span;
-        if(!e){h+='<div class="'+cls+'" style="'+st+'"><span class="m">Unknown</span></div>';continue}
-        var parts=e[1].split(' \u00B7 '), reg=parts[0], born=(parts[3]||'').slice(0,4), color=parts[1]||'';
-        h+='<div class="'+cls+'" style="'+st+'"><a class="nm" data-anc="'+k+'" title="'+esc(e[0])+(k===1?'':' – open this dog\'s page')+'" href="#">'+esc(e[0])+'</a><span class="m">'+esc(reg)+(born?' \u00B7 '+born:'')+(color?' \u00B7 '+esc(color):'')+'</span>';
-        var pr=photoReg(reg,HASPHOTO);
-        if(pr) h+='<a class="cam" href="'+esc(photourl(pr))+'" target="_blank" rel="noopener" title="Photo hosted at '+esc(DB.site)+' ('+esc(DB.label)+'). Opens in a new tab."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>River Rock photo &#8599;</a>';
-        h+='</div>';
-      }
-    }
+    for(var d=0;d<=D;d++){for(var off=0;off<(1<<d);off++){
+      var k=(1<<d)+off,e=P[k],span=1<<(D-d),start=off*span+1;
+      var cls='pn'+(d===0?' root':(k%2?' dam':'')),st='grid-column:'+(d+1)+';grid-row:'+start+' / span '+span;
+      if(!e){h+='<div class="'+cls+'" style="'+st+'"><span class="m">Unknown</span></div>';continue}
+      var parts=e[1].split(' · '),reg=parts[0],born=(parts[3]||'').slice(0,4),color=parts[1]||'';
+      h+='<div class="'+cls+'" style="'+st+'"><a class="nm" data-anc="'+k+'" title="'+esc(e[0])+(k===1?'':' – open this dog\'s page')+'" href="#">'+esc(e[0])+'</a><span class="m">'+esc(reg)+(born?' · '+born:'')+(color?' · '+esc(color):'')+'</span>';
+      if(e[2])h+='<a class="cam" href="'+esc(photourl(e[2]))+'" target="_blank" rel="noopener" title="Photo hosted at '+esc(DB.site)+' ('+esc(DB.label)+'). Opens in a new tab."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>River Rock photo &#8599;</a>';
+      h+='</div>';
+    }}
     grid.innerHTML=h;
   }
-  // --- live map: drawn in the browser from the same data the galaxy page uses; nothing is stored or generated ahead of time ---
-  var GAL=null, galP=null, galMode='all';
+  function renderAdmin(){
+    function deny(){var t='<tr><td colspan="5" class="meta">Administrator only. Sign in as the administrator to see this.</td></tr>';$('requests').innerHTML=t;$('wanted').innerHTML=t;$('log').innerHTML='<li class="meta">Administrator only.</li>'}
+    if(!SESSION||SESSION.role!=='admin'){deny();return}
+    Promise.all([DogAPI.accountRequests(),DogAPI.wanted(),DogAPI.actionLog()]).then(function(r){
+      var rq=r[0],wk=r[1],lg=r[2];
+      $('requests').innerHTML=rq.length?rq.map(function(x){return '<tr><td>'+esc(x.name)+'</td><td>'+esc(x.role)+'</td><td>'+esc(x.verify)+'</td><td><button class="sm" data-approve="'+x.id+'">Approve</button> <button class="sm danger" data-reject="'+x.id+'">Reject</button></td></tr>'}).join(''):'<tr><td colspan="4" class="meta">No pending requests.</td></tr>';
+      $('wanted').innerHTML=wk.length?wk.map(function(w){return '<tr><td>'+esc(w.reg)+'</td><td>'+w.count+'&times; <span class="meta">last '+esc(w.last)+'</span></td><td>'+(w.how==='names'?'On the map, no names':'Not in our data')+'</td><td><a href="'+esc(qurl(w.reg))+'" target="_blank" rel="noopener">Quintessa</a> &middot; <a href="'+esc(XREF.OFA.replace('{id}',encodeURIComponent(w.reg)))+'" target="_blank" rel="noopener">OFA</a></td><td><button class="sm" data-added="'+esc(w.reg)+'">Mark added</button></td></tr>'}).join(''):'<tr><td colspan="5" class="meta">Nothing yet. Search for a number we do not have to see it appear here.</td></tr>';
+      $('log').innerHTML=lg.length?lg.map(function(l){return '<li><b>'+l.date+'</b> &middot; '+esc(l.text)+'</li>'}).join(''):'<li class="meta">No actions yet.</li>';
+    }).catch(function(){deny()});
+  }
+
+  // ---- live map: drawn in the browser from the same data the galaxy page uses; nothing is stored or generated ahead of time ----
+  var GAL=null,galP=null;
   function fnv(t){var h=0x811c9dc5;for(var i=0;i<t.length;i++){h^=t.charCodeAt(i);h=Math.imul(h,0x01000193)}return h>>>0}
   function loadGalaxy(){
     if(galP)return galP;
     galP=fetch('/breed-galaxy.html').then(function(r){return r.text()}).then(function(h){
-      var i=h.indexOf('const DATA='), j=h.indexOf('\n',i), D=JSON.parse(h.slice(i+11,j).replace(/;\s*$/,''));
+      var i=h.indexOf('const DATA='),j=h.indexOf('\n',i),D=JSON.parse(h.slice(i+11,j).replace(/;\s*$/,''));
       function unb(s,T){var b=atob(s),u=new Uint8Array(b.length);for(var k=0;k<b.length;k++)u[k]=b.charCodeAt(k);return new T(u.buffer)}
       var G={N:D.n,asp:D.aspect,y0:D.y0,qx:unb(D.x,Uint16Array),qy:unb(D.y,Uint16Array),yr:unb(D.yr,Uint8Array),f8:unb(D.f,Uint8Array),sire:unb(D.sire,Int32Array),dam:unb(D.dam,Int32Array),cl:unb(D.cl,Uint8Array),cs:D.cs,rh:D.rh?unb(D.rh,Uint32Array):null};
       var ks=new Int32Array(G.N+1),kl=new Int32Array(2*G.N),c=new Int32Array(G.N),k2;
@@ -665,7 +526,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     return galP;
   }
   function galTrace(G,i){
-    var anc=new Map([[i,0]]),q=[i],nx,a,p,k;
+    var anc=new Map([[i,0]]),q=[i],nx,a,k;
     while(q.length){nx=[];for(var u=0;u<q.length;u++){a=q[u];[G.sire[a],G.dam[a]].forEach(function(p){if(p>=0&&!anc.has(p)){anc.set(p,anc.get(a)+1);nx.push(p)}})}q=nx}
     var desc=new Map([[i,0]]);q=[i];
     while(q.length){nx=[];for(var u2=0;u2<q.length;u2++){a=q[u2];for(k=G.ks[a];k<G.ks[a+1];k++){var ch=G.kl[k];if(!desc.has(ch)){desc.set(ch,desc.get(a)+1);nx.push(ch)}}}q=nx}
@@ -673,136 +534,92 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   }
   function hsl(h,s,l){s/=100;l/=100;var a=s*Math.min(l,1-l),f=function(n){var k=(n+h/30)%12;return l-a*Math.max(-1,Math.min(k-3,9-k,1))};return 'rgb('+Math.round(f(0)*255)+','+Math.round(f(8)*255)+','+Math.round(f(4)*255)+')'}
   function drawGalaxy(G,row){
-    var cv=document.getElementById('galcv'), ctx=cv.getContext&&cv.getContext('2d'); if(!ctx)return;
-    var dpr=Math.min(2,window.devicePixelRatio||1), W=cv.clientWidth||600, H=320;
+    var cv=$('galcv'),ctx=cv.getContext&&cv.getContext('2d');if(!ctx)return;
+    var dpr=Math.min(2,window.devicePixelRatio||1),W=cv.clientWidth||600,H=320;
     cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
-    var bx=G.box, bw=bx[1]-bx[0], bh=bx[3]-bx[2], base=Math.min(W*.96/bw,H*.96/bh);
-    var px=function(i){return G.qx[i]/65535}, py=function(i){return G.qy[i]/65535*G.asp};
-    var sc=galMode==='near'?base*12:base, cx=px(row), cy=py(row);
-    var ox=galMode==='near'?W/2-cx*sc:W/2-(bx[0]+bx[1])/2*sc, oy=galMode==='near'?H/2-cy*sc:H/2-(bx[2]+bx[3])/2*sc;
+    var bx=G.box,bw=bx[1]-bx[0],bh=bx[3]-bx[2],base=Math.min(W*.96/bw,H*.96/bh);
+    var px=function(i){return G.qx[i]/65535},py=function(i){return G.qy[i]/65535*G.asp};
+    var sc=galMode==='near'?base*12:base,cx=px(row),cy=py(row);
+    var ox=galMode==='near'?W/2-cx*sc:W/2-(bx[0]+bx[1])/2*sc,oy=galMode==='near'?H/2-cy*sc:H/2-(bx[2]+bx[3])/2*sc;
     var cols=G.cs.map(function(_,c){return hsl((c*137.508)%360,74,[64,54,73][c%3])});
-    ctx.globalAlpha=galMode==='near'?.55:.4;
-    var s=galMode==='near'?2.2:1.1;
+    ctx.globalAlpha=galMode==='near'?.55:.4;var s=galMode==='near'?2.2:1.1;
     for(var i=0;i<G.N;i++){var x=px(i)*sc+ox,y=py(i)*sc+oy;if(x<-2||y<-2||x>W+2||y>H+2)continue;ctx.fillStyle=cols[G.cl[i]];ctx.fillRect(x,y,s,s)}
     ctx.globalAlpha=1;
-    var t=galTrace(G,row), big=galMode==='near'?3.4:2.4;
+    var t=galTrace(G,row),big=galMode==='near'?3.4:2.4;
     t.anc.forEach(function(g,i){ctx.fillStyle='#ffc04d';ctx.fillRect(px(i)*sc+ox-big/2,py(i)*sc+oy-big/2,big,big)});
     t.desc.forEach(function(g,i){ctx.fillStyle='#5ad7ff';ctx.fillRect(px(i)*sc+ox-big/2,py(i)*sc+oy-big/2,big,big)});
-    var dx=px(row)*sc+ox, dy=py(row)*sc+oy;
+    var dx=px(row)*sc+ox,dy=py(row)*sc+oy;
     ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.beginPath();ctx.arc(dx,dy,galMode==='near'?9:7,0,Math.PI*2);ctx.stroke();
     return t;
   }
   function renderGalaxy(){
-    var facts=document.getElementById('galfacts'), akc=primaryReg();
-    document.getElementById('galopen').href=akc?'/breed-galaxy.html#dog='+encodeURIComponent(akc):'/breed-galaxy.html';
-    facts.textContent='Loading the map\u2026';
+    var facts=$('galfacts'),akc=primaryReg(),id=S.dog.id;
+    $('galopen').href=akc?'/breed-galaxy.html#dog='+encodeURIComponent(akc):'/breed-galaxy.html';
+    facts.textContent='Loading the map…';
     loadGalaxy().then(function(G){
-      if(!G.rh||!akc){facts.textContent='This dog is not in the galaxy file.';return}
-      var h=fnv(akc.toUpperCase().replace(/[^A-Z0-9]/g,'')), row=-1;
-      for(var i=0;i<G.N;i++)if(G.rh[i]===h){row=i;break}
-      if(row<0){facts.textContent='Not in the galaxy yet.'+(dog.pending?'':' We\'ve noted that someone looked for it.');if(!dog.pending)logWanted(akc,'dog');return}
-      var t=drawGalaxy(G,row)||galTrace(G,row), maxA=0,maxD=0;
+      var row=-1;
+      if(G.rh&&akc){var h=fnv(akc.toUpperCase().replace(/[^A-Z0-9]/g,''));for(var i=0;i<G.N;i++)if(G.rh[i]===h){row=i;break}}
+      // tell the backend whether the galaxy has this dog, once per dog per visit; it updates the stub and the wanted list
+      if(!galNoted[id]){galNoted[id]=1;DogAPI.noteGalaxy(id,row>=0).then(function(){if(S.dog.id===id)return reload()})}
+      if(row<0){facts.textContent='Not in the galaxy yet.'+(S.dog.pending?'':' We\'ve noted that someone looked for it.');return}
+      var t=drawGalaxy(G,row)||galTrace(G,row),maxA=0,maxD=0;
       t.anc.forEach(function(g){if(g>maxA)maxA=g});t.desc.forEach(function(g){if(g>maxD)maxD=g});
-      facts.textContent='Born '+(G.yr[row]+G.y0)+' \u00B7 '+(t.anc.size-1)+' known ancestors over '+maxA+' generations \u00B7 '+(t.desc.size-1)+' known descendants over '+maxD+' \u00B7 '+G.cs[G.cl[row]][0]+' constellation \u00B7 inbreeding '+(G.f8[row]*0.5/255*100).toFixed(1)+'%';
+      facts.textContent='Born '+(G.yr[row]+G.y0)+' · '+(t.anc.size-1)+' known ancestors over '+maxA+' generations · '+(t.desc.size-1)+' known descendants over '+maxD+' · '+G.cs[G.cl[row]][0]+' constellation · inbreeding '+(G.f8[row]*0.5/255*100).toFixed(1)+'%';
     }).catch(function(){facts.textContent='The map could not be loaded.'});
   }
-  function byId(id){return mine().filter(function(x){return String(x.id)===String(id)})[0]}
-  function actor(){return me===0?1:me}
 
+  // ---- actions: every change goes through the API ----
   document.addEventListener('submit',function(ev){
-    var f=ev.target;
-    if(f.id==='new-rec'){
-      ev.preventDefault();
-      var type=document.getElementById('nr-type').value, url=document.getElementById('nr-url').value;
-      if(type!=='link' && !url){alert('Test results and wins need an evidence link.');return;}
-      claims.push({id:nextId++,dog:DOG,type:type,name:document.getElementById('nr-name').value,value:document.getElementById('nr-val').value,url:url,ver:1,author:actor(),date:document.getElementById('nr-date').value||today(),ev:type==='test'?'doc':'link',status:'visible',flags:[]});
-      f.reset();f.parentNode.open=false;render();return;
-    }
-    if(f.id==='new-litter'){
-      ev.preventDefault();
-      claims.push({id:nextId++,dog:DOG,type:'litter',name:document.getElementById('nl-mate').value,value:document.getElementById('nl-kind').value,url:document.getElementById('nl-url').value,whelp:document.getElementById('nl-date').value,ver:1,author:actor(),date:today(),ev:'link',status:'visible',flags:[]});
-      f.reset();f.parentNode.open=false;render();return;
-    }
-    if(f.dataset.fact){
-      ev.preventDefault();
-      var n=f.dataset.fact, old=fact(n), v=f.elements.v.value;
-      if(v==='Other'&&f.elements.other&&f.elements.other.value) v='Other: '+f.elements.other.value.trim();
-      if(old) old.status='superseded';
-      claims.push({id:nextId++,dog:DOG,type:'fact',name:n,value:v,url:'',src:(f.elements.akc&&f.elements.akc.checked)?'AKC':'',ver:old?old.ver+1:1,author:actor(),date:today(),ev:'link',status:'visible',flags:[]});
-      editing=null;render();return;
-    }
-    if(f.dataset.flag){
-      ev.preventDefault();
-      byId(f.dataset.flag).flags.push({author:actor(),reason:f.elements.reason.value,evidence:f.elements.ev.value,date:today()});
-      render();
-    }
+    var f=ev.target,id=S&&S.dog.id;
+    if(f.id==='new-rec'){ev.preventDefault();
+      run(DogAPI.addRecord(id,{type:$('nr-type').value,name:$('nr-name').value,value:$('nr-val').value,url:$('nr-url').value,date:$('nr-date').value})).then(function(){f.reset();f.parentNode.open=false});return}
+    if(f.id==='new-litter'){ev.preventDefault();
+      run(DogAPI.addRecord(id,{type:'litter',name:$('nl-mate').value,value:$('nl-kind').value,url:$('nl-url').value,whelp:$('nl-date').value})).then(function(){f.reset();f.parentNode.open=false});return}
+    if(f.dataset.fact){ev.preventDefault();
+      var v=f.elements.v.value;if(v==='Other'&&f.elements.other&&f.elements.other.value)v='Other: '+f.elements.other.value.trim();
+      editing=null;run(DogAPI.saveFact(id,f.dataset.fact,v,(f.elements.akc&&f.elements.akc.checked)?'AKC':''));return}
+    if(f.dataset.flag){ev.preventDefault();run(DogAPI.flagClaim(f.dataset.flag,{reason:f.elements.reason.value,evidence:f.elements.ev.value}))}
   });
   document.addEventListener('click',function(ev){
     var t=ev.target;
     var an=t.closest&&t.closest('[data-anc]');
-    if(an){ev.preventDefault();openAncestor(Number(an.dataset.anc));return}
-    if(t.dataset.back){ev.preventDefault();var pv=NAV.pop();if(pv!==undefined)switchDog(pv,true);return}
-    if(t.dataset.added){delete WANTED[t.dataset.added];renderAdmin();return}
-    if(t.dataset.copywanted){var txt=Object.keys(WANTED).join('\n');if(navigator.clipboard)navigator.clipboard.writeText(txt);return}
+    if(an){ev.preventDefault();var k=Number(an.dataset.anc);if(k!==1)DogAPI.openAncestor(S.dog.id,k).then(function(r){return goTo(r.dogId)}).catch(function(e){say(e&&e.message)});return}
+    if(t.dataset.back){ev.preventDefault();var pv=NAV.pop();if(pv)goTo(pv.id,true);return}
+    if(t.dataset.added){DogAPI.markAdded(t.dataset.added).then(renderAdmin);return}
+    if(t.dataset.copywanted){DogAPI.wanted().then(function(w){if(navigator.clipboard)navigator.clipboard.writeText(w.map(function(x){return x.reg}).join('\n'))}).catch(function(e){say(e&&e.message)});return}
     var gt=t.closest&&t.closest('[data-goto]');
-    if(gt){ev.preventDefault();switchDog(gt.dataset.goto);window.scrollTo(0,0);return}
-    if(t.dataset.gotab){ev.preventDefault();var tb=document.querySelector('.tabs button[data-tab="'+t.dataset.gotab+'"]');if(tb)tb.click();return}
+    if(gt){ev.preventDefault();goTo(gt.dataset.goto);window.scrollTo(0,0);return}
     if(t.dataset.gmode){galMode=t.dataset.gmode;document.querySelectorAll('[data-gmode]').forEach(function(b){b.setAttribute('aria-pressed',b===t?'true':'false')});renderGalaxy();return}
     if(t.dataset.fedit){editing=t.dataset.fedit;renderFacts();return}
     if(t.dataset.fcancel){editing=null;renderFacts();return}
-    if(t.dataset.fflag){
-      var evd=prompt('Link to evidence for the correct value:');if(!evd)return;
-      fact(t.dataset.fflag).flags.push({author:actor(),reason:'Disputed',evidence:evd,date:today()});render();return;
-    }
-    if(t.dataset.suggest){
-      var sg=prompt('Suggest a new cause-of-death category:');if(!sg)return;
-      suggestions.push({author:actor(),text:sg,date:today()});log('Category suggestion from '+A(actor()).name+': "'+sg+'"');return;
-    }
-    if(t.dataset.hide){
-      var reason=prompt('Reason for hiding this record (shown to everyone):');if(!reason)return;
-      var c=byId(t.dataset.hide);c.status='hidden';c.reason=reason;
-      log('Administrator hid record "'+c.name+'". Reason: '+reason);render();
-    }
-    if(t.dataset.correct){
-      var c2=byId(t.dataset.correct);
-      var nv=prompt('Corrected value for "'+c2.name+'":',c2.value);if(nv===null)return;
-      c2.status='superseded';
-      claims.push({id:nextId++,dog:DOG,type:c2.type,name:c2.name,value:nv,url:c2.url,ver:c2.ver+1,author:c2.author,date:today(),ev:c2.ev,status:'visible',flags:[]});
-      render();
-    }
-    if(t.dataset.approve){
-      var r=requests.filter(function(x){return x.id===t.dataset.approve})[0];
-      requests=requests.filter(function(x){return x!==r});
-      log('Approved account for '+r.name+' ('+r.role+'). Real name confirmed via: '+r.verify+'.');
-    }
-    if(t.dataset.reject){
-      var r2=requests.filter(function(x){return x.id===t.dataset.reject})[0];
-      requests=requests.filter(function(x){return x!==r2});
-      log('Rejected account request from '+r2.name+'. No verifiable real identity.');
-    }
+    if(t.dataset.fflag){var evd=prompt('Link to evidence for the correct value:');if(!evd)return;var fc=fact(t.dataset.fflag);if(fc)run(DogAPI.flagClaim(fc.id,{reason:'Disputed',evidence:evd}));return}
+    if(t.dataset.suggest){var sg=prompt('Suggest a new cause-of-death category:');if(!sg)return;run(DogAPI.suggestCategory(sg));return}
+    if(t.dataset.hide){var reason=prompt('Reason for hiding this record (shown to everyone):');if(!reason)return;run(DogAPI.hideClaim(t.dataset.hide,reason)).then(renderAdmin);return}
+    if(t.dataset.correct){var c2=S.claims.filter(function(c){return String(c.id)===t.dataset.correct})[0];var nv=prompt('Corrected value for "'+(c2?c2.name:'')+'":',c2?c2.value:'');if(nv===null)return;run(DogAPI.correctClaim(t.dataset.correct,nv));return}
+    if(t.dataset.approve){DogAPI.decideRequest(t.dataset.approve,true).then(renderAdmin);return}
+    if(t.dataset.reject){DogAPI.decideRequest(t.dataset.reject,false).then(renderAdmin);return}
     if(t.dataset.tab){
-      ['rec','photos','seq','model','admin'].forEach(function(k){document.getElementById('tab-'+k).hidden=(k!==t.dataset.tab)});
+      ['rec','photos','seq','model','admin'].forEach(function(k){$('tab-'+k).hidden=(k!==t.dataset.tab)});
       document.querySelectorAll('.tabs button').forEach(function(b){b.setAttribute('aria-selected',b===t?'true':'false')});
+      if(t.dataset.tab==='admin')renderAdmin();
     }
   });
-  document.getElementById('gens').addEventListener('change',renderPed);
-  document.getElementById('findform').addEventListener('submit',function(e){
+  $('gens').addEventListener('change',function(){if(S)renderPed()});
+  $('findform').addEventListener('submit',function(e){
     e.preventDefault();
-    var q=document.getElementById('dogfind').value.trim().toUpperCase().replace(/\s+/g,''), msg=document.getElementById('findmsg');
+    var q=$('dogfind').value.trim(),msg=$('findmsg');
     if(!q){msg.textContent='';return}
-    var hit=identifiers.filter(function(i){return String(i.number).toUpperCase().replace(/\s+/g,'')===q})[0];
-    if(hit){msg.textContent='';switchDog(hit.dog);var dd=DOGS[hit.dog];if(dd&&(dd.pending||dd.inGalaxy))logWanted(q,dd.pending?'dog':'names')}
-    else{msg.textContent='';openUnknown(q)}
+    msg.textContent='';
+    DogAPI.lookup(q).then(function(r){return goTo(r.dogId)}).catch(function(err){msg.textContent=err&&err.message||'That search failed.'});
   });
-  document.getElementById('me').addEventListener('change',function(e){me=Number(e.target.value);render()});
+  $('me').addEventListener('change',function(e){
+    DogAPI.setActor(e.target.value).then(function(s){SESSION=s;return load(S.dog.id)});
+  });
 
-  loadPrivate().then(function(){render();renderPed();renderGalaxy()});
-  render();renderPed();renderGalaxy();
-  fetch('/data/demo-authors.json').then(function(r){return r.json()}).then(function(j){
-    authors=j;document.getElementById('auth-src').textContent='Names loaded live from the authors file. Records store only author numbers.';
-    fillAuthors();render();
-  }).catch(function(){
-    document.getElementById('auth-src').textContent='Authors file not reachable, showing author numbers.';fillAuthors();
+  // ---- start ----
+  DogAPI.init().then(function(s){SESSION=s;return DogAPI.authors()}).then(function(a){
+    authors=a;$('auth-src').textContent='Names come from the authors file. Records store only author numbers.';
+    return load(412);
   });
 })();
 </script>
