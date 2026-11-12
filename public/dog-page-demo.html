@@ -382,8 +382,8 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
 <script src="/dog-api.js"></script>
 <script>
 window.PEDDB_LABEL='River Rock Pedigree';
-function extphotofail(img){var a=img.parentNode;a.innerHTML='<span class="noimg" style="aspect-ratio:4/3;color:var(--info);font-weight:600">Photo on their site &#8599;</span>'}
-function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp.textContent='Photo on '+window.PEDDB_LABEL;el.replaceWith(sp)}
+function extphotofail(img){var a=img.parentNode;a.innerHTML='<span class="noimg" style="aspect-ratio:4/3;color:var(--info);font-weight:600">Photo Available &#8599;</span>'}
+function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp.textContent='Photo Available';el.replaceWith(sp)}
 (function(){
   // This script only draws what DogAPI returns and sends actions back through it. It holds no dog data of its own.
   var S=null, PED={nodes:null,error:null}, SESSION=null, authors={}, NAV=[], editing=null, galMode='all', galNoted={};
