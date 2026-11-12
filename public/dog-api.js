@@ -425,18 +425,19 @@
       return Promise.resolve({ ok: true });
     },
     ourDogs: function () {
-      var groups = [{ title: 'Foundation', dogs: [{ id: 412, label: 'Piper', note: 'the foundation bitch' }] }], by = {};
+      var card = function (d, note) { return { id: d.id, label: d.short || d.call || d.registered || primaryReg(d.id) || 'Unnamed dog', call: d.call || '', registered: d.registered ? titled(d) : '', sex: d.sex || '', note: note || '' }; };
+      var groups = [{ title: 'Foundation', dogs: [card(dogs[412], 'the foundation bitch')] }], by = {};
       Object.keys(dogs).forEach(function (id) {
         var d = dogs[id]; if (!d.litter || d.litter === 'L412' || d.visibility !== 'public') return;
         (by[d.litter] = by[d.litter] || []).push(d);
       });
       Object.keys(by).sort(function (a, b) { return litters[a].whelp < litters[b].whelp ? -1 : 1; }).forEach(function (lid) {
         var L = litters[lid];
-        groups.push({ title: L.label + ', born ' + L.whelp, dogs: by[lid].sort(function (a, b) { return Number(a.id) - Number(b.id); }).map(function (d) { return { id: d.id, label: d.short || d.call || d.registered || 'Unnamed dog', note: d.sex }; }) });
+        groups.push({ title: L.label + ', born ' + L.whelp, dogs: by[lid].sort(function (a, b) { return Number(a.id) - Number(b.id); }).map(function (d) { return card(d, d.registered ? '' : 'not yet registered'); }) });
       });
       var shared = Object.keys(dogs).filter(function (id) { var d = dogs[id]; return !d.litter && d.visibility === 'public'; }).map(function (id) {
         var d = dogs[id], c = claimOf(d.id), who = c && people[c.value] ? people[c.value].label : '';
-        return { id: d.id, label: d.short || d.call || d.registered || primaryReg(d.id) || 'Unnamed dog', note: who ? 'shared by ' + who : '' };
+        return card(d, who ? 'shared by ' + who : '');
       });
       if (shared.length) groups.push({ title: 'Shared by members', dogs: shared });
       return Promise.resolve(groups);
