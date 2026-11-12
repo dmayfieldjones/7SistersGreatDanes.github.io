@@ -144,6 +144,8 @@
     C(25, 413, 'fact', 'Whelp date', '2023-07-09', { src: 'AKC' }),
     C(35, 414, 'fact', 'Whelp date', '2024-08-19', { src: 'AKC' }),
     C(2, 412, 'link', 'DNA test', 'pending'), C(28, 413, 'link', 'DNA test', 'pending'), C(38, 414, 'link', 'DNA test', 'pending'),
+    // Piper's coat color panel was run at UC Davis VGL; we link the lab's panel page and record no results (none entered yet)
+    C(80, 412, 'link', 'UC Davis VGL', 'Great Dane coat color panel', { url: 'https://vgl.ucdavis.edu/panel/dog-coat-color-great-dane', src: 'Owner' }),
     C(70, 412, 'claim', 'Claimed by', 'u2', { start: '2026-11-12' }),
     C(71, 413, 'claim', 'Claimed by', 'u2', { start: '2026-11-12' }),
     C(72, 414, 'claim', 'Claimed by', 'u2', { start: '2026-11-12' }),

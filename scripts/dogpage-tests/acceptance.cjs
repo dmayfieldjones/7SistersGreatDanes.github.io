@@ -14,6 +14,7 @@ let pass=0,fail=0;const ok=(c,m)=>{if(c){pass++}else{fail++;console.log('  FAIL:
  click(d.querySelector('[data-demo="416"] .nm'));await wait(1800);ok(/Pumpkin/.test(T('dog-call'))&&d.getElementById('landing').hidden,'clicking the name text inside a card opens that dog (Pumpkin)');click(d.getElementById('ourdogsbtn'));await wait(400);
  click(d.querySelector('[data-demo="413"]'));await wait(1800);ok(T('dog-call').includes('Mia')&&d.getElementById('landing').hidden,'choosing a dog opens its page');
  click(d.getElementById('ourdogsbtn'));await wait(400);click(d.querySelector('[data-demo="412"]'));await wait(1800);
+ ok([...d.querySelectorAll('#links a')].some(x=>/vgl\.ucdavis\.edu\/panel\/dog-coat-color-great-dane/.test(x.href)&&/UC Davis VGL/.test(x.textContent)),"Piper's coat color test links to the UC Davis VGL panel page");
  console.log('--- title, registered name and call name are three separate things');
  const ttl=()=>[...d.querySelectorAll('#dog-name .ttl')].map(e=>e.textContent);
  ok(ttl().join()==='CH'&&T('dog-name')==='CH Legado N Danekraaft’s How Can I Tell You?','Piper: the title CH is its own marked piece, beside the registered name');
