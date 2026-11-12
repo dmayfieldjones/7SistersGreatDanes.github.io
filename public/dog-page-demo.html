@@ -67,6 +67,9 @@ ul.plain{padding-left:1.1rem;margin:0 0 12px}
 .ttl{font:700 .6em system-ui,sans-serif;letter-spacing:.04em;border:1px solid var(--rule);border-radius:6px;padding:.1em .45em;vertical-align:.2em;color:var(--ink2)}
 #dog-hero img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:10px;border:1px solid var(--grid)}
 #dog-hero .noimg{border:1px solid var(--grid);border-radius:10px}
+#dog-hero .extphoto{position:relative;display:block;text-decoration:none}
+#dog-hero .extcap{position:absolute;left:8px;bottom:8px;background:rgba(0,0,0,.65);color:#fff;font-size:.78rem;padding:2px 8px;border-radius:999px}
+#dog-hero .extphoto:hover .extcap,#dog-hero .extphoto:focus .extcap{background:rgba(0,0,0,.85);text-decoration:underline}
 .onsite{display:flex;align-items:center;justify-content:center;aspect-ratio:4/3;background:var(--surface);color:var(--info);font-size:.8rem;text-decoration:none;font-weight:600}
 .pedgrid.d6 .pn,.pedgrid.d7 .pn,.pedgrid.d8 .pn{padding:1px 6px;white-space:nowrap;overflow:hidden;flex-direction:row;align-items:center;gap:6px}
 .pedgrid.d6 .pn a.nm,.pedgrid.d7 .pn a.nm,.pedgrid.d8 .pn a.nm{overflow:hidden;text-overflow:ellipsis;font-size:.66rem;font-weight:500}
@@ -379,6 +382,7 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
 <script src="/dog-api.js"></script>
 <script>
 window.PEDDB_LABEL='River Rock Pedigree';
+function extphotofail(img){var a=img.parentNode;a.innerHTML='<span class="noimg" style="aspect-ratio:4/3;color:var(--info);font-weight:600">Photo could not load here. Open it on their site &#8599;</span>'}
 function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp.textContent='Photo on '+window.PEDDB_LABEL;el.replaceWith(sp)}
 (function(){
   // This script only draws what DogAPI returns and sends actions back through it. It holds no dog data of its own.
@@ -475,13 +479,16 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   function renderHeader(){
     var d=S.dog, hero;
     $('dog-sub').innerHTML=(!d.registered&&d.short?esc(d.short)+' &middot; ':'')+'Great Dane'+(d.sex?' &middot; '+esc(d.sex):'')+(d.color?' &middot; '+esc(d.color):'')+(d.hasLitter?' &middot; 7Sisters Farm':'');
+    // Photos that live on other sites: show the picture itself (loaded from their site, never copied) and say plainly whose it is and that clicking opens their site.
+    var linked=[];
+    if(d.photoReg)linked.push({label:DB.label,url:photourl(d.photoReg)});
+    if(S.cosmic&&S.cosmic.photo)linked.push({label:DBC.label,url:S.cosmic.photo});
     if(d.photo) hero='<img src="'+esc(d.photo)+'" alt="'+esc(d.call)+'">';
-    else if(d.photoReg) hero='<a class="noimg" style="aspect-ratio:4/3;text-decoration:none;color:var(--info);font-weight:600" href="'+esc(photourl(d.photoReg))+'" target="_blank" rel="noopener" title="Photo hosted at '+esc(DB.site)+' ('+esc(DB.label)+'). Opens in a new tab.">'+esc(DB.short)+' photo &#8599;</a>';
-    else if(S.cosmic&&S.cosmic.photo) hero='<a class="noimg" style="aspect-ratio:4/3;text-decoration:none;color:var(--info);font-weight:600" href="'+esc(S.cosmic.photo)+'" target="_blank" rel="noopener" title="Photo hosted at '+esc(DBC.site)+' ('+esc(DBC.label)+'). Opens in a new tab.">Cosmic photo &#8599;</a>';
+    else if(linked.length) hero='<a class="extphoto" href="'+esc(linked[0].url)+'" target="_blank" rel="noopener" title="Opens the photo on '+esc(linked[0].label)+' in a new tab"><img src="'+esc(linked[0].url)+'" alt="Photo of '+esc(d.registered||d.short||'this dog')+', hosted by '+esc(linked[0].label)+'" onerror="extphotofail(this)"><span class="extcap">Photo from '+esc(linked[0].label)+' &#8599;</span></a>';
     else hero='<div class="noimg" style="aspect-ratio:4/3">No photo yet</div>';
+    if(linked.length)hero+='<div class="meta" style="margin-top:4px">Link only: the picture stays on '+(linked.length>1?'those sites':'their site')+'; click it to open there.'+(linked.length>1?' Also at: '+linked.slice(1).map(function(x){return '<a href="'+esc(x.url)+'" target="_blank" rel="noopener">'+esc(x.label)+' &#8599;</a>'}).join(', ')+'.':'')+'</div>';
     var pl=[];
     if(d.id===412)[['piper.jpg','Piper as a puppy'],['piper-first-litter-5-fawn-puppies-4-boys-1-girl-breeding-female-mia.jpg','First litter puppies'],['piper-captain-mother-son-tiktok-star-sweetest-dog.jpg','Piper with her son'],['piper-second-litter-3-fawn-1-brindle-puppies-with-breeding-female-cora.jpg','Second litter puppies']].forEach(function(x){pl.push({src:'7 Sisters (this site)',file:x[0],note:x[1],url:'/img/'+x[0]})});
-    if(d.photoReg)pl.push({src:DB.label+' ('+DB.site.replace(/^https?:\/\//,'').replace(/\/$/,'')+')',file:d.photoReg+'.jpg',note:'file name as hosted there',url:photourl(d.photoReg)});
     if(pl.length){var cm='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg> ';
       hero+='<details class="photolist" style="margin-top:6px"><summary style="cursor:pointer;color:var(--info);font-weight:600">'+cm+pl.length+(pl.length>1?' photos':' photo')+'</summary><ul style="margin:6px 0 0;padding-left:1.1rem;font-size:.85rem">'+pl.map(function(x){return '<li><a href="'+esc(x.url)+'" target="_blank" rel="noopener">'+esc(x.file)+'</a> <span class="meta">&middot; '+esc(x.note)+' &middot; '+esc(x.src)+'</span></li>'}).join('')+'</ul></details>'}
     $('dog-hero').innerHTML=hero;

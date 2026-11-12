@@ -81,7 +81,7 @@ let pass=0,fail=0;const ok=(c,m)=>{if(c){pass++}else{fail++;console.log('  FAIL:
  ok(/PRF Fendane Have I Gone Mad/.test(T('dog-name')),"opens Piper's sire");
  ok(T('dog-call')==='No call name recorded','no call name for an ancestor');
  ok((T('dog-facts').match(/Born([0-9-]+)/)||[])[1]==='2016-06-06','born date from pedigree data');
- ok(/River Rock photo/.test(T('dog-hero')),'photo tile for a dog with a photo elsewhere');
+ ok(/Photo from River Rock Pedigree/.test(T('dog-hero')),'photo tile for a dog with a photo elsewhere');
  ok(/Not checked yet/.test(T('dog-screens'))&&!/None listed on AKC/.test(T('dog-screens')),'a page generated from the pedigree does not claim AKC has no screens');ok(/OFA Results/.test(T('links')),'a generated ancestor page carries the OFA link');
  ok(/Not confirmed by a member yet/.test(T('dog-confirm'))&&!/Sample Importer/.test(T('links')+T('dog-confirm'))&&/Dustin Mayfield-Jones/.test(T('links')),'a generated page is shown as unconfirmed and authored by Dustin for the demo, with no importer named');
  ok(!!d.querySelector('[data-confirm]')&&/does not say you own or bred/.test(T('dog-confirm')),'a signed-in member can confirm, and is told that is not owning or breeding');
