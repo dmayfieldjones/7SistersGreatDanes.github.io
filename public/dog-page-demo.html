@@ -74,6 +74,11 @@ ul.plain{padding-left:1.1rem;margin:0 0 12px}
 .pedgrid{display:grid;gap:4px;overflow-x:auto;padding-bottom:6px}
 .pn{background:var(--card);border:1px solid var(--grid);border-left:4px solid var(--info);border-radius:6px;padding:4px 8px;font-size:.78rem;line-height:1.25;display:flex;flex-direction:column;justify-content:center;min-width:0}
 .pn.dam{border-left-color:var(--accent)}.pn.root{border-left-color:var(--ink)}
+.pedlist .pn{margin:4px 0 0;border-left-width:4px}
+.pedlist .kids{margin-left:8px;padding-left:6px;border-left:2px solid var(--grid)}
+.pedlist .pn .rl{font:600 .66rem/1 system-ui,sans-serif;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.pedlist .pn a.nm{font-size:.92rem}
+.pedlist .pn .m{font-size:.76rem}
 .pn a.nm{font-weight:600;color:var(--ink);text-decoration:none;overflow-wrap:anywhere}
 .pn a.nm:hover{text-decoration:underline}
 .pn .m{color:var(--muted);font-size:.7rem}
@@ -475,11 +480,29 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     $('model-claims').innerHTML=S.claims.map(function(c){return '<tr><td>'+c.id+'</td><td>'+esc(S.dog.id)+'</td><td>'+c.type+'</td><td>'+esc(c.name)+'</td><td>'+esc(c.value)+(c.co&&c.co.length?' + '+esc(c.co.join(',')):'')+(c.start?' ('+esc(c.start)+' to '+esc(c.end||'now')+')':'')+'</td><td>'+c.ver+'</td><td><b>'+c.author+'</b></td><td>'+c.date+'</td><td>'+c.status+'</td></tr>'}).join('');
     $('model-authors').textContent=JSON.stringify(authors,null,2);
   }
+  if(window.matchMedia)matchMedia('(max-width:640px)').addEventListener('change',function(){if(S&&PED&&PED.nodes)renderPed()});
   function renderPed(){
     var D=Number($('gens').value),rows=1<<D,grid=$('pedgrid'),P=PED.nodes;
     function msg(t){grid.className='pedgrid';grid.style.cssText='';grid.innerHTML='<div class="empty" style="grid-column:1/-1">'+t+'</div>'}
     if(PED.error){msg(PED.error.code==='login_required'?'Sign in to see names in the pedigree.':esc(PED.error.message||'The pedigree could not be loaded.'));return}
     if(!P||!P[1]){msg(S.dog.inGalaxy?'The map above knows this dog\'s ancestry but not the names, so there is no pedigree to draw yet.':'No pedigree data for this dog yet.');return}
+    if(window.matchMedia&&matchMedia('(max-width:640px)').matches){
+      // phones: an indented outline, one dog per row, instead of a sideways-scrolling chart
+      grid.className='pedlist';grid.style.cssText='';
+      var cam='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>';
+      var node=function(k,d){
+        var e=P[k],cls='pn'+(k===1?' root':(k%2?' dam':'')),role=k===1?'':(k%2?'Dam':'Sire');
+        var h='<div class="'+cls+'">'+(role?'<div class="rl">'+role+'</div>':'');
+        if(!e)return h+'<span class="m">Unknown</span></div>';
+        var parts=e[1].split(' · '),born=(parts[3]||'').slice(0,4),color=parts[1]||'';
+        h+='<a class="nm" data-anc="'+k+'" href="#">'+esc(e[0])+'</a><span class="m">'+esc(parts[0])+(born?' · '+born:'')+(color?' · '+esc(color):'')+'</span>';
+        if(e[2])h+='<a class="cam" href="'+esc(photourl(e[2]))+'" target="_blank" rel="noopener">'+cam+'River Rock photo &#8599;</a>';
+        h+='</div>';
+        if(d<D&&(P[2*k]||P[2*k+1]))h+='<div class="kids">'+node(2*k,d+1)+node(2*k+1,d+1)+'</div>';
+        return h;
+      };
+      grid.innerHTML=node(1,0);return;
+    }
     grid.style.gridTemplateColumns='repeat('+(D+1)+',minmax(9.5rem,1fr))';
     grid.className='pedgrid d'+D;
     grid.style.gridTemplateRows='repeat('+rows+',minmax('+(D<=5?30:D===6?17:D===7?12:9)+'px,auto))';
