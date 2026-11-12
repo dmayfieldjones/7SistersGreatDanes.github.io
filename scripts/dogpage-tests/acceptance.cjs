@@ -2,6 +2,12 @@ const {make}=require('./lib.cjs');
 let pass=0,fail=0;const ok=(c,m)=>{if(c){pass++}else{fail++;console.log('  FAIL:',m)}};
 (async()=>{
  const t=make();const {w,d,wait,T,click,submit,find,actAs,errs}=t;await wait(2200);
+ console.log('--- a visitor (not signed in) is the starting state; other people appear in short form');
+ ok(!d.getElementById('signin').hidden,'starts as a visitor');
+ ok(/Jason D\., Francisco C\., Priyanka D\., Phoebe D\./.test(T('dog-breeders')),'visitor sees non-members in short form');
+ ok(!/Dubman|Camacho|Deshmuhk/.test(T('dog-breeders')+T('own-hist')),'no full non-member names reach a visitor');
+ ok(/Karen Mayfield-Jones/.test(T('dog-owners')),'members who consented are named');
+ await actAs(2);ok(/Jason L Dubman, Francisco Camacho, Priyanka Deshmuhk, Phoebe Dubman/.test(T('dog-breeders')),'a member sees full names');
  console.log('--- the three dogs');
  ok(T('dog-call').includes('Piper'),'starts on Piper');
  ok(/Jason L Dubman, Francisco Camacho, Priyanka Deshmuhk, Phoebe Dubman/.test(T('dog-breeders')),"Piper's breeders");
@@ -29,7 +35,7 @@ let pass=0,fail=0;const ok=(c,m)=>{if(c){pass++}else{fail++;console.log('  FAIL:
  await find('WS11111111');ok(!d.getElementById('pendingnote').hidden&&/don't have this dog/.test(T('pendingnote')),'pending page');
  ok(/No pedigree data/.test(T('pedgrid')),'no pedigree for a stub');
  await find('WS11111111');
- await find('S28449/72');ok(/on the map, but we don't have its name/.test(T('pendingnote')),'on the map, no names');ok(/Kingsize/.test(T('galfacts')),'galaxy facts for a dog we hold no names for');
+ await find('S28449/72');ok(/on the map, but we don't have its name/.test(T('pendingnote')),'on the map, no names');ok(/known ancestors/.test(T('galfacts'))&&/Kingsize/.test(T('galfacts')+T('galstory')),'galaxy facts and story for a dog we hold no names for');
  console.log('--- permissions');
  const API=t.API();
  await actAs('v');ok(!d.getElementById('signin').hidden,'visitor sees the sign-in note');

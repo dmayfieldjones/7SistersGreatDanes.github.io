@@ -1,0 +1,37 @@
+const {make}=require('./lib.cjs');let pass=0,fail=0;const ok=(c,m)=>{if(c)pass++;else{fail++;console.log('  FAIL:',m)}};
+(async()=>{
+ // on a real site address (not localhost) the developer "view as" menu must not exist
+ const t=make({host:'example.test'});const {d,w,wait,T,click,submit,errs}=t;await wait(2200);
+ console.log('--- deployed address');
+ ok(d.getElementById('devmenu').hidden,'the developer view-as menu is hidden on a real site');
+ ok(!d.getElementById('signinbtn').hidden,'a Sign in button is shown');ok(d.getElementById('signoutbtn').hidden,'no Sign out while signed out');
+ ok(!d.getElementById('signin').hidden&&d.getElementById('new-rec').parentNode.hidden,'a visitor cannot add');
+ const login=async(u,p,p2)=>{click(d.getElementById('signinbtn'));d.getElementById('lg-user').value=u;d.getElementById('lg-pass').value=p;submit(d.getElementById('loginform'));await wait(300);if(p2){d.getElementById('lg-pass2').value=p2;submit(d.getElementById('loginform'));await wait(1300)}};
+ console.log('--- sign-in');
+ await login('dustin','wrong-password');ok(/Incorrect username or password/.test(T('lg-msg')),'a wrong password is refused with a plain message');
+ ok(d.getElementById('signoutbtn').hidden,'still signed out after a wrong password');
+ d.getElementById('lg-pass').value='Temp-pass-1234';submit(d.getElementById('loginform'));await wait(300);
+ ok(d.getElementById('lg-new').style.display==='grid'&&/temporary password/.test(T('lg-new')),'a temporary password asks for a new one');
+ d.getElementById('lg-pass2').value='short';submit(d.getElementById('loginform'));await wait(300);ok(/not long enough|not strong enough/.test(T('lg-msg')),'a weak new password is refused');
+ d.getElementById('lg-pass2').value='My-chosen-password-1';submit(d.getElementById('loginform'));await wait(1500);
+ ok(/Signed in as Dustin Mayfield-Jones \(administrator\)/.test(T('whoami')),'signed in as the administrator');
+ ok(!d.getElementById('signoutbtn').hidden&&d.getElementById('signinbtn').hidden,'Sign out replaces Sign in');
+ ok(!d.getElementById('new-rec').parentNode.hidden,'an administrator can add records');
+ click(d.querySelector('[data-tab="admin"]'));await wait(500);ok(!/Administrator only/.test(T('requests')),'the admin tab opens for an administrator');
+ ok(/Jason L Dubman/.test(T('dog-breeders')),'signed-in people see full names');
+ console.log('--- stays signed in for the visit, then signs out');
+ ok(!!w.sessionStorage.getItem('dogpage-id-token'),'the sign-in is kept for this browser session only');
+ click(d.getElementById('signoutbtn'));await wait(800);
+ ok(!d.getElementById('signin').hidden&&d.getElementById('whoami').hidden,'signing out returns to visitor');ok(!w.sessionStorage.getItem('dogpage-id-token'),'the token is removed');
+ ok(/Jason D\./.test(T('dog-breeders')),'back to short names');
+ console.log('--- a member who is not an administrator');
+ await login('trial-member','Temp-pass-1234','My-chosen-password-1');
+ ok(/Signed in as Trial member/.test(T('whoami'))&&!/administrator/.test(T('whoami')),'signed in as a member');
+ ok(!d.getElementById('new-rec').parentNode.hidden,'a member can add');
+ click(d.querySelector('[data-tab="admin"]'));await wait(500);ok(/Administrator only/.test(T('wanted')),'a member does not get the admin tab');
+ console.log('--- an account the pages do not know');
+ click(d.getElementById('signoutbtn'));await wait(500);
+ await login('someone','Temp-pass-1234','My-chosen-password-1');
+ ok(/not set up for the dog pages/.test(T('lg-msg')+T('status')),'a real login that is not set up gets no access');ok(!d.getElementById('signin').hidden,'and stays a visitor');
+ console.log('errors in the page:',errs.length?errs.join('; '):'none');ok(errs.length===0,'no page errors');
+ console.log('\nRESULT (sign-in):',pass,'passed,',fail,'failed');process.exit(fail?1:0)})();

@@ -14,6 +14,8 @@
  * The contract (what the real server must provide), by method:
  *   init()                          load shared reference data; returns the session
  *   session() / setActor(id)        who is signed in (setActor is demo only: the real server reads the login token)
+ *   useLogin({username,name,groups})  demo only: turn a verified sign-in into a role. The real server verifies the signed token itself
+ *   signOut()                       back to visitor
  *   authors()                       {authorId: {name, role, status}}
  *   lookup(number)                  find a dog by any registration number, or create a stub and log it as wanted
  *   noteGalaxy(dogId, inGalaxy)     the page reports whether the galaxy file has the dog; the server updates the stub and the wanted list
@@ -33,6 +35,9 @@
 
   var TITLE = /^(AM|CAN|INT|MEX|NORD|EST|SWD|FIN|JPN|UKC|AKC|CH|GCH\w*|BISS?|BIS|ROM|HOF|AOM|&)$/i;
   var AKCNO = /^[A-Z]{2}\d{6,}$/;
+  // Demo only: which sign-in names map to which demo identity. The real server maps a verified token to a member; nothing here is a security control.
+  var LOGINS = { 'dustin': 0, 'trial-member': 9 };
+  var shortName = function (label) { var p = String(label).trim().split(/\s+/); return p.length < 2 ? label : p[0] + ' ' + p[p.length - 1].charAt(0) + '.'; };
   var NOW = function () { return new Date().toISOString().slice(0, 10); };
   var fail = function (code, message) { return Promise.reject({ code: code, message: message }); };
 
@@ -51,7 +56,8 @@
   // ---- the stores -------------------------------------------------------------------------------------------------------------
   var authors = {};
   var priv = { peds: {}, photoRegs: [] };      // pedigree names and the list of dogs with a photo elsewhere: loaded from a private file
-  var actorId = 2;                              // demo only. null = visitor (not signed in), 0 = administrator
+  var actorId = null;                           // demo only. null = visitor (not signed in), 0 = administrator
+  var loginName = null;
   var nextId = 100;
 
   var dogs = {
@@ -172,6 +178,11 @@
     });
     return { rows: out, restricted: false };
   }
+  function peopleFor() {
+    var o = copy(people);
+    if (!isMember()) Object.keys(o).forEach(function (k) { if (o[k].member === null) { o[k].label = shortName(o[k].label); o[k].consent = false; } });
+    return o;
+  }
   function offspringOf(dogId) {
     var reg = primaryReg(dogId), kids = [];
     Object.keys(dogs).forEach(function (id) {
@@ -204,8 +215,15 @@
     setActor: function (id) { actorId = (id === null || id === undefined || id === 'v') ? null : Number(id); return API.session(); },
     session: function () {
       var role = actorId === null ? 'visitor' : (actorId === 0 ? 'admin' : 'member');
-      return Promise.resolve({ actor: actorId, role: role, name: actorId === null ? 'Visitor' : (authors[actorId] || {}).name });
+      return Promise.resolve({ actor: actorId, role: role, name: actorId === null ? 'Visitor' : (loginName || (authors[actorId] || {}).name) });
     },
+    useLogin: function (id) {
+      var u = String(id && id.username || '').toLowerCase();
+      if (!(u in LOGINS)) { actorId = null; return fail('forbidden', 'That account is not set up for the dog pages yet.'); }
+      actorId = LOGINS[u]; loginName = id.name || u;
+      return API.session();
+    },
+    signOut: function () { actorId = null; loginName = null; return API.session(); },
     authors: function () { return Promise.resolve(copy(authors)); },
 
     lookup: function (number) {
@@ -240,7 +258,8 @@
         litter: L ? copy(L) : null,
         parents: par.rows, parentsRestricted: par.restricted,
         offspring: offspringOf(dogId),
-        people: copy(people),
+        // Option 2: a visitor sees other people (breeders, co-owners who are not members) only in short form; members see full names.
+        people: peopleFor(),
         perm: { loggedIn: isMember(), canAdd: isMember(), isAdmin: isAdmin() }
       };
       return Promise.resolve(snap);

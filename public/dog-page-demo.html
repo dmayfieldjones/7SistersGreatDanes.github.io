@@ -143,10 +143,27 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
     <button class="sm" type="submit">Find</button>
   </form>
   <span class="meta" id="findmsg"></span>
-  <label for="me">Viewing as:</label>
-  <select id="me" aria-label="Demo member to act as"></select>
+  <span id="authbox" style="display:inline-flex;gap:8px;align-items:center;flex-wrap:wrap">
+    <button class="sm" type="button" id="signinbtn" hidden>Sign in</button>
+    <span class="meta" id="whoami" hidden></span><button class="sm" type="button" id="signoutbtn" hidden>Sign out</button>
+  </span>
+  <span id="devmenu" hidden><label for="me" class="meta">Developer: view as</label> <select id="me" aria-label="Developer: view as" style="width:auto"></select></span>
   <span class="meta" id="auth-src"></span>
 </div>
+
+<form id="loginform" class="card" hidden autocomplete="on" style="max-width:26rem">
+  <h3 style="margin:0 0 8px">Sign in</h3>
+  <div class="f" style="display:grid;gap:8px">
+    <input type="text" id="lg-user" placeholder="Username" autocomplete="username" required>
+    <input type="password" id="lg-pass" placeholder="Password" autocomplete="current-password" required>
+    <div id="lg-new" hidden style="display:none;gap:8px">
+      <p class="meta" style="margin:0">This is a temporary password. Choose your own (at least 12 characters, with upper case, lower case and a number).</p>
+      <input type="password" id="lg-pass2" placeholder="New password" autocomplete="new-password" minlength="12">
+    </div>
+    <div><button class="sm primary" type="submit" id="lg-go">Sign in</button> <button class="sm" type="button" id="lg-cancel">Cancel</button></div>
+    <p class="meta" id="lg-msg" role="status" style="margin:0"></p>
+  </div>
+</form>
 
 <div id="status" class="meta" role="status" style="min-height:1.2em;margin:0 0 6px"></div>
 <p id="signin" class="meta" hidden>You are viewing as a visitor. Sign in to add records, dispute one, or see names in the pedigree.</p>
@@ -361,6 +378,9 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     var cur=SESSION.actor===null?'v':String(SESSION.actor);
     $('me').innerHTML=opts.map(function(o){return '<option value="'+o[0]+'">'+esc(o[1])+'</option>'}).join('');$('me').value=cur;
     $('signin').hidden=S.perm.loggedIn;
+    $('signinbtn').hidden=!AUTH||S.perm.loggedIn;
+    $('signoutbtn').hidden=!AUTH||!S.perm.loggedIn||!stored();
+    $('whoami').hidden=!S.perm.loggedIn;$('whoami').textContent=S.perm.loggedIn?'Signed in as '+SESSION.name+(SESSION.role==='admin'?' (administrator)':''):'';
     ['new-litter','new-rec'].forEach(function(id){$(id).parentNode.hidden=!S.perm.canAdd});
     document.querySelectorAll('[data-a]').forEach(function(el){el.textContent=A(el.dataset.a).name});
   }
@@ -709,9 +729,51 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     DogAPI.setActor(e.target.value).then(function(s){SESSION=s;return load(S.dog.id)});
   });
 
+  // ---- sign-in: a real login against the user pool (Amazon Cognito). The page never sees a password after the call returns. ----
+  var AUTH=null, challenge=null, KEY='dogpage-id-token';
+  function store(v){try{if(v)sessionStorage.setItem(KEY,v);else sessionStorage.removeItem(KEY)}catch(e){}}
+  function stored(){try{return sessionStorage.getItem(KEY)}catch(e){return null}}
+  function cognito(target,body){
+    return fetch('https://cognito-idp.'+AUTH.region+'.amazonaws.com/',{method:'POST',headers:{'Content-Type':'application/x-amz-json-1.1','X-Amz-Target':'AWSCognitoIdentityProviderService.'+target},body:JSON.stringify(body)})
+      .then(function(r){return r.json().then(function(j){if(!r.ok)throw j;return j})});
+  }
+  function claims(jwt){try{var p=jwt.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');return JSON.parse(decodeURIComponent(escape(atob(p))))}catch(e){return null}}
+  function applyLogin(idToken){
+    var c=claims(idToken);
+    if(!c||(c.exp&&c.exp*1000<Date.now())){store(null);return Promise.resolve(false)}
+    return DogAPI.useLogin({username:c['cognito:username']||c.username||'',name:c.name,groups:c['cognito:groups']||[]}).then(function(s){SESSION=s;store(idToken);return true},function(e){store(null);say(e&&e.message);return false});
+  }
+  function authMsg(t){$('lg-msg').textContent=t||''}
+  function showLogin(on){$('loginform').hidden=!on;if(on){$('lg-user').focus()}}
+  function finish(res){
+    var idt=res&&res.AuthenticationResult&&res.AuthenticationResult.IdToken;
+    if(!idt){authMsg('Sign-in did not complete.');return}
+    applyLogin(idt).then(function(ok){if(ok){$('lg-pass').value='';$('lg-pass2').value='';challenge=null;$('lg-new').style.display='none';showLogin(false);authMsg('');return load(S.dog.id)}else authMsg('That account is not set up for the dog pages yet.')});
+  }
+  $('loginform').addEventListener('submit',function(e){
+    e.preventDefault();authMsg('');
+    var user=$('lg-user').value.trim();
+    var p=challenge?cognito('RespondToAuthChallenge',{ChallengeName:'NEW_PASSWORD_REQUIRED',ClientId:AUTH.clientId,Session:challenge.session,ChallengeResponses:{USERNAME:challenge.username,NEW_PASSWORD:$('lg-pass2').value}})
+      :cognito('InitiateAuth',{AuthFlow:'USER_PASSWORD_AUTH',ClientId:AUTH.clientId,AuthParameters:{USERNAME:user,PASSWORD:$('lg-pass').value}});
+    p.then(function(res){
+      if(res.ChallengeName==='NEW_PASSWORD_REQUIRED'){challenge={session:res.Session,username:user};$('lg-new').style.display='grid';$('lg-pass2').required=true;$('lg-pass2').focus();authMsg('Choose a new password to finish signing in.');return}
+      finish(res);
+    }).catch(function(err){
+      var t=(err&&(err.__type||'')).split('#').pop();
+      authMsg(t==='NotAuthorizedException'||t==='UserNotFoundException'?'Incorrect username or password.':t==='InvalidPasswordException'?(err.message||'That password is not strong enough.'):'Sign-in failed. Try again in a moment.');
+    });
+  });
+  $('lg-cancel').addEventListener('click',function(){challenge=null;$('lg-new').style.display='none';authMsg('');showLogin(false)});
+  $('signinbtn').addEventListener('click',function(){showLogin(true)});
+  $('signoutbtn').addEventListener('click',function(){store(null);DogAPI.signOut().then(function(s){SESSION=s;return load(S.dog.id)})});
+
   // ---- start ----
-  DogAPI.init().then(function(s){SESSION=s;return DogAPI.authors()}).then(function(a){
-    authors=a;$('auth-src').textContent='Names come from the authors file. Records store only author numbers.';
+  var DEV=/^(localhost|127\.0\.0\.1)$/.test(location.hostname);   // the "view as" menu is for local development only: it would let anyone become the administrator
+  fetch('/data/dog-auth.json').then(function(r){return r.ok?r.json():null}).catch(function(){return null}).then(function(cfg){AUTH=cfg;return DogAPI.init()}).then(function(s){
+    SESSION=s;
+    var t=stored();return (AUTH&&t)?applyLogin(t):false;
+  }).then(function(){return DogAPI.authors()}).then(function(a){
+    authors=a;$('devmenu').hidden=!DEV;$('auth-src').textContent=DEV?'Names come from the authors file. Records store only author numbers.':'';
     return load(412);
   });
 })();
