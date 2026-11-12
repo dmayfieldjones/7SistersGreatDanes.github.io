@@ -18,6 +18,7 @@
  *   signOut()                       back to visitor
  *   authors()                       {authorId: {name, role, status}}
  *   lookup(number)                  find a dog by any registration number (members: or create a stub and log it as wanted; visitors: only public dogs)
+ *   ourDogs()                       the public dogs grouped for the "Our dogs" list: the foundation bitch, then each litter
  *   setVisibility(dogId, v)         'public' (everyone with the code) or 'members' (signed in only): the member who claimed the dog, or an administrator
  *   noteGalaxy(dogId, inGalaxy)     the page reports whether the galaxy file has the dog; the server updates the stub and the wanted list
  *   getDog(dogId)                   everything the page needs about one dog, with per-record permissions already worked out
@@ -61,20 +62,51 @@
   var loginName = null;
   var nextId = 100;
 
+  var pupIds = [], pupFacts = [];
   var dogs = {
-    412: { id: 412, registered: 'CH Legado N Danekraaft’s How Can I Tell You?', call: 'Piper', sex: 'female', color: 'fawn', photo: '/img/piper.jpg', ext: true, litter: 'L412', visibility: 'public' },
-    413: { id: 413, registered: 'CH 7sisters N Legado’s I Wanna Dance, I Wanna Win', call: 'Mia', sex: 'female', color: 'fawn', photo: '', ext: false, litter: 'L2023', visibility: 'public' },
-    414: { id: 414, registered: '7sisters N Legado’s Heart Of Gold', call: 'Cora', sex: 'female', color: 'fawn', photo: '', ext: false, litter: 'L2024', visibility: 'public' }
+    412: { id: 412, registered: 'CH Legado N Danekraaft’s How Can I Tell You?', call: 'Piper', short: 'Piper', sex: 'female', color: 'fawn', photo: '/img/piper.jpg', ext: true, litter: 'L412', visibility: 'public' },
+    413: { id: 413, registered: 'CH 7sisters N Legado’s I Wanna Dance, I Wanna Win', call: 'Mia', short: 'Mia', sex: 'female', color: 'fawn', photo: '', ext: false, litter: 'L2023', visibility: 'public' },
+    414: { id: 414, registered: '7sisters N Legado’s Heart Of Gold', call: 'Cora', short: 'Cora', sex: 'female', color: 'fawn', photo: '', ext: false, litter: 'L2024', visibility: 'public' }
   };
   // A litter is stored once: its sire, dam, whelp date and breeders. Each dog points to its litter.
   var litters = {
-    L412: { whelp: '2020-09-26', src: 'AKC', author: 1, breeders: ['p1', 'p2', 'p3', 'p4'],
+    L412: { label: 'Piper\u2019s own litter', whelp: '2020-09-26', src: 'AKC', author: 1, breeders: ['p1', 'p2', 'p3', 'p4'],
       sire: { reg: 'WS54036904', name: 'PRF Fendane Have I Gone Mad', title: 'Am CH' }, dam: { reg: 'WS59632103', name: 'Danekraafts It\'s a Jungle Out Here', title: 'UKC & Int Ch' } },
-    L2023: { whelp: '2023-07-09', src: 'AKC', author: 1, breeders: ['u2', 'u1', 'p2', 'p1'],
+    L2023: { label: 'Rolex \u00d7 Piper', sireAncestry: 'rolex', whelp: '2023-07-09', src: 'AKC', author: 1, breeders: ['u2', 'u1', 'p2', 'p1'],
       sire: { reg: 'WS66273805', name: 'Fendanesylcrest N Diriso\'s This Is The Right Time', title: 'GCHS CH' }, dam: { reg: 'WS69691106', name: 'Legado N Danekraaft\'s How Can I Tell You?', title: 'CH' } },
-    L2024: { whelp: '2024-08-19', src: 'AKC', author: 1, breeders: ['u2', 'u1', 'p2', 'p1'],
-      sire: { reg: 'WS80095602', name: 'Legado N Izya\'s Oops! I Did It Again', title: '' }, dam: { reg: 'WS69691106', name: 'Legado N Danekraaft\'s How Can I Tell You?', title: 'CH' } }
+    L2024: { label: 'Sean \u00d7 Piper', sireAncestry: 'sean', whelp: '2024-08-19', src: 'AKC', author: 1, breeders: ['u2', 'u1', 'p2', 'p1'],
+      sire: { reg: 'WS80095602', name: 'Legado N Izya\'s Oops! I Did It Again', title: '' }, dam: { reg: 'WS69691106', name: 'Legado N Danekraaft\'s How Can I Tell You?', title: 'CH' } },
+    // Breeders for the two 2026 litters are not recorded yet, so none are shown.
+    L2026: { label: 'Ezra \u00d7 Piper', sireAncestry: 'ezra', whelp: '2026-03-23', src: 'AKC', author: 1, breeders: [],
+      sire: { reg: 'WS81479201', name: 'Sonya Danes N Krisda"Our Peace And Harmony"Fontana', title: 'GCH CH' }, dam: { reg: 'WS69691106', name: 'Legado N Danekraaft\'s How Can I Tell You?', title: 'CH' } },
+    L2026M: { label: 'Ezra \u00d7 Mia', sireAncestry: 'ezra', whelp: '2026-10-17', src: 'litter page', author: 1, breeders: [],
+      sire: { reg: 'WS81479201', name: 'Sonya Danes N Krisda"Our Peace And Harmony"Fontana', title: 'GCH CH' }, dam: { reg: 'WS81418801', name: '7sisters N Legado\'s I Wanna Dance, I Wanna Win', title: 'CH' } }
   };
+  // Piper's offspring, from the litter pages and the AKC dog report: id, registered name (as AKC lists it), sex, litter, number, short label, registration type.
+  [
+    [415, '7sisters N Legado\u2019s Final Act V Echoln', 'male', 'L2023', 'WS81418802', 'Final Act V Echoln'],
+    [416, 'CH 7sisters N Legado\u2019s I Know A Guy At Cherryhill', 'male', 'L2023', 'WS81418803', 'I Know A Guy At Cherryhill'],
+    [417, '7sisters N Legado\u2019s Gonna Get Medieval', 'male', 'L2023', 'WS81418804', 'Gonna Get Medieval'],
+    [418, 'Legado N 7sisters\u2019 I Got Somethin\u2019 For You', 'male', 'L2023', 'WS81418805', 'I Got Somethin\u2019 For You'],
+    [419, '7sisters N Legado\u2019s Interstellar', 'female', 'L2024', 'WS84850301', 'Interstellar', 'limited registration'],
+    [420, '7sisters\u2019 Tilly In The Sky With Diamonds', 'female', 'L2024', 'WS84850302', 'Tilly In The Sky With Diamonds', 'limited registration'],
+    [421, '7sisters N Legado\u2019s Cruising To The Oldies', 'male', 'L2024', 'WS84850304', 'Cruising To The Oldies'],
+    [422, '7sisters N Legado\u2019s With This Ring CGC', 'male', 'L2026', 'WS88963901', 'With This Ring'],
+    [423, '7sisters Come Fly With Bea', 'female', 'L2026', 'WS88963902', 'Come Fly With Bea', 'limited registration'],
+    [424, '7sisters N Legado\u2019s The Judge\u2019s Choice V Echolane', 'male', 'L2026', 'WS88963903', 'The Judge\u2019s Choice V Echolane'],
+    [425, '7sisters N Legado\u2019s Odie Just Wants To Have Fun', 'male', 'L2026', 'WS88963904', 'Odie Just Wants To Have Fun'],
+    [426, '7sisters N Legado\u2019s Stop Sign What Stop Sign', 'male', 'L2026', 'WS88963905', 'Stop Sign What Stop Sign'],
+    [427, '7sisters She\u2019s All That @ Sonya Danes N Andalyn', 'female', 'L2026', 'WS88963906', 'She\u2019s All That @ Sonya Danes N Andalyn']
+  ].forEach(function (r) {
+    dogs[r[0]] = { id: r[0], registered: r[1], call: '', short: r[5], sex: r[2], color: 'fawn', photo: '', ext: false, litter: r[3], visibility: 'public' };
+    pupIds.push({ dog: r[0], registry: 'AKC', number: r[4], author: 1, date: '2026-11-12', note: r[6] || '' });
+    pupFacts.push(r[0]);
+  });
+  // Mia's offspring (Ezra x Mia, born 2026-10-17): five puppies known only by collar color and sex; names and numbers are still to come.
+  [[430, 'Black', 'male'], [431, 'Red', 'male'], [432, 'Blue', 'male'], [433, 'Pink', 'female'], [434, 'Purple', 'female']].forEach(function (r) {
+    dogs[r[0]] = { id: r[0], registered: r[1] + ' collar ' + (r[2] === 'male' ? 'boy' : 'girl') + ' (name and registration to come)', call: '', short: r[1] + ' collar ' + (r[2] === 'male' ? 'boy' : 'girl'), sex: r[2], color: '', photo: '', ext: false, litter: 'L2026M', visibility: 'public' };
+    pupFacts.push(r[0]);
+  });
   var identifiers = [
     { dog: 412, registry: 'AKC', number: 'WS69691106', author: 1, date: '2026-11-12' },
     { dog: 412, registry: 'OFA', number: 'OFA25G', author: 1, date: '2026-11-12' },
@@ -83,7 +115,7 @@
     { dog: 413, registry: 'OFA', number: 'OFA30F', author: 1, date: '2026-11-12' },
     { dog: 413, registry: 'CHIC', number: 'CHIC215182', author: 1, date: '2026-11-12' },
     { dog: 414, registry: 'AKC', number: 'WS84850303', author: 1, date: '2026-11-12' }
-  ];
+  ].concat(pupIds);
   // People who can be credited as breeders or owners. Names are as AKC lists them; consent:false shows only a short form.
   var people = {
     u1: { label: 'Dustin Mayfield-Jones', member: 1, consent: true },
@@ -125,6 +157,10 @@
     C(4, 412, 'test', 'Temperament test (sample)', 'Pass', { url: 'https://example.org/sample-cert-2', ev: 'doc', date: '2026-10-02', author: 2 }),
     C(5, 412, 'win', 'Sample specialty show', 'Best of Winners', { url: 'https://example.org/sample-results', date: '2026-10-20' })
   ];
+  pupFacts.forEach(function (id, n) {
+    var L = litters[dogs[id].litter];
+    claims.push(C(200 + n, id, 'fact', 'Whelp date', L.whelp, { src: L.src === 'AKC' ? 'AKC' : 'Litter page' }));
+  });
   var requests = [
     { id: 'r1', name: 'Taylor Brooks', role: 'Breeder', verify: 'Kennel website and AKC breeder listing' },
     { id: 'r2', name: 'xX_dane_lover_Xx', role: 'Owner', verify: 'None provided' }
@@ -170,7 +206,24 @@
     for (var d = 0; d <= 8; d++) for (var off = 0; off < (1 << d); off++) { var from = k * (1 << d) + off; if (src[from]) out[(1 << d) + off] = src[from]; }
     return out;
   }
-  function pedOf(dogId) { return priv.peds[dogId] || {}; }
+  function place(dst, src, rootKey) {
+    Object.keys(src || {}).forEach(function (ks) { ks = Number(ks); var d = Math.floor(Math.log(ks) / Math.LN2), off = ks - (1 << d); dst[rootKey * (1 << d) + off] = src[ks]; });
+  }
+  // A dog's pedigree is its own entry, its sire's ancestry at key 2, and its dam's at key 3 (all from the data file; nothing is stored per dog).
+  function buildPed(dogId) {
+    var j = priv.j, d = dogs[dogId], L = d && litters[d.litter];
+    if (!j || !L || d.litter === 'L412') return null;
+    var reg = primaryReg(dogId) || '', born = L.whelp;
+    var ped = { 1: [d.registered, (reg || 'registration to come') + ' \u00b7 ' + (d.color ? d.color.charAt(0).toUpperCase() + d.color.slice(1) : '') + ' \u00b7 ' + (d.sex === 'female' ? 'F' : (d.sex === 'male' ? 'M' : '')) + ' \u00b7 ' + born] };
+    var sire = L.sireAncestry === 'ezra' ? j.ezra : (L.sireAncestry === 'rolex' ? reroot(j.mia, 2) : { 1: [L.sire.name, L.sire.reg + ' \u00b7  \u00b7 M \u00b7 '] });
+    var dam = L.dam.reg === 'WS69691106' ? j.piper : (L.dam.reg === 'WS81418801' ? j.mia : null);
+    place(ped, sire, 2); place(ped, dam, 3);
+    return ped;
+  }
+  function pedOf(dogId) {
+    if (!priv.peds[dogId]) { var b = buildPed(dogId); if (b) priv.peds[dogId] = b; }
+    return priv.peds[dogId] || {};
+  }
   function parentsOf(dogId) {
     var d = dogs[dogId], L = d && litters[d.litter], out = [];
     function row(role, p, key, author, src) {
@@ -200,8 +253,9 @@
       var role = L.dam.reg === reg ? 'her' : (L.sire.reg === reg ? 'his' : null);
       if (!role) return;
       var w = claims.filter(function (c) { return String(c.dog) === String(id) && c.type === 'fact' && c.name === 'Whelp date'; })[0];
-      kids.push({ dogId: d.id, call: d.call, role: role, whelp: w ? w.value : '' });
+      kids.push({ dogId: d.id, call: d.call, label: d.short || d.call || d.registered, role: role, whelp: w ? w.value : '', litter: (litters[d.litter] || {}).label || '' });
     });
+    kids.sort(function (a, b) { return a.whelp < b.whelp ? -1 : (a.whelp > b.whelp ? 1 : (Number(a.dogId) - Number(b.dogId))); });
     return kids;
   }
 
@@ -213,11 +267,7 @@
         // The ancestry of our own dogs, and the list of dogs with a photo elsewhere, come from a data file, not from the code. The file
         // holds only what the public explorer pages for our litters already show. In the real system the server provides it.
         fetch('/data/our-pedigrees.json').then(function (r) { if (!r.ok) throw new Error('none'); return r.json(); }).then(function (j) {
-          priv.peds[412] = j.piper; priv.peds[413] = j.mia; priv.photoRegs = j.hasphoto || [];
-          // Cora: her dam side is Piper's ancestry shifted one generation. Her sire side is not in the sample data.
-          var c = { 1: ['7Sisters N Legado\'s Heart Of Gold', 'WS84850303 · Fawn · F · 2024-08-19'], 2: ['Legado N Izya\'s Oops! I Did It Again', 'WS80095602 ·  · M · '] };
-          Object.keys(j.piper).forEach(function (kp) { kp = Number(kp); var d = Math.floor(Math.log(kp) / Math.LN2), off = kp - (1 << d); c[3 * (1 << d) + off] = j.piper[kp]; });
-          priv.peds[414] = c;
+          priv.j = j; priv.peds[412] = j.piper; priv.photoRegs = j.hasphoto || [];
         }).catch(function () { })
       ]).then(function () { return API.session(); });
     },
@@ -263,7 +313,7 @@
       var L = litters[d.litter], par = parentsOf(dogId);
       var reg = primaryReg(dogId);
       var snap = {
-        dog: { id: d.id, registered: d.registered, call: d.call, sex: d.sex, color: d.color, photo: d.photo, ext: !!d.ext, pending: !!d.pending, inGalaxy: !!d.inGalaxy, hasLitter: !!L, photoReg: photoRegOf(reg), visibility: d.visibility || 'members' },
+        dog: { id: d.id, registered: d.registered, call: d.call, short: d.short || d.call || '', sex: d.sex, color: d.color, photo: d.photo, ext: !!d.ext, pending: !!d.pending, inGalaxy: !!d.inGalaxy, hasLitter: !!L, photoReg: photoRegOf(reg), visibility: d.visibility || 'members' },
         identifiers: copy(idsOf(dogId)),
         claims: claims.filter(function (c) { return c.dog === dogId; }).map(annotate),
         litter: L ? copy(L) : null,
@@ -340,6 +390,18 @@
       if (!reason) return fail('invalid', 'A reason is required.');
       c.status = 'hidden'; c.reason = reason; logAction('Administrator hid record "' + c.name + '". Reason: ' + reason);
       return Promise.resolve(annotate(c));
+    },
+    ourDogs: function () {
+      var groups = [{ title: 'Foundation', dogs: [{ id: 412, label: 'Piper', note: 'the foundation bitch' }] }], by = {};
+      Object.keys(dogs).forEach(function (id) {
+        var d = dogs[id]; if (!d.litter || d.litter === 'L412' || d.visibility !== 'public') return;
+        (by[d.litter] = by[d.litter] || []).push(d);
+      });
+      Object.keys(by).sort(function (a, b) { return litters[a].whelp < litters[b].whelp ? -1 : 1; }).forEach(function (lid) {
+        var L = litters[lid];
+        groups.push({ title: L.label + ', born ' + L.whelp, dogs: by[lid].sort(function (a, b) { return Number(a.id) - Number(b.id); }).map(function (d) { return { id: d.id, label: d.short || d.call || d.registered, note: d.sex }; }) });
+      });
+      return Promise.resolve(groups);
     },
     setVisibility: function (dogId, v) {
       var g = needMember(); if (g) return g;

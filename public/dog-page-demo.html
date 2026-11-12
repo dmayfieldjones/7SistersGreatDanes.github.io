@@ -101,8 +101,48 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
 </head>
 <body>
 <main>
-<div class="demo-banner"><b>Demo.</b> Piper's photos are real. The two member accounts are real people (the owners). Every record, link and account request below is <b>invented sample content</b>, not a real result, and nothing on this page is saved.</div>
+<div id="topbar" style="display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:space-between;margin:0 0 12px;padding-bottom:10px;border-bottom:1px solid var(--grid)">
+  <strong>Dog pages <span class="meta" style="font-weight:400">private preview</span></strong>
+  <span style="display:inline-flex;gap:10px;align-items:center;flex-wrap:wrap">
+    <button class="sm" type="button" id="ourdogsbtn" data-landing="1">Our dogs</button>
+    <span id="devmenu" hidden><label for="me" class="meta">Developer: view as</label> <select id="me" aria-label="Developer: view as" style="width:auto"></select></span>
+    <span id="authbox" style="display:inline-flex;gap:8px;align-items:center;flex-wrap:wrap">
+    <button class="sm" type="button" id="signinbtn" hidden>Sign in</button>
+    <span class="meta" id="whoami" hidden></span><button class="sm" type="button" id="signoutbtn" hidden>Sign out</button>
+  </span>
+  </span>
+</div>
+<form id="loginform" class="card" hidden autocomplete="on" style="max-width:26rem">
+  <h3 style="margin:0 0 8px">Sign in</h3>
+  <div class="f" style="display:grid;gap:8px">
+    <input type="text" id="lg-user" placeholder="Username" autocomplete="username" required>
+    <input type="password" id="lg-pass" placeholder="Password" autocomplete="current-password" required>
+    <div id="lg-new" hidden style="display:none;gap:8px">
+      <p class="meta" style="margin:0">This is a temporary password. Choose your own (at least 12 characters, with upper case, lower case and a number).</p>
+      <input type="password" id="lg-pass2" placeholder="New password" autocomplete="new-password" minlength="12">
+    </div>
+    <div><button class="sm primary" type="submit" id="lg-go">Sign in</button> <button class="sm" type="button" id="lg-cancel">Cancel</button></div>
+    <p class="meta" id="lg-msg" role="status" style="margin:0"></p>
+  </div>
+</form>
+<p id="signin" class="meta" hidden>You are viewing as a visitor. Sign in to add records, dispute one, or see names in the pedigree.</p>
+<div class="who-box">
+  <form id="findform" style="display:inline-flex;gap:6px;align-items:center">
+    <input type="text" id="dogfind" placeholder="Find a dog by registration number" aria-label="Find a dog by registration number" style="width:16rem" autocomplete="off">
+    <button class="sm" type="submit">Find</button>
+  </form>
+  <span class="meta" id="findmsg"></span>
+  <span class="meta" id="auth-src"></span>
+</div>
+<div id="status" class="meta" role="status" style="min-height:1.2em;margin:0 0 6px"></div>
 
+<section id="landing" class="card" hidden style="margin:0 0 16px">
+  <h2 style="margin-top:0">Our dogs</h2>
+  <p class="meta" style="margin:0 0 10px">Piper is our foundation bitch. Below are her and all her offspring, and Mia's puppies. Some records are sample content, marked <b>Demo data</b>. Signing in lets you look up any dog, add records and dispute one.</p>
+  <div id="landing-groups"></div>
+</section>
+
+<div id="dogview" hidden>
 <div id="backrow" class="meta" style="margin:0 0 8px"></div>
 <div id="pendingnote" class="card" hidden style="border-left:4px solid var(--warn)"></div>
 <div class="hero">
@@ -142,37 +182,6 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
   <p id="pednote" class="meta" style="margin:6px 0 0"></p>
   <p class="meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg> marks a dog with a photo on River Rock Pedigree. It opens the photo on their site in a new tab; we don't host or copy it.</p>
 </section>
-
-<div class="who-box">
-  <form id="findform" style="display:inline-flex;gap:6px;align-items:center">
-    <input type="text" id="dogfind" placeholder="Find a dog by registration number" aria-label="Find a dog by registration number" style="width:16rem" autocomplete="off">
-    <button class="sm" type="submit">Find</button>
-  </form>
-  <span class="meta" id="findmsg"></span>
-  <span id="authbox" style="display:inline-flex;gap:8px;align-items:center;flex-wrap:wrap">
-    <button class="sm" type="button" id="signinbtn" hidden>Sign in</button>
-    <span class="meta" id="whoami" hidden></span><button class="sm" type="button" id="signoutbtn" hidden>Sign out</button>
-  </span>
-  <span id="devmenu" hidden><label for="me" class="meta">Developer: view as</label> <select id="me" aria-label="Developer: view as" style="width:auto"></select></span>
-  <span class="meta" id="auth-src"></span>
-</div>
-
-<form id="loginform" class="card" hidden autocomplete="on" style="max-width:26rem">
-  <h3 style="margin:0 0 8px">Sign in</h3>
-  <div class="f" style="display:grid;gap:8px">
-    <input type="text" id="lg-user" placeholder="Username" autocomplete="username" required>
-    <input type="password" id="lg-pass" placeholder="Password" autocomplete="current-password" required>
-    <div id="lg-new" hidden style="display:none;gap:8px">
-      <p class="meta" style="margin:0">This is a temporary password. Choose your own (at least 12 characters, with upper case, lower case and a number).</p>
-      <input type="password" id="lg-pass2" placeholder="New password" autocomplete="new-password" minlength="12">
-    </div>
-    <div><button class="sm primary" type="submit" id="lg-go">Sign in</button> <button class="sm" type="button" id="lg-cancel">Cancel</button></div>
-    <p class="meta" id="lg-msg" role="status" style="margin:0"></p>
-  </div>
-</form>
-
-<div id="status" class="meta" role="status" style="min-height:1.2em;margin:0 0 6px"></div>
-<p id="signin" class="meta" hidden>You are viewing as a visitor. Sign in to add records, dispute one, or see names in the pedigree.</p>
 
 <div class="tabs" role="tablist">
   <button role="tab" aria-selected="true" data-tab="rec">Records<span class="n" id="n-rec"></span></button>
@@ -324,6 +333,7 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
     <ul class="log plain" id="log"><li class="meta">No actions yet.</li></ul>
   </div>
 </section>
+</div>
 </main>
 
 <script src="/dog-api.js"></script>
@@ -359,7 +369,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   function who(id){var a=A(id);return '<span class="who">'+esc(a.name)+'</span> <span class="meta">#'+id+'</span>'+(a.role?' <span class="chip role">'+esc(a.role)+'</span>':'')}
   function pn(id){var pe=(S&&S.people||{})[id]||{label:'Unknown'};return '<span'+(pe.consent?'':' title="Short form shown until this person agrees to be listed"')+'>'+esc(pe.label)+'</span>'}
   function splitTitle(n){var t=String(n).split(' '),ti=[];while(t.length&&TITLE.test(t[0].replace(/,$/,''))){ti.push(t.shift())}return {title:ti.join(' '),name:t.join(' ')}}
-  function labelOf(d){return d.call||splitTitle(d.registered).name||d.registered}
+  function labelOf(d){return d.short||d.call||splitTitle(d.registered).name||d.registered}
   function idArg(v){return (typeof v==='string'&&v!==''&&!isNaN(+v))?Number(v):v}
   function primaryReg(){var l=S.identifiers;return (l.filter(function(x){return x.registry==='AKC'})[0]||l[0]||{}).number}
   function say(m){$('status').textContent=m||''}
@@ -368,7 +378,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
 
   // ---- loading ----
   function load(id){
-    return DogAPI.getDog(id).then(function(s){S=s;return DogAPI.getPedigree(id,8).then(function(p){PED={nodes:p.nodes,error:null}},function(e){PED={nodes:null,error:e}})}).then(function(){editing=null;renderAll();renderGalaxy()}).catch(function(e){say(e&&e.message?e.message:'That dog could not be loaded.')});
+    return DogAPI.getDog(id).then(function(s){S=s;return DogAPI.getPedigree(id,8).then(function(p){PED={nodes:p.nodes,error:null}},function(e){PED={nodes:null,error:e}})}).then(function(){editing=null;$('landing').hidden=true;$('dogview').hidden=false;renderAll();renderGalaxy()}).catch(function(e){say(e&&e.message?e.message:'That dog could not be loaded.')});
   }
   function reload(){return DogAPI.getDog(S.dog.id).then(function(s){S=s;renderAll()})}
   function goTo(id,back){
@@ -379,17 +389,29 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
 
   // ---- drawing ----
   function renderAll(){renderSession();renderHeader();renderFacts();renderLinks();renderParents();renderOffspring();renderLitters();renderEntries();renderDog();renderModel();renderPed();renderAdmin()}
-  function renderSession(){
+  // The top bar (sign in / out, who you are) depends on the session only, so it works before any dog is loaded.
+  function renderTop(){
+    var li=!!SESSION&&SESSION.role!=='visitor';
     var opts=[['v','Visitor (not signed in)']].concat([0,1,2].map(function(i){return [String(i),A(i).name+(i?' (#'+i+')':'')]}));
-    var cur=SESSION.actor===null?'v':String(SESSION.actor);
-    $('me').innerHTML=opts.map(function(o){return '<option value="'+o[0]+'">'+esc(o[1])+'</option>'}).join('');$('me').value=cur;
-    $('signin').hidden=S.perm.loggedIn;
-    $('signinbtn').hidden=!AUTH||S.perm.loggedIn;
-    $('signoutbtn').hidden=!AUTH||!S.perm.loggedIn||!stored();
-    $('whoami').hidden=!S.perm.loggedIn;$('whoami').textContent=S.perm.loggedIn?'Signed in as '+SESSION.name+(SESSION.role==='admin'?' (administrator)':''):'';
+    $('me').innerHTML=opts.map(function(o){return '<option value="'+o[0]+'">'+esc(o[1])+'</option>'}).join('');$('me').value=!SESSION||SESSION.actor===null?'v':String(SESSION.actor);
+    $('signin').hidden=li;
+    $('signinbtn').hidden=!AUTH||li;
+    $('signoutbtn').hidden=!AUTH||!li||!stored();
+    $('whoami').hidden=!li;$('whoami').textContent=li?'Signed in as '+SESSION.name+(SESSION.role==='admin'?' (administrator)':''):'';
+  }
+  function renderSession(){
+    renderTop();
     ['new-litter','new-rec'].forEach(function(id){$(id).parentNode.hidden=!S.perm.canAdd});
     document.querySelectorAll('[data-a]').forEach(function(el){el.textContent=A(el.dataset.a).name});
   }
+  function renderLanding(groups){
+    $('landing-groups').innerHTML=groups.map(function(g){
+      return '<div style="margin:0 0 10px"><div class="meta" style="margin:0 0 4px"><b>'+esc(g.title)+'</b></div>'+g.dogs.map(function(d){
+        return '<button class="act'+(d.id===412?' primary':'')+'" type="button" data-demo="'+d.id+'" style="margin:0 6px 6px 0">'+esc(d.label)+(d.note?' <span class="meta">'+esc(d.note)+'</span>':'')+'</button>';
+      }).join('')+'</div>';
+    }).join('');
+  }
+  function showLanding(){$('landing').hidden=false;$('dogview').hidden=true;renderTop();return DogAPI.ourDogs().then(renderLanding)}
   function evChip(c){return c.ev==='doc'?'<span class="chip doc">Document attached</span>':'<span class="chip self">Link only</span>'}
   function renderHeader(){
     var d=S.dog, hero;
@@ -403,7 +425,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     if(d.pending){pn_.hidden=false;pn_.innerHTML='<b>We don\'t have this dog yet.</b> Your search has been noted so it can be considered for the next update to our data. Meanwhile, the links below go to the places that may have it.'}
     else if(d.inGalaxy){pn_.hidden=false;pn_.innerHTML='<b>This dog is on the map, but we don\'t have its name or pedigree yet.</b> The map above shows its ancestry anonymously. Open it on Quintessa or River Rock to see names, or add its details to claim it.'}
     else pn_.hidden=true;
-    $('backrow').innerHTML=NAV.length?'<a href="#" data-back="1">&larr; Back to '+esc(NAV[NAV.length-1].label)+'</a>':'';
+    $('backrow').innerHTML=(NAV.length?'<a href="#" data-back="1">&larr; Back to '+esc(NAV[NAV.length-1].label)+'</a>':'');
   }
   function renderLinks(){
     var rows=S.claims.filter(function(c){return c.type==='link'&&c.status==='visible'});
@@ -426,7 +448,11 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     }).join('')||'<div class="empty">No parents recorded.</div>';
   }
   function renderOffspring(){
-    $('offspring').innerHTML=S.offspring.length?S.offspring.map(function(k){return '<button class="sm" data-goto="'+k.dogId+'" style="margin:0 6px 6px 0">'+esc(k.call)+' <span class="meta">('+k.role+' offspring, '+esc(k.whelp)+')</span></button>'}).join(''):'<div class="empty">None of this dog\'s offspring are in our records yet.</div>';
+    var kids=S.offspring,groups=[],by={};
+    kids.forEach(function(k){var key=k.litter+'|'+k.whelp;if(!by[key]){by[key]={title:(k.litter?k.litter+', ':'')+'born '+k.whelp,list:[]};groups.push(by[key])}by[key].list.push(k)});
+    $('offspring').innerHTML=groups.length?groups.map(function(g){
+      return '<div style="margin:0 0 8px"><div class="meta" style="margin:0 0 3px">'+esc(g.title)+' &middot; '+g.list.length+(g.list.length===1?' puppy':' puppies')+'</div>'+g.list.map(function(k){return '<button class="sm" data-goto="'+k.dogId+'" style="margin:0 6px 6px 0">'+esc(k.label)+'</button>'}).join('')+'</div>';
+    }).join(''):'<div class="empty">None of this dog\'s offspring are in our records yet.</div>';
   }
   function renderLitters(){
     var rows=S.claims.filter(function(c){return c.type==='litter'&&c.status==='visible'}).sort(function(a,b){return a.whelp<b.whelp?1:-1});
@@ -499,11 +525,12 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     // A dog's CHIC status is part of its OFA record, so the OFA and CHIC numbers both open the same OFA search, by the AKC number.
     function idline(i){
       var t=XREF[i.registry],u=t?t.replace('{id}',encodeURIComponent((i.registry==='OFA'||i.registry==='CHIC')?akc:i.number)):'';
-      var txt=esc(i.registry)+' '+esc(i.number);
+      var txt=esc(i.registry)+' '+esc(i.number)+(i.note?' <span class="meta">('+esc(i.note)+')</span>':'');
       return u?'<a href="'+esc(u)+'" target="_blank" rel="noopener" title="Opens the OFA search for '+esc(akc)+'">'+txt+' &#8599;</a>':txt;
     }
     var screens=S.identifiers.filter(function(i){return i.registry==='OFA'||i.registry==='CHIC'});
-    $('dog-regs').innerHTML=S.identifiers.filter(function(i){return i.registry!=='OFA'&&i.registry!=='CHIC'}).map(idline).join('<br>');
+    var regs=S.identifiers.filter(function(i){return i.registry!=='OFA'&&i.registry!=='CHIC'});
+    $('dog-regs').innerHTML=regs.length?regs.map(idline).join('<br>'):'<span class="meta">Name and registration number to come</span>';
     $('dog-screens').innerHTML=screens.length?screens.map(idline).join('<br>')+' <span class="chip doc">AKC record</span>':'<span class="meta">None listed on AKC yet</span>';
   }
   function renderModel(){
@@ -687,6 +714,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     var facts=$('galfacts'),akc=primaryReg(),id=S.dog.id;
     $('galopen').href=akc?'/breed-galaxy.html#dog='+encodeURIComponent(akc):'/breed-galaxy.html';
     facts.textContent='Loading the map…';$('galstory').innerHTML='';
+    if(!akc){var cv0=$('galcv');cv0.width=cv0.width;facts.textContent='No registration number yet, so this puppy cannot be placed on the map. It will appear once it is registered.';return}
     loadGalaxy().then(function(G){
       var row=-1;
       if(G.rh&&akc){var h=fnv(akc.toUpperCase().replace(/[^A-Z0-9]/g,''));for(var i=0;i<G.N;i++)if(G.rh[i]===h){row=i;break}}
@@ -719,6 +747,8 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     if(t.dataset.back){ev.preventDefault();var pv=NAV.pop();if(pv)goTo(pv.id,true);return}
     if(t.dataset.added){DogAPI.markAdded(t.dataset.added).then(renderAdmin);return}
     if(t.dataset.copywanted){DogAPI.wanted().then(function(w){if(navigator.clipboard)navigator.clipboard.writeText(w.map(function(x){return x.reg}).join('\n'))}).catch(function(e){say(e&&e.message)});return}
+    if(t.dataset.demo){goTo(t.dataset.demo);return}
+    if(t.dataset.landing){ev.preventDefault();showLanding();return}
     var gt=t.closest&&t.closest('[data-goto]');
     if(gt){ev.preventDefault();goTo(gt.dataset.goto);window.scrollTo(0,0);return}
     if(t.dataset.gmode){galMode=t.dataset.gmode;document.querySelectorAll('[data-gmode]').forEach(function(b){b.setAttribute('aria-pressed',b===t?'true':'false')});renderGalaxy();return}
@@ -768,7 +798,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   function finish(res){
     var idt=res&&res.AuthenticationResult&&res.AuthenticationResult.IdToken;
     if(!idt){authMsg('Sign-in did not complete.');return}
-    applyLogin(idt).then(function(ok){if(ok){$('lg-pass').value='';$('lg-pass2').value='';challenge=null;$('lg-new').style.display='none';showLogin(false);authMsg('');return load(S.dog.id)}else authMsg('That account is not set up for the dog pages yet.')});
+    applyLogin(idt).then(function(ok){if(ok){$('lg-pass').value='';$('lg-pass2').value='';challenge=null;$('lg-new').style.display='none';showLogin(false);authMsg('');renderTop();return load(S?S.dog.id:412)}else authMsg('That account is not set up for the dog pages yet.')});
   }
   $('loginform').addEventListener('submit',function(e){
     e.preventDefault();authMsg('');
@@ -785,12 +815,11 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   });
   $('lg-cancel').addEventListener('click',function(){challenge=null;$('lg-new').style.display='none';authMsg('');showLogin(false)});
   $('signinbtn').addEventListener('click',function(){showLogin(true)});
-  // After signing out (or changing who you are) the page you are on may be closed to you: go to a public dog instead of leaving it on screen.
+  // After signing out (or changing who you are): a visitor goes back to Piper, our foundation bitch; a member reloads the page they are on.
   function afterSessionChange(){
-    return DogAPI.getDog(S.dog.id).then(function(){return load(S.dog.id)},function(e){
-      if(e&&e.code==='login_required'){NAV=[];say('That page is for signed-in members. Showing a public dog instead.');return load(412)}
-      return load(S.dog.id);
-    });
+    renderTop();
+    if(SESSION.role==='visitor'){NAV=[];return load(412)}
+    return load(S?S.dog.id:412);
   }
   $('signoutbtn').addEventListener('click',function(){store(null);DogAPI.signOut().then(function(s){SESSION=s;return afterSessionChange()})});
 
@@ -801,7 +830,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     var t=stored();return (AUTH&&t)?applyLogin(t):false;
   }).then(function(){return DogAPI.authors()}).then(function(a){
     authors=a;$('devmenu').hidden=!DEV;$('auth-src').textContent=DEV?'Names come from the authors file. Records store only author numbers.':'';
-    return load(412);
+    renderTop();return load(412);
   });
 })();
 </script>
