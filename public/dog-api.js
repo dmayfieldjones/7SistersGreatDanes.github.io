@@ -106,6 +106,9 @@
     pupIds.push({ dog: r[0], registry: 'AKC', number: r[4], author: 1, date: '2026-11-12', note: r[6] || '' });
     pupFacts.push(r[0]);
   });
+  // Call names, as on the litter pages (RolexXPiper, SeanXPiper, EzraxPiper)
+  var callNames = { 415: 'Zee', 416: 'Pumpkin', 417: 'Wallace', 418: 'Captain', 419: 'Stella', 420: 'Tilly', 421: 'Cruz', 422: 'Glenn', 423: 'Beatrice', 424: 'Elliot', 425: 'Odie', 426: 'Buford', 427: 'Vogue' };
+  Object.keys(callNames).forEach(function (id) { dogs[id].call = callNames[id]; dogs[id].short = callNames[id]; });
   dogs[416].title = 'CH'; dogs[422].titleSuffix = 'CGC';   // as AKC lists them: CH ... Cherryhill, and ... With This Ring CGC
   // Mia's offspring (Ezra x Mia, born 2026-10-17): five puppies known only by collar color and sex; names and numbers are still to come.
   [[430, 'Black', 'male'], [431, 'Red', 'male'], [432, 'Blue', 'male'], [433, 'Pink', 'female'], [434, 'Purple', 'female']].forEach(function (r) {
