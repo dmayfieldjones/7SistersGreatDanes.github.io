@@ -114,7 +114,7 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
 </div>
 
 <section id="galaxy" style="margin:0 0 18px">
-  <h2>Where this dog sits</h2>
+  <h2>Great Dane Galaxy</h2>
   <canvas id="galcv" aria-label="Map of the breed with this dog highlighted"></canvas>
   <div class="gbar">
     <span class="seg"><button class="sm" type="button" data-gmode="all" aria-pressed="true">Whole breed</button> <button class="sm" type="button" data-gmode="near" aria-pressed="false">Close up</button></span>
@@ -122,6 +122,7 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
     <a id="galopen" target="_blank" rel="noopener">Open in the galaxy &#8599;</a>
   </div>
   <p class="meta" id="galfacts"></p>
+  <div id="galstory" style="font-size:.95rem;line-height:1.5"></div>
 </section>
 
 <section id="pedigree" style="margin:0 0 18px">
@@ -552,10 +553,53 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.beginPath();ctx.arc(dx,dy,galMode==='near'?9:7,0,Math.PI*2);ctx.stroke();
     return t;
   }
+  // ---- the dog's place in the galaxy, written on the fly from the loaded map; nothing is stored ----
+  function cname(G,c){return G.cs[c][0]||('Group '+(c+1))}
+  function galStats(G){
+    if(G.stat)return G.stat;
+    var K=G.cs.length,sx=new Float64Array(K),sy=new Float64Array(K),n=new Int32Array(K),i,c;
+    for(i=0;i<G.N;i++){c=G.cl[i];sx[c]+=G.qx[i]/65535;sy[c]+=G.qy[i]/65535*G.asp;n[c]++}
+    var cx=[],cy=[];for(c=0;c<K;c++){cx[c]=sx[c]/(n[c]||1);cy[c]=sy[c]/(n[c]||1)}
+    var dist=new Float32Array(G.N),by=[];for(c=0;c<K;c++)by[c]=[];
+    for(i=0;i<G.N;i++){c=G.cl[i];dist[i]=Math.hypot(G.qx[i]/65535-cx[c],G.qy[i]/65535*G.asp-cy[c]);by[c].push(dist[i])}
+    by.forEach(function(a){a.sort(function(x,y){return x-y})});
+    var fs=Array.prototype.slice.call(G.f8).sort(function(x,y){return x-y});
+    return (G.stat={cx:cx,cy:cy,dist:dist,by:by,fs:fs});
+  }
+  function rank(a,v){var lo=0,hi=a.length;while(lo<hi){var m=(lo+hi)>>1;if(a[m]<v)lo=m+1;else hi=m}return lo/a.length}
+  function galStory(G,row,t){
+    var S2=galStats(G),c=G.cl[row],K=G.cs.length,yr=G.yr[row]+G.y0,out=[],esc2=function(x){return String(x).replace(/[&<>]/g,function(ch){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[ch]})};
+    // rank of this constellation by size
+    var sizes=G.cs.map(function(x){return x[1]}),bigger=sizes.filter(function(x){return x>sizes[c]}).length+1;
+    var med=G.cs[c][2],gap=yr-med;
+    out.push('<b>'+esc2(cname(G,c))+' constellation.</b> It is the '+(bigger===1?'largest':'No. '+bigger+' largest')+' of '+K+' in the breed, with '+G.cs[c][1].toLocaleString()+' dogs and a median birth year of '+med+'. This dog was born '+(Math.abs(gap)<=3?'right in the middle of that era':Math.abs(gap)+' years '+(gap>0?'after':'before')+' the constellation\'s middle')+'.');
+    // position within the constellation and nearest neighbor
+    var pr=rank(S2.by[c],S2.dist[row]),px=G.qx[row]/65535,py=G.qy[row]/65535*G.asp,best=-1,bd=1e9;
+    for(var k=0;k<K;k++){if(k===c)continue;var d=Math.hypot(px-S2.cx[k],py-S2.cy[k]);if(d<bd){bd=d;best=k}}
+    var where=pr<.2?'near its core, among the most typical dogs of the group':pr>.8?'out toward its edge, farther from the center than '+Math.round(pr*100)+'% of its constellation':'about halfway between the center and the edge';
+    out.push('On the map it sits '+where+(best>=0?', with '+esc2(cname(G,best))+' as the nearest neighboring constellation':'')+'.');
+    // where the ancestors came from
+    var mix={},tot=0;t.anc.forEach(function(g,i){if(i===row||g>6)return;var w=Math.pow(.5,g);mix[G.cl[i]]=(mix[G.cl[i]]||0)+w;tot+=w});
+    if(tot>0){
+      var ks=Object.keys(mix).map(Number).sort(function(a,b){return mix[b]-mix[a]}),own=(mix[c]||0)/tot;
+      var others=ks.filter(function(k){return k!==c&&mix[k]/tot>=.08}).slice(0,3).map(function(k){return esc2(cname(G,k))+' ('+Math.round(mix[k]/tot*100)+'%)'});
+      out.push('Weighting near ancestors most, '+Math.round(own*100)+'% of its pedigree comes from its own constellation'+(others.length?' and the rest chiefly from '+others.join(', ')+(own<.4?', so it is a true crossroads dog':''):'')+'.');
+    }
+    // descendants
+    var dn=t.desc.size-1;
+    if(dn>0){var inC=0,oth={};t.desc.forEach(function(g,i){if(i===row)return;if(G.cl[i]===c)inC++;else oth[G.cl[i]]=(oth[G.cl[i]]||0)+1});
+      var ok=Object.keys(oth).map(Number).sort(function(a,b){return oth[b]-oth[a]})[0];
+      out.push('Of its '+dn.toLocaleString()+' known descendants, '+Math.round(inC/dn*100)+'% stayed in '+esc2(cname(G,c))+(ok!==undefined&&oth[ok]/dn>=.1?' and '+Math.round(oth[ok]/dn*100)+'% went on to '+esc2(cname(G,ok)):'')+'.');
+    }
+    // inbreeding versus the breed
+    var fr=rank(S2.fs,G.f8[row]);
+    out.push(G.f8[row]===0?'No inbreeding shows up in its recorded pedigree.':'Its inbreeding coefficient is higher than '+Math.round(fr*100)+'% of dogs in the galaxy.');
+    return out.map(function(x){return '<p style="margin:.4em 0">'+x+'</p>'}).join('');
+  }
   function renderGalaxy(){
     var facts=$('galfacts'),akc=primaryReg(),id=S.dog.id;
     $('galopen').href=akc?'/breed-galaxy.html#dog='+encodeURIComponent(akc):'/breed-galaxy.html';
-    facts.textContent='Loading the map…';
+    facts.textContent='Loading the map…';$('galstory').innerHTML='';
     loadGalaxy().then(function(G){
       var row=-1;
       if(G.rh&&akc){var h=fnv(akc.toUpperCase().replace(/[^A-Z0-9]/g,''));for(var i=0;i<G.N;i++)if(G.rh[i]===h){row=i;break}}
@@ -564,7 +608,8 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
       if(row<0){facts.textContent='Not in the galaxy yet.'+(S.dog.pending?'':' We\'ve noted that someone looked for it.');return}
       var t=drawGalaxy(G,row)||galTrace(G,row),maxA=0,maxD=0;
       t.anc.forEach(function(g){if(g>maxA)maxA=g});t.desc.forEach(function(g){if(g>maxD)maxD=g});
-      facts.textContent='Born '+(G.yr[row]+G.y0)+' · '+(t.anc.size-1)+' known ancestors over '+maxA+' generations · '+(t.desc.size-1)+' known descendants over '+maxD+' · '+G.cs[G.cl[row]][0]+' constellation · inbreeding '+(G.f8[row]*0.5/255*100).toFixed(1)+'%';
+      facts.textContent='Born '+(G.yr[row]+G.y0)+' · '+(t.anc.size-1)+' known ancestors over '+maxA+' generations · '+(t.desc.size-1)+' known descendants over '+maxD+' · inbreeding '+(G.f8[row]*0.5/255*100).toFixed(1)+'%';
+      $('galstory').innerHTML=galStory(G,row,t);
     }).catch(function(){facts.textContent='The map could not be loaded.'});
   }
 
