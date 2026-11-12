@@ -1,0 +1,6 @@
+{
+  "0": { "name": "Administrator", "role": "Administrator", "status": "active" },
+  "1": { "name": "Dustin Mayfield-Jones", "role": "Owner and breeder", "status": "active" },
+  "2": { "name": "Karen Mayfield-Jones", "role": "Owner and breeder", "status": "active" },
+  "3": { "name": "Sample Importer v1", "role": "Automated importer", "status": "active" }
+}

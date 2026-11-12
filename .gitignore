@@ -34,3 +34,6 @@ __pycache__/
 
 # Fetched from private storage at build time
 public/data/dog-shows.json
+
+# private pedigree sample for the dog page demo (names and numbers; never commit)
+public/data/private/

@@ -62,6 +62,10 @@ h1{font-size:1.5rem;margin:0 0 2px;letter-spacing:.01em}
 .ksearch{position:relative;max-width:420px;margin-bottom:10px}
 .ksearch input{width:100%;font:inherit;font-size:.9rem;color:var(--ink);background:#151826;border:1px solid #343850;border-radius:8px;padding:7px 12px}
 .kres{position:absolute;left:0;right:0;top:100%;margin:4px 0 0;padding:4px;list-style:none;background:#10131d;border:1px solid #3a3e52;border-radius:8px;z-index:6;max-height:300px;overflow:auto;display:none}
+.dogfind{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.dogfind input{font:inherit;font-size:.85rem;color:var(--ink);background:#151826;border:1px solid #343850;border-radius:8px;padding:6px 10px;width:15.5rem;max-width:100%}
+.dogfind button{font:inherit;font-size:.85rem;border:1px solid #343850;background:#1c2032;color:var(--ink);border-radius:8px;padding:6px 12px;cursor:pointer}
+#dogmsg{font-size:.8rem;color:var(--mute)}
 .kres li{padding:6px 10px;border-radius:6px;cursor:pointer;font-size:.88rem;display:flex;justify-content:space-between;gap:12px}
 .kres li:hover,.kres li.on{background:#1c2032}.kres small{color:var(--mute)}
 .kg{margin:8px 0 0}.kg summary{cursor:pointer;font-size:.78rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--mute);margin:0 0 6px;list-style:revert}.kg summary small{font-weight:400}
@@ -102,6 +106,7 @@ h1{font-size:1.5rem;margin:0 0 2px;letter-spacing:.01em}
       <button type="button" data-m="coat" aria-pressed="false">Coat</button>
       <button type="button" data-m="inb" aria-pressed="false">Inbreeding</button>
     </div>
+    <form id="dogform" class="dogfind" autocomplete="off"><input id="dogq" type="search" placeholder="Find a dog by registration number" aria-label="Find a dog by registration number"><button type="submit">Find</button><span id="dogmsg" role="status"></span></form>
     <button id="reset" type="button">Reset view</button>
   </div>
   <div class="legend" id="legend"></div>
@@ -138,6 +143,7 @@ h1{font-size:1.5rem;margin:0 0 2px;letter-spacing:.01em}
     <ul id="m-sweep"></ul>
     <p>Each Kennel Constellation is named for its most characteristic kennel: the kennel name whose dogs fill the most of the group while sitting mostly inside it, so a kennel with a few dogs in many groups does not win. Each kennel names at most one constellation, and a group with no fitting kennel is just numbered. The name says where a line is concentrated, not that every dog in it came from that kennel. The clusters are a mathematical convenience: the breed is one continuous tangle of lines, and many dogs sit between two constellations.</p>
   </section>
+  <p class="notes"><b>Finding a dog by number.</b> The page holds no names and no readable registration numbers. For each dog with a number it holds a short fingerprint (a hash), so you can find a dog whose number you already know. Registration numbers are easy to guess, so this keeps the list from being browsed casually; it does not make the numbers secret. About two in three dogs have a number in the source; placeholders such as &ldquo;UNREG&rdquo; are left out.</p>
   <p class="notes"><b>How to read it.</b> Position comes from a force layout of the whole pedigree: dogs that share many ancestors end up near each other, so the axes mean nothing and only distance does. The oldest dogs (amber in Era view) sit along the right edge. About <span id="imp"></span> of dogs have no recorded birth year; theirs is estimated from their parents and offspring, and the tooltip says so. After about 2020 the records thin out, so the later years hold only our own litters and their ancestors. Inbreeding is the 10-generation figure and is lower for early dogs only because their pedigrees are shorter. About <span id="left"></span> of the file sits in small disconnected pedigrees and is left out. The page holds no dog names or registration numbers; kennel names are matched from registered names and stored only as which dogs carry them.</p>
 </div>
 <script>
@@ -153,6 +159,8 @@ const qx=unb(DATA.x,Uint16Array),qy=unb(DATA.y,Uint16Array),yrs=unb(DATA.yr,Uint
 const sire=unb(DATA.sire,Int32Array),dam=unb(DATA.dam,Int32Array)
 const px=new Float32Array(N),py=new Float32Array(N),year=new Float32Array(N)
 for(let i=0;i<N;i++){px[i]=qx[i]/65535;py[i]=qy[i]/65535;year[i]=yrs[i]+Y0}
+const RH=DATA.rh?unb(DATA.rh,Uint32Array):null
+const fnv=s=>{let h=0x811c9dc5;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,0x01000193)}return h>>>0}
 const CL=unb(DATA.cl,Uint8Array),CS=DATA.cs.map(([name,n,med,share],i)=>({name:name||('Group '+(i+1)),named:!!name,n,med,share,i}))
 const NC=CS.length
 const hsl=(h,s,l)=>{s/=100;l/=100;const a=s*Math.min(l,1-l),f=n=>{const k=(n+h/30)%12;return l-a*Math.max(-1,Math.min(k-3,9-k,1))};return [Math.round(f(0)*255),Math.round(f(8)*255),Math.round(f(4)*255)]}
@@ -391,6 +399,17 @@ function pick(mx,my){
   return best
 }
 
+// --- find a dog by registration number ---
+// The page holds only a short hash of each number, so this finds a dog you already know the number of.
+function locate(i){if(year[i]>cur)setYear(Math.ceil(year[i]));K=14;const s=S();TX=W/2-px[i]*s;TY=H/2-py[i]*ASPECT*s;traceFrom(i)}
+if(!RH)$('dogform').style.display='none'
+else $('dogform').addEventListener('submit',e=>{e.preventDefault()
+  const q=$('dogq').value.toUpperCase().replace(/[^A-Z0-9]/g,''),msg=$('dogmsg');if(!q){msg.textContent='';return}
+  const h=fnv(q),hits=[];for(let i=0;i<N;i++)if(RH[i]===h)hits.push(i)
+  if(!hits.length){msg.textContent='No dog with that number in this file.';return}
+  msg.textContent=hits.length>1?hits.length+' records share that number; showing the first. Check its birth year.':''
+  locate(hits[0])})
+
 // --- input ---
 const ptrs=new Map();let moved=0,pinch=0
 cv.addEventListener('pointerdown',e=>{cv.setPointerCapture(e.pointerId);ptrs.set(e.pointerId,[e.offsetX,e.offsetY]);moved=0;cv.classList.add('drag')
@@ -466,6 +485,8 @@ requestAnimationFrame(()=>{reset();setMode(mode);requestAnimationFrame(()=>draw(
 document.addEventListener('visibilitychange',()=>{if(!document.hidden){last=performance.now();draw()}})
 if(!matchMedia('(prefers-reduced-motion: reduce)').matches){cur=MINY;pg=0;scrub.value=cur;playing=true;flash=1;$('play').textContent='Pause';last=performance.now();setTimeout(()=>{last=performance.now();requestAnimationFrame(tick)},900)}
 else setYear(MAXY)
+// deep link from a dog page: breed-galaxy.html#dog=<registration number>
+{const m=/[#&]dog=([^&]+)/.exec(location.hash);if(m&&RH){playing=false;$('play').textContent='Play';setYear(MAXY);$('dogq').value=decodeURIComponent(m[1]);$('dogform').dispatchEvent(new Event('submit',{cancelable:true}))}}
 })()
 </script>
 </body>

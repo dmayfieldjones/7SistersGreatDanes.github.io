@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Dog Page Demo | 7Sisters Farm</title>
+<script src="/private-gate.js" data-key="dog-page-demo" data-codes="1887"></script>
+<style>
+:root{--page:#f9f9f7;--surface:#fcfcfb;--card:#fff;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--grid:#e1e0d9;--rule:#c3c2b7;--accent:#bf141c;--ok:#1b6b3a;--warn:#8a5a00;--info:#1f4f9a}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--page:#0d0d0d;--surface:#1a1a19;--card:#161615;--ink:#f0efec;--ink2:#c3c2b7;--muted:#898781;--grid:#2c2c2a;--rule:#383835;--accent:#ff5a62;--ok:#5fcf8a;--warn:#e8b04a;--info:#7fb0ff}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:52rem;margin:0 auto;padding:16px 16px 56px}
+a{color:var(--ink)}
+.demo-banner{background:var(--surface);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:8px;padding:10px 14px;font-size:.88rem;color:var(--ink2);margin:0 0 16px}
+.demo-banner b{color:var(--ink)}
+.hero{display:grid;grid-template-columns:minmax(0,13rem) 1fr;gap:18px;align-items:start;margin-bottom:14px}
+.hero img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:10px;border:1px solid var(--grid)}
+h1{font-size:1.7rem;line-height:1.2;margin:0 0 4px}
+.sub{color:var(--ink2);margin:0 0 10px;font-size:.95rem}
+dl.facts{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:0;font-size:.9rem}
+dl.facts dt{color:var(--muted)}dl.facts dd{margin:0}
+.tabs{display:flex;gap:4px;flex-wrap:wrap;border-bottom:2px solid var(--grid);margin:18px 0 18px}
+.tabs button{font:600 .9rem system-ui,sans-serif;background:none;border:none;border-bottom:3px solid transparent;margin-bottom:-2px;padding:9px 13px;color:var(--ink2);cursor:pointer}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tabs .n{font-weight:500;color:var(--muted);margin-left:4px}
+section[hidden]{display:none}
+h2{font-size:1.15rem;margin:0 0 10px}
+h3{font-size:1rem;margin:18px 0 8px}
+.card{background:var(--card);border:1px solid var(--grid);border-radius:10px;padding:12px 15px;margin:0 0 10px}
+.card.hidden-entry,.card.old{opacity:.7;border-style:dashed}
+.row{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;font-size:.85rem;color:var(--ink2);margin:0 0 4px}
+.who{font-weight:700;color:var(--ink)}
+.chip{display:inline-block;font:600 .68rem/1 system-ui,sans-serif;letter-spacing:.04em;text-transform:uppercase;border:1px solid currentColor;border-radius:999px;padding:4px 8px}
+.chip.demo{color:var(--accent)}.chip.doc{color:var(--ok)}.chip.self{color:var(--muted)}.chip.role{color:var(--info)}.chip.disp{color:var(--warn)}
+.title{font-weight:700}
+.val{font-size:1.02rem;margin:2px 0 4px}
+button.act,button.sm{font:600 .82rem system-ui,sans-serif;border:1px solid var(--rule);background:var(--surface);color:var(--ink);border-radius:8px;padding:6px 11px;cursor:pointer}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+button.sm.danger{color:var(--accent);border-color:var(--accent)}
+form.f{display:grid;gap:8px;margin-top:8px}
+form.f .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+select,input[type=text],input[type=date],input[type=url]{font:inherit;font-size:.9rem;padding:7px 9px;border:1px solid var(--rule);border-radius:8px;background:var(--surface);color:var(--ink);width:100%}
+.meta{font-size:.8rem;color:var(--muted)}
+.empty{border:2px dashed var(--rule);border-radius:10px;padding:18px;color:var(--ink2);text-align:center}
+.photos{display:grid;grid-template-columns:repeat(auto-fill,minmax(10rem,1fr));gap:10px}
+.photos figure{margin:0}.photos img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px;border:1px solid var(--grid)}
+.photos figcaption{font-size:.78rem;color:var(--ink2);margin-top:3px}
+table{border-collapse:collapse;width:100%;font-size:.86rem}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--grid);vertical-align:top}
+th{font-weight:700;border-bottom:2px solid var(--rule)}
+.tw{overflow-x:auto}
+code,pre{font:.8rem/1.45 ui-monospace,SFMono-Regular,Menlo,monospace}
+pre{background:var(--surface);border:1px solid var(--grid);border-radius:8px;padding:10px 12px;overflow-x:auto;margin:0 0 10px}
+.track{border:1px solid var(--grid);border-radius:10px;background:var(--card);padding:12px 14px;margin:0 0 12px}
+.fake-track{height:46px;border-radius:6px;background:repeating-linear-gradient(90deg,var(--grid) 0 2px,transparent 2px 24px);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:.8rem;margin-top:8px}
+.who-box{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;font-size:.85rem;margin:0 0 16px;color:var(--ink2)}
+.who-box select{width:auto}
+.log li{margin:0 0 6px;font-size:.88rem}
+ul.plain{padding-left:1.1rem;margin:0 0 12px}
+.linkout a{font-weight:600}
+#galaxy canvas{width:100%;height:320px;display:block;background:#05060a;border:1px solid var(--grid);border-radius:10px}
+#galaxy .gbar{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin:8px 0 0;font-size:.85rem}
+#galaxy .seg button[aria-pressed="true"]{background:var(--ink);color:var(--page)}
+.dotkey{display:inline-block;width:.7em;height:.7em;border-radius:50%;margin-right:4px;vertical-align:-1px}
+#dog-hero img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:10px;border:1px solid var(--grid)}
+#dog-hero .noimg{border:1px solid var(--grid);border-radius:10px}
+.onsite{display:flex;align-items:center;justify-content:center;aspect-ratio:4/3;background:var(--surface);color:var(--info);font-size:.8rem;text-decoration:none;font-weight:600}
+.pedgrid.d6 .pn,.pedgrid.d7 .pn,.pedgrid.d8 .pn{padding:1px 6px;white-space:nowrap;overflow:hidden;flex-direction:row;align-items:center;gap:6px}
+.pedgrid.d6 .pn a.nm,.pedgrid.d7 .pn a.nm,.pedgrid.d8 .pn a.nm{overflow:hidden;text-overflow:ellipsis;font-size:.66rem;font-weight:500}
+.pedgrid.d6 .pn .m,.pedgrid.d7 .pn .m,.pedgrid.d8 .pn .m,.pedgrid.d6 .pn a.cam svg,.pedgrid.d7 .pn a.cam svg,.pedgrid.d8 .pn a.cam svg{display:none}
+.pedgrid.d7 .pn a.nm,.pedgrid.d8 .pn a.nm{font-size:.58rem}
+.pedgrid{display:grid;gap:4px;overflow-x:auto;padding-bottom:6px}
+.pn{background:var(--card);border:1px solid var(--grid);border-left:4px solid var(--info);border-radius:6px;padding:4px 8px;font-size:.78rem;line-height:1.25;display:flex;flex-direction:column;justify-content:center;min-width:0}
+.pn.dam{border-left-color:var(--accent)}.pn.root{border-left-color:var(--ink)}
+.pn a.nm{font-weight:600;color:var(--ink);text-decoration:none;overflow-wrap:anywhere}
+.pn a.nm:hover{text-decoration:underline}
+.pn .m{color:var(--muted);font-size:.7rem}
+.pn a.cam{display:inline-flex;align-items:center;gap:3px;color:var(--info);font-size:.68rem;text-decoration:none;margin-top:2px}
+.pn a.cam svg{width:12px;height:12px}
+.parents{display:grid;grid-template-columns:repeat(auto-fill,minmax(14rem,1fr));gap:10px}
+.pcard{background:var(--card);border:1px solid var(--grid);border-radius:10px;overflow:hidden}
+.pcard .ph{display:block}.pcard .ph img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
+.noimg{display:flex;align-items:center;justify-content:center;aspect-ratio:4/3;background:var(--surface);color:var(--muted);font-size:.8rem;text-align:center;padding:8px}
+.pcard .pb{padding:10px 12px;font-size:.88rem}.pcard .pb b{display:block;font-size:.95rem}
+form.inline{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:0}
+form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem}
+.fact-by{font-size:.75rem;color:var(--muted);margin-left:6px}
+@media (max-width:560px){.hero{grid-template-columns:1fr}main{padding:12px 12px 44px}form.f .two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main>
+<div class="demo-banner"><b>Demo.</b> Piper's photos are real. The two member accounts are real people (the owners). Every record, link and account request below is <b>invented sample content</b>, not a real result, and nothing on this page is saved.</div>
+
+<div id="backrow" class="meta" style="margin:0 0 8px"></div>
+<div id="pendingnote" class="card" hidden style="border-left:4px solid var(--warn)"></div>
+<div class="hero">
+  <div id="dog-hero"></div>
+  <div>
+    <h1 id="dog-name"></h1>
+    <p class="sub" id="dog-sub"></p>
+    <dl class="facts">
+      <dt>Call name</dt><dd id="dog-call"></dd>
+      <dt>Registrations</dt><dd id="dog-regs"></dd>
+      <dt>Breeders</dt><dd id="dog-breeders"></dd>
+      <dt>Claimed by</dt><dd id="dog-owners"></dd>
+      <span id="dog-facts" style="display:contents"></span>
+      <dt>Also on</dt><dd id="dog-ped"></dd>
+      <dt>Genetic data</dt><dd>Embark kit ordered, results pending</dd>
+    </dl>
+  </div>
+</div>
+
+<section id="galaxy" style="margin:0 0 18px">
+  <h2>Where this dog sits</h2>
+  <canvas id="galcv" aria-label="Map of the breed with this dog highlighted"></canvas>
+  <div class="gbar">
+    <span class="seg"><button class="sm" type="button" data-gmode="all" aria-pressed="true">Whole breed</button> <button class="sm" type="button" data-gmode="near" aria-pressed="false">Close up</button></span>
+    <span class="meta"><span class="dotkey" style="background:#fff"></span>this dog <span class="dotkey" style="background:#ffc04d;margin-left:8px"></span>ancestors <span class="dotkey" style="background:#5ad7ff;margin-left:8px"></span>descendants</span>
+    <a id="galopen" target="_blank" rel="noopener">Open in the galaxy &#8599;</a>
+  </div>
+  <p class="meta" id="galfacts"></p>
+</section>
+
+<section id="pedigree" style="margin:0 0 18px">
+  <h2>Pedigree</h2>
+  <p class="meta"><label for="gens">Generations</label> <select id="gens" style="width:auto;display:inline-block"><option>3</option><option selected>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select> &nbsp;Generated from our own pedigree data when you open this tab. Nothing is stored per dog. Sample data from your Ezra explorer pages, which hold 8 generations above each dog. Cora's sire side is not available.</p>
+  <div id="pedgrid" class="pedgrid"></div>
+  <p class="meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg> marks a dog with a photo on River Rock Pedigree. It opens the photo on their site in a new tab; we don't host or copy it.</p>
+</section>
+
+<div class="who-box">
+  <form id="findform" style="display:inline-flex;gap:6px;align-items:center">
+    <input type="text" id="dogfind" placeholder="Find a dog by registration number" aria-label="Find a dog by registration number" style="width:16rem" autocomplete="off">
+    <button class="sm" type="submit">Find</button>
+  </form>
+  <span class="meta" id="findmsg"></span>
+  <label for="me">Viewing as:</label>
+  <select id="me" aria-label="Demo member to act as"></select>
+  <span class="meta" id="auth-src"></span>
+</div>
+
+<div class="tabs" role="tablist">
+  <button role="tab" aria-selected="true" data-tab="rec">Records<span class="n" id="n-rec"></span></button>
+  <button role="tab" aria-selected="false" data-tab="photos">Photos</button>
+  <button role="tab" aria-selected="false" data-tab="seq">Sequence</button>
+  <button role="tab" aria-selected="false" data-tab="model">Data model</button>
+  <button role="tab" aria-selected="false" data-tab="admin">Admin view</button>
+</div>
+
+<section id="tab-rec">
+  <h2>Links out</h2>
+  <p class="meta">Built from the registration number. Nothing is copied.</p>
+  <div id="links"></div>
+
+  <h2 style="margin-top:22px">Parents</h2>
+  <div id="parents" class="parents"></div>
+
+  <details class="card" style="margin-top:14px">
+    <summary><b>Ownership history from AKC</b> <span class="meta">(our dogs only; not part of the shared model)</span></summary>
+    <div id="own-hist" style="margin-top:8px"></div>
+  </details>
+
+  <h2 style="margin-top:22px">Offspring in our records</h2>
+  <div id="offspring"></div>
+
+  <h2 style="margin-top:22px">Litters</h2>
+  <div id="litters"></div>
+  <details class="card">
+    <summary><b>Add a litter</b></summary>
+    <form id="new-litter" class="f">
+      <div class="two">
+        <input type="date" id="nl-date" required aria-label="Whelp date">
+        <input type="text" id="nl-mate" maxlength="60" placeholder="Other parent (call name or registered name)" required>
+      </div>
+      <div class="two">
+        <select id="nl-kind" aria-label="Link type"><option>Litter page</option><option>Breeder website</option><option>Announcement image</option><option>Registry record</option></select>
+        <input type="url" id="nl-url" placeholder="Link (https://…)" required>
+      </div>
+      <button class="act primary" type="submit">Add under my name</button>
+    </form>
+  </details>
+
+  <h2 style="margin-top:22px">Test results and titles</h2>
+  <p class="meta">Each entry needs a date and an evidence link. Flag anything that looks wrong.</p>
+  <div id="entries"></div>
+
+  <details class="card">
+    <summary><b>Add a record</b></summary>
+    <form id="new-rec" class="f">
+      <div class="two">
+        <select id="nr-type" aria-label="Record type"><option value="test">Test result</option><option value="win">Show win or title</option><option value="link">Link out</option></select>
+        <input type="text" id="nr-name" maxlength="60" placeholder="Test, event, or system (for example, Hips, or OFA)" required>
+      </div>
+      <div class="two">
+        <input type="text" id="nr-val" maxlength="40" placeholder="Result, placement, or registration number">
+        <input type="date" id="nr-date" required>
+      </div>
+      <input type="url" id="nr-url" placeholder="Evidence link (not needed for OFA: built from the registration number)">
+      <button class="act primary" type="submit">Add under my name</button>
+    </form>
+  </details>
+</section>
+
+
+
+<section id="tab-photos" hidden>
+  <h2>Photos</h2>
+  <p class="meta">Added by the owner or someone the owner approves. Any photo can be flagged.</p>
+  <div id="photos-none" class="empty" hidden>No photos yet.</div>
+  <div class="photos" id="photos-412">
+    <figure><img src="/img/piper.jpg" alt="Piper as a puppy" loading="lazy"><figcaption><span class="chip self">puppy</span> Credit: <span data-a="1"></span></figcaption></figure>
+    <figure><img src="/img/piper-first-litter-5-fawn-puppies-4-boys-1-girl-breeding-female-mia.jpg" alt="First litter puppies" loading="lazy"><figcaption><span class="chip self">litter</span> July 2023. Credit: <span data-a="1"></span></figcaption></figure>
+    <figure><img src="/img/piper-captain-mother-son-tiktok-star-sweetest-dog.jpg" alt="Piper with her son" loading="lazy"><figcaption><span class="chip self">representative</span> Sept 2023. Credit: <span data-a="2"></span></figcaption></figure>
+    <figure><img src="/img/piper-second-litter-3-fawn-1-brindle-puppies-with-breeding-female-cora.jpg" alt="Second litter puppies" loading="lazy"><figcaption><span class="chip self">litter</span> Aug 2024. Credit: <span data-a="1"></span></figcaption></figure>
+  </div>
+</section>
+
+<section id="tab-seq" hidden>
+  <h2>Sequence and genotype data</h2>
+  <div class="empty" style="margin-bottom:14px"><b>Embark results pending.</b><br>When the kit returns, one claim is added: data type, version, link, contributor. The converted VCF is hosted in cloud storage and appears here as a genome browser track. Nothing is shown until real data exists.</div>
+  <div class="track">
+    <div class="row"><span class="who">Embark SNP array</span><span class="chip self">pending</span></div>
+    <p class="meta" style="margin:0">About 200,000 markers, not a whole genome. Labeled as an array so no one mistakes it for sequence.</p>
+    <div class="fake-track">placeholder for the genome browser track</div>
+  </div>
+  <div class="track">
+    <div class="row"><span class="who">Whole-genome sequence</span><span class="chip self">not yet</span></div>
+    <p class="meta" style="margin:0">Raw reads go to NCBI SRA (shown here as an accession link). Processed CRAM and VCF sit in cloud storage, and the browser reads only the visible region.</p>
+  </div>
+</section>
+
+<section id="tab-model" hidden>
+  <h2>How little we store</h2>
+  <p class="meta">A claim is one short row. Names, roles and status live once in a small authors file that the page loads when it opens, so a change shows up everywhere without touching any claim. Heavy files stay in cloud storage and are referenced by link.</p>
+  <h3>Dog (stored once)</h3>
+  <pre id="model-dog"></pre>
+  <h3>Identifiers (any registry, any number of them)</h3>
+  <div class="tw"><table><thead><tr><th>dog</th><th>registry</th><th>number</th><th>author</th><th>date</th></tr></thead><tbody id="model-ids"></tbody></table></div>
+  <p class="meta">The registered name is the dog's main label and the call name is a separate field. Links such as OFA are built from an identifier and a URL template, so they're never stored.</p>
+  <h3>Litters (stored once; each puppy points to its litter)</h3>
+  <pre id="model-litters"></pre>
+  <h3>Claims (stored)</h3>
+  <div class="tw"><table><thead><tr><th>id</th><th>dog</th><th>type</th><th>name</th><th>value</th><th>ver</th><th>author</th><th>date</th><th>status</th></tr></thead><tbody id="model-claims"></tbody></table></div>
+  <h3>Authors file (loaded live from <code>/data/demo-authors.json</code>)</h3>
+  <pre id="model-authors"></pre>
+  <h3>Three kinds of version</h3>
+  <ul class="plain meta">
+    <li><b>Claim version:</b> a correction adds a new row, the old row stays as superseded.</li>
+    <li><b>Data version:</b> which array or panel release produced a genotype file.</li>
+    <li><b>Reference build:</b> which genome assembly the coordinates use. Mixing these is a silent error, so it's always stated.</li>
+  </ul>
+</section>
+
+<section id="tab-admin" hidden>
+  <h2>Administrator view</h2>
+  <p class="meta">Confirms real identities. Records are not queued for approval.</p>
+
+  <div class="card">
+    <h3 style="margin-top:0">Account requests</h3>
+    <div class="tw"><table>
+      <thead><tr><th>Name</th><th>Role</th><th>How to verify</th><th></th></tr></thead>
+      <tbody id="requests"></tbody>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">Graded actions</h3>
+    <ul class="plain">
+      <li><b>Suspend account:</b> can't add records, existing ones stay.</li>
+      <li><b>Hide record or photo:</b> collapsed with a visible reason, kept in the data.</li>
+      <li><b>Remove record:</b> last resort (legal or illegal content), kept in an admin-only archive.</li>
+      <li><b>Revoke account:</b> permanent, reason recorded.</li>
+    </ul>
+    <p class="meta">Try it: view as the Administrator on the Records tab and use "Hide".</p>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">Dogs people looked for that we don't fully have</h3>
+    <p class="meta">Built from searches and page opens. Nothing is looked up on other sites automatically. This is the list to send when asking for a data update, or to check by hand.</p>
+    <div class="tw"><table>
+      <thead><tr><th>Registration</th><th>Asked</th><th>What is missing</th><th>Look it up</th><th></th></tr></thead>
+      <tbody id="wanted"></tbody>
+    </table></div>
+    <p style="margin:10px 0 0"><button class="sm" type="button" data-copywanted="1">Copy the list of numbers</button></p>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">Action log</h3>
+    <ul class="log plain" id="log"><li class="meta">No actions yet.</li></ul>
+  </div>
+</section>
+</main>
+
+<script>
+window.PEDDB_LABEL='River Rock Pedigree';
+function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp.textContent='Photo on '+window.PEDDB_LABEL;el.replaceWith(sp)}
+(function(){
+  var authors = {};
+  var DOG = 412; // sample internal ids: 412 Piper, 413 Mia, 414 Cora
+  var DOGS = {
+    412:{id:412, registered:'CH Legado N Danekraaft\u2019s How Can I Tell You?', listName:'Legado N Danekraaft\'s How Can I Tell You?', call:'Piper', sex:'female', color:'fawn', photo:'/img/piper.jpg', ext:true},
+    413:{id:413, registered:'CH 7sisters N Legado\u2019s I Wanna Dance, I Wanna Win', listName:'7sisters N Legado\'s I Wanna Dance, I Wanna Win', call:'Mia', sex:'female', color:'fawn', photo:'', ext:false},
+    414:{id:414, registered:'7sisters N Legado\u2019s Heart Of Gold', listName:'7sisters N Legado\'s Heart Of Gold', call:'Cora', sex:'female', color:'fawn', photo:'', ext:false}
+  };
+  // A litter is stored once: its sire, dam, whelp date and breeders. Each dog points to its litter, so parents, breeders and
+  // "offspring in our records" are derived and never repeated per puppy.
+  var LITTERS = {
+    L412:{whelp:'2020-09-26', src:'AKC', author:1, breeders:['p1','p2','p3','p4'],
+      sire:{reg:'WS54036904', name:'PRF Fendane Have I Gone Mad', title:'Am CH'}, dam:{reg:'WS59632103', name:'Danekraafts It\'s a Jungle Out Here', title:'UKC & Int Ch'}},
+    L2023:{whelp:'2023-07-09', src:'AKC', author:1, breeders:['u2','u1','p2','p1'],
+      sire:{reg:'WS66273805', name:'Fendanesylcrest N Diriso\'s This Is The Right Time', title:'GCHS CH'}, dam:{reg:'WS69691106', name:'Legado N Danekraaft\'s How Can I Tell You?', title:'CH'}},
+    L2024:{whelp:'2024-08-19', src:'AKC', author:1, breeders:['u2','u1','p2','p1'],
+      sire:{reg:'WS80095602', name:'Legado N Izya\'s Oops! I Did It Again', title:''}, dam:{reg:'WS69691106', name:'Legado N Danekraaft\'s How Can I Tell You?', title:'CH'}}
+  };
+  DOGS[412].litter='L412'; DOGS[413].litter='L2023'; DOGS[414].litter='L2024';
+  var dog = DOGS[DOG];
+  // External pedigree databases we link to. Each one gets its own labeled link, like this one. Add another by copying this entry.
+  // Pages here are addressed by registered name (titles dropped), photos by registration number.
+  var DB = {
+    label: 'River Rock Pedigree',
+    site: 'https://breedpedigrees.com/',
+    short: 'River Rock',
+    page: 'https://breedpedigrees.com/pedpoint/pp_pedigree.php?id={id}&db=pedigree&gens=9',
+    photo: 'https://breedpedigrees.com/pedpoint/images/{reg}.jpg'
+  };
+  // Quintessa: its pages use an internal index we cannot compute, but its search takes a registration number and lists the match
+  // (with links to the pedigree, photo and breeding page). The site asks that it be viewed by hand, so we only link to it.
+  var DBQ = {label:'Quintessa Pedigree', site:'https://www.quintessa.net.au/', search:'https://www.quintessa.net.au/cgi-bin/geneal.pl?gens=5&pattern={id}&db=Quintess.dbw&op=search'};
+  function qurl(n){return DBQ.search.replace('{id}',encodeURIComponent(n))}
+  function pedurl(n){return DB.page.replace('{id}',encodeURIComponent(n))}
+  function photourl(r){return DB.photo.replace('{reg}',encodeURIComponent(r))}
+  // A dog can have two registration numbers ("FIN26965/97 / WP81315901"); the image is named with the American one.
+  function photoReg(r,list){var parts=String(r).split(' / ');for(var i=0;i<parts.length;i++){var t=parts[i].trim();if(/^[A-Z]{2}\d{6,}$/.test(t)&&(!list||list.indexOf(t)>-1))return t}return null}
+  var identifiers = [
+    {dog:DOG, registry:'AKC', number:'WS69691106', author:1, date:'2026-11-12'},
+    {dog:DOG, registry:'OFA', number:'OFA25G', author:1, date:'2026-11-12'},
+    {dog:DOG, registry:'CHIC', number:'CHIC181340', author:1, date:'2026-11-12'},
+    {dog:413, registry:'AKC', number:'WS81418801', author:1, date:'2026-11-12'},
+    {dog:413, registry:'OFA', number:'OFA30F', author:1, date:'2026-11-12'},
+    {dog:413, registry:'CHIC', number:'CHIC215182', author:1, date:'2026-11-12'},
+    {dog:414, registry:'AKC', number:'WS84850303', author:1, date:'2026-11-12'}
+  ];
+  function mine(){return claims.filter(function(c){return c.dog===DOG})}
+  function myIds(){return identifiers.filter(function(i){return i.dog===DOG})}
+  function dogByReg(r){var i=identifiers.filter(function(x){return x.number===r})[0];return i?i.dog:null}
+  function primaryReg(){var l=myIds();return (l.filter(function(x){return x.registry==='AKC'})[0]||l[0]||{}).number}
+  // People who can be credited as breeders or owners. Names are as AKC lists them; set consent:false on a person to show only a short form.
+  var PEOPLE = {
+    u1:{label:'Dustin Mayfield-Jones', member:1, consent:true},
+    u2:{label:'Karen Mayfield-Jones', member:2, consent:true},
+    p1:{label:'Jason L Dubman', member:null, consent:true},
+    p2:{label:'Francisco Camacho', member:null, consent:true},
+    p3:{label:'Priyanka Deshmuhk', member:null, consent:true},
+    p4:{label:'Phoebe Dubman', member:null, consent:true},
+    p5:{label:'Karen Martin', member:null, consent:true}
+  };
+  // Cross-references: the claim stores only the identifier, and the link is built from a template.
+  // AKC: add the lookup address pattern here ({id} = registration number) and the link switches on.
+  // OFA's own search box submits GET /advanced-search?quicksearch=<Reg#, Litter#, OFA#, name or kennel>. (Their old ?regnum= no longer works.)
+  // To verify: click the OFA link on a dog page and check that the record appears. The CHIC number has no page of its own: the CHIC status is part of the OFA record, so only the OFA line links.
+  // AKC still needs its public address pattern before it becomes a link.
+  var XREF = {OFA:'https://ofa.org/advanced-search/?quicksearch={id}', AKC:'', CHIC:'', AKCPTS:'https://shop.akc.org/collections/akc-reports-pedigree'};
+  // AKC's report store has a Points Progression report (needs a free AKC login): you enter the number there, so it is a link, not a per-dog page.
+  var XLABEL = {OFA:'OFA Results', AKC:'AKC record', AKCPTS:'AKC points report (free AKC login; enter this number)'};
+  function xurl(c){return XREF[c.name] && c.value ? XREF[c.name].replace('{id}',encodeURIComponent(c.value)) : c.url}
+  var claims = [
+    {id:25, dog:413, type:'fact', name:'Whelp date', value:'2023-07-09', url:'', src:'AKC', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
+    {id:28, dog:413, type:'link', name:'Embark', value:'pending', url:'', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
+    {id:35, dog:414, type:'fact', name:'Whelp date', value:'2024-08-19', url:'', src:'AKC', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
+    {id:38, dog:414, type:'link', name:'Embark', value:'pending', url:'', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
+    {id:17, dog:DOG, type:'ownership', name:'Ownership', value:'u2', co:['u1','p2','p1'], start:'2020-12-02', end:'', url:'', src:'AKC', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
+    {id:51, dog:413, type:'ownership', name:'Ownership', value:'u2', co:['u1','p2','p5'], start:'2026-08-01', end:'', url:'', src:'AKC', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
+    {id:52, dog:413, type:'ownership', name:'Ownership', value:'u2', co:['u1','p5'], start:'2026-02-26', end:'2026-08-01', url:'', src:'AKC', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
+    {id:53, dog:413, type:'ownership', name:'Ownership', value:'u2', co:['u1'], start:'2023-08-29', end:'2026-02-26', url:'', src:'AKC', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
+    {id:54, dog:413, type:'ownership', name:'Ownership', value:'u2', co:['u1','p2','p1'], start:'2023-07-09', end:'2023-08-29', url:'', src:'AKC', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
+    {id:55, dog:414, type:'ownership', name:'Ownership', value:'u2', co:['u1','p2','p5'], start:'2026-08-01', end:'', url:'', src:'AKC', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
+    {id:56, dog:414, type:'ownership', name:'Ownership', value:'u2', co:['u1','p5'], start:'2026-02-26', end:'2026-08-01', url:'', src:'AKC', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
+    {id:57, dog:414, type:'ownership', name:'Ownership', value:'u2', co:['u1'], start:'2025-01-17', end:'2026-02-26', url:'', src:'AKC', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
+    {id:58, dog:414, type:'ownership', name:'Ownership', value:'u2', co:['u1','p2','p1'], start:'2024-08-19', end:'2025-01-17', url:'', src:'AKC', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
+    {id:70, dog:412, type:'claim', name:'Claimed by', value:'u2', start:'2026-11-12', url:'', src:'', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
+    {id:71, dog:413, type:'claim', name:'Claimed by', value:'u2', start:'2026-11-12', url:'', src:'', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
+    {id:72, dog:414, type:'claim', name:'Claimed by', value:'u2', start:'2026-11-12', url:'', src:'', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
+    {id:6, dog:DOG, type:'fact', name:'Whelp date', value:'2020-09-26', url:'', src:'AKC', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
+    {id:7, dog:DOG, type:'litter', name:'Rolex', value:'Litter page', url:'/RolexXPiper', whelp:'2023-07-09', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
+    {id:8, dog:DOG, type:'litter', name:'Sean', value:'Litter page', url:'/SeanXPiper', whelp:'2024-08-19', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
+    {id:9, dog:DOG, type:'litter', name:'Ezra', value:'Litter page', url:'/EzraxPiper', whelp:'2026-03-23', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
+    {id:2, dog:DOG, type:'link', name:'Embark', value:'pending', url:'', ver:1, author:1, date:'2026-11-12', ev:'link', status:'visible', flags:[]},
+    {id:3, dog:DOG, type:'test', name:'Echocardiogram (sample)', value:'Normal', url:'https://example.org/sample-cert', ver:1, author:1, date:'2026-09-14', ev:'doc', status:'visible', flags:[
+      {author:2, reason:'Wrong date', evidence:'https://example.org/sample-report', date:'2026-09-16'}
+    ]},
+    {id:4, dog:DOG, type:'test', name:'Temperament test (sample)', value:'Pass', url:'https://example.org/sample-cert-2', ver:1, author:2, date:'2026-10-02', ev:'doc', status:'visible', flags:[]},
+    {id:5, dog:DOG, type:'win', name:'Sample specialty show', value:'Best of Winners', url:'https://example.org/sample-results', ver:1, author:1, date:'2026-10-20', ev:'link', status:'visible', flags:[]}
+  ];
+  var requests = [
+    {id:'r1', name:'Taylor Brooks', role:'Breeder', verify:'Kennel website and AKC breeder listing'},
+    {id:'r2', name:'xX_dane_lover_Xx', role:'Owner', verify:'None provided'}
+  ];
+  var NAV = [], WANTED = {}, logs = [], nextId = 80, me = 2, MAPPED = [0,1,2], editing = null, suggestions = [];
+  var CAUSES = ['Old age','Heart disease','Bloat (GDV)','Cancer','Wobbler or neurologic','Musculoskeletal (euthanized for mobility loss)','Accident','Infectious disease','Other','Unknown'];
+  var FACTS = [{name:'Whelp date',label:'Born',kind:'date'},{name:'Death date',label:'Died',kind:'date'},{name:'Cause of death',label:'Cause of death',kind:'cause'}];
+
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function today(){return new Date().toISOString().slice(0,10)}
+  function A(id){return authors[id] || {name:'Author #'+id, role:'', status:'unknown'}}
+  function who(id){var a=A(id);return '<span class="who">'+esc(a.name)+'</span> <span class="meta">#'+id+'</span>'+(a.role?' <span class="chip role">'+esc(a.role)+'</span>':'')}
+
+  function fillAuthors(){
+    document.querySelectorAll('[data-a]').forEach(function(el){el.textContent=A(el.dataset.a).name});
+    var sel=document.getElementById('me');
+    sel.innerHTML=MAPPED.map(function(i){var a=A(i);return '<option value="'+i+'">'+esc(a.name)+(i?' (#'+i+')':'')+'</option>'}).join('');
+    sel.value=me;
+    renderDog();
+    document.getElementById('model-authors').textContent=JSON.stringify(authors,null,2);
+  }
+
+  function evChip(c){
+    if(c.ev==='doc') return '<span class="chip doc">Document attached</span>';
+    return '<span class="chip self">Link only</span>';
+  }
+
+  function renderLinks(){
+    var rows=mine().filter(function(c){return c.type==='link'&&c.status==='visible'});
+    myIds().forEach(function(i){ if(i.registry==='AKC'){ rows.unshift({name:'AKCPTS',value:i.number,url:'',author:i.author,date:i.date}); rows.unshift({name:'AKC',value:i.number,url:'',author:i.author,date:i.date}); } if(i.registry==='AKC'||i.registry==='Reg.'){ rows.unshift({name:'OFA',value:i.number,url:'',author:i.author,date:i.date}); } });
+    document.getElementById('links').innerHTML = rows.length ? rows.map(function(c){
+      var u = xurl(c);
+      var target = u ? '<a href="'+esc(u)+'" target="_blank" rel="noopener">'+esc(c.value)+' '+esc(XLABEL[c.name]||c.name)+'</a>' : '<span>'+esc(c.name)+' <span class="chip self">'+esc(c.value||'none yet')+'</span></span>';
+      return '<div class="card linkout"><div class="row">'+target+'<span class="meta">added by</span> '+who(c.author)+'<span class="meta">'+c.date+'</span><span class="chip demo">Demo data</span></div></div>';
+    }).join('') : '<div class="empty">No links yet.</div>';
+  }
+
+  function myLitter(){return LITTERS[dog.litter]}
+  function splitTitle(n){var t=String(n).split(' '),ti=[];while(t.length&&TITLE.test(t[0].replace(/,$/,''))){ti.push(t.shift())}return {title:ti.join(' '),name:t.join(' ')}}
+  function regOf(r){var parts=String(r).split(' / ');for(var i=0;i<parts.length;i++){var t=parts[i].trim();if(/^[A-Z]{2}\d{6,}$/.test(t))return t}return parts[0].trim()}
+  function parentRows(){
+    var L=myLitter();
+    if(L) return [{name:'Sire',p:L.sire,key:2,author:L.author,src:'litter record'},{name:'Dam',p:L.dam,key:3,author:L.author,src:'litter record'}];
+    var P=PEDS[DOG]||{};
+    return [[2,'Sire'],[3,'Dam']].filter(function(x){return P[x[0]]}).map(function(x){var e=P[x[0]],sp=splitTitle(e[0]);return {name:x[1],p:{reg:regOf(e[1].split(' · ')[0]),name:sp.name,title:sp.title},key:x[0],author:3,src:'pedigree data'}});
+  }
+  function renderParents(){
+    var rows=parentRows();
+    document.getElementById('parents').innerHTML=rows.map(function(r){
+      var c={name:r.name,value:r.p.name,reg:r.p.reg,title:r.p.title}, tgt=dogByReg(c.reg), ttl=(c.title?c.title+' ':'')+c.value;
+      var pr=photoReg(c.reg,HASPHOTO), attr=tgt!==null&&tgt!==undefined?'data-goto="'+tgt+'"':'data-anc="'+r.key+'"';
+      var tile=pr?'<a class="ph" href="'+esc(photourl(pr))+'" target="_blank" rel="noopener" title="Photo hosted at '+esc(DB.site)+' ('+esc(DB.label)+'). Opens in a new tab."><img src="'+esc(photourl(pr))+'" alt="'+esc(c.value)+'" loading="lazy" onerror="noimg(this)"></a>':'<a class="onsite" href="#" '+attr+'>Open this dog\'s page</a>';
+      return '<div class="pcard">'+tile+'<div class="pb"><span class="meta">'+esc(c.name)+'</span><b><a href="#" '+attr+'>'+esc(ttl)+'</a></b><span class="meta">'+esc(c.reg)+'</span><br><span class="meta">From the '+esc(r.src)+', added by </span>'+who(r.author)+'</div></div>';
+    }).join('')||'<div class="empty">No parents recorded.</div>';
+  }
+  function renderOffspring(){
+    var reg=primaryReg(), kids={};
+    Object.keys(DOGS).forEach(function(id){var d=DOGS[id], L=LITTERS[d.litter]; if(!L||String(id)===String(DOG))return; if(L.dam.reg===reg)kids[id]='her'; else if(L.sire.reg===reg)kids[id]='his'});
+    var ids=Object.keys(kids);
+    document.getElementById('offspring').innerHTML=ids.length?ids.map(function(id){var d=DOGS[id];var w=(claims.filter(function(c){return String(c.dog)===String(id)&&c.type==='fact'&&c.name==='Whelp date'})[0]||{}).value||'';return '<button class="sm" data-goto="'+id+'" style="margin:0 6px 6px 0">'+esc(d.call)+' <span class="meta">('+kids[id]+' offspring, '+esc(w)+')</span></button>'}).join(''):'<div class="empty">None of this dog\'s offspring are in our records yet.</div>';
+  }
+  function renderLitters(){
+    var rows=mine().filter(function(c){return c.type==='litter'&&c.status==='visible'}).sort(function(a,b){return a.whelp<b.whelp?1:-1});
+    document.getElementById('litters').innerHTML=rows.length?'<div class="tw"><table><thead><tr><th>Whelped</th><th>Other parent</th><th>Link</th><th>Added by</th></tr></thead><tbody>'+rows.map(function(c){
+      return '<tr><td>'+esc(c.whelp)+'</td><td>'+esc(c.name)+'</td><td><a href="'+esc(c.url)+'" target="_blank" rel="noopener">'+esc(c.value)+'</a></td><td>'+who(c.author)+'</td></tr>';
+    }).join('')+'</tbody></table></div>':'<div class="empty">No litters yet.</div>';
+  }
+  function renderEntries(){
+    var rows=mine().filter(function(c){return c.type==='test'||c.type==='win'});
+    document.getElementById('entries').innerHTML = rows.map(function(c){
+      var hidden=c.status==='hidden', old=c.status==='superseded';
+      var h='<article class="card'+(hidden?' hidden-entry':'')+(old?' old':'')+'">';
+      h+='<div class="row">'+who(c.author)+'<span>'+c.date+'</span><span class="chip demo">Demo data</span>';
+      if(!hidden) h+=evChip(c);
+      if(c.ver>1) h+='<span class="chip self">v'+c.ver+'</span>';
+      if(old) h+='<span class="chip self">superseded</span>';
+      if(c.flags.length&&!old) h+='<span class="chip disp">'+c.flags.length+' flagged</span>';
+      h+='</div>';
+      if(hidden){
+        h+='<p class="val"><i>Hidden by administrator. Reason: '+esc(c.reason||'')+'</i></p><p class="meta">The record is kept. It is not deleted.</p>';
+      } else {
+        h+='<div class="val"><span class="title">'+esc(c.name)+':</span> '+esc(c.value)+'</div>';
+        if(c.url) h+='<div class="meta"><a href="'+esc(c.url)+'" target="_blank" rel="noopener">evidence link</a></div>';
+        if(c.flags.length&&!old) h+='<ul class="plain meta">'+c.flags.map(function(f){return '<li>Flagged by '+esc(A(f.author).name)+' on '+f.date+': <b>'+esc(f.reason)+'</b>'+(f.evidence?' (<a href="'+esc(f.evidence)+'" target="_blank" rel="noopener">evidence</a>)':'')+'</li>'}).join('')+'</ul>';
+        if(!old){
+          h+='<div style="margin-top:6px"><form class="f" data-flag="'+c.id+'" style="display:inline-grid;grid-template-columns:auto auto auto;gap:6px;align-items:center"><select name="reason" aria-label="Reason"><option>Wrong dog</option><option>Wrong date</option><option>Wrong result</option><option>Duplicate</option></select><input type="url" name="ev" placeholder="Evidence link" required><button class="sm" type="submit">Flag as incorrect</button></form>';
+          if(me===c.author) h+=' <button class="sm" type="button" data-correct="'+c.id+'">Post correction (new version)</button>';
+          if(me===0) h+=' <button class="sm danger" type="button" data-hide="'+c.id+'">Hide (admin)</button>';
+          h+='</div>';
+        }
+      }
+      return h+'</article>';
+    }).join('')||'<div class="empty">No entries yet.</div>';
+    document.getElementById('n-rec').textContent='('+mine().filter(function(c){return c.status==='visible'}).length+')';
+  }
+
+  function fact(n){return mine().filter(function(c){return c.type==='fact'&&c.name===n&&c.status==='visible'})[0]}
+  function factForm(f,cur){
+    var inp = f.kind==='text' ? '<input type="text" name="v" maxlength="60" required placeholder="Name or kennel" value="'+esc(cur?cur.value:'')+'"><label class="meta"><input type="checkbox" name="akc"'+(cur&&cur.src?' checked':'')+'> From AKC record</label>'
+      : f.kind==='date' ? '<input type="date" name="v" required value="'+esc(cur?cur.value:'')+'">'
+      : '<select name="v" required><option value="">Choose…</option>'+CAUSES.map(function(c){return '<option'+(cur&&cur.value===c?' selected':'')+'>'+esc(c)+'</option>'}).join('')+'</select><input type="text" name="other" maxlength="60" placeholder="Describe (short)" hidden>';
+    return '<form class="inline" data-fact="'+esc(f.name)+'" oninput="var o=this.elements.other;if(o){var sh=this.elements.v.value===\'Other\';o.hidden=!sh;o.required=sh}">'+inp+'<button class="sm primary" type="submit">Save</button>'+(cur?'<button class="sm" type="button" data-fcancel="1">Cancel</button>':'')+(f.kind==='cause'?' <button class="sm" type="button" data-suggest="1">Suggest a category</button>':'')+'</form>';
+  }
+  function renderFacts(){
+    document.getElementById('dog-facts').innerHTML=FACTS.map(function(f){
+      var c=fact(f.name), h='<dt>'+f.label+'</dt><dd>';
+      if(editing===f.name||!c){
+        h+=(c||!c&&true)?factForm(f,editing===f.name?c:null):'';
+      } else {
+        h+=esc(c.value)+(c.src?' <span class="chip doc">'+esc(c.src)+' record</span>':'')+'<span class="fact-by">'+(c.url?'<a href="'+esc(c.url)+'">source</a> &middot; ':'')+'by '+esc(A(c.author).name)+' #'+c.author+(c.ver>1?' &middot; v'+c.ver:'')+'</span>';
+        if(c.flags.length) h+=' <span class="chip disp">'+c.flags.length+' disputed</span>';
+        if(me===c.author||me===0) h+=' <button class="sm" data-fedit="'+esc(f.name)+'">Correct</button>';
+        if(me!==c.author) h+=' <button class="sm" data-fflag="'+esc(f.name)+'">Dispute</button>';
+      }
+      return h+'</dd>';
+    }).join('');
+  }
+  function labelOf(d){return d.call||splitTitle(d.registered).name||d.registered}
+  function renderHeader(){
+    var reg0=primaryReg(), pr=reg0?photoReg(reg0,HASPHOTO):null, hero;
+    document.getElementById('dog-sub').innerHTML='Great Dane'+(dog.sex?' &middot; '+esc(dog.sex):'')+(dog.color?' &middot; '+esc(dog.color):'')+(dog.litter?' &middot; 7Sisters Farm':'');
+    if(dog.photo) hero='<img src="'+esc(dog.photo)+'" alt="'+esc(dog.call)+'">';
+    else if(pr) hero='<a class="noimg" style="aspect-ratio:4/3;text-decoration:none;color:var(--info);font-weight:600" href="'+esc(photourl(pr))+'" target="_blank" rel="noopener" title="Photo hosted at '+esc(DB.site)+' ('+esc(DB.label)+'). Opens in a new tab.">'+esc(DB.short)+' photo &#8599;</a>';
+    else hero='<div class="noimg" style="aspect-ratio:4/3">No photo yet</div>';
+    document.getElementById('dog-hero').innerHTML=hero;
+    document.getElementById('photos-412').hidden=DOG!==412;
+    document.getElementById('photos-none').hidden=DOG===412;
+    var pn=document.getElementById('pendingnote');
+    if(dog.pending){pn.hidden=false;pn.innerHTML='<b>We don\'t have this dog yet.</b> Your search has been noted so it can be considered for the next update to our data. Meanwhile, the links below go to the places that may have it.'}
+    else if(dog.inGalaxy){pn.hidden=false;pn.innerHTML='<b>This dog is on the map, but we don\'t have its name or pedigree yet.</b> The map above shows its ancestry anonymously. Open it on Quintessa or River Rock to see names, or add its details to claim it.'}
+    else pn.hidden=true;
+    document.getElementById('backrow').innerHTML=NAV.length?'<a href="#" data-back="1">&larr; Back to '+esc(labelOf(DOGS[NAV[NAV.length-1]]))+'</a>':'';
+  }
+  function switchDog(id,back){
+    var nid=(typeof id==='string'&&isNaN(+id))?id:Number(id);
+    if(!back&&nid!==DOG){NAV.push(DOG);if(NAV.length>30)NAV.shift()}
+    DOG=nid;dog=DOGS[DOG];editing=null;
+    render();renderPed();fillAuthors();renderGalaxy();
+  }
+  // Wanted list: dogs people asked for that we do not fully have. In production this is a table the admin can export.
+  function logWanted(reg,how){var w=WANTED[reg]||(WANTED[reg]={count:0,first:today(),how:how});w.count++;w.last=today();w.how=how;renderAdmin()}
+  function reroot(src,k){var out={};for(var d=0;d<=8;d++){for(var off=0;off<(1<<d);off++){var from=k*(1<<d)+off;if(src[from])out[(1<<d)+off]=src[from]}}return out}
+  function openAncestor(k){
+    var e=(PEDS[DOG]||{})[k]; if(!e||k===1)return;
+    var parts=e[1].split(' · '), reg=regOf(parts[0]), ex=dogByReg(reg);
+    if(ex!==null&&ex!==undefined){switchDog(ex);return}
+    var id='r:'+reg;
+    if(!DOGS[id]){
+      var sp=splitTitle(e[0]), sx=(parts[2]||'').trim();
+      DOGS[id]={id:id,registered:e[0],listName:sp.name,call:'',sex:sx==='F'?'female':sx==='M'?'male':'',color:(parts[1]||'').trim().toLowerCase(),photo:'',ext:true,litter:null};
+      identifiers.push({dog:id,registry:/^[A-Z]{2}\d{6,}$/.test(reg)?'AKC':'Reg.',number:reg,author:3,date:today()});
+      var born=(parts[3]||'').trim();
+      if(/^\d{4}-\d{2}-\d{2}$/.test(born))claims.push({id:nextId++,dog:id,type:'fact',name:'Whelp date',value:born,url:'',src:'Pedigree data',ver:1,author:3,date:today(),ev:'link',status:'visible',flags:[]});
+      PEDS[id]=reroot(PEDS[DOG],k);
+    }
+    switchDog(id);
+  }
+  function openUnknown(raw){
+    var reg=raw.toUpperCase().replace(/\s+/g,''), ex=dogByReg(reg);
+    if(ex!==null&&ex!==undefined){switchDog(ex);return}
+    var id='r:'+reg;
+    DOGS[id]={id:id,registered:'Registration '+reg,listName:'',call:'',sex:'',color:'',photo:'',ext:false,litter:null,pending:true};
+    identifiers.push({dog:id,registry:/^[A-Z]{2}\d{6,}$/.test(reg)?'AKC':'Reg.',number:reg,author:0,date:today()});
+    PEDS[id]={};
+    switchDog(id);
+    loadGalaxy().then(function(G){
+      var h=fnv(reg.replace(/[^A-Z0-9]/g,'')), found=false;
+      if(G.rh)for(var i=0;i<G.N;i++)if(G.rh[i]===h){found=true;break}
+      var d=DOGS[id]; d.pending=!found; d.inGalaxy=found;
+      logWanted(reg,found?'names':'dog');
+      if(DOG===id){renderHeader();renderPed()}
+    }).catch(function(){logWanted(reg,'dog')});
+  }
+  function renderDog(){
+    document.getElementById('dog-name').textContent=dog.registered;
+    var akcNo0=primaryReg();
+    document.getElementById('dog-ped').innerHTML=[akcNo0?'<a href="'+esc(qurl(akcNo0))+'" target="_blank" rel="noopener" title="Searches '+esc(DBQ.site)+' ('+esc(DBQ.label)+') for '+esc(akcNo0)+'. Opens in a new tab.">'+esc(DBQ.label)+' &#8599;</a>':'',dog.ext?'<a href="'+esc(pedurl(dog.listName))+'" target="_blank" rel="noopener" title="Opens the pedigree on '+esc(DB.site)+' ('+esc(DB.label)+'). Opens in a new tab.">'+esc(DB.label)+' &#8599;</a>':''].filter(Boolean).join(' &middot; ')||'<span class="meta">None</span>';
+    var L=myLitter();
+    function pn(id){var pe=PEOPLE[id]||{label:'Unknown'};return '<span'+(pe.consent?'':' title="Short form shown until this person agrees to be listed"')+'>'+esc(pe.label)+'</span>'}
+    document.getElementById('dog-breeders').innerHTML=L&&L.breeders.length?L.breeders.map(pn).join(', ')+' <span class="chip doc">'+esc(L.src)+' record</span><span class="fact-by">litter record, by '+esc(A(L.author).name)+' #'+L.author+'</span>':'<span class="meta">Not recorded</span>';
+    var cl=mine().filter(function(c){return c.type==='claim'&&c.status==='visible'})[0];
+    document.getElementById('dog-owners').innerHTML=cl?pn(cl.value)+' <span class="meta">&middot; member #'+(PEOPLE[cl.value]||{}).member+' &middot; since '+esc(cl.start)+'</span>':'<span class="meta">Unclaimed. A member can claim this dog to add records.</span>';
+    var ow=mine().filter(function(c){return c.type==='ownership'&&c.status==='visible'}).sort(function(x,y){return x.start<y.start?1:-1});
+    function oline(c){return pn(c.value)+(c.co&&c.co.length?' <span class="meta">with</span> '+c.co.map(pn).join(', '):'')+' <span class="meta">&middot; '+(c.end?esc(c.start)+' to '+esc(c.end):'since '+esc(c.start))+'</span>'}
+    document.getElementById('own-hist').innerHTML=ow.length?ow.map(oline).join('<br>'):'<span class="meta">None recorded.</span>';
+    document.getElementById('dog-call').textContent=dog.call?'“'+dog.call+'”':'No call name recorded';
+    var akcNo=(myIds().filter(function(x){return x.registry==='AKC'})[0]||{}).number;
+    document.getElementById('dog-regs').innerHTML=myIds().map(function(i){
+      var t=XREF[i.registry], u=t?t.replace('{id}',encodeURIComponent((i.registry==='OFA'||i.registry==='CHIC')?akcNo:i.number)):'';
+      var txt=esc(i.registry)+' '+esc(i.number);
+      return u?'<a href="'+esc(u)+'" target="_blank" rel="noopener" title="Opens the OFA search for '+esc(akcNo)+'">'+txt+' &#8599;</a>':txt;
+    }).join('<br>');
+    document.getElementById('model-dog').textContent=JSON.stringify(dog,null,2);
+    document.getElementById('model-litters').textContent=JSON.stringify(LITTERS,null,1);
+    document.getElementById('model-ids').innerHTML=identifiers.map(function(i){return '<tr><td>'+i.dog+'</td><td>'+esc(i.registry)+'</td><td>'+esc(i.number)+'</td><td><b>'+i.author+'</b></td><td>'+i.date+'</td></tr>'}).join('');
+  }
+  function renderModel(){
+    renderDog();
+    document.getElementById('model-claims').innerHTML=claims.map(function(c){
+      return '<tr><td>'+c.id+'</td><td>'+c.dog+'</td><td>'+c.type+'</td><td>'+esc(c.name)+'</td><td>'+esc(c.value)+(c.co&&c.co.length?' + '+esc(c.co.join(',')):'')+(c.start?' ('+esc(c.start)+' to '+esc(c.end||'now')+')':'')+'</td><td>'+c.ver+'</td><td><b>'+c.author+'</b></td><td>'+c.date+'</td><td>'+c.status+'</td></tr>';
+    }).join('');
+  }
+
+  function renderAdmin(){
+    document.getElementById('requests').innerHTML=requests.length?requests.map(function(r){
+      return '<tr><td>'+esc(r.name)+'</td><td>'+esc(r.role)+'</td><td>'+esc(r.verify)+'</td><td><button class="sm" data-approve="'+r.id+'">Approve</button> <button class="sm danger" data-reject="'+r.id+'">Reject</button></td></tr>';
+    }).join(''):'<tr><td colspan="4" class="meta">No pending requests.</td></tr>';
+    var wk=Object.keys(WANTED);
+    document.getElementById('wanted').innerHTML=wk.length?wk.map(function(r){var w=WANTED[r];return '<tr><td>'+esc(r)+'</td><td>'+w.count+'&times; <span class="meta">last '+esc(w.last)+'</span></td><td>'+(w.how==='names'?'On the map, no names':'Not in our data')+'</td><td><a href="'+esc(qurl(r))+'" target="_blank" rel="noopener">Quintessa</a> &middot; <a href="'+esc(XREF.OFA.replace('{id}',encodeURIComponent(r)))+'" target="_blank" rel="noopener">OFA</a></td><td><button class="sm" data-added="'+esc(r)+'">Mark added</button></td></tr>'}).join(''):'<tr><td colspan="5" class="meta">Nothing yet. Search for a number we do not have to see it appear here.</td></tr>';
+    document.getElementById('log').innerHTML=logs.length?logs.map(function(l){return '<li><b>'+l.date+'</b> &middot; '+esc(l.text)+'</li>'}).join(''):'<li class="meta">No actions yet.</li>';
+  }
+  function log(t){logs.unshift({date:today(),text:t});renderAdmin()}
+  function render(){renderHeader();renderFacts();renderLinks();renderParents();renderOffspring();renderLitters();renderEntries();renderModel();renderAdmin()}
+
+  // Ancestry (names, numbers) and the list of dogs with a photo on the other site are NOT part of this page. They load from a private
+  // file at run time, which is not committed. In the real system this is a call to the members-only service. Without it the page still
+  // works, with no pedigree names.
+  var PEDS = {}, HASPHOTO = [];
+  function loadPrivate(){
+    return fetch('/data/private/ped-sample.json').then(function(r){if(!r.ok)throw new Error('no private data');return r.json()}).then(function(j){
+      PEDS[412]=j.piper; PEDS[413]=j.mia; HASPHOTO=j.hasphoto||[];
+      // Cora: her dam side is Piper's ancestry shifted one generation. Her sire side is not in the sample data.
+      PEDS[414]={1:['7Sisters N Legado\'s Heart Of Gold','WS84850303 · Fawn · F · 2024-08-19'],2:['Legado N Izya\'s Oops! I Did It Again','WS80095602 ·  · M · ']};
+      Object.keys(j.piper).forEach(function(kp){kp=Number(kp);var d=Math.floor(Math.log(kp)/Math.LN2),off=kp-(1<<d);PEDS[414][3*(1<<d)+off]=j.piper[kp]});
+    }).catch(function(){});
+  }
+  var TITLE = /^(AM|CAN|INT|MEX|NORD|EST|SWD|FIN|JPN|UKC|AKC|CH|GCH\w*|BISS?|BIS|ROM|HOF|AOM|&)$/i;
+  function plain(n){var t=String(n).split(' ');while(t.length&&TITLE.test(t[0].replace(/,$/,'')))t.shift();return t.join(' ')}
+  function renderPed(){
+    var D=Number(document.getElementById('gens').value), rows=1<<D, grid=document.getElementById('pedgrid');
+    if(!PEDS[DOG]||!PEDS[DOG][1]){grid.className='pedgrid';grid.style.cssText='';grid.innerHTML='<div class="empty" style="grid-column:1/-1">'+(dog.inGalaxy?'The map above knows this dog\'s ancestry but not the names, so there is no pedigree to draw yet.':'No pedigree data for this dog yet.')+'</div>';return}
+    grid.style.gridTemplateColumns='repeat('+(D+1)+',minmax(9.5rem,1fr))';
+    grid.className='pedgrid d'+D;
+    grid.style.gridTemplateRows='repeat('+rows+',minmax('+(D<=5?30:D===6?17:D===7?12:9)+'px,auto))';
+    var h='';
+    for(var d=0;d<=D;d++){
+      for(var off=0;off<(1<<d);off++){
+        var k=(1<<d)+off, e=(PEDS[DOG]||{})[k], span=1<<(D-d), start=off*span+1;
+        var cls='pn'+(d===0?' root':(k%2?' dam':''));
+        var st='grid-column:'+(d+1)+';grid-row:'+start+' / span '+span;
+        if(!e){h+='<div class="'+cls+'" style="'+st+'"><span class="m">Unknown</span></div>';continue}
+        var parts=e[1].split(' \u00B7 '), reg=parts[0], born=(parts[3]||'').slice(0,4), color=parts[1]||'';
+        h+='<div class="'+cls+'" style="'+st+'"><a class="nm" data-anc="'+k+'" title="'+esc(e[0])+(k===1?'':' – open this dog\'s page')+'" href="#">'+esc(e[0])+'</a><span class="m">'+esc(reg)+(born?' \u00B7 '+born:'')+(color?' \u00B7 '+esc(color):'')+'</span>';
+        var pr=photoReg(reg,HASPHOTO);
+        if(pr) h+='<a class="cam" href="'+esc(photourl(pr))+'" target="_blank" rel="noopener" title="Photo hosted at '+esc(DB.site)+' ('+esc(DB.label)+'). Opens in a new tab."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>River Rock photo &#8599;</a>';
+        h+='</div>';
+      }
+    }
+    grid.innerHTML=h;
+  }
+  // --- live map: drawn in the browser from the same data the galaxy page uses; nothing is stored or generated ahead of time ---
+  var GAL=null, galP=null, galMode='all';
+  function fnv(t){var h=0x811c9dc5;for(var i=0;i<t.length;i++){h^=t.charCodeAt(i);h=Math.imul(h,0x01000193)}return h>>>0}
+  function loadGalaxy(){
+    if(galP)return galP;
+    galP=fetch('/breed-galaxy.html').then(function(r){return r.text()}).then(function(h){
+      var i=h.indexOf('const DATA='), j=h.indexOf('\n',i), D=JSON.parse(h.slice(i+11,j).replace(/;\s*$/,''));
+      function unb(s,T){var b=atob(s),u=new Uint8Array(b.length);for(var k=0;k<b.length;k++)u[k]=b.charCodeAt(k);return new T(u.buffer)}
+      var G={N:D.n,asp:D.aspect,y0:D.y0,qx:unb(D.x,Uint16Array),qy:unb(D.y,Uint16Array),yr:unb(D.yr,Uint8Array),f8:unb(D.f,Uint8Array),sire:unb(D.sire,Int32Array),dam:unb(D.dam,Int32Array),cl:unb(D.cl,Uint8Array),cs:D.cs,rh:D.rh?unb(D.rh,Uint32Array):null};
+      var ks=new Int32Array(G.N+1),kl=new Int32Array(2*G.N),c=new Int32Array(G.N),k2;
+      for(k2=0;k2<G.N;k2++){if(G.sire[k2]>=0)c[G.sire[k2]]++;if(G.dam[k2]>=0)c[G.dam[k2]]++}
+      for(k2=0;k2<G.N;k2++)ks[k2+1]=ks[k2]+c[k2];
+      var f=ks.slice(0,G.N);for(k2=0;k2<G.N;k2++){if(G.sire[k2]>=0)kl[f[G.sire[k2]]++]=k2;if(G.dam[k2]>=0)kl[f[G.dam[k2]]++]=k2}
+      G.ks=ks;G.kl=kl;
+      var minx=9,maxx=-9,miny=9,maxy=-9;for(k2=0;k2<G.N;k2++){var x=G.qx[k2]/65535,y=G.qy[k2]/65535*G.asp;if(x<minx)minx=x;if(x>maxx)maxx=x;if(y<miny)miny=y;if(y>maxy)maxy=y}
+      G.box=[minx,maxx,miny,maxy];
+      return (GAL=G);
+    });
+    return galP;
+  }
+  function galTrace(G,i){
+    var anc=new Map([[i,0]]),q=[i],nx,a,p,k;
+    while(q.length){nx=[];for(var u=0;u<q.length;u++){a=q[u];[G.sire[a],G.dam[a]].forEach(function(p){if(p>=0&&!anc.has(p)){anc.set(p,anc.get(a)+1);nx.push(p)}})}q=nx}
+    var desc=new Map([[i,0]]);q=[i];
+    while(q.length){nx=[];for(var u2=0;u2<q.length;u2++){a=q[u2];for(k=G.ks[a];k<G.ks[a+1];k++){var ch=G.kl[k];if(!desc.has(ch)){desc.set(ch,desc.get(a)+1);nx.push(ch)}}}q=nx}
+    return {anc:anc,desc:desc};
+  }
+  function hsl(h,s,l){s/=100;l/=100;var a=s*Math.min(l,1-l),f=function(n){var k=(n+h/30)%12;return l-a*Math.max(-1,Math.min(k-3,9-k,1))};return 'rgb('+Math.round(f(0)*255)+','+Math.round(f(8)*255)+','+Math.round(f(4)*255)+')'}
+  function drawGalaxy(G,row){
+    var cv=document.getElementById('galcv'), ctx=cv.getContext&&cv.getContext('2d'); if(!ctx)return;
+    var dpr=Math.min(2,window.devicePixelRatio||1), W=cv.clientWidth||600, H=320;
+    cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
+    var bx=G.box, bw=bx[1]-bx[0], bh=bx[3]-bx[2], base=Math.min(W*.96/bw,H*.96/bh);
+    var px=function(i){return G.qx[i]/65535}, py=function(i){return G.qy[i]/65535*G.asp};
+    var sc=galMode==='near'?base*12:base, cx=px(row), cy=py(row);
+    var ox=galMode==='near'?W/2-cx*sc:W/2-(bx[0]+bx[1])/2*sc, oy=galMode==='near'?H/2-cy*sc:H/2-(bx[2]+bx[3])/2*sc;
+    var cols=G.cs.map(function(_,c){return hsl((c*137.508)%360,74,[64,54,73][c%3])});
+    ctx.globalAlpha=galMode==='near'?.55:.4;
+    var s=galMode==='near'?2.2:1.1;
+    for(var i=0;i<G.N;i++){var x=px(i)*sc+ox,y=py(i)*sc+oy;if(x<-2||y<-2||x>W+2||y>H+2)continue;ctx.fillStyle=cols[G.cl[i]];ctx.fillRect(x,y,s,s)}
+    ctx.globalAlpha=1;
+    var t=galTrace(G,row), big=galMode==='near'?3.4:2.4;
+    t.anc.forEach(function(g,i){ctx.fillStyle='#ffc04d';ctx.fillRect(px(i)*sc+ox-big/2,py(i)*sc+oy-big/2,big,big)});
+    t.desc.forEach(function(g,i){ctx.fillStyle='#5ad7ff';ctx.fillRect(px(i)*sc+ox-big/2,py(i)*sc+oy-big/2,big,big)});
+    var dx=px(row)*sc+ox, dy=py(row)*sc+oy;
+    ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.beginPath();ctx.arc(dx,dy,galMode==='near'?9:7,0,Math.PI*2);ctx.stroke();
+    return t;
+  }
+  function renderGalaxy(){
+    var facts=document.getElementById('galfacts'), akc=primaryReg();
+    document.getElementById('galopen').href=akc?'/breed-galaxy.html#dog='+encodeURIComponent(akc):'/breed-galaxy.html';
+    facts.textContent='Loading the map\u2026';
+    loadGalaxy().then(function(G){
+      if(!G.rh||!akc){facts.textContent='This dog is not in the galaxy file.';return}
+      var h=fnv(akc.toUpperCase().replace(/[^A-Z0-9]/g,'')), row=-1;
+      for(var i=0;i<G.N;i++)if(G.rh[i]===h){row=i;break}
+      if(row<0){facts.textContent='Not in the galaxy yet.'+(dog.pending?'':' We\'ve noted that someone looked for it.');if(!dog.pending)logWanted(akc,'dog');return}
+      var t=drawGalaxy(G,row)||galTrace(G,row), maxA=0,maxD=0;
+      t.anc.forEach(function(g){if(g>maxA)maxA=g});t.desc.forEach(function(g){if(g>maxD)maxD=g});
+      facts.textContent='Born '+(G.yr[row]+G.y0)+' \u00B7 '+(t.anc.size-1)+' known ancestors over '+maxA+' generations \u00B7 '+(t.desc.size-1)+' known descendants over '+maxD+' \u00B7 '+G.cs[G.cl[row]][0]+' constellation \u00B7 inbreeding '+(G.f8[row]*0.5/255*100).toFixed(1)+'%';
+    }).catch(function(){facts.textContent='The map could not be loaded.'});
+  }
+  function byId(id){return mine().filter(function(x){return String(x.id)===String(id)})[0]}
+  function actor(){return me===0?1:me}
+
+  document.addEventListener('submit',function(ev){
+    var f=ev.target;
+    if(f.id==='new-rec'){
+      ev.preventDefault();
+      var type=document.getElementById('nr-type').value, url=document.getElementById('nr-url').value;
+      if(type!=='link' && !url){alert('Test results and wins need an evidence link.');return;}
+      claims.push({id:nextId++,dog:DOG,type:type,name:document.getElementById('nr-name').value,value:document.getElementById('nr-val').value,url:url,ver:1,author:actor(),date:document.getElementById('nr-date').value||today(),ev:type==='test'?'doc':'link',status:'visible',flags:[]});
+      f.reset();f.parentNode.open=false;render();return;
+    }
+    if(f.id==='new-litter'){
+      ev.preventDefault();
+      claims.push({id:nextId++,dog:DOG,type:'litter',name:document.getElementById('nl-mate').value,value:document.getElementById('nl-kind').value,url:document.getElementById('nl-url').value,whelp:document.getElementById('nl-date').value,ver:1,author:actor(),date:today(),ev:'link',status:'visible',flags:[]});
+      f.reset();f.parentNode.open=false;render();return;
+    }
+    if(f.dataset.fact){
+      ev.preventDefault();
+      var n=f.dataset.fact, old=fact(n), v=f.elements.v.value;
+      if(v==='Other'&&f.elements.other&&f.elements.other.value) v='Other: '+f.elements.other.value.trim();
+      if(old) old.status='superseded';
+      claims.push({id:nextId++,dog:DOG,type:'fact',name:n,value:v,url:'',src:(f.elements.akc&&f.elements.akc.checked)?'AKC':'',ver:old?old.ver+1:1,author:actor(),date:today(),ev:'link',status:'visible',flags:[]});
+      editing=null;render();return;
+    }
+    if(f.dataset.flag){
+      ev.preventDefault();
+      byId(f.dataset.flag).flags.push({author:actor(),reason:f.elements.reason.value,evidence:f.elements.ev.value,date:today()});
+      render();
+    }
+  });
+  document.addEventListener('click',function(ev){
+    var t=ev.target;
+    var an=t.closest&&t.closest('[data-anc]');
+    if(an){ev.preventDefault();openAncestor(Number(an.dataset.anc));return}
+    if(t.dataset.back){ev.preventDefault();var pv=NAV.pop();if(pv!==undefined)switchDog(pv,true);return}
+    if(t.dataset.added){delete WANTED[t.dataset.added];renderAdmin();return}
+    if(t.dataset.copywanted){var txt=Object.keys(WANTED).join('\n');if(navigator.clipboard)navigator.clipboard.writeText(txt);return}
+    var gt=t.closest&&t.closest('[data-goto]');
+    if(gt){ev.preventDefault();switchDog(gt.dataset.goto);window.scrollTo(0,0);return}
+    if(t.dataset.gotab){ev.preventDefault();var tb=document.querySelector('.tabs button[data-tab="'+t.dataset.gotab+'"]');if(tb)tb.click();return}
+    if(t.dataset.gmode){galMode=t.dataset.gmode;document.querySelectorAll('[data-gmode]').forEach(function(b){b.setAttribute('aria-pressed',b===t?'true':'false')});renderGalaxy();return}
+    if(t.dataset.fedit){editing=t.dataset.fedit;renderFacts();return}
+    if(t.dataset.fcancel){editing=null;renderFacts();return}
+    if(t.dataset.fflag){
+      var evd=prompt('Link to evidence for the correct value:');if(!evd)return;
+      fact(t.dataset.fflag).flags.push({author:actor(),reason:'Disputed',evidence:evd,date:today()});render();return;
+    }
+    if(t.dataset.suggest){
+      var sg=prompt('Suggest a new cause-of-death category:');if(!sg)return;
+      suggestions.push({author:actor(),text:sg,date:today()});log('Category suggestion from '+A(actor()).name+': "'+sg+'"');return;
+    }
+    if(t.dataset.hide){
+      var reason=prompt('Reason for hiding this record (shown to everyone):');if(!reason)return;
+      var c=byId(t.dataset.hide);c.status='hidden';c.reason=reason;
+      log('Administrator hid record "'+c.name+'". Reason: '+reason);render();
+    }
+    if(t.dataset.correct){
+      var c2=byId(t.dataset.correct);
+      var nv=prompt('Corrected value for "'+c2.name+'":',c2.value);if(nv===null)return;
+      c2.status='superseded';
+      claims.push({id:nextId++,dog:DOG,type:c2.type,name:c2.name,value:nv,url:c2.url,ver:c2.ver+1,author:c2.author,date:today(),ev:c2.ev,status:'visible',flags:[]});
+      render();
+    }
+    if(t.dataset.approve){
+      var r=requests.filter(function(x){return x.id===t.dataset.approve})[0];
+      requests=requests.filter(function(x){return x!==r});
+      log('Approved account for '+r.name+' ('+r.role+'). Real name confirmed via: '+r.verify+'.');
+    }
+    if(t.dataset.reject){
+      var r2=requests.filter(function(x){return x.id===t.dataset.reject})[0];
+      requests=requests.filter(function(x){return x!==r2});
+      log('Rejected account request from '+r2.name+'. No verifiable real identity.');
+    }
+    if(t.dataset.tab){
+      ['rec','photos','seq','model','admin'].forEach(function(k){document.getElementById('tab-'+k).hidden=(k!==t.dataset.tab)});
+      document.querySelectorAll('.tabs button').forEach(function(b){b.setAttribute('aria-selected',b===t?'true':'false')});
+    }
+  });
+  document.getElementById('gens').addEventListener('change',renderPed);
+  document.getElementById('findform').addEventListener('submit',function(e){
+    e.preventDefault();
+    var q=document.getElementById('dogfind').value.trim().toUpperCase().replace(/\s+/g,''), msg=document.getElementById('findmsg');
+    if(!q){msg.textContent='';return}
+    var hit=identifiers.filter(function(i){return String(i.number).toUpperCase().replace(/\s+/g,'')===q})[0];
+    if(hit){msg.textContent='';switchDog(hit.dog);var dd=DOGS[hit.dog];if(dd&&(dd.pending||dd.inGalaxy))logWanted(q,dd.pending?'dog':'names')}
+    else{msg.textContent='';openUnknown(q)}
+  });
+  document.getElementById('me').addEventListener('change',function(e){me=Number(e.target.value);render()});
+
+  loadPrivate().then(function(){render();renderPed();renderGalaxy()});
+  render();renderPed();renderGalaxy();
+  fetch('/data/demo-authors.json').then(function(r){return r.json()}).then(function(j){
+    authors=j;document.getElementById('auth-src').textContent='Names loaded live from the authors file. Records store only author numbers.';
+    fillAuthors();render();
+  }).catch(function(){
+    document.getElementById('auth-src').textContent='Authors file not reachable, showing author numbers.';fillAuthors();
+  });
+})();
+</script>
+</body>
+</html>

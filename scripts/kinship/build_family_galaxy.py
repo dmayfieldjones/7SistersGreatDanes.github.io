@@ -10,9 +10,12 @@ Needs `pip install igraph` (force layout only; not needed by the other scripts).
 Dogs are placed by a force layout of the whole pedigree graph (both parents), so
 lineages form their own filaments. Birth year (imputed from relatives for the
 ~40% of dogs without a date), coat family and 10-generation inbreeding are the
-only per-dog fields. The page carries NO ids, names, registrations or kennels;
-dog order is shuffled; parent links are anonymous row numbers into that
-shuffled order. Dogs outside the one big connected pedigree are left out.
+only per-dog fields. The page carries NO ids, names, readable registrations or
+kennels; dog order is shuffled; parent links are anonymous row numbers into that
+shuffled order. The one exception is a 32-bit hash of each dog's registration
+number (see reg_hash), so a visitor who already knows a number can find that dog.
+It stops casual browsing; it is not secrecy, because numbers are guessable.
+Dogs outside the one big connected pedigree are left out.
 """
 import argparse
 import base64
@@ -20,6 +23,7 @@ import json
 import multiprocessing as mp
 import os
 import random
+import re
 
 import numpy as np
 
@@ -120,6 +124,18 @@ def main():
     f8 = np.clip(np.array([F[ids[k]] for k in keep]) * 255 / 0.5, 0, 255).astype('u1')   # 0..50% in 8 bits
     par = lambda arr: np.array([row.get(int(arr[k]), -1) if arr[k] >= 0 else -1 for k in keep], '<i4')
     s, d = par(sire), par(dam)
+    # registration lookup: one 32-bit FNV-1a hash per dog (the registration that looks like an AKC number,
+    # else the first one), over upper-cased letters and digits only. Same function runs in the page.
+    def reg_hash(reg):
+        toks = [re.sub(r'[^A-Z0-9]', '', t.upper()) for t in re.split(r'\s+/\s+', reg or '')]
+        toks = [t for t in toks if t]
+        pick = next((t for t in toks if re.fullmatch(r'[A-Z]{2}\d{6,}', t)), toks[0] if toks else '')
+        if not pick or 'UNREG' in pick or not re.search(r'\d', pick): return 0   # placeholders ('UNREG', 'LOI', ...) are not numbers
+        h = 0x811c9dc5
+        for b in pick.encode(): h = ((h ^ b) * 0x01000193) & 0xffffffff
+        return h
+    rh = np.array([reg_hash(D[ids[k]]['reg']) for k in keep], '<u4')
+    log(f'registration hashes: {int((rh != 0).sum())} of {len(rh)} dogs')
     # kennels: affix membership (by name only), mapped to rows of the galaxy
     mem = K.membership(D, ids)
     rowof = np.full(N, -1); rowof[keep] = np.arange(len(keep))
@@ -170,7 +186,7 @@ def main():
     data = dict(n=len(keep), all=N, left=round(100 * (1 - len(keep) / N)), aspect=float((hi - lo)[1] / span), x=b64(q[:, 0]), y=b64(q[:, 1]), yr=b64(yr),
                 meta=b64(meta), f=b64(f8), sire=b64(s), dam=b64(d), y0=1870, ex=a.export_end,
                 kn=[[k[0], k[1], k[2], len(k[3]), b64(k[3])] for k in kn],
-                cl=b64(clab.astype('u1')), cs=cs, csweep=csweep)
+                cl=b64(clab.astype('u1')), cs=cs, csweep=csweep, rh=b64(rh))
     html = open(a.template, encoding='utf-8').read().replace('/*DATA*/null', json.dumps(data, separators=(',', ':')))
     open(a.out, 'w', encoding='utf-8').write(html)
     log(f'wrote {a.out} {len(html)//1024} KB')
