@@ -359,6 +359,8 @@
       Object.keys(P).forEach(function (k) {
         var e = P[k], rg = regOf(e[1].split(' · ')[0]), rr = photoRegOf(rg), list = (mine[rg] || []).slice();
         if (rr) list.push({ title: rr + '.jpg', author: 'River Rock Pedigree', url: 'https://breedpedigrees.com/pedpoint/images/' + encodeURIComponent(rr) + '.jpg', linked: true });
+        // Past the visitor limit the data is held but not shown: the slot says so, and a sign-in reveals it.
+        if (!isMember() && (dogs[dogId].gen || 0) + Math.floor(Math.log(Number(k)) / Math.LN2) > API.visitorGens) { out[k] = { locked: true }; return; }
         out[k] = [e[0], e[1], rr, list];
       });
       if (out[1] && dogs[dogId].registered) out[1][0] = titled(dogs[dogId]);   // the root is the dog itself: its own title and registered name

@@ -89,6 +89,7 @@ ul.plain{padding-left:1.1rem;margin:0 0 12px}
 .pn .m{color:var(--muted);font-size:.7rem}
 .pn a.cam{display:inline-flex;align-items:center;gap:3px;color:var(--info);font-size:.68rem;text-decoration:none;margin-top:2px}
 .pn a.cam svg{width:12px;height:12px}
+.pn a.lock{color:var(--info);font-size:.7rem;font-style:italic;text-decoration:none}.pn.locked{opacity:.8;border-style:dashed}
 .pn a.cam .cnt{font-size:.62rem;line-height:1;background:var(--info);color:#fff;border-radius:8px;padding:1px 4px}
 #photopop{position:absolute;z-index:50;background:var(--card,#fff);border:1px solid var(--grid);border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,.18);padding:4px;max-width:20rem;font-size:.82rem}
 #photopop a{display:block;padding:5px 8px;border-radius:6px;color:var(--ink);text-decoration:none}#photopop a:hover{background:var(--grid)}
@@ -137,7 +138,18 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
     <p class="meta" id="lg-msg" role="status" style="margin:0"></p>
   </div>
 </form>
-<p id="signin" class="meta" hidden>You are viewing as a visitor. Sign in to add records, dispute one, or see names in the pedigree.</p>
+<p id="signin" class="meta" hidden>You are viewing as a visitor. Sign in to add records, correct your own, or dispute anyone's. Disputes show both sides until they are resolved.</p>
+<section id="invite" class="card" hidden style="margin:0 0 12px">
+  <b>Help build the Great Dane record, one dog at a time.</b>
+  <p class="meta" style="margin:4px 0 6px">Every page here is assembled from public pedigree databases, links to other sites, and what members add by hand. By signing in and using it, you help fill it in and check it.</p>
+  <ul class="meta" style="margin:0 0 6px;padding-left:1.1rem">
+    <li><b>Add what you know:</b> a whelp date, a health test, a title, a photo link, always with your name and a link to the evidence.</li>
+    <li><b>Check others' records:</b> if something looks wrong, dispute it with a reason. Both sides stay visible until it is settled.</li>
+    <li><b>Claim your dogs</b> and choose who can see them. Dogs you make public join the shared list.</li>
+    <li><b>Reach further back:</b> sign in to open every ancestor. Dogs people search for that we don't have yet go on a wanted list, so the data grows where people look.</li>
+  </ul>
+  <p class="meta" style="margin:0">No opinions, no anonymous edits: real names and evidence only. Accounts are made by the administrator so everyone is a real person. Ask whoever shared this page with you. <a href="#" id="invitesignin">Sign in</a></p>
+</section>
 <div class="who-box">
   <form id="findform" style="display:inline-flex;gap:6px;align-items:center">
     <input type="text" id="dogfind" placeholder="Find a dog by registration number" aria-label="Find a dog by registration number" style="width:16rem" autocomplete="off">
@@ -245,6 +257,7 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
 
   <h2 style="margin-top:22px">Test results and titles</h2>
   <p class="meta">Each entry needs a date and an evidence link. Flag anything that looks wrong.</p>
+  <div id="editnote" class="card" style="margin:0 0 10px" hidden><b>Want to change something?</b> You are looking as a visitor. <a href="#" id="editsignin">Sign in</a> to add a record, correct one you added, or dispute any record with your real name and a reason. Signed-in members can also claim their own dogs.</div>
   <div id="entries"></div>
 
   <details class="card">
@@ -428,6 +441,8 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   function renderSession(){
     renderTop();
     ['new-litter','new-rec'].forEach(function(id){$(id).parentNode.hidden=!S.perm.canAdd});
+    $('editnote').hidden=!!S.perm.canAdd;
+    $('invite').hidden=!!S.perm.loggedIn;
     document.querySelectorAll('[data-a]').forEach(function(el){el.textContent=A(el.dataset.a).name});
   }
   function renderLanding(groups){
@@ -604,6 +619,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
         var e=P[k],cls='pn'+(k===1?' root':(k%2?' dam':'')),role=k===1?'':(k%2?'Dam':'Sire');
         var h='<div class="'+cls+'">'+(role?'<div class="rl">'+role+'</div>':'');
         if(!e)return h+'<span class="m">Unknown</span></div>';
+        if(e.locked)return h+'<a class="m lock" href="#" data-signin="1">Sign in to reveal</a></div>';
         var parts=e[1].split(' · '),born=(parts[3]||'').slice(0,4),color=parts[1]||'';
         h+=nameEl(k,e[0])+'<span class="m">'+esc(parts[0])+(born?' · '+born:'')+(color?' · '+esc(color):'')+'</span>';
         if(e[3]&&e[3].length)h+=camBtn(k,e[3]);
@@ -621,6 +637,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
       var k=(1<<d)+off,e=P[k],span=1<<(D-d),start=off*span+1;
       var cls='pn'+(d===0?' root':(k%2?' dam':'')),st='grid-column:'+(d+1)+';grid-row:'+start+' / span '+span;
       if(!e){h+='<div class="'+cls+'" style="'+st+'"><span class="m">Unknown</span></div>';continue}
+      if(e.locked){h+='<div class="'+cls+' locked" style="'+st+'"><a class="lock" href="#" data-signin="1" title="We have this ancestor. Sign in to see it.">Sign in to reveal</a></div>';continue}
       var parts=e[1].split(' · '),reg=parts[0],born=(parts[3]||'').slice(0,4),color=parts[1]||'';
       h+='<div class="'+cls+'" style="'+st+'">'+nameEl(k,e[0],k!==1)+'<span class="m">'+esc(reg)+(born?' · '+born:'')+(color?' · '+esc(color):'')+'</span>';
       if(e[3]&&e[3].length)h+=camBtn(k,e[3]);
@@ -786,6 +803,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   });
   document.addEventListener('click',function(ev){
     var t=ev.target;
+    if(t.closest&&t.closest('[data-signin]')){ev.preventDefault();window.scrollTo(0,0);showLogin(true);return}
     var ph=t.closest&&t.closest('[data-photos]');
     if(ph){ev.preventDefault();var pp=$('photopop');if(!pp.hidden&&pp.dataset.for===ph.dataset.photos){pp.hidden=true;return}pp.dataset.for=ph.dataset.photos;showPhotoPop(ph);return}
     if(!(t.closest&&t.closest('#photopop')))$('photopop').hidden=true;
@@ -864,6 +882,8 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   });
   $('lg-cancel').addEventListener('click',function(){challenge=null;$('lg-new').style.display='none';authMsg('');showLogin(false)});
   $('signinbtn').addEventListener('click',function(){showLogin(true)});
+  $('invitesignin').addEventListener('click',function(e){e.preventDefault();window.scrollTo(0,0);showLogin(true)});
+  $('editsignin').addEventListener('click',function(e){e.preventDefault();window.scrollTo(0,0);showLogin(true)});
   // After signing out (or changing who you are): a visitor goes back to Piper, our foundation bitch; a member reloads the page they are on.
   function afterSessionChange(){
     renderTop();

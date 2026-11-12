@@ -49,7 +49,11 @@ let pass=0,fail=0;const ok=(c,m)=>{if(c){pass++}else{fail++;console.log('  FAIL:
  ok(/Karen Mayfield-Jones/.test(T('dog-owners')),'members who consented are named');
  ok(d.querySelectorAll('#pedgrid .pn').length===31&&d.querySelectorAll('#pedgrid a.nm').length===31,"a visitor sees our own dog's pedigree with every name a link");
  ok(T('pednote')==='','and is not told to sign in to follow the pedigree back');
- await actAs(2);ok(/Jason L Dubman, Francisco Camacho, Priyanka Deshmuhk, Phoebe Dubman/.test(T('dog-breeders')),'a member sees full names');
+ ok(!d.getElementById('invite').hidden&&/help fill it in and check it/.test(T('invite'))&&/real names and evidence/.test(T('invite')),'a visitor is invited to sign up, told that using the site helps populate and cross-check it, and told the rules');
+ ok(!d.getElementById('editnote').hidden&&/dispute any record/.test(T('editnote')),'a visitor is told on the Records tab that signing in lets them add, correct or dispute');
+ await actAs(2);ok(d.getElementById('invite').hidden,'the invitation is gone once signed in');
+ ok(d.getElementById('editnote').hidden,'the sign-in prompt on the Records tab is gone once signed in');
+ ok(/Jason L Dubman, Francisco Camacho, Priyanka Deshmuhk, Phoebe Dubman/.test(T('dog-breeders')),'a member sees full names');
  console.log('--- the three dogs');
  ok(T('dog-call').includes('Piper'),'starts on Piper');
  ok(/Jason L Dubman, Francisco Camacho, Priyanka Deshmuhk, Phoebe Dubman/.test(T('dog-breeders')),"Piper's breeders");
@@ -97,6 +101,12 @@ let pass=0,fail=0;const ok=(c,m)=>{if(c){pass++}else{fail++;console.log('  FAIL:
  await API.ourDogs().then(g=>ok(!g.some(x=>/Shared by members/.test(x.title)),'generated ancestors do not show up as shared dogs'));
  API.visitorGens=1;await API.openAncestor(412,2).then(r=>ok(!!r.dogId,'a visitor can go one generation back when the limit is one'),()=>ok(false,'one back'));
  await API.openAncestor(412,4).then(()=>ok(false,'two back refused at limit one'),e=>ok(e.code==='login_required'&&/further back/.test(e.message),'and is asked to sign in to go further'));
+
+ await API.getPedigree(412).then(r=>ok(r.nodes[2]&&!r.nodes[2].locked&&r.nodes[4]&&r.nodes[4].locked===true&&r.nodes[8].locked===true,'past the visitor limit a slot says it is held but locked (limit one: parents shown, grandparents locked)'));
+ API.visitorGens=10;
+ await API.getPedigree(412).then(r=>ok(Object.values(r.nodes).every(n=>!n.locked),'at the normal limit of ten nothing is locked in the data we hold'));
+ API.visitorGens=2;{const g=d.getElementById('gens');g.value='4';g.dispatchEvent(new w.Event('change',{bubbles:true}));await wait(600);click(d.getElementById('ourdogsbtn'));await wait(300);click(d.querySelector('[data-demo="412"]'));await wait(1500);
+ ok(d.querySelectorAll('#pedgrid a.lock').length>0&&/Sign in to reveal/.test(T('pedgrid')),'the pedigree shows "Sign in to reveal" past the limit');}
  API.visitorGens=10;
  ok(d.querySelectorAll('#pedgrid .pn').length===31,'the visitor still sees the pedigree after returning to a public dog');
  ok(d.querySelectorAll('#parents .pcard').length===2,"own litter's parents are public");
