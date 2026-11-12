@@ -64,6 +64,7 @@ let pass=0,fail=0;const ok=(c,m)=>{if(c){pass++}else{fail++;console.log('  FAIL:
  ok([...d.querySelectorAll('#dog-screens a')].filter(a=>a.href.includes('quicksearch=WS69691106')).length===2,'OFA and CHIC numbers both link to the same OFA search, built from the AKC number');
  ok(/OFA OFA25G/.test(T('dog-screens'))&&/CHIC CHIC181340/.test(T('dog-screens'))&&!/OFA25G/.test(T('dog-regs')),'medical screens are their own section, apart from registrations');
  ok(/Quintessa Pedigree/.test(T('dog-ped'))&&/River Rock Pedigree/.test(T('dog-ped')),'also-on links');
+ ok([...d.querySelectorAll('#dog-ped a')].some(x=>x.href==='https://www.danesworld.info/hundelist.php?psearch=WS69691106'),'DANES World link is built from the registration number');
  await find('WS81418801');ok(T('dog-call').includes('Mia'),'find Mia by number');
  await find('WS84850303');ok(/None listed on AKC yet/.test(T('dog-screens')),"Cora has no medical screens listed, as on AKC");await find('WS81418801');
  ok(/Earlier owners \(3\)/.test(T('dog-owners'))===false&&/Earlier owners \(3\)/.test(T('own-hist'))===false,'(ownership history is a collapsed note, not in the header)');

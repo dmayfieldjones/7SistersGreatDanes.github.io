@@ -62,7 +62,7 @@
 
   // ---- the stores -------------------------------------------------------------------------------------------------------------
   var authors = {};
-  var priv = { peds: {}, photoRegs: [] };      // pedigree names and the list of dogs with a photo elsewhere: loaded from a private file
+  var priv = { peds: {}, photoRegs: [], cosmic: {} };      // pedigree names and the list of dogs with a photo elsewhere: loaded from a private file
   var actorId = null;                           // demo only. null = visitor (not signed in), 0 = administrator
   var loginName = null;
   var nextId = 100;
@@ -288,7 +288,7 @@
         // The ancestry of our own dogs, and the list of dogs with a photo elsewhere, come from a data file, not from the code. The file
         // holds only what the public explorer pages for our litters already show. In the real system the server provides it.
         fetch('/data/our-pedigrees.json').then(function (r) { if (!r.ok) throw new Error('none'); return r.json(); }).then(function (j) {
-          priv.j = j; priv.peds[412] = j.piper; priv.photoRegs = j.hasphoto || [];
+          priv.j = j; priv.peds[412] = j.piper; priv.photoRegs = j.hasphoto || []; priv.cosmic = j.cosmic || {};
         }).catch(function () { })
       ]).then(function () { return API.session(); });
     },
@@ -339,6 +339,8 @@
       var snap = {
         dog: { id: d.id, title: d.title || '', titleSuffix: d.titleSuffix || '', registered: d.registered || '', call: d.call, short: d.short || d.call || '', sex: d.sex, color: d.color, photo: d.photo, ext: !!d.ext, pending: !!d.pending, generated: !!d.generated, inGalaxy: !!d.inGalaxy, hasLitter: !!L, photoReg: photoRegOf(reg), visibility: d.visibility || 'members' },
         identifiers: copy(idsOf(dogId)),
+        // links to other pedigree databases that list this dog (we only link; nothing is copied)
+        cosmic: (reg && priv.cosmic[regOf(reg)]) ? copy(priv.cosmic[regOf(reg)]) : null,
         // pages filled in automatically start unconfirmed; members who checked them against a source are listed here
         confirm: { auto: !!d.generated, by: (d.confirmedBy || []).map(function (x) { return { author: x.author, date: x.date }; }), canConfirm: isMember() && !!d.generated && !(d.confirmedBy || []).some(function (x) { return x.author === authorOf(actorId); }) },
         claims: claims.filter(function (c) { return c.dog === dogId; }).map(annotate),
@@ -362,6 +364,8 @@
       Object.keys(P).forEach(function (k) {
         var e = P[k], rg = regOf(e[1].split(' · ')[0]), rr = photoRegOf(rg), list = (mine[rg] || []).slice();
         if (rr) list.push({ title: rr + '.jpg', author: 'River Rock Pedigree', url: 'https://breedpedigrees.com/pedpoint/images/' + encodeURIComponent(rr) + '.jpg', linked: true });
+        // Cosmic Great Danes: a map from registration number to their photo (hotlinked, never copied)
+        var cz = priv.cosmic[rg]; if (cz && cz.photo) list.push({ title: 'Photo at Cosmic Great Danes', author: 'Cosmic Great Danes', url: cz.photo, linked: true });
         // Past the visitor limit the data is held but not shown: the slot says so, and a sign-in reveals it.
         if (!isMember() && (dogs[dogId].gen || 0) + Math.floor(Math.log(Number(k)) / Math.LN2) > API.visitorGens) { out[k] = { locked: true }; return; }
         out[k] = [e[0], e[1], rr, list];
