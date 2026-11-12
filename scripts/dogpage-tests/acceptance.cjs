@@ -7,6 +7,8 @@ let pass=0,fail=0;const ok=(c,m)=>{if(c){pass++}else{fail++;console.log('  FAIL:
  ok(/Jason D\., Francisco C\., Priyanka D\., Phoebe D\./.test(T('dog-breeders')),'visitor sees non-members in short form');
  ok(!/Dubman|Camacho|Deshmuhk/.test(T('dog-breeders')+T('own-hist')),'no full non-member names reach a visitor');
  ok(/Karen Mayfield-Jones/.test(T('dog-owners')),'members who consented are named');
+ ok(d.querySelectorAll('#pedgrid .pn').length===31&&d.querySelectorAll('#pedgrid a.nm').length===0,"a visitor sees our own dog's pedigree as plain names, not links");
+ ok(/Sign in to open an ancestor/.test(T('pednote')),'and is told that ancestor pages need a sign-in');
  await actAs(2);ok(/Jason L Dubman, Francisco Camacho, Priyanka Deshmuhk, Phoebe Dubman/.test(T('dog-breeders')),'a member sees full names');
  console.log('--- the three dogs');
  ok(T('dog-call').includes('Piper'),'starts on Piper');
@@ -44,7 +46,9 @@ let pass=0,fail=0;const ok=(c,m)=>{if(c){pass++}else{fail++;console.log('  FAIL:
  await find('WS69691106');
  ok(d.getElementById('new-rec').parentNode.hidden&&d.getElementById('new-litter').parentNode.hidden,'visitor cannot see the add forms');
  ok(d.querySelectorAll('#entries form[data-flag]').length===0&&d.querySelectorAll('#entries [data-correct],#entries [data-hide]').length===0,'visitor has no flag/correct/hide buttons');
- ok(/Sign in to see names in the pedigree/.test(T('pedgrid')),'pedigree names need a login');
+ await API.getPedigree('r:WS54036904').then(()=>ok(false,'visitor pedigree of a members-only dog refused'),e=>ok(e.code==='login_required','a visitor cannot get the pedigree of a dog that is not public'));
+ await API.openAncestor(412,2).then(()=>ok(false,'visitor openAncestor refused'),e=>ok(e.code==='login_required','a visitor cannot open an ancestor page'));
+ ok(d.querySelectorAll('#pedgrid .pn').length===31,'the visitor still sees the pedigree after returning to a public dog');
  ok(d.querySelectorAll('#parents .pcard').length===2,"own litter's parents are public");
  ok(/Not recorded/.test(T('dog-facts')),'no fact forms for a visitor (Died not recorded)');
  await API.addRecord(412,{type:'win',name:'x',url:'http://a'}).then(()=>ok(false,'visitor add should be refused'),e=>ok(e.code==='login_required','visitor add -> login_required'));

@@ -2,7 +2,7 @@ const {JSDOM,VirtualConsole,ResourceLoader}=require('jsdom');const fs=require('f
 // Tests for the private dog page (public/dog-page-demo.html) and its demo backend (public/dog-api.js).
 // Run with:  npm i --no-save jsdom   then   node scripts/dogpage-tests/acceptance.cjs   (and nopriv.cjs)
 // The same checks are the contract the real server must pass: swap DogAPI for a client of the server and they should still hold.
-// acceptance.cjs needs public/data/private/ped-sample.json (git-ignored); nopriv.cjs runs without it.
+// acceptance.cjs uses public/data/our-pedigrees.json (the ancestry of our own dogs, as on the public explorer pages); nopriv.cjs runs without it.
 const PUB=require('path').resolve(__dirname,'../../public');
 class Loader extends ResourceLoader{fetch(url){const u=new URL(url);const f=PUB+u.pathname;return fs.existsSync(f)?Promise.resolve(fs.readFileSync(f)):null}}
 let gal=null;
@@ -29,7 +29,7 @@ exports.make=function({nopriv=false,host='localhost'}={}){
         return bad()}
       if(u.includes('dog-auth'))return Promise.resolve({ok:true,json:()=>Promise.resolve({region:'us-east-2',clientId:'test-client'})});
       if(u.includes('breed-galaxy'))return Promise.resolve({ok:true,text:()=>Promise.resolve(gal)});
-      if(u.includes('ped-sample'))return nopriv?Promise.resolve({ok:false}):Promise.resolve({ok:true,json:()=>Promise.resolve(JSON.parse(fs.readFileSync(PUB+'/data/private/ped-sample.json','utf8')))});
+      if(u.includes('our-pedigrees'))return nopriv?Promise.resolve({ok:false}):Promise.resolve({ok:true,json:()=>Promise.resolve(JSON.parse(fs.readFileSync(PUB+'/data/our-pedigrees.json','utf8')))});
       if(u.includes('demo-authors'))return Promise.resolve({ok:true,json:()=>Promise.resolve(JSON.parse(fs.readFileSync(PUB+'/data/demo-authors.json','utf8')))});
       return Promise.resolve({ok:false})};
     w.scrollTo=()=>{};w.prompt=()=>null;

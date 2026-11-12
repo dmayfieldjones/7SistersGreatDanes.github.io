@@ -21,7 +21,7 @@
  *   setVisibility(dogId, v)         'public' (everyone with the code) or 'members' (signed in only): the member who claimed the dog, or an administrator
  *   noteGalaxy(dogId, inGalaxy)     the page reports whether the galaxy file has the dog; the server updates the stub and the wanted list
  *   getDog(dogId)                   everything the page needs about one dog, with per-record permissions already worked out
- *   getPedigree(dogId, gens)        names and numbers for the pedigree (members only)
+ *   getPedigree(dogId, gens)        names and numbers for the pedigree: anyone for a public dog, otherwise members only
  *   openAncestor(dogId, key)        open (or create) the page for an ancestor in this dog's pedigree (members only)
  *   saveFact(dogId, name, value, src)   add or correct a single-valued fact (born, died, cause of death)
  *   addRecord(dogId, record)        add a test result, win, litter or link
@@ -210,9 +210,9 @@
     init: function () {
       return Promise.all([
         fetch('/data/demo-authors.json').then(function (r) { return r.json(); }).then(function (j) { authors = j; }).catch(function () { }),
-        // Pedigree names and the list of dogs with a photo elsewhere are not part of the code: they come from a private file that is not
-        // committed. In the real system they live behind the members-only service.
-        fetch('/data/private/ped-sample.json').then(function (r) { if (!r.ok) throw new Error('none'); return r.json(); }).then(function (j) {
+        // The ancestry of our own dogs, and the list of dogs with a photo elsewhere, come from a data file, not from the code. The file
+        // holds only what the public explorer pages for our litters already show. In the real system the server provides it.
+        fetch('/data/our-pedigrees.json').then(function (r) { if (!r.ok) throw new Error('none'); return r.json(); }).then(function (j) {
           priv.peds[412] = j.piper; priv.peds[413] = j.mia; priv.photoRegs = j.hasphoto || [];
           // Cora: her dam side is Piper's ancestry shifted one generation. Her sire side is not in the sample data.
           var c = { 1: ['7Sisters N Legado\'s Heart Of Gold', 'WS84850303 · Fawn · F · 2024-08-19'], 2: ['Legado N Izya\'s Oops! I Did It Again', 'WS80095602 ·  · M · '] };
@@ -276,8 +276,8 @@
       return Promise.resolve(snap);
     },
     getPedigree: function (dogId, gens) {
-      if (!isMember()) return fail('login_required', 'Sign in to see names in the pedigree.');
       if (!dogs[dogId]) return fail('not_found', 'No such dog.');
+      if (!canSee(dogs[dogId])) return fail('login_required', 'Sign in to see names in the pedigree.');
       var P = pedOf(dogId), out = {};
       Object.keys(P).forEach(function (k) { var e = P[k]; out[k] = [e[0], e[1], photoRegOf(regOf(e[1].split(' · ')[0]))]; });
       return Promise.resolve({ nodes: out });

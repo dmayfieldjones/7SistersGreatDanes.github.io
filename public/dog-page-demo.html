@@ -79,6 +79,10 @@ ul.plain{padding-left:1.1rem;margin:0 0 12px}
 .pedlist .pn .rl{font:600 .66rem/1 system-ui,sans-serif;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
 .pedlist .pn a.nm{font-size:.92rem}
 .pedlist .pn .m{font-size:.76rem}
+.pn span.nm{font-weight:600;overflow-wrap:anywhere}
+.pedgrid.d6 .pn span.nm,.pedgrid.d7 .pn span.nm,.pedgrid.d8 .pn span.nm{overflow:hidden;text-overflow:ellipsis;font-size:.66rem;font-weight:500}
+.pedgrid.d7 .pn span.nm,.pedgrid.d8 .pn span.nm{font-size:.58rem}
+.pedlist .pn span.nm{font-size:.92rem}
 .pn a.nm{font-weight:600;color:var(--ink);text-decoration:none;overflow-wrap:anywhere}
 .pn a.nm:hover{text-decoration:underline}
 .pn .m{color:var(--muted);font-size:.7rem}
@@ -135,6 +139,7 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
   <h2>Pedigree</h2>
   <p class="meta"><label for="gens">Generations</label> <select id="gens" style="width:auto;display:inline-block"><option>3</option><option selected>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select> &nbsp;Generated from our own pedigree data when you open this tab. Nothing is stored per dog. Sample data from your Ezra explorer pages, which hold 8 generations above each dog. Cora's sire side is not available.</p>
   <div id="pedgrid" class="pedgrid"></div>
+  <p id="pednote" class="meta" style="margin:6px 0 0"></p>
   <p class="meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg> marks a dog with a photo on River Rock Pedigree. It opens the photo on their site in a new tab; we don't host or copy it.</p>
 </section>
 
@@ -509,8 +514,14 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     $('model-authors').textContent=JSON.stringify(authors,null,2);
   }
   if(window.matchMedia)matchMedia('(max-width:640px)').addEventListener('change',function(){if(S&&PED&&PED.nodes)renderPed()});
+  // A name opens that dog's page only for signed-in members (ancestor pages are members only); a visitor sees plain text.
+  function nameEl(k,name,openable){
+    var t=esc(name)+(openable&&S.perm.loggedIn?' – open this dog\'s page':'');
+    return S.perm.loggedIn?'<a class="nm" data-anc="'+k+'" title="'+t+'" href="#">'+esc(name)+'</a>':'<span class="nm" title="'+t+'">'+esc(name)+'</span>';
+  }
   function renderPed(){
     var D=Number($('gens').value),rows=1<<D,grid=$('pedgrid'),P=PED.nodes;
+    $('pednote').textContent=(S.perm.loggedIn||!P||!P[1])?'':'Sign in to open an ancestor\'s page.';
     function msg(t){grid.className='pedgrid';grid.style.cssText='';grid.innerHTML='<div class="empty" style="grid-column:1/-1">'+t+'</div>'}
     if(PED.error){msg(PED.error.code==='login_required'?'Sign in to see names in the pedigree.':esc(PED.error.message||'The pedigree could not be loaded.'));return}
     if(!P||!P[1]){msg(S.dog.inGalaxy?'The map above knows this dog\'s ancestry but not the names, so there is no pedigree to draw yet.':'No pedigree data for this dog yet.');return}
@@ -523,7 +534,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
         var h='<div class="'+cls+'">'+(role?'<div class="rl">'+role+'</div>':'');
         if(!e)return h+'<span class="m">Unknown</span></div>';
         var parts=e[1].split(' · '),born=(parts[3]||'').slice(0,4),color=parts[1]||'';
-        h+='<a class="nm" data-anc="'+k+'" href="#">'+esc(e[0])+'</a><span class="m">'+esc(parts[0])+(born?' · '+born:'')+(color?' · '+esc(color):'')+'</span>';
+        h+=nameEl(k,e[0])+'<span class="m">'+esc(parts[0])+(born?' · '+born:'')+(color?' · '+esc(color):'')+'</span>';
         if(e[2])h+='<a class="cam" href="'+esc(photourl(e[2]))+'" target="_blank" rel="noopener">'+cam+'River Rock photo &#8599;</a>';
         h+='</div>';
         if(d<D&&(P[2*k]||P[2*k+1]))h+='<div class="kids">'+node(2*k,d+1)+node(2*k+1,d+1)+'</div>';
@@ -540,7 +551,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
       var cls='pn'+(d===0?' root':(k%2?' dam':'')),st='grid-column:'+(d+1)+';grid-row:'+start+' / span '+span;
       if(!e){h+='<div class="'+cls+'" style="'+st+'"><span class="m">Unknown</span></div>';continue}
       var parts=e[1].split(' · '),reg=parts[0],born=(parts[3]||'').slice(0,4),color=parts[1]||'';
-      h+='<div class="'+cls+'" style="'+st+'"><a class="nm" data-anc="'+k+'" title="'+esc(e[0])+(k===1?'':' – open this dog\'s page')+'" href="#">'+esc(e[0])+'</a><span class="m">'+esc(reg)+(born?' · '+born:'')+(color?' · '+esc(color):'')+'</span>';
+      h+='<div class="'+cls+'" style="'+st+'">'+nameEl(k,e[0],k!==1)+'<span class="m">'+esc(reg)+(born?' · '+born:'')+(color?' · '+esc(color):'')+'</span>';
       if(e[2])h+='<a class="cam" href="'+esc(photourl(e[2]))+'" target="_blank" rel="noopener" title="Photo hosted at '+esc(DB.site)+' ('+esc(DB.label)+'). Opens in a new tab."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>River Rock photo &#8599;</a>';
       h+='</div>';
     }}
