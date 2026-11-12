@@ -46,8 +46,8 @@ let pass=0,fail=0;const ok=(c,m)=>{if(c){pass++}else{fail++;console.log('  FAIL:
  ok(/Jason D\., Francisco C\., Priyanka D\., Phoebe D\./.test(T('dog-breeders')),'visitor sees non-members in short form');
  ok(!/Dubman|Camacho|Deshmuhk/.test(T('dog-breeders')+T('own-hist')),'no full non-member names reach a visitor');
  ok(/Karen Mayfield-Jones/.test(T('dog-owners')),'members who consented are named');
- ok(d.querySelectorAll('#pedgrid .pn').length===31&&d.querySelectorAll('#pedgrid a.nm').length===31,"a visitor sees our own dog's pedigree with every name a link");
- ok(T('pednote')==='','and is not told to sign in to follow the pedigree back');
+ ok(d.querySelectorAll('#pedgrid .pn').length===31&&d.querySelectorAll('#pedgrid a.nm').length===0,"a visitor sees our own dog's pedigree as plain names, not links");
+ ok(/Sign in to open an ancestor/.test(T('pednote')),'and is told that ancestor pages need a sign-in');
  await actAs(2);ok(/Jason L Dubman, Francisco Camacho, Priyanka Deshmuhk, Phoebe Dubman/.test(T('dog-breeders')),'a member sees full names');
  console.log('--- the three dogs');
  ok(T('dog-call').includes('Piper'),'starts on Piper');
@@ -91,9 +91,8 @@ let pass=0,fail=0;const ok=(c,m)=>{if(c){pass++}else{fail++;console.log('  FAIL:
  await find('WS69691106');
  ok(d.getElementById('new-rec').parentNode.hidden&&d.getElementById('new-litter').parentNode.hidden,'visitor cannot see the add forms');
  ok(d.querySelectorAll('#entries form[data-flag]').length===0&&d.querySelectorAll('#entries [data-correct],#entries [data-hide]').length===0,'visitor has no flag/correct/hide buttons');
- await API.openAncestor(412,2).then(r=>ok(!!r.dogId,'a visitor can open an ancestor of one of our public dogs'),()=>ok(false,'visitor openAncestor should work for a public dog'));
- await API.openAncestor('r:WS54036904',2).then(r=>ok(!!r.dogId,'and can keep going back, ancestor of an ancestor'),()=>ok(false,'visitor scan back'));
- await API.ourDogs().then(g=>ok(!g.some(x=>/Shared by members/.test(x.title)),'generated ancestors do not show up as shared dogs'));
+ await API.getPedigree('r:WS54036904').then(()=>ok(false,'visitor pedigree of a members-only dog refused'),e=>ok(e.code==='login_required','a visitor cannot get the pedigree of a dog that is not public'));
+ await API.openAncestor(412,2).then(()=>ok(false,'visitor openAncestor refused'),e=>ok(e.code==='login_required','a visitor cannot open an ancestor page'));
  ok(d.querySelectorAll('#pedgrid .pn').length===31,'the visitor still sees the pedigree after returning to a public dog');
  ok(d.querySelectorAll('#parents .pcard').length===2,"own litter's parents are public");
  ok(/Not recorded/.test(T('dog-facts')),'no fact forms for a visitor (Died not recorded)');
@@ -130,7 +129,7 @@ let pass=0,fail=0;const ok=(c,m)=>{if(c){pass++}else{fail++;console.log('  FAIL:
  await actAs('v');
  await API.lookup('WS11111111').then(()=>ok(false,'visitor lookup of an unknown number refused'),e=>ok(e.code==='login_required'&&/look up other dogs/.test(e.message),'a visitor cannot look up a number we do not have'));
  await API.lookup(' ws81418801 ').then(r=>ok(r.dogId===413,'a visitor can open one of our public dogs by number'),()=>ok(false,'public lookup should work'));
- await API.getDog('r:WS54036904').then(r=>ok(r.dog.generated===true,'a visitor can read an ancestor page that was generated from a public pedigree'),()=>ok(false,'visitor reads generated ancestor'));
+ await API.getDog('r:WS54036904').then(()=>ok(false,'visitor reading an ancestor page refused'),e=>ok(e.code==='login_required','a visitor cannot open an ancestor page'));
  await find('WS81418801');ok(d.querySelectorAll('#parents a.onsite[data-goto]').length===1,"on Mia's page a visitor can follow only the parent that is public (Piper)");
  ok(d.querySelectorAll('#parents a[data-anc]').length>=1,"the other parent is not linked to a page a visitor cannot open");
  ok(!d.getElementById('vis'),'a visitor has no visibility control');
@@ -138,8 +137,6 @@ let pass=0,fail=0;const ok=(c,m)=>{if(c){pass++}else{fail++;console.log('  FAIL:
  await actAs(2);await find('WS81418801');ok(!!d.getElementById('vis')&&d.getElementById('vis').value==='public','the claiming member sees the control, set to public');
  d.getElementById('vis').value='members';d.getElementById('vis').dispatchEvent(new w.Event('change',{bubbles:true}));await wait(500);
  await actAs('v');await API.getDog(413).then(()=>ok(false,'hidden dog should refuse a visitor'),e=>ok(e.code==='login_required','a dog set to members-only is closed to visitors'));
- await API.getPedigree(413).then(()=>ok(false,'visitor pedigree of a members-only dog refused'),e=>ok(e.code==='login_required','a visitor cannot get the pedigree of a dog that is not public'));
- await API.openAncestor(413,2).then(()=>ok(false,'visitor ancestors of a members-only dog refused'),e=>ok(e.code==='login_required','and cannot open ancestors reached through a dog that is not public'));
  await find('WS69691106');ok(![...d.querySelectorAll('#offspring button')].some(b=>/Mia/.test(b.textContent))&&[...d.querySelectorAll('#offspring button')].some(b=>/Cora/.test(b.textContent)),"a members-only dog drops out of its parent's offspring list for visitors");
  await API.setVisibility(413,'public').then(()=>ok(false,'visitor setVisibility refused'),e=>ok(e.code==='login_required','a visitor cannot change visibility'));
  await API.setActor(9);await API.setVisibility(413,'public').then(()=>ok(false,'non-claimant refused'),e=>ok(e.code==='forbidden','a member who did not claim the dog cannot change who sees it'));
