@@ -115,7 +115,7 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
 
 <section id="galaxy" style="margin:0 0 18px">
   <h2>Great Dane Galaxy</h2>
-  <canvas id="galcv" aria-label="Map of the breed with this dog highlighted"></canvas>
+  <canvas id="galcv" aria-label="Map of the breed; a pulsing marker labeled You are here shows this dog"></canvas>
   <div class="gbar">
     <span class="seg"><button class="sm" type="button" data-gmode="all" aria-pressed="true">Whole breed</button> <button class="sm" type="button" data-gmode="near" aria-pressed="false">Close up</button></span>
     <span class="meta"><span class="dotkey" style="background:#fff"></span>this dog <span class="dotkey" style="background:#ffc04d;margin-left:8px"></span>ancestors <span class="dotkey" style="background:#5ad7ff;margin-left:8px"></span>descendants</span>
@@ -534,10 +534,36 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     return {anc:anc,desc:desc};
   }
   function hsl(h,s,l){s/=100;l/=100;var a=s*Math.min(l,1-l),f=function(n){var k=(n+h/30)%12;return l-a*Math.max(-1,Math.min(k-3,9-k,1))};return 'rgb('+Math.round(f(0)*255)+','+Math.round(f(8)*255)+','+Math.round(f(4)*255)+')'}
+  // the dog's marker: base map is drawn once; only this glow, pulse and label animate
+  var galRaf=0;
+  function galPin(cv,off,dx,dy,dpr,W,H){
+    cancelAnimationFrame(galRaf);
+    var ctx=cv.getContext('2d'),calm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches,near=galMode==='near';
+    var label='You are here',up=dy>46,lx=Math.max(48,Math.min(W-48,dx)),ly=up?dy-30:dy+34;
+    function frame(ts){
+      if(!cv.isConnected)return;
+      var ph=calm?0:(ts%2200)/2200,r0=near?9:7;
+      ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,cv.width,cv.height);ctx.drawImage(off,0,0);ctx.setTransform(dpr,0,0,dpr,0,0);
+      var g=ctx.createRadialGradient(dx,dy,0,dx,dy,r0*4);g.addColorStop(0,'rgba(255,255,255,.55)');g.addColorStop(.35,'rgba(255,230,160,.22)');g.addColorStop(1,'rgba(255,200,80,0)');
+      ctx.fillStyle=g;ctx.beginPath();ctx.arc(dx,dy,r0*4,0,Math.PI*2);ctx.fill();
+      for(var k=0;k<2;k++){var q=(ph+k*.5)%1;ctx.strokeStyle='rgba(255,255,255,'+(.8*(1-q)).toFixed(3)+')';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(dx,dy,r0+q*r0*3,0,Math.PI*2);ctx.stroke()}
+      ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.beginPath();ctx.arc(dx,dy,r0,0,Math.PI*2);ctx.stroke();
+      ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(dx,dy,2.2,0,Math.PI*2);ctx.fill();
+      // label with a short pointer toward the dog
+      ctx.font='600 13px system-ui,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+      var tw=ctx.measureText(label).width+14;
+      ctx.strokeStyle='rgba(255,255,255,.7)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(dx,up?dy-r0-2:dy+r0+2);ctx.lineTo(dx,up?ly+11:ly-11);ctx.stroke();
+      ctx.fillStyle='rgba(5,6,10,.85)';ctx.fillRect(lx-tw/2,ly-11,tw,22);ctx.strokeStyle='rgba(255,255,255,.7)';ctx.strokeRect(lx-tw/2,ly-11,tw,22);
+      ctx.fillStyle='#fff';ctx.fillText(label,lx,ly+.5);
+      if(!calm)galRaf=requestAnimationFrame(frame)
+    }
+    galRaf=requestAnimationFrame(frame);
+  }
   function drawGalaxy(G,row){
     var cv=$('galcv'),ctx=cv.getContext&&cv.getContext('2d');if(!ctx)return;
     var dpr=Math.min(2,window.devicePixelRatio||1),W=cv.clientWidth||600,H=320;
-    cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
+    cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);
+    var off=document.createElement('canvas');off.width=cv.width;off.height=cv.height;ctx=off.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);
     var bx=G.box,bw=bx[1]-bx[0],bh=bx[3]-bx[2],base=Math.min(W*.96/bw,H*.96/bh);
     var px=function(i){return G.qx[i]/65535},py=function(i){return G.qy[i]/65535*G.asp};
     var sc=galMode==='near'?base*12:base,cx=px(row),cy=py(row);
@@ -549,8 +575,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     var t=galTrace(G,row),big=galMode==='near'?3.4:2.4;
     t.anc.forEach(function(g,i){ctx.fillStyle='#ffc04d';ctx.fillRect(px(i)*sc+ox-big/2,py(i)*sc+oy-big/2,big,big)});
     t.desc.forEach(function(g,i){ctx.fillStyle='#5ad7ff';ctx.fillRect(px(i)*sc+ox-big/2,py(i)*sc+oy-big/2,big,big)});
-    var dx=px(row)*sc+ox,dy=py(row)*sc+oy;
-    ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.beginPath();ctx.arc(dx,dy,galMode==='near'?9:7,0,Math.PI*2);ctx.stroke();
+    galPin(cv,off,px(row)*sc+ox,py(row)*sc+oy,dpr,W,H);
     return t;
   }
   // ---- the dog's place in the galaxy, written on the fly from the loaded map; nothing is stored ----

@@ -97,7 +97,7 @@ These questions will quickly separate serious breeders from puppy mills or backy
 
 **"What health testing do you perform?"**
 
-✅ **Good Answer:** At minimum: cardiac clearance, thyroid testing, and hip evaluation and eye testing. Advanced breeders may discuss genetic testing, dilated cardiomyopathy (DCM) screening, and breed-specific concerns. They should provide copies of all health clearances.
+✅ **Good Answer:** At minimum: cardiac clearance, thyroid testing, and hip evaluation and eye testing. Advanced breeders may discuss genetic testing, dilated cardiomyopathy (DCM) screening, and breed-specific concerns. They should provide copies of all health clearances. Our pages on [DCM screening](/posts/2026-10-21-dcm-in-great-danes) and [hip and elbow screening](/posts/2026-10-21-joint-health-in-the-growing-great-dane) explain what these tests can and cannot tell you.
 
 ❌ **Red Flag:** "The vet says they're healthy" without specific testing, or refusal to provide documentation.
 

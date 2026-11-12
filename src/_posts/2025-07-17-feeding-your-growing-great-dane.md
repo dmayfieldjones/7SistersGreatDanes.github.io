@@ -1,7 +1,7 @@
 ---
 title: "Feeding Your Growing Great Dane: A Nutritional Deep Dive"
 date: 2025-07-17
-updated: 2026-07-09
+updated: 2026-10-21
 description: "Comprehensive guide to Great Dane nutrition, feeding strategies, and growth management for every life stage, from puppy to adult."
 ---
 
@@ -23,7 +23,9 @@ After multiple litters, conversations with families about feeding challenges, an
 - Controlled, steady growth is essential; overfeeding and rapid growth increase the risk of orthopedic problems.
 - Use a Great Dane-appropriate formula with controlled calcium and phosphorus; avoid most generic “puppy” foods.
 - Monitor body condition, not just portion size—let your hands, not your eyes, guide feeding adjustments.
+- Add no calcium supplements to a complete large-breed diet. The label statement "growth, including large size dogs" is the quickest check.
 - Never free-feed; stick to scheduled, measured meals and adjust as your dog grows.
+- A limp that keeps coming back, fever with bone pain, or any wobbling needs a veterinary exam, not a wait-and-see approach.
 - Bloat is a serious risk—feed smaller, frequent meals, use slow-feed bowls, and avoid exercise around mealtimes.
 - Consult your veterinarian regularly for growth monitoring and diet adjustments.
 </details>
@@ -46,7 +48,7 @@ Great Danes don't just scale up from smaller dogs—their nutritional needs are 
 Your Great Dane puppy will gain approximately **2-4 pounds per week** during peak growth periods. This represents a **9,000% increase** from birth to adult weight for many Great Danes—a growth rate that places enormous demands on developing joints, bones, and organ systems.
 
 **Why This Matters for Feeding:**
-- **Controlled growth prevents orthopedic problems** - Fast growth increases hip dysplasia and other developmental issues
+- **Controlled growth lowers orthopedic risk** - Genetics sets the risk for hip dysplasia and similar conditions. Rapid growth and extra body weight can make a lax hip worse, but feeding cannot fix one
 - **Nutrient timing is critical** - Missing key nutrients during growth spurts causes permanent problems  
 - **Overfeeding is more dangerous than underfeeding** - Excess calories accelerate growth beyond what bones can support
 - **Traditional feeding advice doesn't apply** - Recommendations for 30-pound dogs fail catastrophically with giants
@@ -116,7 +118,7 @@ This period requires the most precise nutrition management. Growth is rapid but 
 - **Premium brands** with consistent quality and nutritional analysis
 - **Avoid "puppy"** formulas that often contain excessive nutrients
 
-You may hear a different recommendation from your vet: a large-breed-specific puppy formula rather than an adult food. That's a reasonable position, especially since [AAFCO's revised nutrient profiles](https://www.petfoodindustry.com/nutrition/article/15460647/the-revised-aafco-dog-and-cat-food-nutrient-profiles) (2016 Official Publication) cap calcium at **1.8%** on a dry-matter basis for growth and all-life-stages foods fed to large-breed puppies (70+ lb adult weight)—lower than the **2.5%** maximum that still applies to many general puppy formulas. Our reasoning for recommending adult or all-life-stage food instead comes down to consistency: "use an adult formula that hits these numbers" is a simpler rule for owners to follow correctly every time they buy food, compared to "use a large-breed puppy formula, but check the label on every bag," since not every food labeled large-breed puppy actually lands where it should on calcium. Either way, a generic puppy food not formulated for large breeds is what we want to avoid.
+You may hear a different recommendation from your vet: a large-breed-specific puppy formula rather than an adult food. That's a reasonable position, especially since [AAFCO's revised nutrient profiles](https://www.petfoodindustry.com/nutrition/article/15460647/the-revised-aafco-dog-and-cat-food-nutrient-profiles) (2016 Official Publication) cap calcium at **1.8%** on a dry-matter basis for growth and all-life-stages foods fed to large-breed puppies (70+ lb adult weight)—lower than the **2.5%** maximum that still applies to many general puppy formulas. Our reasoning for recommending adult or all-life-stage food instead comes down to consistency: "use an adult formula that hits these numbers" is a simpler rule for owners to follow correctly every time they buy food, compared to "use a large-breed puppy formula, but check the label on every bag," since not every food labeled large-breed puppy actually lands where it should on calcium. Either way, a generic puppy food not formulated for large breeds is what we want to avoid. A board-certified veterinary surgeon speaking at the 2026 GDCA National Specialty gave the same core advice: feed a complete diet formulated for growth of large-size dogs, keep puppies lean, and add no calcium supplements. The surgeon said owners often feed puppy food and then add calcium on top, which defeats the formulation.
 
 This isn't just our take. [Foto Danes](https://www.fotodanes.com/kibble.htm) and other longtime Dane breeders land in the same place.
 
@@ -162,7 +164,7 @@ This is when families get overwhelmed. Appetites surge, growth continues, but nu
 Mia went through a phase where she acted starving despite adequate nutrition. This is normal! Great Dane adolescents often have enormous appetites that don't reflect actual nutritional needs.
 
 **Our Strategies:**
-- **Measure everything** - everyone needs to know how much they are feeding to properly make adjusements when neceessary
+- **Measure everything** - everyone needs to know how much they are feeding to properly make adjustments when necessary
 - **Maintain schedule** - consistent meal times prevent food anxiety
 - **Monitor body condition** - let your hands guide portions
 
@@ -223,7 +225,7 @@ We've had excellent results with Purina Pro Plan Large Breed kibble combined wit
 - Large Breed formulations with appropriate calcium/phosphorus ratios (1.0-1.2% Ca)
 - Controlled protein levels (24-26%) suitable for controlled growth
 - Kibble size appropriate for large mouths and proper chewing
-- Traditional grain-inclusive formulas (avoiding potential DCM links from grain-free diets)
+- Grain-inclusive formulas that are not built on peas, lentils, or other legumes (the FDA's investigation of diet-associated heart disease focused on those ingredients)
 - Consistent nutrient profiles batch-to-batch
 
 **Addressing Common Concerns:**
@@ -313,7 +315,7 @@ Great Danes have higher bloat risk than most breeds. Feeding management is criti
 - **Slow-feed bowls** for fast eaters
 - **No vigorous exercise immediately before or after meals** - wait 1-2 hours
 - **Monitor eating speed** and intervene if necessary
-- **Consider prophylactic gastropexy** - discuss with your veterinarian
+- **Consider prophylactic gastropexy** - discuss with your veterinarian. A veterinary surgeon at the 2026 GDCA National Specialty recommended doing it during the same anesthesia as a spay or neuter
 
 For an alternative, research-based perspective on bloat risk factors, see [Bloat and the Risk Factors](https://breedingbetterdogs.com/article/bloat-and-risk-factors) by Dr. Carmen Battaglia.
 
@@ -332,7 +334,8 @@ For an alternative, research-based perspective on bloat risk factors, see [Bloat
 **Common Issues:**
 - **Environmental vs. food allergies** often confused
 - **Protein sensitivities** may develop over time
-- **Grain-free concerns** - recent research linking grain-free diets to heart disease
+- **Grain-free and legume-heavy diets** - the FDA has investigated a possible link to dilated cardiomyopathy (DCM). In its 2019 update, 93% of the reported products contained peas and/or lentils, and no cause has been established. Proposed mechanisms include low sulfur amino acids, fiber-driven taurine loss, and low intake per kilogram in giant breeds.
+- **Diet is only one cause of DCM** - infections, low thyroid, a sustained fast heart rate, and the chemotherapy drug doxorubicin can all mimic inherited DCM. Great Danes also have a genetic form that no diet prevents, and a single clear exam does not rule out later disease. Cardiologists at the 2026 GDCA National Specialty recommended a yearly echocardiogram plus a 24-hour Holter monitor starting around age 2 to 3, whatever the dog eats. See [DCM in Great Danes](/posts/2026-10-21-dcm-in-great-danes) for details.
 
 **Our Approach:**
 - **Elimination diets** under veterinary supervision
@@ -349,17 +352,32 @@ For an alternative, research-based perspective on bloat risk factors, see [Bloat
 Great Dane growth plates don't close until 18-24 months. Nutrition during this period affects lifelong soundness.
 
 **Key Nutritional Factors:**
-- **Controlled calcium** - excess accelerates closure and causes problems
+- **Controlled calcium** - excess calcium has been linked to skeletal disease in Great Dane puppies (Hazewinkel and colleagues)
 
 AAFCO's [revised dog food nutrient profiles](https://www.petfoodindustry.com/nutrition/article/15460647/the-revised-aafco-dog-and-cat-food-nutrient-profiles), adopted into the **2016 Official Publication**, formalized this: growth and all-life-stages formulas that may be fed to large-breed puppies (70+ lb adult weight) are capped at **1.8% calcium** on a dry-matter basis—lower than the **2.5%** maximum that still applies to many other puppy formulas.
 
-- **Appropriate protein** - too little stunts growth, too much accelerates it
+- **Protein is not the main lever** - in a controlled study, Great Dane puppies ate 14.6%, 23.1%, or 31.6% protein (dry matter) at equal calories, and protein had no demonstrable effect on skeletal development (Nap et al., 1991). Calcium and total calories matter more
 - **Balanced minerals** - zinc, copper, manganese for proper development
 - **Caloric control** - overfeeding is the biggest risk factor
+- **Lean pays off over a lifetime** - in a Labrador study, dogs fed about a quarter less lived nearly two years longer (Kealy et al., 2002). That was Labradors, not Danes, and a pet food company funded it, but the direction fits the advice above
 
 For a breeder’s perspective and practical checklists on recognizing bone diseases in Great Danes—including HOD, OCD, and Panosteitis—see [A Guide To Recognizing Bone Diseases by Linda Arndt (“Great Dane Lady”)](https://www.greatdanelady.com/articles/guide_to_recognizing_bone_diseases.htm).
 
-**Note:** While this resource offers valuable real-world insights, some recommendations reflect the author’s personal experience and commercial interests, and may not always align with current veterinary consensus or peer-reviewed research. Always consult your veterinarian before making changes to your dog’s diet, supplement regimen, or vaccination schedule. Use this guide as a conversation starter with your vet, not a substitute for professional diagnosis and care.
+**Note:** While this resource offers valuable real-world insights, some recommendations reflect the author’s personal experience and commercial interests, and may not always align with current veterinary consensus or peer-reviewed research. Always consult your veterinarian before making changes to your dog’s diet, supplement regimen, or vaccination schedule. Use this guide as a conversation starter with your vet, not a substitute for professional diagnosis and care. As one example, a veterinary surgeon speaking at the 2026 GDCA National Specialty said vitamin C does not play the role in HOD that people once believed, so check any vitamin C protocol with your vet.
+
+</details>
+
+<details>
+<summary><strong>Exercise, Traction, and Joint Health</strong></summary>
+
+**What We Can Say:**
+- **Free play is fine; hours of ball-throwing are not.** A dog playing in the yard can stop when it wants. A dog chasing a thrown ball will often keep going past what is comfortable or healthy because it wants to please its owner (veterinary surgeon, 2026 GDCA National Specialty).
+- **Give traction.** Slick floors and regular, comfortable movement matter more than hard exercise.
+- **Keep puppies lean.** Extra weight loads every joint, and it can make a lax hip express worse.
+- **Early life may matter.** A Norwegian study of 501 puppies from four large and giant breeds (Newfoundlands, Labradors, Leonbergers, and Irish Wolfhounds) linked daily stair climbing before about three months to a higher risk of hip dysplasia, and daily exercise in parks to a lower risk (Krontveit et al., 2012). Great Danes were not in that study.
+
+**The "Puppy Who Just Sits Funny":**
+Bunny hopping, reluctance to jump, a short stride, or trouble rising deserves an orthopedic exam now. Some affected puppies show no obvious lameness, and a normal gait does not rule out abnormal hips. Do not start pain medication before the exam, because it can hide the signs the specialist needs to see. More in [Limping, Hips, and Screening](/posts/2026-10-21-joint-health-in-the-growing-great-dane).
 
 </details>
 
@@ -425,28 +443,6 @@ Learn to assess your dog's condition through hands-on evaluation:
 </details>
 
 <details>
-<summary><strong>The Real Investment</strong></summary>
-
-**Monthly Food Costs:**
-- **Puppy phase:** $80-120/month for premium food
-- **Adult maintenance:** $100-150/month depending on brand and dog size
-- **Annual total:** $1,200-1,800 for quality nutrition
-
-**Why Premium Food Makes Economic Sense:**
-- **Better digestibility** - less waste, better value per serving
-- **Health prevention** - reduces veterinary costs long-term
-- **Consistent quality** - fewer digestive upsets and transitions
-- **Nutritional density** - often need less volume than cheaper foods
-
-**Budget Management:**
-- **Buy in bulk** when possible for cost savings
-- **Subscribe and save** programs for regular delivery
-- **Compare price per serving** rather than price per bag
-- **Factor in health costs** - cheap food often means expensive vet bills
-
-</details>
-
-<details>
 <summary><strong>Working with Your Veterinarian</strong></summary>
 
 **Building the Partnership:**
@@ -455,7 +451,7 @@ Your veterinarian or nutritionist that is knowledgeable about Great Danes should
 **What to Discuss:**
 - **Growth rate monitoring** - monthly weigh-ins during puppyhood
 - **Body condition scoring** - learn proper assessment techniques
-- **Supplement needs** - most premium foods don't require additional vitamins
+- **Supplement needs** - most premium foods don't require additional vitamins, and calcium should never be added. Taurine and L-carnitine are for dogs with a diagnosed deficiency or diet-associated heart disease; nothing shows they prevent DCM in a healthy dog
 - **Life stage transitions** - timing for food changes
 - **Special circumstances** - health conditions requiring dietary modification
 
@@ -481,12 +477,15 @@ The following sections highlight warning signs and common mistakes to avoid. Exp
 - **Persistent vomiting or diarrhea**
 - **Signs of pain** during or after eating
 - **Extreme lethargy** following meals
+- **Fever with bone pain, swelling, or refusal to walk** in a puppy (possible HOD)
+- **Wobbling, scuffed nails, or knuckling** (needs a neurologic exam)
 
 **Schedule Veterinary Consultation:**
 - **Gradual appetite decrease** over several days
 - **Weight loss** despite adequate food intake
 - **Changes in water consumption**
 - **Behavioral changes** around feeding time
+- **A limp that keeps coming back**, even when it warms out, or a limp that shifts from leg to leg
 - **Digestive irregularities** lasting more than 2-3 days
 
 </details>
@@ -547,7 +546,7 @@ Most Great Danes begin showing age-related changes around 6-8 years, requiring n
 
 **Senior Considerations:**
 - **Reduced caloric needs** as activity decreases
-- **Joint support** through appropriate supplementation
+- **Joint support** through lean weight, steady low-impact exercise, and any supplements your vet recommends. Omega-3 has the best evidence; the evidence for glucosamine and chondroitin is mixed. See [Arthritis in the Aging Great Dane](/posts/2026-10-21-arthritis-in-the-aging-great-dane)
 - **Easier digestion** with modified protein sources
 - **Medical condition management** through therapeutic diets
 
@@ -600,6 +599,9 @@ To learn more about our approach to Great Dane breeding and our current litters,
 **Related Reading:**
 - Curious about Great Dane puppy development? Read our [month-by-month guide](/posts/2025-07-03-the-first-year).
 - Want to understand our breeding philosophy? See [Our Breeding Philosophy](/BreedingPhilosophy).
+- Worried about your puppy's joints or gait? Read [Limping, Hips, and Screening](/posts/2026-10-21-joint-health-in-the-growing-great-dane).
+- Want the full picture on heart screening? Read [DCM in Great Danes](/posts/2026-10-21-dcm-in-great-danes).
+- Caring for an older Dane? Read [Arthritis in the Aging Great Dane](/posts/2026-10-21-arthritis-in-the-aging-great-dane).
 
 [← Back to Blog Archive](/archive)
 
@@ -622,6 +624,10 @@ To learn more about our approach to Great Dane breeding and our current litters,
 • **Kealy, Richard D., et al.** "Effects of diet restriction on life span and age-related changes in dogs." *Journal of the American Veterinary Medical Association*, 2002.  
 • **Richardson, Daniel C.** "The role of nutrition in canine hip dysplasia." *Veterinary Clinics of North America: Small Animal Practice*, 1992.  
 • **Hazewinkel, Herman AW.** "Nutrition in relation to skeletal growth deformities." *Journal of Small Animal Practice*, 1989.  
+• **Nap, R.C., et al.** "Growth and skeletal development in Great Dane pups fed different levels of protein intake." *Journal of Nutrition*, 1991;121(11 Suppl):S107–S113. [PubMed](https://pubmed.ncbi.nlm.nih.gov/1941203/)  
+• **Krontveit, R.I., et al.** "Housing- and exercise-related risk factors associated with the development of hip dysplasia as determined by radiographic evaluation in a prospective cohort of Newfoundlands, Labrador Retrievers, Leonbergers, and Irish Wolfhounds in Norway." *American Journal of Veterinary Research*, 2012;73(6):838–846. [DOI](https://doi.org/10.2460/ajvr.73.6.838)  
+• **U.S. Food and Drug Administration.** Update on its investigation of diets and canine dilated cardiomyopathy, February 2019. [Summary at dvm360](https://dvm360.com/view/fda-targets-peas-lentils-potatoes-investigation-grain-free-diets-and-dcm)  
+• **GDCA National Specialty health clinics, October 2026.** Cardiology and orthopedic surgery presentations, cited above where noted.  
 
 
 ### Suggested Reading

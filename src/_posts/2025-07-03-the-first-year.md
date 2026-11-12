@@ -207,7 +207,7 @@ If you're visiting puppies during this period, they're becoming more interactive
 - **Vaccination series**—DHPP, and in the U.S., the first rabies vaccine is usually given at 12-16 weeks (not before 12 weeks).
 - **Parasite prevention**—monthly heartworm and flea/tick prevention.
 - **Growth monitoring**—vet should track weight and development.
-- **Spay/neuter discussion**—for giant breeds like Great Danes, discuss with your vet about delaying spay/neuter until after 18-24 months to support healthy growth and joint development.
+- **Spay/neuter discussion**—for giant breeds like Great Danes, discuss with your vet about delaying spay/neuter until after 18-24 months to support healthy growth and joint development. See [our joint health page](/posts/2026-10-21-joint-health-in-the-growing-great-dane) for warning signs and [our page on spay/neuter timing](/posts/2026-10-21-cruciate-ligament-disease-and-spay-neuter-timing-in-great-danes).
 
 </details>
 
