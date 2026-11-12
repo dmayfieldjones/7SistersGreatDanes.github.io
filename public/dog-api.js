@@ -17,7 +17,8 @@
  *   useLogin({username,name,groups})  demo only: turn a verified sign-in into a role. The real server verifies the signed token itself
  *   signOut()                       back to visitor
  *   authors()                       {authorId: {name, role, status}}
- *   lookup(number)                  find a dog by any registration number, or create a stub and log it as wanted
+ *   lookup(number)                  find a dog by any registration number (members: or create a stub and log it as wanted; visitors: only public dogs)
+ *   setVisibility(dogId, v)         'public' (everyone with the code) or 'members' (signed in only): the member who claimed the dog, or an administrator
  *   noteGalaxy(dogId, inGalaxy)     the page reports whether the galaxy file has the dog; the server updates the stub and the wanted list
  *   getDog(dogId)                   everything the page needs about one dog, with per-record permissions already worked out
  *   getPedigree(dogId, gens)        names and numbers for the pedigree (members only)
@@ -61,9 +62,9 @@
   var nextId = 100;
 
   var dogs = {
-    412: { id: 412, registered: 'CH Legado N Danekraaft’s How Can I Tell You?', call: 'Piper', sex: 'female', color: 'fawn', photo: '/img/piper.jpg', ext: true, litter: 'L412' },
-    413: { id: 413, registered: 'CH 7sisters N Legado’s I Wanna Dance, I Wanna Win', call: 'Mia', sex: 'female', color: 'fawn', photo: '', ext: false, litter: 'L2023' },
-    414: { id: 414, registered: '7sisters N Legado’s Heart Of Gold', call: 'Cora', sex: 'female', color: 'fawn', photo: '', ext: false, litter: 'L2024' }
+    412: { id: 412, registered: 'CH Legado N Danekraaft’s How Can I Tell You?', call: 'Piper', sex: 'female', color: 'fawn', photo: '/img/piper.jpg', ext: true, litter: 'L412', visibility: 'public' },
+    413: { id: 413, registered: 'CH 7sisters N Legado’s I Wanna Dance, I Wanna Win', call: 'Mia', sex: 'female', color: 'fawn', photo: '', ext: false, litter: 'L2023', visibility: 'public' },
+    414: { id: 414, registered: '7sisters N Legado’s Heart Of Gold', call: 'Cora', sex: 'female', color: 'fawn', photo: '', ext: false, litter: 'L2024', visibility: 'public' }
   };
   // A litter is stored once: its sire, dam, whelp date and breeders. Each dog points to its litter.
   var litters = {
@@ -137,6 +138,13 @@
   function needMember() { return isMember() ? null : fail('login_required', 'Sign in to do that.'); }
   function needAdmin() { return !isMember() ? fail('login_required', 'Sign in to do that.') : (isAdmin() ? null : fail('forbidden', 'Administrator only.')); }
   function logAction(text) { log.unshift({ date: NOW(), text: text }); }
+  function canSee(d) { return isMember() || (d && d.visibility === 'public'); }
+  function canSetVisibility(dogId) {
+    if (!isMember()) return false;
+    if (isAdmin()) return true;
+    var c = claims.filter(function (x) { return x.dog === dogId && x.type === 'claim' && x.status === 'visible'; })[0];
+    return !!(c && people[c.value] && people[c.value].member === actorId);
+  }
   function copy(x) { return JSON.parse(JSON.stringify(x)); }
   function idsOf(dogId) { return identifiers.filter(function (i) { return i.dog === dogId; }); }
   function primaryReg(dogId) { var l = idsOf(dogId); return (l.filter(function (x) { return x.registry === 'AKC'; })[0] || l[0] || {}).number; }
@@ -166,7 +174,8 @@
   function parentsOf(dogId) {
     var d = dogs[dogId], L = d && litters[d.litter], out = [];
     function row(role, p, key, author, src) {
-      out.push({ role: role, name: p.name, title: p.title, reg: p.reg, key: key, author: author, src: src, dogId: dogByNumber(p.reg), photoReg: photoRegOf(p.reg) });
+      var pid = dogByNumber(p.reg);
+      out.push({ role: role, name: p.name, title: p.title, reg: p.reg, key: key, author: author, src: src, dogId: (pid !== null && canSee(dogs[pid])) ? pid : null, photoReg: photoRegOf(p.reg) });
     }
     if (L) { row('Sire', L.sire, 2, L.author, 'litter record'); row('Dam', L.dam, 3, L.author, 'litter record'); return { rows: out, restricted: false }; }
     if (!isMember()) return { rows: [], restricted: Object.keys(pedOf(dogId)).length > 0 };
@@ -187,7 +196,7 @@
     var reg = primaryReg(dogId), kids = [];
     Object.keys(dogs).forEach(function (id) {
       var d = dogs[id], L = litters[d.litter];
-      if (!L || String(id) === String(dogId)) return;
+      if (!L || String(id) === String(dogId) || !canSee(d)) return;
       var role = L.dam.reg === reg ? 'her' : (L.sire.reg === reg ? 'his' : null);
       if (!role) return;
       var w = claims.filter(function (c) { return String(c.dog) === String(id) && c.type === 'fact' && c.name === 'Whelp date'; })[0];
@@ -228,13 +237,14 @@
 
     lookup: function (number) {
       var reg = norm(number), ex = dogByNumber(reg);
+      if (!isMember() && !(ex !== null && canSee(dogs[ex]))) return fail('login_required', 'Sign in to look up other dogs.');
       if (ex !== null) {
         var d = dogs[ex];
         if (d.stub) wantedLog(reg, d.pending ? 'dog' : 'names');
         return Promise.resolve({ dogId: ex, created: false });
       }
       var id = 'r:' + reg;
-      dogs[id] = { id: id, registered: 'Registration ' + reg, call: '', sex: '', color: '', photo: '', ext: false, litter: null, stub: true, pending: true };
+      dogs[id] = { id: id, registered: 'Registration ' + reg, call: '', sex: '', color: '', photo: '', ext: false, litter: null, stub: true, pending: true, visibility: 'members' };
       identifiers.push({ dog: id, registry: AKCNO.test(reg) ? 'AKC' : 'Reg.', number: reg, author: 0, date: NOW() });
       wantedLog(reg, 'dog');
       return Promise.resolve({ dogId: id, created: true });
@@ -249,10 +259,11 @@
 
     getDog: function (dogId) {
       var d = dogs[dogId]; if (!d) return fail('not_found', 'No such dog.');
+      if (!canSee(d)) return fail('login_required', 'Sign in to see this dog.');
       var L = litters[d.litter], par = parentsOf(dogId);
       var reg = primaryReg(dogId);
       var snap = {
-        dog: { id: d.id, registered: d.registered, call: d.call, sex: d.sex, color: d.color, photo: d.photo, ext: !!d.ext, pending: !!d.pending, inGalaxy: !!d.inGalaxy, hasLitter: !!L, photoReg: photoRegOf(reg) },
+        dog: { id: d.id, registered: d.registered, call: d.call, sex: d.sex, color: d.color, photo: d.photo, ext: !!d.ext, pending: !!d.pending, inGalaxy: !!d.inGalaxy, hasLitter: !!L, photoReg: photoRegOf(reg), visibility: d.visibility || 'members' },
         identifiers: copy(idsOf(dogId)),
         claims: claims.filter(function (c) { return c.dog === dogId; }).map(annotate),
         litter: L ? copy(L) : null,
@@ -260,7 +271,7 @@
         offspring: offspringOf(dogId),
         // Option 2: a visitor sees other people (breeders, co-owners who are not members) only in short form; members see full names.
         people: peopleFor(),
-        perm: { loggedIn: isMember(), canAdd: isMember(), isAdmin: isAdmin() }
+        perm: { loggedIn: isMember(), canAdd: isMember(), isAdmin: isAdmin(), canSetVisibility: canSetVisibility(dogId) }
       };
       return Promise.resolve(snap);
     },
@@ -279,7 +290,7 @@
       var parts = e[1].split(' · '), reg = regOf(parts[0]), ex = dogByNumber(reg);
       if (ex !== null) return Promise.resolve({ dogId: ex });
       var id = 'r:' + reg, sp = splitTitle(e[0]), sx = (parts[2] || '').trim();
-      dogs[id] = { id: id, registered: e[0], call: '', sex: sx === 'F' ? 'female' : (sx === 'M' ? 'male' : ''), color: (parts[1] || '').trim().toLowerCase(), photo: '', ext: true, litter: null };
+      dogs[id] = { id: id, registered: e[0], call: '', sex: sx === 'F' ? 'female' : (sx === 'M' ? 'male' : ''), color: (parts[1] || '').trim().toLowerCase(), photo: '', ext: true, litter: null, visibility: 'members' };
       identifiers.push({ dog: id, registry: AKCNO.test(reg) ? 'AKC' : 'Reg.', number: reg, author: 3, date: NOW() });
       var born = (parts[3] || '').trim();
       if (/^\d{4}-\d{2}-\d{2}$/.test(born)) claims.push(C(nextId++, id, 'fact', 'Whelp date', born, { src: 'Pedigree data', author: 3, date: NOW() }));
@@ -329,6 +340,14 @@
       if (!reason) return fail('invalid', 'A reason is required.');
       c.status = 'hidden'; c.reason = reason; logAction('Administrator hid record "' + c.name + '". Reason: ' + reason);
       return Promise.resolve(annotate(c));
+    },
+    setVisibility: function (dogId, v) {
+      var g = needMember(); if (g) return g;
+      var d = dogs[dogId]; if (!d) return fail('not_found', 'No such dog.');
+      if (v !== 'public' && v !== 'members') return fail('invalid', 'Choose who can see this dog.');
+      if (!canSetVisibility(dogId)) return fail('forbidden', 'Only the member who claimed this dog, or an administrator, can change who sees it.');
+      d.visibility = v; logAction('Visibility of ' + (d.call || d.registered) + ' set to ' + v + ' by ' + ((authors[actorId] || {}).name || actorId));
+      return Promise.resolve({ ok: true });
     },
     suggestCategory: function (text) {
       var g = needMember(); if (g) return g;

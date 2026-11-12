@@ -483,6 +483,8 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     $('dog-breeders').innerHTML=L&&L.breeders.length?L.breeders.map(pn).join(', ')+' <span class="chip doc">'+esc(L.src)+' record</span><span class="fact-by">litter record, by '+esc(A(L.author).name)+' #'+L.author+'</span>':'<span class="meta">Not recorded</span>';
     var cl=S.claims.filter(function(c){return c.type==='claim'&&c.status==='visible'})[0];
     $('dog-owners').innerHTML=cl?pn(cl.value)+' <span class="meta">&middot; member #'+((S.people[cl.value]||{}).member)+' &middot; since '+esc(cl.start)+'</span>':'<span class="meta">Unclaimed. A member can claim this dog to add records.</span>';
+    var vis=d.visibility||'members';
+    $('dog-owners').innerHTML+=S.perm.loggedIn?'<div style="margin-top:4px"><span class="meta">Visible to</span> '+(S.perm.canSetVisibility?'<select id="vis" aria-label="Who can see this dog" style="width:auto;font-size:.85rem"><option value="public"'+(vis==='public'?' selected':'')+'>Everyone with the code</option><option value="members"'+(vis==='members'?' selected':'')+'>Signed-in members only</option></select>':'<span class="meta">'+(vis==='public'?'everyone with the code':'signed-in members only')+'</span>')+'</div>':'';
     var ow=S.claims.filter(function(c){return c.type==='ownership'&&c.status==='visible'}).sort(function(x,y){return x.start<y.start?1:-1});
     function oline(c){return pn(c.value)+(c.co&&c.co.length?' <span class="meta">with</span> '+c.co.map(pn).join(', '):'')+' <span class="meta">&middot; '+(c.end?esc(c.start)+' to '+esc(c.end):'since '+esc(c.start))+'</span>'}
     $('own-hist').innerHTML=ow.length?ow.map(oline).join('<br>'):'<span class="meta">None recorded.</span>';
@@ -718,6 +720,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     }
   });
   $('gens').addEventListener('change',function(){if(S)renderPed()});
+  document.addEventListener('change',function(e){if(e.target&&e.target.id==='vis'&&S)run(DogAPI.setVisibility(S.dog.id,e.target.value))});
   $('findform').addEventListener('submit',function(e){
     e.preventDefault();
     var q=$('dogfind').value.trim(),msg=$('findmsg');
@@ -726,7 +729,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     DogAPI.lookup(q).then(function(r){return goTo(r.dogId)}).catch(function(err){msg.textContent=err&&err.message||'That search failed.'});
   });
   $('me').addEventListener('change',function(e){
-    DogAPI.setActor(e.target.value).then(function(s){SESSION=s;return load(S.dog.id)});
+    DogAPI.setActor(e.target.value).then(function(s){SESSION=s;return afterSessionChange()});
   });
 
   // ---- sign-in: a real login against the user pool (Amazon Cognito). The page never sees a password after the call returns. ----
@@ -765,7 +768,14 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   });
   $('lg-cancel').addEventListener('click',function(){challenge=null;$('lg-new').style.display='none';authMsg('');showLogin(false)});
   $('signinbtn').addEventListener('click',function(){showLogin(true)});
-  $('signoutbtn').addEventListener('click',function(){store(null);DogAPI.signOut().then(function(s){SESSION=s;return load(S.dog.id)})});
+  // After signing out (or changing who you are) the page you are on may be closed to you: go to a public dog instead of leaving it on screen.
+  function afterSessionChange(){
+    return DogAPI.getDog(S.dog.id).then(function(){return load(S.dog.id)},function(e){
+      if(e&&e.code==='login_required'){NAV=[];say('That page is for signed-in members. Showing a public dog instead.');return load(412)}
+      return load(S.dog.id);
+    });
+  }
+  $('signoutbtn').addEventListener('click',function(){store(null);DogAPI.signOut().then(function(s){SESSION=s;return afterSessionChange()})});
 
   // ---- start ----
   var DEV=/^(localhost|127\.0\.0\.1)$/.test(location.hostname);   // the "view as" menu is for local development only: it would let anyone become the administrator
