@@ -64,6 +64,7 @@ ul.plain{padding-left:1.1rem;margin:0 0 12px}
 #galaxy .gbar{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin:8px 0 0;font-size:.85rem}
 #galaxy .seg button[aria-pressed="true"]{background:var(--ink);color:var(--page)}
 .dotkey{display:inline-block;width:.7em;height:.7em;border-radius:50%;margin-right:4px;vertical-align:-1px}
+.ttl{font:700 .6em system-ui,sans-serif;letter-spacing:.04em;border:1px solid var(--rule);border-radius:6px;padding:.1em .45em;vertical-align:.2em;color:var(--ink2)}
 #dog-hero img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:10px;border:1px solid var(--grid)}
 #dog-hero .noimg{border:1px solid var(--grid);border-radius:10px}
 .onsite{display:flex;align-items:center;justify-content:center;aspect-ratio:4/3;background:var(--surface);color:var(--info);font-size:.8rem;text-decoration:none;font-weight:600}
@@ -104,7 +105,7 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
 <div id="topbar" style="display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:space-between;margin:0 0 12px;padding-bottom:10px;border-bottom:1px solid var(--grid)">
   <strong>Dog pages <span class="meta" style="font-weight:400">private preview</span></strong>
   <span style="display:inline-flex;gap:10px;align-items:center;flex-wrap:wrap">
-    <button class="sm" type="button" id="ourdogsbtn" data-landing="1">Our dogs</button>
+    <button class="sm" type="button" id="ourdogsbtn" data-landing="1">Demo Our Dogs</button>
     <span id="devmenu" hidden><label for="me" class="meta">Developer: view as</label> <select id="me" aria-label="Developer: view as" style="width:auto"></select></span>
     <span id="authbox" style="display:inline-flex;gap:8px;align-items:center;flex-wrap:wrap">
     <button class="sm" type="button" id="signinbtn" hidden>Sign in</button>
@@ -137,8 +138,8 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
 <div id="status" class="meta" role="status" style="min-height:1.2em;margin:0 0 6px"></div>
 
 <section id="landing" class="card" hidden style="margin:0 0 16px">
-  <h2 style="margin-top:0">Our dogs</h2>
-  <p class="meta" style="margin:0 0 10px">Piper is our foundation bitch. Below are her and all her offspring, and Mia's puppies. Some records are sample content, marked <b>Demo data</b>. Signing in lets you look up any dog, add records and dispute one.</p>
+  <h2 style="margin-top:0">Demo Our Dogs</h2>
+  <p class="meta" style="margin:0 0 10px">Piper is our foundation bitch. Below are her and all her offspring, and Mia's puppies. Some records are sample content, marked <b>Demo data</b>. Members can claim the dogs they own and choose to make them public too; those appear under Shared by members. Signing in lets you look up any dog, add records and dispute one.</p>
   <div id="landing-groups"></div>
 </section>
 
@@ -368,8 +369,8 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   function A(id){return authors[id]||{name:'Author #'+id,role:'',status:'unknown'}}
   function who(id){var a=A(id);return '<span class="who">'+esc(a.name)+'</span> <span class="meta">#'+id+'</span>'+(a.role?' <span class="chip role">'+esc(a.role)+'</span>':'')}
   function pn(id){var pe=(S&&S.people||{})[id]||{label:'Unknown'};return '<span'+(pe.consent?'':' title="Short form shown until this person agrees to be listed"')+'>'+esc(pe.label)+'</span>'}
-  function splitTitle(n){var t=String(n).split(' '),ti=[];while(t.length&&TITLE.test(t[0].replace(/,$/,''))){ti.push(t.shift())}return {title:ti.join(' '),name:t.join(' ')}}
-  function labelOf(d){return d.short||d.call||splitTitle(d.registered).name||d.registered}
+  // Three separate things: the title (CH, earned), the registered name (never includes the title) and the call name (Piper).
+  function labelOf(d){return d.short||d.call||d.registered||'Unnamed dog'}
   function idArg(v){return (typeof v==='string'&&v!==''&&!isNaN(+v))?Number(v):v}
   function primaryReg(){var l=S.identifiers;return (l.filter(function(x){return x.registry==='AKC'})[0]||l[0]||{}).number}
   function say(m){$('status').textContent=m||''}
@@ -415,10 +416,15 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   function evChip(c){return c.ev==='doc'?'<span class="chip doc">Document attached</span>':'<span class="chip self">Link only</span>'}
   function renderHeader(){
     var d=S.dog, hero;
-    $('dog-sub').innerHTML='Great Dane'+(d.sex?' &middot; '+esc(d.sex):'')+(d.color?' &middot; '+esc(d.color):'')+(d.hasLitter?' &middot; 7Sisters Farm':'');
+    $('dog-sub').innerHTML=(!d.registered&&d.short?esc(d.short)+' &middot; ':'')+'Great Dane'+(d.sex?' &middot; '+esc(d.sex):'')+(d.color?' &middot; '+esc(d.color):'')+(d.hasLitter?' &middot; 7Sisters Farm':'');
     if(d.photo) hero='<img src="'+esc(d.photo)+'" alt="'+esc(d.call)+'">';
     else if(d.photoReg) hero='<a class="noimg" style="aspect-ratio:4/3;text-decoration:none;color:var(--info);font-weight:600" href="'+esc(photourl(d.photoReg))+'" target="_blank" rel="noopener" title="Photo hosted at '+esc(DB.site)+' ('+esc(DB.label)+'). Opens in a new tab.">'+esc(DB.short)+' photo &#8599;</a>';
     else hero='<div class="noimg" style="aspect-ratio:4/3">No photo yet</div>';
+    var pl=[];
+    if(d.id===412)[['piper.jpg','Piper as a puppy'],['piper-first-litter-5-fawn-puppies-4-boys-1-girl-breeding-female-mia.jpg','First litter puppies'],['piper-captain-mother-son-tiktok-star-sweetest-dog.jpg','Piper with her son'],['piper-second-litter-3-fawn-1-brindle-puppies-with-breeding-female-cora.jpg','Second litter puppies']].forEach(function(x){pl.push({src:'7 Sisters (this site)',file:x[0],note:x[1],url:'/img/'+x[0]})});
+    if(d.photoReg)pl.push({src:DB.label+' ('+DB.site.replace(/^https?:\/\//,'').replace(/\/$/,'')+')',file:d.photoReg+'.jpg',note:'file name as hosted there',url:photourl(d.photoReg)});
+    if(pl.length){var cm='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg> ';
+      hero+='<details class="photolist" style="margin-top:6px"><summary style="cursor:pointer;color:var(--info);font-weight:600">'+cm+pl.length+(pl.length>1?' photos':' photo')+'</summary><ul style="margin:6px 0 0;padding-left:1.1rem;font-size:.85rem">'+pl.map(function(x){return '<li><a href="'+esc(x.url)+'" target="_blank" rel="noopener">'+esc(x.file)+'</a> <span class="meta">&middot; '+esc(x.note)+' &middot; '+esc(x.src)+'</span></li>'}).join('')+'</ul></details>'}
     $('dog-hero').innerHTML=hero;
     $('photos-412').hidden=d.id!==412;$('photos-none').hidden=d.id===412;
     var pn_=$('pendingnote');
@@ -510,11 +516,12 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   }
   function renderDog(){
     var d=S.dog,L=S.litter,akc=primaryReg();
-    $('dog-name').textContent=d.registered;
-    $('dog-ped').innerHTML=[akc?'<a href="'+esc(qurl(akc))+'" target="_blank" rel="noopener" title="Searches '+esc(DBQ.site)+' ('+esc(DBQ.label)+') for '+esc(akc)+'. Opens in a new tab.">'+esc(DBQ.label)+' &#8599;</a>':'',d.ext?'<a href="'+esc(pedurl(splitTitle(d.registered).name.replace(/’/g,"'")))+'" target="_blank" rel="noopener" title="Opens the pedigree on '+esc(DB.site)+' ('+esc(DB.label)+'). Opens in a new tab.">'+esc(DB.label)+' &#8599;</a>':''].filter(Boolean).join(' &middot; ')||'<span class="meta">None</span>';
+    var nm=d.registered||((d.pending||d.inGalaxy)?'Name not known yet':'Name to come');
+    $('dog-name').innerHTML=(d.title?'<span class="ttl" title="Title">'+esc(d.title)+'</span> ':'')+esc(nm)+(d.titleSuffix?' <span class="ttl" title="Title">'+esc(d.titleSuffix)+'</span>':'');
+    $('dog-ped').innerHTML=[akc?'<a href="'+esc(qurl(akc))+'" target="_blank" rel="noopener" title="Searches '+esc(DBQ.site)+' ('+esc(DBQ.label)+') for '+esc(akc)+'. Opens in a new tab.">'+esc(DBQ.label)+' &#8599;</a>':'',(d.ext&&d.registered)?'<a href="'+esc(pedurl(d.registered.replace(/’/g,"'")))+'" target="_blank" rel="noopener" title="Opens the pedigree on '+esc(DB.site)+' ('+esc(DB.label)+'). Opens in a new tab.">'+esc(DB.label)+' &#8599;</a>':''].filter(Boolean).join(' &middot; ')||'<span class="meta">None</span>';
     $('dog-breeders').innerHTML=L&&L.breeders.length?L.breeders.map(pn).join(', ')+' <span class="chip doc">'+esc(L.src)+' record</span><span class="fact-by">litter record, by '+esc(A(L.author).name)+' #'+L.author+'</span>':'<span class="meta">Not recorded</span>';
     var cl=S.claims.filter(function(c){return c.type==='claim'&&c.status==='visible'})[0];
-    $('dog-owners').innerHTML=cl?pn(cl.value)+' <span class="meta">&middot; member #'+((S.people[cl.value]||{}).member)+' &middot; since '+esc(cl.start)+'</span>':'<span class="meta">Unclaimed. A member can claim this dog to add records.</span>';
+    $('dog-owners').innerHTML=cl?pn(cl.value)+' <span class="meta">&middot; member #'+((S.people[cl.value]||{}).member)+' &middot; since '+esc(cl.start)+'</span>':(S.perm.canClaim?'<span class="meta">Unclaimed.</span> <button class="sm" type="button" data-claim="1">Claim this dog</button> <span class="meta">Claim it if it is yours; you can then choose who sees it.</span>':'<span class="meta">Unclaimed. A signed-in member can claim this dog.</span>');
     var vis=d.visibility||'members';
     $('dog-owners').innerHTML+=S.perm.loggedIn?'<div style="margin-top:4px"><span class="meta">Visible to</span> '+(S.perm.canSetVisibility?'<select id="vis" aria-label="Who can see this dog" style="width:auto;font-size:.85rem"><option value="public"'+(vis==='public'?' selected':'')+'>Everyone with the code</option><option value="members"'+(vis==='members'?' selected':'')+'>Signed-in members only</option></select>':'<span class="meta">'+(vis==='public'?'everyone with the code':'signed-in members only')+'</span>')+'</div>':'';
     var ow=S.claims.filter(function(c){return c.type==='ownership'&&c.status==='visible'}).sort(function(x,y){return x.start<y.start?1:-1});
@@ -748,6 +755,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     if(t.dataset.added){DogAPI.markAdded(t.dataset.added).then(renderAdmin);return}
     if(t.dataset.copywanted){DogAPI.wanted().then(function(w){if(navigator.clipboard)navigator.clipboard.writeText(w.map(function(x){return x.reg}).join('\n'))}).catch(function(e){say(e&&e.message)});return}
     if(t.dataset.demo){goTo(t.dataset.demo);return}
+    if(t.dataset.claim){run(DogAPI.claimDog(S.dog.id));return}
     if(t.dataset.landing){ev.preventDefault();showLanding();return}
     var gt=t.closest&&t.closest('[data-goto]');
     if(gt){ev.preventDefault();goTo(gt.dataset.goto);window.scrollTo(0,0);return}

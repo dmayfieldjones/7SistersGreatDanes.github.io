@@ -5,6 +5,9 @@
  * enforces the same rules a real server would (who may add, flag, correct, hide). In the real system this file is replaced by a client with
  * the same methods that calls the server with the member's login token; the page does not change.
  *
+ * Names: a dog has up to three separate things. `title` (CH, GCH ...; earned, can change), `registered` (the registered name, never including the title) and
+ * `call` (the name used at home: Piper). `short` is only a label for lists: the call name if there is one, otherwise the registered name without the kennel prefix.
+ *
  * Every method returns a Promise. A refused call rejects with {code, message}, where code is one of:
  *   login_required   the caller is a visitor and the call needs a member
  *   forbidden        the caller is signed in but not allowed (not the author, not an admin, ...)
@@ -19,6 +22,7 @@
  *   authors()                       {authorId: {name, role, status}}
  *   lookup(number)                  find a dog by any registration number (members: or create a stub and log it as wanted; visitors: only public dogs)
  *   ourDogs()                       the public dogs grouped for the "Our dogs" list: the foundation bitch, then each litter
+ *   claimDog(dogId)                 a member says "this dog is mine" (only while it is unclaimed); the dog starts members-only and its owner can then make it public
  *   setVisibility(dogId, v)         'public' (everyone with the code) or 'members' (signed in only): the member who claimed the dog, or an administrator
  *   noteGalaxy(dogId, inGalaxy)     the page reports whether the galaxy file has the dog; the server updates the stub and the wanted list
  *   getDog(dogId)                   everything the page needs about one dog, with per-record permissions already worked out
@@ -64,9 +68,9 @@
 
   var pupIds = [], pupFacts = [];
   var dogs = {
-    412: { id: 412, registered: 'CH Legado N Danekraaft’s How Can I Tell You?', call: 'Piper', short: 'Piper', sex: 'female', color: 'fawn', photo: '/img/piper.jpg', ext: true, litter: 'L412', visibility: 'public' },
-    413: { id: 413, registered: 'CH 7sisters N Legado’s I Wanna Dance, I Wanna Win', call: 'Mia', short: 'Mia', sex: 'female', color: 'fawn', photo: '', ext: false, litter: 'L2023', visibility: 'public' },
-    414: { id: 414, registered: '7sisters N Legado’s Heart Of Gold', call: 'Cora', short: 'Cora', sex: 'female', color: 'fawn', photo: '', ext: false, litter: 'L2024', visibility: 'public' }
+    412: { id: 412, title: 'CH', registered: 'Legado N Danekraaft’s How Can I Tell You?', call: 'Piper', short: 'Piper', sex: 'female', color: 'fawn', photo: '/img/piper.jpg', ext: true, litter: 'L412', visibility: 'public' },
+    413: { id: 413, title: 'CH', registered: '7sisters N Legado’s I Wanna Dance, I Wanna Win', call: 'Mia', short: 'Mia', sex: 'female', color: 'fawn', photo: '', ext: false, litter: 'L2023', visibility: 'public' },
+    414: { id: 414, title: '', registered: '7sisters N Legado’s Heart Of Gold', call: 'Cora', short: 'Cora', sex: 'female', color: 'fawn', photo: '', ext: false, litter: 'L2024', visibility: 'public' }
   };
   // A litter is stored once: its sire, dam, whelp date and breeders. Each dog points to its litter.
   var litters = {
@@ -85,26 +89,27 @@
   // Piper's offspring, from the litter pages and the AKC dog report: id, registered name (as AKC lists it), sex, litter, number, short label, registration type.
   [
     [415, '7sisters N Legado\u2019s Final Act V Echoln', 'male', 'L2023', 'WS81418802', 'Final Act V Echoln'],
-    [416, 'CH 7sisters N Legado\u2019s I Know A Guy At Cherryhill', 'male', 'L2023', 'WS81418803', 'I Know A Guy At Cherryhill'],
+    [416, '7sisters N Legado\u2019s I Know A Guy At Cherryhill', 'male', 'L2023', 'WS81418803', 'I Know A Guy At Cherryhill'],
     [417, '7sisters N Legado\u2019s Gonna Get Medieval', 'male', 'L2023', 'WS81418804', 'Gonna Get Medieval'],
     [418, 'Legado N 7sisters\u2019 I Got Somethin\u2019 For You', 'male', 'L2023', 'WS81418805', 'I Got Somethin\u2019 For You'],
     [419, '7sisters N Legado\u2019s Interstellar', 'female', 'L2024', 'WS84850301', 'Interstellar', 'limited registration'],
     [420, '7sisters\u2019 Tilly In The Sky With Diamonds', 'female', 'L2024', 'WS84850302', 'Tilly In The Sky With Diamonds', 'limited registration'],
     [421, '7sisters N Legado\u2019s Cruising To The Oldies', 'male', 'L2024', 'WS84850304', 'Cruising To The Oldies'],
-    [422, '7sisters N Legado\u2019s With This Ring CGC', 'male', 'L2026', 'WS88963901', 'With This Ring'],
+    [422, '7sisters N Legado\u2019s With This Ring', 'male', 'L2026', 'WS88963901', 'With This Ring'],
     [423, '7sisters Come Fly With Bea', 'female', 'L2026', 'WS88963902', 'Come Fly With Bea', 'limited registration'],
     [424, '7sisters N Legado\u2019s The Judge\u2019s Choice V Echolane', 'male', 'L2026', 'WS88963903', 'The Judge\u2019s Choice V Echolane'],
     [425, '7sisters N Legado\u2019s Odie Just Wants To Have Fun', 'male', 'L2026', 'WS88963904', 'Odie Just Wants To Have Fun'],
     [426, '7sisters N Legado\u2019s Stop Sign What Stop Sign', 'male', 'L2026', 'WS88963905', 'Stop Sign What Stop Sign'],
     [427, '7sisters She\u2019s All That @ Sonya Danes N Andalyn', 'female', 'L2026', 'WS88963906', 'She\u2019s All That @ Sonya Danes N Andalyn']
   ].forEach(function (r) {
-    dogs[r[0]] = { id: r[0], registered: r[1], call: '', short: r[5], sex: r[2], color: 'fawn', photo: '', ext: false, litter: r[3], visibility: 'public' };
+    dogs[r[0]] = { id: r[0], title: '', titleSuffix: '', registered: r[1], call: '', short: r[5], sex: r[2], color: 'fawn', photo: '', ext: false, litter: r[3], visibility: 'public' };
     pupIds.push({ dog: r[0], registry: 'AKC', number: r[4], author: 1, date: '2026-11-12', note: r[6] || '' });
     pupFacts.push(r[0]);
   });
+  dogs[416].title = 'CH'; dogs[422].titleSuffix = 'CGC';   // as AKC lists them: CH ... Cherryhill, and ... With This Ring CGC
   // Mia's offspring (Ezra x Mia, born 2026-10-17): five puppies known only by collar color and sex; names and numbers are still to come.
   [[430, 'Black', 'male'], [431, 'Red', 'male'], [432, 'Blue', 'male'], [433, 'Pink', 'female'], [434, 'Purple', 'female']].forEach(function (r) {
-    dogs[r[0]] = { id: r[0], registered: r[1] + ' collar ' + (r[2] === 'male' ? 'boy' : 'girl') + ' (name and registration to come)', call: '', short: r[1] + ' collar ' + (r[2] === 'male' ? 'boy' : 'girl'), sex: r[2], color: '', photo: '', ext: false, litter: 'L2026M', visibility: 'public' };
+    dogs[r[0]] = { id: r[0], title: '', titleSuffix: '', registered: '', call: '', short: r[1] + ' collar ' + (r[2] === 'male' ? 'boy' : 'girl'), sex: r[2], color: '', photo: '', ext: false, litter: 'L2026M', visibility: 'public' };
     pupFacts.push(r[0]);
   });
   var identifiers = [
@@ -175,6 +180,14 @@
   function needAdmin() { return !isMember() ? fail('login_required', 'Sign in to do that.') : (isAdmin() ? null : fail('forbidden', 'Administrator only.')); }
   function logAction(text) { log.unshift({ date: NOW(), text: text }); }
   function canSee(d) { return isMember() || (d && d.visibility === 'public'); }
+  // The person record for a member: our own people keep their existing records; a new member gets one made from their name.
+  function authorOf(id) { return id === 0 ? 1 : id; }
+  function personFor(aid) {
+    var k = Object.keys(people).filter(function (x) { return people[x].member === aid; })[0];
+    if (k) return k;
+    k = 'm' + aid; people[k] = { label: (authors[aid] || {}).name || ('Member #' + aid), member: aid, consent: true }; return k;
+  }
+  function claimOf(dogId) { return claims.filter(function (x) { return x.dog === dogId && x.type === 'claim' && x.status === 'visible'; })[0]; }
   function canSetVisibility(dogId) {
     if (!isMember()) return false;
     if (isAdmin()) return true;
@@ -206,6 +219,7 @@
     for (var d = 0; d <= 8; d++) for (var off = 0; off < (1 << d); off++) { var from = k * (1 << d) + off; if (src[from]) out[(1 << d) + off] = src[from]; }
     return out;
   }
+  function titled(d) { return (d.title ? d.title + ' ' : '') + d.registered + (d.titleSuffix ? ' ' + d.titleSuffix : ''); }
   function place(dst, src, rootKey) {
     Object.keys(src || {}).forEach(function (ks) { ks = Number(ks); var d = Math.floor(Math.log(ks) / Math.LN2), off = ks - (1 << d); dst[rootKey * (1 << d) + off] = src[ks]; });
   }
@@ -214,7 +228,7 @@
     var j = priv.j, d = dogs[dogId], L = d && litters[d.litter];
     if (!j || !L || d.litter === 'L412') return null;
     var reg = primaryReg(dogId) || '', born = L.whelp;
-    var ped = { 1: [d.registered, (reg || 'registration to come') + ' \u00b7 ' + (d.color ? d.color.charAt(0).toUpperCase() + d.color.slice(1) : '') + ' \u00b7 ' + (d.sex === 'female' ? 'F' : (d.sex === 'male' ? 'M' : '')) + ' \u00b7 ' + born] };
+    var ped = { 1: [titled(d) || d.short, (reg || 'registration to come') + ' \u00b7 ' + (d.color ? d.color.charAt(0).toUpperCase() + d.color.slice(1) : '') + ' \u00b7 ' + (d.sex === 'female' ? 'F' : (d.sex === 'male' ? 'M' : '')) + ' \u00b7 ' + born] };
     var sire = L.sireAncestry === 'ezra' ? j.ezra : (L.sireAncestry === 'rolex' ? reroot(j.mia, 2) : { 1: [L.sire.name, L.sire.reg + ' \u00b7  \u00b7 M \u00b7 '] });
     var dam = L.dam.reg === 'WS69691106' ? j.piper : (L.dam.reg === 'WS81418801' ? j.mia : null);
     place(ped, sire, 2); place(ped, dam, 3);
@@ -253,7 +267,7 @@
       var role = L.dam.reg === reg ? 'her' : (L.sire.reg === reg ? 'his' : null);
       if (!role) return;
       var w = claims.filter(function (c) { return String(c.dog) === String(id) && c.type === 'fact' && c.name === 'Whelp date'; })[0];
-      kids.push({ dogId: d.id, call: d.call, label: d.short || d.call || d.registered, role: role, whelp: w ? w.value : '', litter: (litters[d.litter] || {}).label || '' });
+      kids.push({ dogId: d.id, call: d.call, label: d.short || d.call || d.registered || 'Unnamed dog', role: role, whelp: w ? w.value : '', litter: (litters[d.litter] || {}).label || '' });
     });
     kids.sort(function (a, b) { return a.whelp < b.whelp ? -1 : (a.whelp > b.whelp ? 1 : (Number(a.dogId) - Number(b.dogId))); });
     return kids;
@@ -294,7 +308,7 @@
         return Promise.resolve({ dogId: ex, created: false });
       }
       var id = 'r:' + reg;
-      dogs[id] = { id: id, registered: 'Registration ' + reg, call: '', sex: '', color: '', photo: '', ext: false, litter: null, stub: true, pending: true, visibility: 'members' };
+      dogs[id] = { id: id, title: '', titleSuffix: '', registered: '', call: '', sex: '', color: '', photo: '', ext: false, litter: null, stub: true, pending: true, visibility: 'members' };
       identifiers.push({ dog: id, registry: AKCNO.test(reg) ? 'AKC' : 'Reg.', number: reg, author: 0, date: NOW() });
       wantedLog(reg, 'dog');
       return Promise.resolve({ dogId: id, created: true });
@@ -313,7 +327,7 @@
       var L = litters[d.litter], par = parentsOf(dogId);
       var reg = primaryReg(dogId);
       var snap = {
-        dog: { id: d.id, registered: d.registered, call: d.call, short: d.short || d.call || '', sex: d.sex, color: d.color, photo: d.photo, ext: !!d.ext, pending: !!d.pending, inGalaxy: !!d.inGalaxy, hasLitter: !!L, photoReg: photoRegOf(reg), visibility: d.visibility || 'members' },
+        dog: { id: d.id, title: d.title || '', titleSuffix: d.titleSuffix || '', registered: d.registered || '', call: d.call, short: d.short || d.call || '', sex: d.sex, color: d.color, photo: d.photo, ext: !!d.ext, pending: !!d.pending, inGalaxy: !!d.inGalaxy, hasLitter: !!L, photoReg: photoRegOf(reg), visibility: d.visibility || 'members' },
         identifiers: copy(idsOf(dogId)),
         claims: claims.filter(function (c) { return c.dog === dogId; }).map(annotate),
         litter: L ? copy(L) : null,
@@ -321,7 +335,7 @@
         offspring: offspringOf(dogId),
         // Option 2: a visitor sees other people (breeders, co-owners who are not members) only in short form; members see full names.
         people: peopleFor(),
-        perm: { loggedIn: isMember(), canAdd: isMember(), isAdmin: isAdmin(), canSetVisibility: canSetVisibility(dogId) }
+        perm: { loggedIn: isMember(), canAdd: isMember(), isAdmin: isAdmin(), canSetVisibility: canSetVisibility(dogId), canClaim: isMember() && !claimOf(dogId) }
       };
       return Promise.resolve(snap);
     },
@@ -330,6 +344,7 @@
       if (!canSee(dogs[dogId])) return fail('login_required', 'Sign in to see names in the pedigree.');
       var P = pedOf(dogId), out = {};
       Object.keys(P).forEach(function (k) { var e = P[k]; out[k] = [e[0], e[1], photoRegOf(regOf(e[1].split(' · ')[0]))]; });
+      if (out[1] && dogs[dogId].registered) out[1][0] = titled(dogs[dogId]);   // the root is the dog itself: its own title and registered name
       return Promise.resolve({ nodes: out });
     },
     openAncestor: function (dogId, key) {
@@ -340,7 +355,7 @@
       var parts = e[1].split(' · '), reg = regOf(parts[0]), ex = dogByNumber(reg);
       if (ex !== null) return Promise.resolve({ dogId: ex });
       var id = 'r:' + reg, sp = splitTitle(e[0]), sx = (parts[2] || '').trim();
-      dogs[id] = { id: id, registered: e[0], call: '', sex: sx === 'F' ? 'female' : (sx === 'M' ? 'male' : ''), color: (parts[1] || '').trim().toLowerCase(), photo: '', ext: true, litter: null, visibility: 'members' };
+      dogs[id] = { id: id, title: sp.title, titleSuffix: '', registered: sp.name, call: '', sex: sx === 'F' ? 'female' : (sx === 'M' ? 'male' : ''), color: (parts[1] || '').trim().toLowerCase(), photo: '', ext: true, litter: null, visibility: 'members' };
       identifiers.push({ dog: id, registry: AKCNO.test(reg) ? 'AKC' : 'Reg.', number: reg, author: 3, date: NOW() });
       var born = (parts[3] || '').trim();
       if (/^\d{4}-\d{2}-\d{2}$/.test(born)) claims.push(C(nextId++, id, 'fact', 'Whelp date', born, { src: 'Pedigree data', author: 3, date: NOW() }));
@@ -391,6 +406,16 @@
       c.status = 'hidden'; c.reason = reason; logAction('Administrator hid record "' + c.name + '". Reason: ' + reason);
       return Promise.resolve(annotate(c));
     },
+    claimDog: function (dogId) {
+      var g = needMember(); if (g) return g;
+      var d = dogs[dogId]; if (!d) return fail('not_found', 'No such dog.');
+      var ex = claimOf(dogId);
+      if (ex) return (people[ex.value] && people[ex.value].member === authorOf(actorId)) ? Promise.resolve({ ok: true }) : fail('forbidden', 'This dog has already been claimed. If that is a mistake, tell the administrator.');
+      claims.push(C(nextId++, dogId, 'claim', 'Claimed by', personFor(authorOf(actorId)), { start: NOW(), author: authorOf(actorId) }));
+      if (!d.visibility) d.visibility = 'members';
+      logAction((((authors[actorId] || {}).name) || actorId) + ' claimed ' + (d.call || d.registered || primaryReg(dogId) || 'a dog'));
+      return Promise.resolve({ ok: true });
+    },
     ourDogs: function () {
       var groups = [{ title: 'Foundation', dogs: [{ id: 412, label: 'Piper', note: 'the foundation bitch' }] }], by = {};
       Object.keys(dogs).forEach(function (id) {
@@ -399,8 +424,13 @@
       });
       Object.keys(by).sort(function (a, b) { return litters[a].whelp < litters[b].whelp ? -1 : 1; }).forEach(function (lid) {
         var L = litters[lid];
-        groups.push({ title: L.label + ', born ' + L.whelp, dogs: by[lid].sort(function (a, b) { return Number(a.id) - Number(b.id); }).map(function (d) { return { id: d.id, label: d.short || d.call || d.registered, note: d.sex }; }) });
+        groups.push({ title: L.label + ', born ' + L.whelp, dogs: by[lid].sort(function (a, b) { return Number(a.id) - Number(b.id); }).map(function (d) { return { id: d.id, label: d.short || d.call || d.registered || 'Unnamed dog', note: d.sex }; }) });
       });
+      var shared = Object.keys(dogs).filter(function (id) { var d = dogs[id]; return !d.litter && d.visibility === 'public'; }).map(function (id) {
+        var d = dogs[id], c = claimOf(d.id), who = c && people[c.value] ? people[c.value].label : '';
+        return { id: d.id, label: d.short || d.call || d.registered || primaryReg(d.id) || 'Unnamed dog', note: who ? 'shared by ' + who : '' };
+      });
+      if (shared.length) groups.push({ title: 'Shared by members', dogs: shared });
       return Promise.resolve(groups);
     },
     setVisibility: function (dogId, v) {
