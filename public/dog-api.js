@@ -20,6 +20,8 @@
  *   useLogin({username,name,groups})  demo only: turn a verified sign-in into a role. The real server verifies the signed token itself
  *   signOut()                       back to visitor
  *   authors()                       {authorId: {name, role, status}}
+
+ *   find({q, sex})  one search box: a registration number, or a name (visitors: 7Sisters dogs only; members: any dog with a page, else {notFound})
  *   lookupByName({name, sex, url, forceNew})  for a dog with no registration number: members only: find it by registered name (several matches come back as choices), or start its page; the source link is kept as a record
  *   lookup(number)                  find a dog by any registration number (members: or create a stub and log it as wanted; visitors: only public dogs)
  *   ourDogs()                       the public dogs grouped for the "Our dogs" list: the foundation bitch, then each litter
@@ -66,6 +68,7 @@
     var h; try { h = new URL(url).hostname.toLowerCase(); } catch (e) { return null; }
     return Object.keys(SOURCE_SITES).filter(function (d) { return h === d || h.slice(-d.length - 1) === '.' + d; }).map(function (d) { return SOURCE_SITES[d]; })[0] || null;
   }
+  function normName(n) { return String(n).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ''); }
   function norm(q) { return String(q).toUpperCase().replace(/\s+/g, ''); }
 
   // ---- the stores -------------------------------------------------------------------------------------------------------------
@@ -340,6 +343,33 @@
     signOut: function () { actorId = null; loginName = null; return API.session(); },
     authors: function () { return Promise.resolve(copy(authors)); },
 
+    // One search for everything: a registration number opens that dog; a name finds dogs by registered name or call name.
+    // Visitors can find only 7Sisters dogs (not the pedigree ancestors), so a name search never lets anyone browse the database.
+    // Members get matches among every dog that has a page; when there is none the answer is {notFound: true} and the page offers to start one.
+    find: function (o) {
+      var q = String((o && o.q) || '').trim().slice(0, 140);
+      if (!q) return fail('invalid', 'Enter a name or a registration number.');
+      var compact = q.replace(/\s+/g, '');
+      if (/\d{5,}/.test(compact) && compact.length <= 24 && !/[a-z]{4,}/i.test(compact.replace(/^[a-z]{1,3}/i, ''))) return API.lookup(compact);
+      var sp = splitTitle(q), nk = normName(sp.name || q);
+      if (!nk) return fail('invalid', 'Enter a name or a registration number.');
+      var sx = o.sex === 'female' || o.sex === 'male' ? o.sex : '';
+      var cands = Object.keys(dogs).filter(function (k) {
+        var d = dogs[k];
+        if (!canSee(d) || (!isMember() && (d.generated || d.stub))) return false;
+        if (sx && d.sex && d.sex !== sx) return false;
+        return [d.registered, d.call, d.short].some(function (n) { return n && normName(n) === nk; });
+      });
+      if (!isMember()) {
+        if (!cands.length) return fail('login_required', 'Sign in to look up other dogs.');
+      } else if (!(cands.length === 1 && dogs[cands[0]].visibility === 'public')) { var cap = lookupBudget(); if (cap) return cap; }
+      if (cands.length === 1) return Promise.resolve({ dogId: cands[0], created: false });
+      if (!cands.length) return Promise.resolve({ notFound: true, name: sp.name || q });
+      return Promise.resolve({ choices: cands.map(function (k) {
+        var l = claims.filter(function (c) { return c.dog === k && c.type === 'link' && c.status === 'visible' && c.url; })[0];
+        return { dogId: k, name: dogs[k].registered || dogs[k].short || dogs[k].call, sex: dogs[k].sex, source: l ? l.name : '', url: l ? l.url : '', by: l ? ((authors[l.author] || {}).name || '') : '' };
+      }) });
+    },
     // A dog with no registration number (older or non-US dogs) is found by its registered name. Members only.
     // One match opens it. Several matches, or a match whose saved source link differs from the one given, come back as choices so the member
     // picks the right dog or says it is a different one ({forceNew: true}).

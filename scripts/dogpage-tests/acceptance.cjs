@@ -6,7 +6,8 @@ let pass=0,fail=0;const ok=(c,m)=>{if(c){pass++}else{fail++;console.log('  FAIL:
  ok(!d.getElementById('home').hidden&&d.getElementById('landing').hidden&&d.getElementById('dogview').hidden,'a visitor lands on the home screen');
  ok(['412','413','414'].every(n=>d.querySelector('#home [data-demo="'+n+'"]')),'the home screen offers Piper, Mia and Cora as demos');
  ok(d.getElementById('whobox').hidden,'the small search bar is hidden on the home screen');
- d.getElementById('homefind').value='Piper';submit(d.getElementById('homeform'));await wait(300);ok(/registration number/.test(T('homemsg'))&&d.querySelectorAll('#homemsg a').length===3,'a name (no digits) is told to use a registration number, with three places to look one up');
+ d.getElementById('homefind').value='Piper';submit(d.getElementById('homeform'));await wait(1500);ok(!d.getElementById('dogview').hidden&&/Legado N Danekraaft/.test(T('dog-name')),'typing a 7Sisters dog\'s call name opens it, no registration number needed');
+ d.querySelector('[data-home="1"]').click();await wait(300);
  click(d.querySelector('#home [data-demo="412"]'));await wait(1500);
  ok(d.getElementById('home').hidden&&d.getElementById('landing').hidden&&!d.getElementById('dogview').hidden&&/Legado N Danekraaft/.test(T('dog-name'))&&T('dog-call').includes('Piper'),'the Piper demo button opens Piper');
  ok(!d.getElementById('whobox').hidden,'the search bar returns on a dog page');
@@ -171,7 +172,7 @@ let pass=0,fail=0;const ok=(c,m)=>{if(c){pass++}else{fail++;console.log('  FAIL:
  await find('WS81418801');ok(d.querySelectorAll('#parents a.onsite[data-goto]').length===1,"on Mia's page a visitor can follow only the parent that is public (Piper)");
  ok(d.querySelectorAll('#parents a[data-anc]').length>=1,"the other parent is not linked to a page a visitor cannot open");
  ok(!d.getElementById('vis'),'a visitor has no visibility control');
- await find('WS11111111');ok(/Sign in to look up other dogs/.test(T('findmsg')),'the search box tells a visitor to sign in');
+ await find('WS11111111');ok(/not a 7Sisters dog.*Sign in/.test(T('findmsg')),'the search box tells a visitor to sign in');
  await actAs(2);await find('WS81418801');ok(!!d.getElementById('vis')&&d.getElementById('vis').value==='public','the claiming member sees the control, set to public');
  d.getElementById('vis').value='members';d.getElementById('vis').dispatchEvent(new w.Event('change',{bubbles:true}));await wait(500);
  await actAs('v');await API.getDog(413).then(()=>ok(false,'hidden dog should refuse a visitor'),e=>ok(e.code==='login_required','a dog set to members-only is closed to visitors'));
