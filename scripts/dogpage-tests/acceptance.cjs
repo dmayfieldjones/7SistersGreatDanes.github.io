@@ -172,7 +172,7 @@ let pass=0,fail=0;const ok=(c,m)=>{if(c){pass++}else{fail++;console.log('  FAIL:
  await find('WS81418801');ok(d.querySelectorAll('#parents a.onsite[data-goto]').length===1,"on Mia's page a visitor can follow only the parent that is public (Piper)");
  ok(d.querySelectorAll('#parents a[data-anc]').length>=1,"the other parent is not linked to a page a visitor cannot open");
  ok(!d.getElementById('vis'),'a visitor has no visibility control');
- await find('WS11111111');ok(/not a 7Sisters dog.*Sign in/.test(T('findmsg')),'the search box tells a visitor to sign in');
+ await find('WS11111111');ok(/not a 7Sisters dog.*Sign in/.test(T('findpanel')),'the search box tells a visitor to sign in');
  await actAs(2);await find('WS81418801');ok(!!d.getElementById('vis')&&d.getElementById('vis').value==='public','the claiming member sees the control, set to public');
  d.getElementById('vis').value='members';d.getElementById('vis').dispatchEvent(new w.Event('change',{bubbles:true}));await wait(500);
  await actAs('v');await API.getDog(413).then(()=>ok(false,'hidden dog should refuse a visitor'),e=>ok(e.code==='login_required','a dog set to members-only is closed to visitors'));

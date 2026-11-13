@@ -1099,7 +1099,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
         return}
       if(r.notFound)startPanel(r.name||q)
     }).catch(function(err){
-      if(err&&err.code==='login_required')msg.innerHTML='That is not a <span class="brand7"><b>7</b>Sisters</span> dog. <a href="#" class="signlink">Sign in</a> to look up any Great Dane.';
+      if(err&&err.code==='login_required'){var fp=$('findpanel');fp.innerHTML='<div class="card" role="alert" style="border:2px solid var(--accent);padding:12px 14px;display:grid;gap:8px;margin:0"><div><b>'+esc(q)+'</b> is not a <span class="brand7"><b>7</b>Sisters</span> dog.</div><div>Sign in to look up any Great Dane.</div><div><button class="sm primary signlink" type="button">Sign in</button></div></div>';fp.scrollIntoView({block:'nearest',behavior:'smooth'})}
       else msg.textContent=err&&err.message||'That search failed.'})
   }
   // Members: nothing matched, so offer to start a page. A link to the dog on another database is optional and counts as the member's confirmation.
