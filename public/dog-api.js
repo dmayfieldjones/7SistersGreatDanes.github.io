@@ -347,7 +347,7 @@
       var ex = Object.keys(dogs).filter(function (k) { return dogs[k].nameKey === key; })[0];
       if (ex !== undefined) return Promise.resolve({ dogId: ex, created: false });
       var id = 'n:' + key, sx = o.sex === 'female' || o.sex === 'male' ? o.sex : '', a = actorId === 0 ? 1 : actorId;
-      dogs[id] = { id: id, title: '', titleSuffix: '', registered: name, call: '', short: '', sex: sx, color: '', photo: '', ext: false, litter: null, stub: true, pending: true, visibility: 'members', nameKey: key };
+      dogs[id] = { id: id, title: '', titleSuffix: '', registered: name, call: '', short: '', sex: sx, color: String(o.color || '').trim().toLowerCase().slice(0, 40), photo: '', ext: false, litter: null, stub: true, pending: true, visibility: 'members', nameKey: key };
       claims.push(C(nextId++, id, 'fact', 'Whelp date', born, { src: url, author: a, date: NOW() }));
       if (url) claims.push(C(nextId++, id, 'link', 'Source for this dog', '', { url: url, author: a, date: NOW() }));
       wantedLog(name + ' (born ' + born + ')', 'dog');
