@@ -187,3 +187,31 @@ test('a visitor cannot move the wanted list; a member can', async () => {
   await call(h, 'noteGalaxy', [412, false], member('sam', 'Sam'));
   assert.equal((await call(h, 'wanted', [], member('dmj', 'Dustin'))).result.length, 1);
 });
+
+import { dynamoStore } from '../../server/store-dynamo.mjs';
+// a fake of the two DynamoDB calls, enough to check the conditional write and the compression round trip
+function fakeDynamo() {
+  let item = null;
+  class Get { constructor(p) { this.p = p; } }
+  class Put { constructor(p) { this.p = p; } }
+  return {
+    commands: { GetItemCommand: Get, PutItemCommand: Put },
+    async send(cmd) {
+      if (cmd instanceof Get) return item ? { Item: item } : {};
+      const p = cmd.p, expected = Number(p.Item.version.N) - 1;
+      const ok = p.ConditionExpression === 'attribute_not_exists(pk)' ? item === null : (item && Number(item.version.N) === expected);
+      if (!ok) { const e = new Error('no'); e.name = 'ConditionalCheckFailedException'; throw e; }
+      item = p.Item; return {};
+    },
+  };
+}
+test('the DynamoDB store round-trips compressed state and refuses a stale save', async () => {
+  const s = dynamoStore({ client: fakeDynamo(), table: 't' });
+  assert.deepEqual(await s.get(), { version: 0, state: null });
+  assert.equal(await s.put(0, { a: 1, big: 'x'.repeat(50000) }), true);
+  assert.equal(await s.put(0, { a: 2 }), false, 'second first-save refused');
+  const r = await s.get(); assert.equal(r.version, 1); assert.equal(r.state.a, 1);
+  assert.equal(await s.put(1, { a: 3 }), true);
+  assert.equal(await s.put(1, { a: 4 }), false, 'stale version refused');
+  assert.equal((await s.get()).state.a, 3);
+});

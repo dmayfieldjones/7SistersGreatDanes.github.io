@@ -1,0 +1,142 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Dog pages server (HTTP API, one Lambda, one DynamoDB table, a private bucket, throttling and a budget alert).
+
+Parameters:
+  PoolId: { Type: String }
+  ClientId: { Type: String }
+  AdminUsers: { Type: String, Default: dmj }
+  CodeBucket: { Type: String }
+  CodeKey: { Type: String }
+  MonthlyBudgetUsd: { Type: Number, Default: 5 }
+
+Resources:
+  StateTable:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      TableName: dogpages-state
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions: [{ AttributeName: pk, AttributeType: S }]
+      KeySchema: [{ AttributeName: pk, KeyType: HASH }]
+      PointInTimeRecoverySpecification: { PointInTimeRecoveryEnabled: true }
+
+  ScansBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      BucketName: !Sub '7sistersgreatdanes-dogpages-scans-${AWS::AccountId}'
+      PublicAccessBlockConfiguration: { BlockPublicAcls: true, BlockPublicPolicy: true, IgnorePublicAcls: true, RestrictPublicBuckets: true }
+      BucketEncryption: { ServerSideEncryptionConfiguration: [{ ServerSideEncryptionByDefault: { SSEAlgorithm: AES256 } }] }
+      VersioningConfiguration: { Status: Enabled }
+
+  FunctionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement: [{ Effect: Allow, Principal: { Service: lambda.amazonaws.com }, Action: 'sts:AssumeRole' }]
+      ManagedPolicyArns: [arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole]
+      Policies:
+        - PolicyName: state-table-only
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement: [{ Effect: Allow, Action: ['dynamodb:GetItem', 'dynamodb:PutItem'], Resource: !GetAtt StateTable.Arn }]
+
+  ApiLogs:
+    Type: AWS::Logs::LogGroup
+    Properties: { LogGroupName: /aws/lambda/dogpages-api, RetentionInDays: 30 }
+
+  ApiFunction:
+    Type: AWS::Lambda::Function
+    DependsOn: ApiLogs
+    Properties:
+      FunctionName: dogpages-api
+      Runtime: nodejs22.x
+      Architectures: [arm64]
+      Handler: server/lambda.handle
+      MemorySize: 512
+      Timeout: 15
+      Role: !GetAtt FunctionRole.Arn
+      Code: { S3Bucket: !Ref CodeBucket, S3Key: !Ref CodeKey }
+      Environment:
+        Variables:
+          REGION: !Ref AWS::Region
+          POOL_ID: !Ref PoolId
+          CLIENT_ID: !Ref ClientId
+          TABLE: !Ref StateTable
+          ADMIN_USERS: !Ref AdminUsers
+          ALLOW_ORIGIN: https://7sistersgreatdanes.com
+
+  Api:
+    Type: AWS::ApiGatewayV2::Api
+    Properties:
+      Name: dogpages
+      ProtocolType: HTTP
+      CorsConfiguration:
+        AllowOrigins: [https://7sistersgreatdanes.com, https://www.7sistersgreatdanes.com, 'http://localhost:4321']
+        AllowMethods: [POST, GET, OPTIONS]
+        AllowHeaders: [authorization, content-type]
+        MaxAge: 3600
+
+  Integration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref Api
+      IntegrationType: AWS_PROXY
+      IntegrationUri: !GetAtt ApiFunction.Arn
+      PayloadFormatVersion: '2.0'
+
+  CallRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties: { ApiId: !Ref Api, RouteKey: 'POST /api/call', Target: !Sub 'integrations/${Integration}' }
+  HealthRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties: { ApiId: !Ref Api, RouteKey: 'GET /api/health', Target: !Sub 'integrations/${Integration}' }
+
+  Stage:
+    Type: AWS::ApiGatewayV2::Stage
+    Properties:
+      ApiId: !Ref Api
+      StageName: $default
+      AutoDeploy: true
+      # a ceiling on requests: at most 5 a second sustained, bursts of 10. Caps the worst-case bill if anything misbehaves.
+      DefaultRouteSettings: { ThrottlingRateLimit: 5, ThrottlingBurstLimit: 10 }
+
+  InvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref ApiFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub 'arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${Api}/*/*/*'
+
+  BudgetTopic:
+    Type: AWS::SNS::Topic
+    Properties: { TopicName: dogpages-budget }
+  BudgetTopicPolicy:
+    Type: AWS::SNS::TopicPolicy
+    Properties:
+      Topics: [!Ref BudgetTopic]
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement: [{ Effect: Allow, Principal: { Service: budgets.amazonaws.com }, Action: 'sns:Publish', Resource: !Ref BudgetTopic }]
+  Budget:
+    Type: AWS::Budgets::Budget
+    DependsOn: BudgetTopicPolicy
+    Properties:
+      Budget:
+        BudgetName: dogpages-monthly
+        BudgetType: COST
+        TimeUnit: MONTHLY
+        BudgetLimit: { Amount: !Ref MonthlyBudgetUsd, Unit: USD }
+      NotificationsWithSubscribers:
+        - Notification: { NotificationType: ACTUAL, ComparisonOperator: GREATER_THAN, Threshold: 80, ThresholdType: PERCENTAGE }
+          Subscribers: [{ SubscriptionType: SNS, Address: !Ref BudgetTopic }]
+        - Notification: { NotificationType: FORECASTED, ComparisonOperator: GREATER_THAN, Threshold: 100, ThresholdType: PERCENTAGE }
+          Subscribers: [{ SubscriptionType: SNS, Address: !Ref BudgetTopic }]
+
+Outputs:
+  ApiUrl: { Value: !GetAtt Api.ApiEndpoint }
+  BudgetTopicArn: { Value: !Ref BudgetTopic }
