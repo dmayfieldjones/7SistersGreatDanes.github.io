@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>When databases disagree | 7Sisters Farm</title>
+<script src="/private-gate.js" data-key="databases-disagree" data-codes="1887"></script>
+<style>
+:root{--page:#f9f9f7;--surface:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--grid:#e1e0d9;--rule:#c3c2b7;--accent:#bf141c}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--page:#0d0d0d;--surface:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--grid:#2c2c2a;--rule:#383835;--accent:#ff5a62}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:46rem;margin:0 auto;padding:20px 16px 48px}
+.badge{display:inline-block;font:600 .75rem/1 system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent);border-radius:999px;padding:5px 10px;margin-bottom:12px}
+h1{font:700 1.5rem/1.25 system-ui,-apple-system,"Segoe UI",sans-serif;margin:0 0 6px}
+.meta{font:.85rem system-ui,sans-serif;color:var(--ink2);margin:0 0 28px}
+h2{font:700 1.2rem/1.3 system-ui,sans-serif;margin:34px 0 8px;padding-top:18px;border-top:1px solid var(--grid)}
+p{margin:0 0 14px}
+ul{padding-left:1.2rem;margin:0 0 14px}li{margin:0 0 8px}
+.check{list-style:none;padding-left:0}.check li::before{content:"\2610\00a0";color:var(--ink2)}
+table{border-collapse:collapse;width:100%;margin:6px 0 16px;font:.9rem/1.4 system-ui,sans-serif}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--grid);vertical-align:top}
+th{font-weight:700;border-bottom:2px solid var(--rule)}
+td.n,th.n{text-align:right;white-space:nowrap}
+.note{font:.85rem system-ui,sans-serif;color:var(--ink2)}
+a{color:var(--ink)}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+@media (max-width:560px){main{padding:12px 12px 40px}th,td{padding:6px 7px}table{font-size:.82rem}}
+.back{font:.85rem system-ui,sans-serif;margin-bottom:16px;display:block}
+
+</style>
+</head>
+<body>
+<main>
+<a class="back" href="/dog-page-demo.html">&larr; Back to GDGalaxy</a>
+<h1>When databases disagree: one dog, three answers</h1>
+<p class="meta">Updated November 13, 2026 &middot; A worked example of how GDGalaxy marks a disagreement and how members settle it.</p>
+
+<p>Pedigree databases make mistakes, and some of them copy each other's mistakes. GDGalaxy shows where that happens instead of hiding it. Here is one real example.</p>
+
+<h2>The dog</h2>
+<p>Batemanor Amanda at Tiparone is a harlequin female born in 1994. She is listed in three of the databases we link to: Quintessa, River Rock, and DANES World. We compared what each one says about her parents and grandparents.</p>
+
+<h2>What agrees</h2>
+<p>Her dam's whole side matches in all three. Her sire's line also matches once you reach Batemanor Apache War Paint, who has the same parents everywhere: Beccas Blucher and Crystal Cameo of Batemanor.</p>
+
+<h2>What does not</h2>
+<div class="tw"><table>
+<thead><tr><th>Database</th><th>Her sire</th><th>Her dam</th></tr></thead>
+<tbody>
+<tr><td>Quintessa</td><td>Batemanor Apache War Dance</td><td>Batemanor Fatal Attractrion at Tiparome</td></tr>
+<tr><td>River Rock</td><td>Batemanor Apache War Dance</td><td>Batemanor Fatal Attractrion at Tiparome</td></tr>
+<tr><td>DANES World</td><td>Batemanor Apache War Paint</td><td>Batemanor Fatal Attraction at Tiparone</td></tr>
+</tbody></table></div>
+<p>There are two kinds of difference.</p>
+<p><strong>Spelling.</strong> The dam's name has two typos in Quintessa and River Rock ("Attractrion" and "Tiparome"). A second dog, Chapala Sulitelma, is spelled "Sulietelma" in the same two. DANES World spells all of them correctly. A typo can also split one dog into two records: in the pedigree data we hold, Sulitelma appears twice with the same parents, once under each spelling.</p>
+<p><strong>Parentage.</strong> Quintessa and River Rock put a dog named Apache War Dance between Amanda and Apache War Paint. In DANES World, Apache War Paint is her sire directly. Everything past that point then sits one generation apart, so comparing the pedigrees position by position reports fifteen differences. Compared by who is whose parent, there is one disagreement and two misspellings.</p>
+
+<h2>Why agreement is not proof</h2>
+<p>River Rock repeats Quintessa's misspellings exactly. Two databases that share a typo probably share a source, so they count as one witness and not two. Two databases against one is therefore not a vote.</p>
+
+<h2>How the site handles it</h2>
+<p>GDGalaxy does not decide which version is right, and it never overwrites anything. A difference becomes a flag on the dog's page that lists each version and where it was found. Signed-in members back the version they can support and say how they know: a link, a registration number, or where they looked. When three different members back the same version, the flag is marked resolved. The administrator can resolve or reopen any flag. Every vote carries the member's name, the history stays visible, and the original spelling stays searchable.</p>
+<p>Open flags are collected under <strong>Needs checking</strong> in the top bar, for members who want to help.</p>
+
+<h2>Where this one stands</h2>
+<p>The sire question is open. We do not know whether Apache War Dance is a real dog that DANES World left out, or an extra generation in the other two. A Kennel Club registration or the breeder would settle it.</p>
+
+<h2>What the site does not do yet</h2>
+<p>Today a member raises a flag, and the site tracks the votes. We found this disagreement by comparing the databases ourselves. Automatic comparison across databases is planned, and so is a scan for likely duplicate records.</p>
+</main>
+</body>
+</html>
