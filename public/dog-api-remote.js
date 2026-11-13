@@ -6,9 +6,10 @@
 (function (root) {
   'use strict';
   var local = root.DogAPI, server = null, token = null;
-  var REMOTE = ['session', 'authors', 'lookup', 'find', 'lookupByName', 'ourDogs', 'confirmDog', 'claimDog', 'setVisibility', 'noteGalaxy', 'getDog', 'getPedigree',
-    'openAncestor', 'saveFact', 'addRecord', 'flagClaim', 'correctClaim', 'hideClaim', 'suggestCategory',
-    'wanted', 'markAdded', 'accountRequests', 'decideRequest', 'actionLog'];
+  // Everything the demo offers goes to the server, except these: they only make sense in the browser demo or are handled below.
+  // A new method on the demo therefore reaches the server by default; scripts/dogpage-tests/api-parity.cjs checks the server knows it.
+  var LOCAL_ONLY = ['setLoader', 'init', 'setActor', 'useLogin', 'signOut', 'exportState', 'importState'];
+  var REMOTE = Object.keys(local).filter(function (k) { return typeof local[k] === 'function' && LOCAL_ONLY.indexOf(k) < 0; });
   var down = { code: 'unavailable', message: 'The server could not be reached. Check your connection and try again.' };
 
   function call(method, args) {
