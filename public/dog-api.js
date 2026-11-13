@@ -275,6 +275,7 @@
     return ped;
   }
   function pedOf(dogId) {
+    if (!priv.peds[dogId] && dogs[dogId] && dogs[dogId].ped) priv.peds[dogId] = dogs[dogId].ped;   // a dog added from another database keeps its own pedigree
     if (!priv.peds[dogId]) { var b = buildPed(dogId); if (b) priv.peds[dogId] = b; }
     return priv.peds[dogId] || {};
   }
@@ -439,20 +440,41 @@
       return Promise.resolve(copy(stash[k].list));
     },
     // The member confirmed one of the dogs the server found: create its page from the server's own copy of that result.
-    importExternal: function (token) {
+    // server only: the dog behind a confirmation token, so the server can fetch its pedigree before the page is made
+    externalCandidate: function (token) {
+      var g = needMember(); if (g) return g;
+      var st = stash[String(actorId)], c = st && Date.now() - st.at < 3600000 && st.list.filter(function (x) { return x.token === String(token); })[0];
+      return c ? Promise.resolve(copy(c)) : fail('not_found', 'That lookup has expired. Search again.');
+    },
+    // ped (server only, never from the browser): the ancestors the other database lists, {2: {name, color, registry, number}, 3: ...}
+    importExternal: function (token, ped) {
       var g = needMember(); if (g) return g;
       var st = stash[String(actorId)], c = st && Date.now() - st.at < 3600000 && st.list.filter(function (x) { return x.token === String(token); })[0];
       if (!c) return fail('not_found', 'That lookup has expired. Search again.');
       var reg = c.number ? norm(c.number) : '', ex = reg ? dogByNumber(reg) : null;
       var sp = splitTitle(c.name), name = sp.name || c.name, nk = normName(name);
       if (ex === null) { var same = Object.keys(dogs).filter(function (k) { return (dogs[k].nameKey || '').split('#')[0] === nk && (!c.sex || !dogs[k].sex || dogs[k].sex === c.sex); }); if (same.length === 1 && !reg) ex = same[0]; }
-      if (ex !== null) return Promise.resolve({ dogId: ex, created: false });
+      var pedOut = function (d) {
+        var P = { 1: [titled(d) || d.short, (primaryReg(d.id) || '') + ' \u00b7 ' + (d.color || '') + ' \u00b7 ' + (d.sex === 'female' ? 'F' : d.sex === 'male' ? 'M' : '') + ' \u00b7 ' + ((claims.filter(function (x) { return x.dog === d.id && x.name === 'Whelp date' && x.status === 'visible'; })[0] || {}).value || '')] };
+        Object.keys(ped || {}).forEach(function (k) {
+          var v = ped[k]; k = Number(k);
+          if (!(k >= 2 && k <= 63) || !v || !v.name) return;
+          P[k] = [String(v.name).slice(0, 120), String(v.number || '').slice(0, 24) + ' \u00b7 ' + String(v.color || '').slice(0, 20) + ' \u00b7 ' + (k % 2 ? 'F' : 'M') + ' \u00b7 '];
+        });
+        return P;
+      };
+      if (ex !== null) {
+        // the dog is already here: if it has no pedigree yet, give it this one
+        if (ped && dogs[ex].stub && !dogs[ex].ped && !Object.keys(pedOf(ex)).length) dogs[ex].ped = pedOut(dogs[ex]);
+        return Promise.resolve({ dogId: ex, created: false });
+      }
       var n = Object.keys(dogs).filter(function (k) { return (dogs[k].nameKey || '').split('#')[0] === nk; }).length;
       var key = n ? nk + '#' + (n + 1) : nk, id = reg ? 'r:' + reg : 'n:' + key, a = actorId === 0 ? 1 : actorId;
       dogs[id] = { id: id, title: sp.title || '', titleSuffix: '', registered: name, call: '', short: '', sex: c.sex || '', color: c.color || '', photo: '', ext: false, litter: null, stub: true, pending: false, visibility: 'members', nameKey: key };
       if (reg) identifiers.push({ dog: id, registry: AKCNO.test(reg) ? 'AKC' : (c.registry || 'Reg.'), number: reg, author: a, date: NOW() });
       if (/^\d{4}-\d{2}-\d{2}$/.test(c.born || '')) claims.push(C(nextId++, id, 'fact', 'Whelp date', c.born, { src: 'DANES World', author: a, date: NOW() }));
       claims.push(C(nextId++, id, 'link', 'Checked on DANES World', '', { url: 'https://www.danesworld.info/hundelist.php?psearch=' + encodeURIComponent(reg || name), author: a, date: NOW() }));
+      if (ped) dogs[id].ped = pedOut(dogs[id]);
       delete stash[String(actorId)];
       return Promise.resolve({ dogId: id, created: true });
     },
@@ -482,7 +504,7 @@
         offspring: offspringOf(dogId),
         // Option 2: a visitor sees other people (breeders, co-owners who are not members) only in short form; members see full names.
         people: peopleFor(),
-        perm: { loggedIn: isMember(), canAdd: isMember(), isAdmin: isAdmin(), canSetVisibility: canSetVisibility(dogId), canClaim: isMember() && !claimOf(dogId), canEnterResults: canEnterResults(dogId) }
+        perm: { loggedIn: isMember(), canAdd: isMember(), isAdmin: isAdmin(), canSetVisibility: canSetVisibility(dogId), canClaim: isMember() && !claimOf(dogId), canEnterResults: canEnterResults(dogId), hasPedigree: Object.keys(pedOf(dogId)).length > 1 }
       };
       return Promise.resolve(snap);
     },
@@ -528,11 +550,15 @@
       // A visitor may follow the pedigree back this many generations from one of our dogs (counted along the whole trail); further back needs a sign-in.
       var gen = (dogs[dogId].gen || 0) + Math.floor(Math.log(key) / Math.LN2);
       if (!isMember() && gen > API.visitorGens) return fail('login_required', 'Sign in to go further back than ' + API.visitorGens + ' generations.');
-      var parts = e[1].split(' · '), reg = regOf(parts[0]), ex = dogByNumber(reg);
+      var parts = e[1].split(' · '), reg = regOf(parts[0]).replace(/\s+/g, ''), ex = reg ? dogByNumber(reg) : null;
+      var sp = splitTitle(e[0]), nk = normName(sp.name);
+      // no registration number: the dog is told apart by its name, so the same dog twice in a pedigree is one page
+      if (!reg) { var twin = Object.keys(dogs).filter(function (k) { return (dogs[k].nameKey || '').split('#')[0] === nk; })[0]; if (twin !== undefined) ex = twin; }
       if (ex !== null) return Promise.resolve({ dogId: ex });
-      var id = 'r:' + reg, sp = splitTitle(e[0]), sx = (parts[2] || '').trim();
+      var id = reg ? 'r:' + reg : 'n:' + nk, sx = (parts[2] || '').trim();
       dogs[id] = { id: id, title: sp.title, titleSuffix: '', registered: sp.name, call: '', sex: sx === 'F' ? 'female' : (sx === 'M' ? 'male' : ''), color: (parts[1] || '').trim().toLowerCase(), photo: '', ext: true, litter: null, generated: true, gen: gen, origin: { dog: dogId, key: key }, visibility: 'public' };
-      identifiers.push({ dog: id, registry: AKCNO.test(reg) ? 'AKC' : 'Reg.', number: reg, author: 1, auto: true, date: NOW() });
+      if (!reg) dogs[id].nameKey = nk;
+      if (reg) identifiers.push({ dog: id, registry: AKCNO.test(reg) ? 'AKC' : 'Reg.', number: reg, author: 1, auto: true, date: NOW() });
       var born = (parts[3] || '').trim();
       if (/^\d{4}-\d{2}-\d{2}$/.test(born)) claims.push(C(nextId++, id, 'fact', 'Whelp date', born, { src: 'Pedigree data', author: 1, auto: true, date: NOW() }));
       priv.peds[id] = reroot(P, key);
@@ -668,7 +694,7 @@
     st = JSON.parse(JSON.stringify(st || SEED));
     nextId = st.nextId; authors = st.authors; LOGINS = st.logins; dogs = st.dogs; litters = st.litters; identifiers = st.identifiers;
     people = st.people; claims = st.claims; requests = st.requests; wantedList = st.wanted; log = st.log; lookups = st.lookups || {}; externals = st.externals || {}; stash = st.stash || {};
-    Object.keys(priv.peds).forEach(function (k) { if (String(k).indexOf('r:') === 0) delete priv.peds[k]; });
+    Object.keys(priv.peds).forEach(function (k) { if (/^[rna]:/.test(String(k))) delete priv.peds[k]; });   // every pedigree held for an added dog is rebuilt from the saved state
     Object.keys(dogs).filter(function (id) { return dogs[id].origin; }).sort(function (a, b) { return (dogs[a].gen || 0) - (dogs[b].gen || 0); }).forEach(function (id) {
       var o = dogs[id].origin, P = pedOf(o.dog); if (P[o.key]) priv.peds[id] = reroot(P, o.key);
     });

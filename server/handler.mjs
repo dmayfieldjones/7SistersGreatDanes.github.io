@@ -5,7 +5,7 @@
 // GET  /api/health
 import { readFile } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
-import { searchDanesWorld } from './danesworld.mjs';
+import { searchDanesWorld, fetchPedigree } from './danesworld.mjs';
 import { fileURLToPath } from 'node:url';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -47,7 +47,7 @@ function sane(v, depth = 0) {
   return false;
 }
 
-export function makeHandler({ store, verify, dataDir = join(HERE, '..', 'public', 'data'), adminUsers = ['dmj'], allowOrigin = '*', external = searchDanesWorld }) {
+export function makeHandler({ store, verify, dataDir = join(HERE, '..', 'public', 'data'), adminUsers = ['dmj'], allowOrigin = '*', external = searchDanesWorld, externalPedigree = fetchPedigree }) {
   const admins = new Set(adminUsers.map((u) => u.toLowerCase()));
   const headers = {
     'content-type': 'application/json',
@@ -114,6 +114,14 @@ export function makeHandler({ store, verify, dataDir = join(HERE, '..', 'public'
         let rows;
         try { rows = await external(q); } catch { return error('unavailable', 'DANES World could not be reached just now. Open the searches below yourself.', 503); }
         return reply(200, { ok: true, result: { choices: await transact((a) => a.stashCandidates(rows)) } });
+      }
+      if (req.method === 'importExternal') {
+        // Confirming a dog: one more request to the same site for its pedigree, so its ancestors come with it. If that fails the dog is still
+        // added, just without ancestors. The pedigree is passed in by the server alone; whatever else the browser sent is ignored.
+        const cand = await transact((a) => a.externalCandidate(args[0]));
+        let ped = null;
+        if (cand.siteId) { try { ped = await externalPedigree(cand.siteId); } catch { ped = null; } }
+        return reply(200, { ok: true, result: await transact((a) => a.importExternal(args[0], ped)) });
       }
       return reply(200, { ok: true, result: await transact((a) => a[req.method].apply(a, args)) });
     } catch (e) { return fail(e); }

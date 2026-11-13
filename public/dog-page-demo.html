@@ -593,7 +593,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
       var ttl=(r.title?r.title+' ':'')+r.name, attr=(r.dogId!==null&&r.dogId!==undefined)?'data-goto="'+r.dogId+'"':'data-anc="'+r.key+'"';
       var tile=r.photoReg?'<a class="ph" href="'+esc(photourl(r.photoReg))+'" target="_blank" rel="noopener" title="Photo hosted at '+esc(DB.site)+' ('+esc(DB.label)+'). Opens in a new tab."><img src="'+esc(photourl(r.photoReg))+'" alt="'+esc(r.name)+'" loading="lazy" onerror="noimg(this)"></a>':'<a class="onsite" href="#" '+attr+'>Open this dog\'s page</a>';
       return '<div class="pcard">'+tile+'<div class="pb"><span class="meta">'+esc(r.role)+'</span><b><a href="#" '+attr+'>'+esc(ttl)+'</a></b><span class="meta">'+esc(r.reg)+'</span><br><span class="meta">From the '+esc(r.src)+', added by </span>'+who(r.author)+'</div></div>';
-    }).join('')||'<div class="empty">No parents recorded.</div>';
+    }).join('')||'<div class="empty">No parents recorded.'+(S.perm.canAdd&&!S.perm.hasPedigree&&S.dog.registered&&DogAPI.remote&&DogAPI.remote()?'<br><button class="sm" type="button" data-fillped="1" style="margin-top:6px">Look up its ancestors on DANES World</button>':'')+'</div>';
   }
   function renderOffspring(){
     var kids=S.offspring,groups=[],by={};
@@ -929,6 +929,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     var an=t.closest&&t.closest('[data-anc]');
     if(an){ev.preventDefault();var k=Number(an.dataset.anc);if(k!==1)DogAPI.openAncestor(S.dog.id,k).then(function(r){return goTo(r.dogId)}).catch(function(e){say(e&&e.message)});return}
     if(t.dataset.back){ev.preventDefault();var pv=NAV.pop();if(pv)goTo(pv.id,true);return}
+    if(t.dataset.fillped){t.disabled=true;autoFind(S.dog.registered).then(function(){t.disabled=false});return}
     if(t.dataset.added){DogAPI.markAdded(t.dataset.added).then(renderAdmin);return}
     if(t.dataset.copywanted){DogAPI.wanted().then(function(w){if(navigator.clipboard)navigator.clipboard.writeText(w.map(function(x){return x.reg}).join('\n'))}).catch(function(e){say(e&&e.message)});return}
     var dm=t.closest&&t.closest('[data-demo]');   // a card holds several inner spans; a click on any of them counts

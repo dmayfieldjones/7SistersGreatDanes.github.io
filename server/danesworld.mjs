@@ -64,3 +64,41 @@ export async function searchDanesWorld(q, fetchImpl = fetch) {
   cache.set(k, { at: Date.now(), rows });
   return rows;
 }
+
+// ---- the pedigree page: the dog's ancestors, read by position ----
+// The table has 16 rows. The sire's cell spans 8 rows, his parents 4, and so on down to single rows; the dam's side starts halfway down.
+// A cell that spans s rows, starting at row r, is ancestor number 2^g + r/s with g = log2(16/s) (2 = sire, 3 = dam, 4 and 5 = his parents ...).
+const COLOUR_WORDS = /\s+(gelb\/gestromt|schwarz\/gefleckt|blau mit Abzeichen|gefleckt|gestromt|gelb|schwarz|blau|weiss|wei\u00df|harlekin|mantel)$/i;
+
+export function parsePedigree(html) {
+  const table = /<table[^>]*id="pedigree"[\s\S]*?<\/table>/.exec(html);
+  if (!table) return {};
+  const out = {}, rows = table[0].match(/<tr[\s\S]*?<\/tr>/g) || [];
+  if (rows.length !== 16) return {};
+  rows.forEach((row, r) => {
+    for (const m of row.matchAll(/<td([^>]*)>([\s\S]*?)<\/td>/g)) {
+      const span = Number((/rowspan="(\d+)"/.exec(m[1]) || [])[1] || 1);
+      if (![1, 2, 4, 8].includes(span) || r % span) continue;
+      const g = Math.log2(16 / span), n = 2 ** g + r / span;
+      const lines = text(m[2]).split('\n').map((x) => x.trim()).filter(Boolean);
+      if (!lines.length) continue;
+      const colour = (COLOUR_WORDS.exec(lines[0]) || [])[1] || '';
+      const name = lines[0].replace(COLOUR_WORDS, '').trim();
+      const [registry = '', ...rest] = (lines[1] || '').split(' ');
+      if (name) out[n] = { name: name.slice(0, 120), color: COLOR[colour.toLowerCase()] || '', registry: registry.slice(0, 12), number: rest.join(' ').slice(0, 24) };
+    }
+  });
+  return out;
+}
+
+const pedCache = new Map();
+export async function fetchPedigree(siteId, fetchImpl = fetch) {
+  if (!/^\d{1,9}$/.test(String(siteId))) return {};
+  const hit = pedCache.get(siteId);
+  if (hit && Date.now() - hit.at < DAY) return hit.ped;
+  const res = await fetchImpl(`${SITE}pedigree.php?id=${siteId}&language=en`, { headers: { 'user-agent': AGENT }, signal: AbortSignal.timeout(8000) });
+  if (!res.ok) throw Object.assign(new Error('DANES World answered ' + res.status), { code: 'unavailable' });
+  const ped = parsePedigree(await res.text());
+  pedCache.set(siteId, { at: Date.now(), ped });
+  return ped;
+}
