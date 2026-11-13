@@ -1366,7 +1366,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     cognito('VerifySoftwareToken',{AccessToken:at,UserCode:$('mfa-code').value.trim(),FriendlyDeviceName:'Authenticator app'})
       .then(function(r){if(r.Status!=='SUCCESS')throw r;return cognito('SetUserMFAPreference',{AccessToken:at,SoftwareTokenMfaSettings:{Enabled:true,PreferredMfa:true}})})
       .then(function(){mfaMsg('Two-step sign-in is on. Next time you sign in, it will ask for a code.');$('mfa-key').textContent='';$('mfa-qr').innerHTML='';$('mfabtn').textContent='Two-step sign-in is on'})
-      .catch(function(){mfaMsg('That code did not work. Check the app and try the current code.')});
+      .catch(function(){mfaMsg('That code did not work. Each time this panel opens it makes a new key, so delete any older GDGalaxy entry in your app, scan this code, and type the current 6-digit code.')});
   });
   $('mfa-cancel').addEventListener('click',function(){$('mfapanel').hidden=true;$('mfa-key').textContent='';$('mfa-qr').innerHTML='';mfaMsg('')});
   $('mfa-copy').addEventListener('click',function(){
