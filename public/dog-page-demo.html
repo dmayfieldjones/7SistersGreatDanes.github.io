@@ -953,6 +953,18 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
       while(rest.length){var bi=-1,bj=-1,bd=1e9;inT.forEach(function(a){rest.forEach(function(b){var d=Math.hypot(px(st[a])-px(st[b]),py(st[a])-py(st[b]));if(d<bd){bd=d;bi=a;bj=b}})});ed.push([st[bi],st[bj]]);inT.push(bj);rest.splice(rest.indexOf(bj),1)}
       return {c:c,m:m,cx:cx,cy:cy,s:Math.max(base*1.6,Math.min(base*7,Math.min(W*.4/ex,H*.36/ey))),st:st,ed:ed};
     });
+    // kennel names for every constellation, placed once so none overlap (bigger groups win), and faded in as the clock reaches each group's era
+    var mx=new Float64Array(K),my=new Float64Array(K),mn=new Int32Array(K);
+    for(i=0;i<N;i++){c=G.cl[i];mx[c]+=px(i);my[c]+=py(i);mn[c]++}
+    var maxSz=Math.max.apply(null,G.cs.map(function(x){return x[1]})),labs=[],boxes=[];
+    G.cs.map(function(_,c){return c}).sort(function(a,b){return G.cs[b][1]-G.cs[a][1]}).forEach(function(c){
+      var nm=G.cs[c][0];if(!nm||!mn[c])return;
+      var fs=Math.round(11+6*Math.sqrt(G.cs[c][1]/maxSz)),x=mx[c]/mn[c],y=my[c]/mn[c];
+      ctx.font='600 '+fs+'px system-ui,sans-serif';var tw=ctx.measureText(nm).width+8,sx=(x-mid[0])*base*.8+W/2,sy=(y-mid[1])*base*.8+H/2;
+      var r=[sx-tw/2,sy-fs/2-2,sx+tw/2,sy+fs/2+2];
+      for(var q=0;q<boxes.length;q++){var o=boxes[q];if(r[0]<o[2]&&r[2]>o[0]&&r[1]<o[3]&&r[3]>o[1])return}
+      boxes.push(r);labs.push({c:c,nm:nm,x:x,y:y,fs:fs,med:G.cs[c][2]});
+    });
     // the finale: Piper's own ancestors, drawn generation by generation
     var fin=null;
     if(star&&star.reg&&G.rh){
@@ -1005,6 +1017,14 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
       ctx.globalAlpha=dim;ctx.imageSmoothingEnabled=true;
       ctx.setTransform(dpr*s/ls,0,0,dpr*s/ls,dpr*(bx[0]*s*-1+ox),dpr*(bx[2]*s*-1+oy));ctx.drawImage(lay,0,0);
       ctx.setTransform(dpr,0,0,dpr,0,0);
+      // kennel names: build in with the clock, then thin out as the camera moves in close
+      var whole2=1-Math.max(0,Math.min(1,(s/base-1)/.5)),yNow=yearAt(e);
+      if(whole2>0){
+        ctx.textAlign='center';ctx.textBaseline='middle';ctx.shadowColor='#000';ctx.shadowBlur=5;
+        for(i=0;i<labs.length;i++){var Lb=labs[i],ap=e<BY?e3((yNow-(Lb.med-10))/20):1;if(ap<=0)continue;
+          ctx.globalAlpha=ap*whole2*(fin&&Math.floor((e-BUILD)/TT)>=tour.length?.45:.85);ctx.fillStyle=hot[Lb.c];ctx.font='600 '+Lb.fs+'px system-ui,sans-serif';ctx.fillText(Lb.nm,Lb.x*s+ox,Lb.y*s+oy)}
+        ctx.shadowBlur=0;ctx.globalAlpha=1;ctx.textAlign='left'
+      }
       var title='',sub='';
       if(e<BUILD){
         var yr=Math.floor(yearAt(e));
