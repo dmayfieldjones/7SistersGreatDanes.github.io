@@ -143,10 +143,10 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
   </div>
 </form>
 <p id="signin" class="meta" hidden></p>
-<section id="invite" class="card" hidden style="margin:0 0 12px">
-  <b>Help build the Great Dane record.</b>
-  <span class="meta">Sign in to add records, check and dispute others' under your real name, claim your dogs, and open every ancestor. Everything is linked to its evidence, and what you add helps fill the record in and cross-check it. Accounts are made by the administrator; ask whoever sent you this link. <a href="#" id="invitesignin">Sign in</a></span>
-</section>
+<details id="invite" class="card" hidden style="margin:0 0 12px">
+  <summary><b>New here? How this works and how to help</b> &middot; <a href="#" id="invitesignin">Sign in</a></summary>
+  <p class="meta" style="margin:6px 0 0">This page gathers what is already public about a dog and links to the original sources. What you add, under your real name and with a link to the evidence, helps fill the record in and cross-check it. Sign in to add records, dispute others', claim your dogs, and open every ancestor. Accounts are made by the administrator; ask whoever sent you this link.</p>
+</details>
 <div class="who-box">
   <form id="findform" style="display:inline-flex;gap:6px;align-items:center">
     <input type="text" id="dogfind" placeholder="Find a dog by registration number" aria-label="Find a dog by registration number" style="width:16rem" autocomplete="off">
@@ -159,14 +159,14 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
 
 <section id="landing" class="card" hidden style="margin:0 0 16px">
   <h2 style="margin-top:0">Demo Our Dogs</h2>
-  <p class="meta" style="margin:0 0 10px">Piper is our foundation bitch. Below are her, her offspring and Mia's puppies. Records marked <b>Demo data</b> are samples. Members can claim their own dogs and make them public.</p>
-  <details class="meta" style="margin:0 0 10px"><summary style="cursor:pointer;font-weight:600">Testing this preview? Read this first</summary>
+  <details class="meta" style="margin:0 0 10px"><summary style="cursor:pointer;font-weight:600">About this list and testing this preview</summary>
+    <p style="margin:6px 0 0">Piper is our foundation bitch. Below are her, her offspring and Mia's puppies. Records marked <b>Demo data</b> are samples. Members can claim their own dogs and make them public.</p>
     <ul style="margin:6px 0 0;padding-left:1.1rem">
       <li><b>Nothing is saved yet.</b> Records, claims and visibility choices you make live only in your browser tab and are gone when you reload. Try everything freely.</li>
       <li><b>Try:</b> look up a dog by registration number, open an ancestor from the pedigree, sign in, claim a dog, add a record, dispute one, and click the camera icon on a pedigree box.</li>
-      <li><b>Records marked Demo data</b> are samples. Real records will carry the name of the member who added them.</li>
       <li><b>Tell us</b> what was confusing or missing, and which dog or screen you were on.</li>
     </ul></details>
+  
   <div id="landing-groups"></div>
 </section>
 
