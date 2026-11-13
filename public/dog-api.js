@@ -70,6 +70,11 @@
   }
   function normName(n) { return String(n).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ''); }
   function norm(q) { return String(q).toUpperCase().replace(/\s+/g, ''); }
+  // A registration number from any registry. An AKC number stands alone; any other keeps its registry in front (KC3019BS), so two registries
+  // that happen to share digits are never taken for the same dog. The registry is kept on the identifier too.
+  function regKey(registry, number) { var n = norm(number || ''); if (!n) return ''; return (AKCNO.test(n) || !registry || /^(AKC|Reg\.)$/i.test(registry)) ? n : norm(registry) + n; }
+  function regLabel(registry, number) { var n = String(number || '').trim(); if (!n) return ''; return (AKCNO.test(norm(n)) || !registry || /^AKC$/i.test(registry)) ? n : registry + ' ' + n; }
+  function registryFrom(raw) { var t = String(raw).trim().split(/\s+/); return AKCNO.test(norm(raw)) ? 'AKC' : (t.length > 1 && /^[A-Za-z]{2,6}$/.test(t[0]) ? t[0].toUpperCase() : 'Reg.'); }
 
   // ---- the stores -------------------------------------------------------------------------------------------------------------
   var authors = {};
@@ -451,27 +456,28 @@
       var g = needMember(); if (g) return g;
       var st = stash[String(actorId)], c = st && Date.now() - st.at < 3600000 && st.list.filter(function (x) { return x.token === String(token); })[0];
       if (!c) return fail('not_found', 'That lookup has expired. Search again.');
-      var reg = c.number ? norm(c.number) : '', ex = reg ? dogByNumber(reg) : null;
+      var reg = regKey(c.registry, c.number), ex = reg ? dogByNumber(reg) : null;
       var sp = splitTitle(c.name), name = sp.name || c.name, nk = normName(name);
-      if (ex === null) { var same = Object.keys(dogs).filter(function (k) { return (dogs[k].nameKey || '').split('#')[0] === nk && (!c.sex || !dogs[k].sex || dogs[k].sex === c.sex); }); if (same.length === 1 && !reg) ex = same[0]; }
+      if (ex === null) { var same = Object.keys(dogs).filter(function (k) { return (dogs[k].nameKey || '').split('#')[0] === nk && (!c.sex || !dogs[k].sex || dogs[k].sex === c.sex); }); if (same.length === 1 && (!reg || idsOf(same[0]).length === 0)) ex = same[0]; }   // a dog we only knew by name is the same dog; a number found now is added to it
       var pedOut = function (d) {
         var P = { 1: [titled(d) || d.short, (primaryReg(d.id) || '') + ' \u00b7 ' + (d.color || '') + ' \u00b7 ' + (d.sex === 'female' ? 'F' : d.sex === 'male' ? 'M' : '') + ' \u00b7 ' + ((claims.filter(function (x) { return x.dog === d.id && x.name === 'Whelp date' && x.status === 'visible'; })[0] || {}).value || '')] };
         Object.keys(ped || {}).forEach(function (k) {
           var v = ped[k]; k = Number(k);
           if (!(k >= 2 && k <= 63) || !v || !v.name) return;
-          P[k] = [String(v.name).slice(0, 120), String(v.number || '').slice(0, 24) + ' \u00b7 ' + String(v.color || '').slice(0, 20) + ' \u00b7 ' + (k % 2 ? 'F' : 'M') + ' \u00b7 '];
+          P[k] = [String(v.name).slice(0, 120), regLabel(v.registry, v.number).slice(0, 30) + ' \u00b7 ' + String(v.color || '').slice(0, 20) + ' \u00b7 ' + (k % 2 ? 'F' : 'M') + ' \u00b7 '];
         });
         return P;
       };
       if (ex !== null) {
-        // the dog is already here: if it has no pedigree yet, give it this one
+        // the dog is already here: add the number we have just learned, and if it has no pedigree yet, give it this one
+        if (reg && !dogByNumber(reg)) identifiers.push({ dog: ex, registry: registryFrom(regLabel(c.registry, c.number)), number: reg, author: actorId === 0 ? 1 : actorId, date: NOW() });
         if (ped && dogs[ex].stub && !dogs[ex].ped && !Object.keys(pedOf(ex)).length) { dogs[ex].ped = pedOut(dogs[ex]); dogs[ex].pedFrom = { src: 'DANES World pedigree', author: actorId === 0 ? 1 : actorId }; }
         return Promise.resolve({ dogId: ex, created: false });
       }
       var n = Object.keys(dogs).filter(function (k) { return (dogs[k].nameKey || '').split('#')[0] === nk; }).length;
       var key = n ? nk + '#' + (n + 1) : nk, id = reg ? 'r:' + reg : 'n:' + key, a = actorId === 0 ? 1 : actorId;
       dogs[id] = { id: id, title: sp.title || '', titleSuffix: '', registered: name, call: '', short: '', sex: c.sex || '', color: c.color || '', photo: '', ext: false, litter: null, stub: true, pending: false, visibility: 'members', nameKey: key };
-      if (reg) identifiers.push({ dog: id, registry: AKCNO.test(reg) ? 'AKC' : (c.registry || 'Reg.'), number: reg, author: a, date: NOW() });
+      if (reg) identifiers.push({ dog: id, registry: registryFrom(regLabel(c.registry, c.number)), number: reg, author: a, date: NOW() });
       if (/^\d{4}-\d{2}-\d{2}$/.test(c.born || '')) claims.push(C(nextId++, id, 'fact', 'Whelp date', c.born, { src: 'DANES World', author: a, date: NOW() }));
       claims.push(C(nextId++, id, 'link', 'Checked on DANES World', '', { url: 'https://www.danesworld.info/hundelist.php?psearch=' + encodeURIComponent(reg || name), author: a, date: NOW() }));
       if (ped) { dogs[id].ped = pedOut(dogs[id]); dogs[id].pedFrom = { src: 'DANES World pedigree', author: a }; }
@@ -550,7 +556,7 @@
       // A visitor may follow the pedigree back this many generations from one of our dogs (counted along the whole trail); further back needs a sign-in.
       var gen = (dogs[dogId].gen || 0) + Math.floor(Math.log(key) / Math.LN2);
       if (!isMember() && gen > API.visitorGens) return fail('login_required', 'Sign in to go further back than ' + API.visitorGens + ' generations.');
-      var parts = e[1].split(' · '), reg = regOf(parts[0]).replace(/\s+/g, ''), ex = reg ? dogByNumber(reg) : null;
+      var parts = e[1].split(' · '), rawReg = regOf(parts[0]), reg = norm(rawReg), ex = reg ? dogByNumber(reg) : null;
       var sp = splitTitle(e[0]), nk = normName(sp.name);
       // no registration number: the dog is told apart by its name, so the same dog twice in a pedigree is one page
       if (!reg) { var twin = Object.keys(dogs).filter(function (k) { return (dogs[k].nameKey || '').split('#')[0] === nk; })[0]; if (twin !== undefined) ex = twin; }
@@ -558,7 +564,7 @@
       var id = reg ? 'r:' + reg : 'n:' + nk, sx = (parts[2] || '').trim();
       dogs[id] = { id: id, title: sp.title, titleSuffix: '', registered: sp.name, call: '', sex: sx === 'F' ? 'female' : (sx === 'M' ? 'male' : ''), color: (parts[1] || '').trim().toLowerCase(), photo: '', ext: true, litter: null, generated: true, gen: gen, origin: { dog: dogId, key: key }, visibility: 'public' };
       if (!reg) dogs[id].nameKey = nk;
-      if (reg) identifiers.push({ dog: id, registry: AKCNO.test(reg) ? 'AKC' : 'Reg.', number: reg, author: 1, auto: true, date: NOW() });
+      if (reg) identifiers.push({ dog: id, registry: registryFrom(rawReg), number: reg, author: 1, auto: true, date: NOW() });
       var born = (parts[3] || '').trim();
       if (/^\d{4}-\d{2}-\d{2}$/.test(born)) claims.push(C(nextId++, id, 'fact', 'Whelp date', born, { src: 'Pedigree data', author: 1, auto: true, date: NOW() }));
       priv.peds[id] = reroot(P, key);

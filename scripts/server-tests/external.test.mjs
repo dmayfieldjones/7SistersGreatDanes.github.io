@@ -123,3 +123,38 @@ test('a dog added earlier with no ancestors gets them when it is confirmed again
   assert.equal(again.result.dogId, id); assert.equal(again.result.created, false);
   assert.equal((await call(h, 'getDog', [id], t)).result.perm.hasPedigree, true);
 });
+
+const open = async (h, t, id, name) => {   // open the ancestor of dog `id` whose name matches, by its place in the pedigree
+  const nodes = (await call(h, 'getPedigree', [id, 8], t)).result.nodes;
+  const k = Object.keys(nodes).find((x) => nodes[x][0] === name);
+  return call(h, 'openAncestor', [id, k], t);
+};
+const importWith = async (rows, name, t, store) => {
+  const h = fresh(store, { external: async () => rows, externalPedigree });
+  const f = await call(h, 'findExternal', [{ q: name }], t);
+  return { h, made: await call(h, 'importExternal', [f.result.choices[0].token], t) };
+};
+test('an ancestor with a Kennel Club number keeps that registry, so it can be matched later', async () => {
+  const h = fresh(memoryStore(), { external, externalPedigree }), t = alice();
+  const f = await call(h, 'findExternal', [{ q: 'Batemanor Amanda at Tiparone' }], t);
+  const id = (await call(h, 'importExternal', [f.result.choices[0].token], t)).result.dogId;
+  const anc = await open(h, t, id, 'Chapala SQUEEZY MOP at Yacanto');
+  const d = await call(h, 'getDog', [anc.result.dogId], t);
+  assert.deepEqual(d.result.identifiers.map((i) => [i.registry, i.number]), [['KC', 'KC3019BS']]);
+});
+test('a dog we only knew by name takes the number found later; it does not become two dogs', async () => {
+  const store = memoryStore(), t = alice();
+  const { h, made } = await importWith([DOG], 'Batemanor Amanda at Tiparone', t, store);
+  const first = await open(h, t, made.result.dogId, 'BECCAS BLUCHER');          // opened from a pedigree: name only
+  const row = { name: 'BECCAS BLUCHER', sex: 'male', color: '', born: '', registry: 'KC', number: '12345', sire: '', dam: '', siteId: '' };
+  const { made: again } = await importWith([row], 'BECCAS BLUCHER', t, store);
+  assert.equal(again.result.dogId, first.result.dogId); assert.equal(again.result.created, false);
+  const d = await call(h, 'getDog', [first.result.dogId], t);
+  assert.deepEqual(d.result.identifiers.map((i) => i.number), ['KC12345']);
+});
+test('the same digits from two registries are two different dogs', async () => {
+  const store = memoryStore(), t = alice();
+  const a = await importWith([{ name: 'Dog One', sex: 'male', color: '', born: '', registry: 'KC', number: '777', sire: '', dam: '', siteId: '' }], 'Dog One', t, store);
+  const b = await importWith([{ name: 'Dog Two', sex: 'male', color: '', born: '', registry: 'NHSB', number: '777', sire: '', dam: '', siteId: '' }], 'Dog Two', t, store);
+  assert.notEqual(a.made.result.dogId, b.made.result.dogId);
+});
