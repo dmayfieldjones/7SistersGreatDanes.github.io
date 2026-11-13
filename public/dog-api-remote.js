@@ -6,7 +6,7 @@
 (function (root) {
   'use strict';
   var local = root.DogAPI, server = null, token = null;
-  var REMOTE = ['session', 'authors', 'lookup', 'ourDogs', 'confirmDog', 'claimDog', 'setVisibility', 'noteGalaxy', 'getDog', 'getPedigree',
+  var REMOTE = ['session', 'authors', 'lookup', 'find', 'lookupByName', 'ourDogs', 'confirmDog', 'claimDog', 'setVisibility', 'noteGalaxy', 'getDog', 'getPedigree',
     'openAncestor', 'saveFact', 'addRecord', 'flagClaim', 'correctClaim', 'hideClaim', 'suggestCategory',
     'wanted', 'markAdded', 'accountRequests', 'decideRequest', 'actionLog'];
   var down = { code: 'unavailable', message: 'The server could not be reached. Check your connection and try again.' };
