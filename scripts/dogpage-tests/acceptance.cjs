@@ -161,7 +161,7 @@ let pass=0,fail=0;const ok=(c,m)=>{if(c){pass++}else{fail++;console.log('  FAIL:
  const echo3=[...d.querySelectorAll('#entries article')].find(a=>/Echocardiogram/.test(a.textContent)&&!/superseded/.test(a.textContent));ok(echo3&&echo3.querySelector('[data-hide]'),'administrator can hide');
  await API.hideClaim(5,'test reason');await actAs(0);ok(/Hidden by administrator/.test(T('entries')),'a hidden record shows its reason and stays in the data');
  click(d.querySelector('[data-tab="admin"]'));await wait(500);
- ok(/WS11111111/.test(T('wanted'))&&/2×/.test(T('wanted')),'wanted list shows the number twice');ok(/S28449\/72/.test(T('wanted'))&&/On the map, no names/.test(T('wanted')),'wanted list marks a dog that is on the map');
+ ok(/WS11111111/.test(T('wanted'))&&/2 times/.test(T('wanted')),'wanted list shows the number twice');ok(/S28449\/72/.test(T('wanted'))&&/Partly/.test(T('wanted')),'wanted list marks a dog that is on the map');
  ok(/Administrator hid record/.test(T('log')),'action log');
  await actAs(2);click(d.querySelector('[data-tab="admin"]'));await wait(300);ok(/Administrator only/.test(T('wanted')),'a member sees "Administrator only" in the admin tab');
  console.log('--- who can see which dog');
@@ -178,7 +178,7 @@ let pass=0,fail=0;const ok=(c,m)=>{if(c){pass++}else{fail++;console.log('  FAIL:
  await actAs('v');await API.getDog(413).then(()=>ok(false,'hidden dog should refuse a visitor'),e=>ok(e.code==='login_required','a dog set to members-only is closed to visitors'));
  await API.getPedigree(413).then(()=>ok(false,'visitor pedigree of a members-only dog refused'),e=>ok(e.code==='login_required','a visitor cannot get the pedigree of a dog that is not public'));
  await API.openAncestor(413,2).then(()=>ok(false,'visitor ancestors of a members-only dog refused'),e=>ok(e.code==='login_required','and cannot open ancestors reached through a dog that is not public'));
- await find('WS69691106');ok(![...d.querySelectorAll('#offspring button')].some(b=>/Mia/.test(b.textContent))&&[...d.querySelectorAll('#offspring button')].some(b=>/Cora/.test(b.textContent)),"a members-only dog drops out of its parent's offspring list for visitors");
+ await find('WS69691106');ok(![...d.querySelectorAll('#offspring button')].some(b=>/Mia/.test(b.textContent))&&[...d.querySelectorAll('#offspring button')].some(b=>/Heart Of Gold/.test(b.textContent)),"a members-only dog drops out of its parent's offspring list for visitors");
  await API.setVisibility(413,'public').then(()=>ok(false,'visitor setVisibility refused'),e=>ok(e.code==='login_required','a visitor cannot change visibility'));
  await API.setActor(9);await API.setVisibility(413,'public').then(()=>ok(false,'non-claimant refused'),e=>ok(e.code==='forbidden','a member who did not claim the dog cannot change who sees it'));
  await API.setActor(2);await API.setVisibility(413,'bogus').then(()=>ok(false,'bad value refused'),e=>ok(e.code==='invalid','an unknown visibility value is refused'));
