@@ -368,7 +368,17 @@
         var cz = priv.cosmic[rg]; if (cz && cz.photo) list.push({ title: 'Photo at Cosmic Great Danes', author: 'Cosmic Great Danes', url: cz.photo, linked: true });
         // Past the visitor limit the data is held but not shown: the slot says so, and a sign-in reveals it.
         if (!isMember() && (dogs[dogId].gen || 0) + Math.floor(Math.log(Number(k)) / Math.LN2) > API.visitorGens) { out[k] = { locked: true }; return; }
-        out[k] = [e[0], e[1], rr, list];
+        // What we know exists for this dog (never a guess): health screens (OFA or CHIC numbers, test records) and DNA or sequence data.
+        var did = dogByNumber(rg), hn = 0, dn = 0;
+        if (did !== null) {
+          hn = idsOf(did).filter(function (i) { return i.registry === 'OFA' || i.registry === 'CHIC'; }).length;
+          claims.forEach(function (c) {
+            if (c.dog !== did || c.status !== 'visible') return;
+            if (c.type === 'test') hn++;
+            if (c.type === 'link' && (/VGL|AKC DNA|Embark|Wisdom|sequence/i.test(c.name) || (c.name === 'DNA test' && c.value !== 'pending'))) dn++;
+          });
+        }
+        out[k] = [e[0], e[1], rr, list, { health: hn, dna: dn }];
       });
       if (out[1] && dogs[dogId].registered) out[1][0] = titled(dogs[dogId]);   // the root is the dog itself: its own title and registered name
       return Promise.resolve({ nodes: out });

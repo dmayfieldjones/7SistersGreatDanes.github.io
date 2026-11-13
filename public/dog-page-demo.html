@@ -209,7 +209,7 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
   <p class="meta"><label for="gens">Generations</label> <select id="gens" style="width:auto;display:inline-block"><option>3</option><option selected>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select> &nbsp;Generated live from our pedigree data; nothing is stored per dog. Cora's sire side is not available.</p>
   <div id="pedgrid" class="pedgrid"></div>
   <p id="pednote" class="meta" style="margin:6px 0 0"></p>
-  <p class="meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg> marks a dog with a photo on River Rock Pedigree. It opens the photo on their site in a new tab; we don't host or copy it.</p>
+  <p class="meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg> marks a dog with a photo on River Rock Pedigree. It opens the photo on their site in a new tab; we don't host or copy it. <span style="white-space:nowrap">A plus marks health screens or test records we hold; a helix marks DNA or sequence data.</span></p>
 </section>
 
 <div class="tabs" role="tablist">
@@ -461,6 +461,13 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   function showLanding(){$('landing').hidden=false;$('dogview').hidden=true;renderTop();return DogAPI.ourDogs().then(renderLanding)}
   var PH={};
   var CAM='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>';
+  var HEALTH='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8M8 12h8"/></svg>';
+  var HELIX='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 3c0 5 10 5 10 9s-10 4-10 9M17 3c0 5-10 5-10 9s10 4 10 9"/><path d="M8.5 7h7M8.5 17h7"/></svg>';
+  // health screens and DNA data are separate icons: a plus for OFA-type screens and test records, a helix for DNA and sequence data; both only where we hold a record
+  function dataIcons(k,f){if(!f)return '';var o='';
+    if(f.health)o+='<a class="cam" href="#" data-anc="'+k+'" title="Health screens or test records on file: '+f.health+'. Opens this dog\'s page." aria-label="Health records">'+HEALTH+'</a>';
+    if(f.dna)o+='<a class="cam" href="#" data-anc="'+k+'" title="DNA or sequence data on file: '+f.dna+'. Opens this dog\'s page." aria-label="DNA data">'+HELIX+'</a>';
+    return o}
   function camBtn(k,list){PH[k]=list;var one=list.length===1;
     return '<a class="cam" href="'+(one?esc(list[0].url):'#')+'"'+(one?' target="_blank" rel="noopener"':' data-photos="'+k+'"')+' title="'+(one?esc(list[0].author)+': '+esc(list[0].title)+'. Opens in a new tab.':list.length+' photos. Click to choose one.')+'" aria-label="'+list.length+(one?' photo':' photos')+'">'+CAM+(one?'':'<b class="cnt">'+list.length+'</b>')+'</a>'}
   function showPhotoPop(a){
@@ -637,6 +644,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
         var parts=e[1].split(' · '),born=(parts[3]||'').slice(0,4),color=parts[1]||'';
         h+=nameEl(k,e[0])+'<span class="m">'+esc(parts[0])+(born?' · '+born:'')+(color?' · '+esc(color):'')+'</span>';
         if(e[3]&&e[3].length)h+=camBtn(k,e[3]);
+        h+=dataIcons(k,e[4]);
         h+='</div>';
         if(d<D&&(P[2*k]||P[2*k+1]))h+='<div class="kids">'+node(2*k,d+1)+node(2*k+1,d+1)+'</div>';
         return h;
@@ -655,6 +663,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
       var parts=e[1].split(' · '),reg=parts[0],born=(parts[3]||'').slice(0,4),color=parts[1]||'';
       h+='<div class="'+cls+'" style="'+st+'">'+nameEl(k,e[0],k!==1)+'<span class="m">'+esc(reg)+(born?' · '+born:'')+(color?' · '+esc(color):'')+'</span>';
       if(e[3]&&e[3].length)h+=camBtn(k,e[3]);
+      h+=dataIcons(k,e[4]);
       h+='</div>';
     }}
     grid.innerHTML=h;
