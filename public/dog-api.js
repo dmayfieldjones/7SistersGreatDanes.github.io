@@ -200,6 +200,23 @@
   // Automatic lookups on another database (DANES World): a few an hour per member, so the other site sees only a trickle. Past the limit the page
   // falls back to links the member opens by hand. The server keeps what it found, so a confirmation never trusts what the browser sends back.
   var EXT_PER_HOUR = 5, NET_PER_HOUR = 30, externals = {}, stash = {};
+  // Where sources disagree about a dog. Nothing is overwritten: a flag lists the versions, members vote with their names, and when DIFF_AGREE
+  // different members back the same version it is marked resolved (the administrator can resolve or reopen any flag; the history is kept).
+  var DIFF_AGREE = 3, DIFF_FIELDS = ['Sire', 'Dam', 'Name', 'Birth date', 'Duplicate record'], diffs = [];
+  function diffView(x) {
+    var counts = x.options.map(function (o, i) { return x.votes.filter(function (v) { return v.option === i; }).length; });
+    var mine = isMember() ? x.votes.filter(function (v) { return v.author === authorOf(actorId); })[0] : null;
+    return { id: x.id, dog: x.dog, field: x.field, options: copy(x.options), votes: copy(x.votes), counts: counts, need: DIFF_AGREE, status: x.status, chosen: x.chosen, by: x.by, raisedBy: x.raisedBy,
+      created: x.created, note: x.note, log: copy(x.log), my: mine ? mine.option : -1, can: { vote: isMember() && x.status === 'open', resolve: isAdmin() && x.status === 'open', reopen: isAdmin() && x.status === 'resolved' } };
+  }
+  function diffTally(x) {
+    if (x.status !== 'open') return;
+    for (var i = 0; i < x.options.length; i++) {
+      if (x.votes.filter(function (v) { return v.option === i; }).length >= DIFF_AGREE) {
+        x.status = 'resolved'; x.chosen = i; x.by = 'members'; x.log.push({ date: NOW(), author: 0, text: DIFF_AGREE + ' members agreed on: ' + x.options[i].value }); return;
+      }
+    }
+  }
   function lookupBudget() {
     if (isAdmin()) return null;
     var now = Date.now(), k = String(actorId), t = (lookups[k] || []).filter(function (x) { return now - x < 86400000; });
@@ -500,6 +517,57 @@
       identifiers.push({ dog: dogId, registry: registry, number: n, author: actorId === 0 ? 1 : actorId, date: NOW() });
       return Promise.resolve({ ok: true });
     },
+
+    // ---- where sources disagree ----
+    // f: {field, options: [{value, source}] (2 to 4 versions), mine: index of the version you back, evidence: how you know, note}
+    raiseDiff: function (dogId, f) {
+      var g = needMember(); if (g) return g;
+      if (!dogs[dogId]) return fail('not_found', 'No such dog.');
+      f = f || {};
+      if (DIFF_FIELDS.indexOf(f.field) < 0) return fail('invalid', 'Choose what differs: ' + DIFF_FIELDS.join(', ') + '.');
+      var opts = (f.options || []).slice(0, 4).map(function (o) { return { value: String((o && o.value) || '').trim().slice(0, 120), source: String((o && o.source) || '').trim().slice(0, 60) }; }).filter(function (o) { return o.value; });
+      if (opts.length < 2) return fail('invalid', 'Give at least two versions, and where each one is found.');
+      var mine = Number(f.mine); if (!(mine >= 0 && mine < opts.length)) return fail('invalid', 'Say which version you back.');
+      var ev = String(f.evidence || '').trim().slice(0, 300);
+      if (ev.length < 4) return fail('invalid', 'Say how you know: a link, a registration number, or where you looked.');
+      var open = diffs.filter(function (x) { return x.dog === dogId && x.field === f.field && x.status === 'open'; })[0];
+      if (open) return fail('invalid', 'This difference is already flagged. Add your agreement to it instead.');
+      var a = authorOf(actorId), x = { id: 'd' + nextId++, dog: dogId, field: f.field, options: opts, votes: [{ author: a, option: mine, evidence: ev, date: NOW() }], status: 'open', chosen: null, by: '', raisedBy: a, created: NOW(), note: String(f.note || '').trim().slice(0, 300), log: [{ date: NOW(), author: a, text: 'Raised, backing: ' + opts[mine].value }] };
+      diffs.push(x); diffTally(x); return Promise.resolve(diffView(x));
+    },
+    // back one version (your earlier vote on the same flag is replaced); evidence is optional but welcome
+    agreeDiff: function (id, option, evidence) {
+      var g = needMember(); if (g) return g;
+      var x = diffs.filter(function (d) { return d.id === id; })[0]; if (!x) return fail('not_found', 'No such flag.');
+      if (x.status !== 'open') return fail('invalid', 'This flag is already resolved.');
+      option = Number(option); if (!(option >= 0 && option < x.options.length)) return fail('invalid', 'Choose one of the versions.');
+      var a = authorOf(actorId);
+      x.votes = x.votes.filter(function (v) { return v.author !== a; });
+      x.votes.push({ author: a, option: option, evidence: String(evidence || '').trim().slice(0, 300), date: NOW() });
+      x.log.push({ date: NOW(), author: a, text: 'Backed: ' + x.options[option].value });
+      diffTally(x); return Promise.resolve(diffView(x));
+    },
+    resolveDiff: function (id, option, note) {
+      var g = needAdmin(); if (g) return g;
+      var x = diffs.filter(function (d) { return d.id === id; })[0]; if (!x) return fail('not_found', 'No such flag.');
+      option = Number(option); if (!(option >= 0 && option < x.options.length)) return fail('invalid', 'Choose one of the versions.');
+      x.status = 'resolved'; x.chosen = option; x.by = 'admin';
+      x.log.push({ date: NOW(), author: 1, text: 'Administrator resolved: ' + x.options[option].value + (note ? '. ' + String(note).slice(0, 200) : '') });
+      logAction('Administrator resolved a difference (' + x.field + ') as: ' + x.options[option].value);
+      return Promise.resolve(diffView(x));
+    },
+    reopenDiff: function (id) {
+      var g = needAdmin(); if (g) return g;
+      var x = diffs.filter(function (d) { return d.id === id; })[0]; if (!x) return fail('not_found', 'No such flag.');
+      x.status = 'open'; x.chosen = null; x.by = '';
+      x.log.push({ date: NOW(), author: 1, text: 'Administrator reopened this flag' });
+      return Promise.resolve(diffView(x));
+    },
+    // the work queue: every open flag, for any signed-in member who wants to help check records (least-backed first, so the lonely ones get looked at)
+    openDiffs: function () {
+      var g = needMember(); if (g) return g;
+      return Promise.resolve(diffs.filter(function (x) { return x.status === 'open'; }).map(function (x) { var d = dogs[x.dog] || {}; var o = diffView(x); o.dogName = titled(d) || d.short || String(x.dog); return o; }).sort(function (a, b) { return Math.max.apply(null, a.counts) - Math.max.apply(null, b.counts); }));
+    },
     noteGalaxy: function (dogId, inGalaxy) {
       var d = dogs[dogId]; if (!d) return fail('not_found', 'No such dog.');
       var reg = primaryReg(dogId);
@@ -526,6 +594,7 @@
         offspring: offspringOf(dogId),
         // Option 2: a visitor sees other people (breeders, co-owners who are not members) only in short form; members see full names.
         people: peopleFor(),
+        diffs: diffs.filter(function (x) { return x.dog === dogId; }).map(diffView),
         perm: { loggedIn: isMember(), canAdd: isMember(), isAdmin: isAdmin(), canSetVisibility: canSetVisibility(dogId), canClaim: isMember() && !claimOf(dogId), canEnterResults: canEnterResults(dogId), hasPedigree: Object.keys(pedOf(dogId)).length > 1 }
       };
       return Promise.resolve(snap);
@@ -711,12 +780,12 @@
   // The seed data lives in this file; pedigrees of generated ancestor pages are not saved, they are rebuilt from where each was opened.
   API.exportState = function () {
     return JSON.parse(JSON.stringify({ v: 1, nextId: nextId, authors: authors, logins: LOGINS, dogs: dogs, litters: litters, identifiers: identifiers,
-      people: people, claims: claims, requests: requests, wanted: wantedList, log: log, lookups: lookups, externals: externals, stash: stash }));
+      people: people, claims: claims, requests: requests, wanted: wantedList, log: log, lookups: lookups, externals: externals, stash: stash, diffs: diffs }));
   };
   API.importState = function (st) {
     st = JSON.parse(JSON.stringify(st || SEED));
     nextId = st.nextId; authors = st.authors; LOGINS = st.logins; dogs = st.dogs; litters = st.litters; identifiers = st.identifiers;
-    people = st.people; claims = st.claims; requests = st.requests; wantedList = st.wanted; log = st.log; lookups = st.lookups || {}; externals = st.externals || {}; stash = st.stash || {};
+    people = st.people; claims = st.claims; requests = st.requests; wantedList = st.wanted; log = st.log; lookups = st.lookups || {}; externals = st.externals || {}; stash = st.stash || {}; diffs = st.diffs || [];
     Object.keys(priv.peds).forEach(function (k) { if (/^[rna]:/.test(String(k))) delete priv.peds[k]; });   // every pedigree held for an added dog is rebuilt from the saved state
     Object.keys(dogs).filter(function (id) { return dogs[id].origin; }).sort(function (a, b) { return (dogs[a].gen || 0) - (dogs[b].gen || 0); }).forEach(function (id) {
       var o = dogs[id].origin, P = pedOf(o.dog); if (P[o.key]) priv.peds[id] = reroot(P, o.key);
