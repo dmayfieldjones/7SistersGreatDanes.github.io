@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>DANES World - Pedigreedatenbank</title>
+	
+
+<meta name="author" content="Manfred Link - BREEDMASTER">
+<meta name="generator" content="BREEDMASTER PEDIGREE-SOFTWARE">
+<meta name="copyright" content="Manfred Link - BREEDMASTER">
+<meta name="description" content="Zuchtdatenbank Pedigreesoftware">
+<meta name="keywords" content="Pedigree Pedigreesoftware Datenbank Hundedatenbank Pedigreedatenbank Hundezuchtverein ">
+<meta http-equiv="content-language" content="de">
+<meta name="robots" content="index, follow">
+
+<!-- Meta-Tags -->
+
+			<link rel="stylesheet" type="text/css" href="bootstrap3/css/bootstrap.css">
+		<!-- Optional theme -->
+		<link rel="stylesheet" type="text/css" href="bootstrap3/css/bootstrap-theme.css">
+				<link rel="stylesheet" type="text/css" href="phpcss/jquery.fileupload.css">
+		<link rel="stylesheet" type="text/css" href="phpcss/jquery.fileupload-ui.css">
+							<meta name="viewport" content="width=device-width, initial-scale=1">
+				<link rel="stylesheet" type="text/css" href="phpcss/Breedmaster2016.css?v=2?v=2?v=2">
+				<link href="phpcss/custom.css?v=5" rel="stylesheet" type="text/css">
+		<script type="text/javascript" src="jquery/jquery-1.12.0.min.js"></script>
+		<script type="text/javascript" src="jquery/jquery.storageapi.min.js"></script>
+		<script type="text/javascript" src="jquery/pStrength.jquery.js"></script>
+		<script type="text/javascript" src="jquery/pGenerator.jquery.js"></script>
+				<script type="text/javascript" src="bootstrap3/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="phpjs/typeahead.bundle.min.js"></script>
+		<script type="text/javascript" src="jqueryfileupload/jquery.ui.widget.js"></script>
+		<script type="text/javascript" src="jqueryfileupload/load-image.all.min.js"></script>
+		<script type="text/javascript" src="jqueryfileupload/jqueryfileupload.min.js"></script>
+		<script type="text/javascript" src="phpjs/mobile-detect.min.js"></script>
+		<script type="text/javascript" src="phpjs/moment.min.js"></script>
+		<script type="text/javascript" src="ckeditor/ckeditor.js"></script>
+		<script type="text/javascript" src="phpjs/eweditor.js"></script>
+		<script type="text/javascript">
+			var EW_LANGUAGE_ID = "de";
+			var EW_DATE_SEPARATOR = "."; // Default date separator
+			var EW_DEFAULT_DATE_FORMAT = "dd.mm.yyyy"; // Default date format
+			var EW_DECIMAL_POINT = ",";
+			var EW_THOUSANDS_SEP = ".";
+			var EW_MIN_PASSWORD_STRENGTH = 45;
+			var EW_GENERATE_PASSWORD_LENGTH = 6;
+			var EW_GENERATE_PASSWORD_UPPERCASE = true;
+			var EW_GENERATE_PASSWORD_LOWERCASE = true;
+			var EW_GENERATE_PASSWORD_NUMBER = true;
+			var EW_GENERATE_PASSWORD_SPECIALCHARS = false;
+			var EW_SESSION_TIMEOUT = 0; // Session timeout time (seconds)
+			var EW_SESSION_TIMEOUT_COUNTDOWN = 60; // Count down time to session timeout (seconds)
+			var EW_SESSION_KEEP_ALIVE_INTERVAL = 0; // Keep alive interval (seconds)
+			var EW_RELATIVE_PATH = ""; // Relative path
+			var EW_SESSION_URL = EW_RELATIVE_PATH + "ewsession12.php"; // Session URL
+			var EW_IS_LOGGEDIN = false; // Is logged in
+			var EW_IS_AUTOLOGIN = false; // Is logged in with option "Auto login until I logout explicitly"
+			var EW_LOGOUT_URL = EW_RELATIVE_PATH + "logout.php"; // Logout URL
+			var EW_LOOKUP_FILE_NAME = "ewlookup12.php"; // Lookup file name
+			var EW_AUTO_SUGGEST_MAX_ENTRIES = 100; // Auto-Suggest max entries
+			var EW_MAX_EMAIL_RECIPIENT = 3;
+			var EW_DISABLE_BUTTON_ON_SUBMIT = true;
+			var EW_IMAGE_FOLDER = "phpimages/"; // Image folder
+			var EW_UPLOAD_URL = "ewupload12.php"; // Upload URL
+			var EW_UPLOAD_THUMBNAIL_WIDTH = 200; // Upload thumbnail width
+			var EW_UPLOAD_THUMBNAIL_HEIGHT = 0; // Upload thumbnail height
+			var EW_MULTIPLE_UPLOAD_SEPARATOR = ","; // Upload multiple separator
+			var EW_USE_COLORBOX = false;
+			var EW_USE_JAVASCRIPT_MESSAGE = false;
+			var EW_MOBILE_DETECT = new MobileDetect(window.navigator.userAgent);
+			var EW_IS_MOBILE = EW_MOBILE_DETECT.mobile() ? true : false;
+			var EW_PROJECT_STYLESHEET_FILENAME = "phpcss/Breedmaster2016.css?v=2?v=2?v=2"; // Project style sheet
+			var EW_PDF_STYLESHEET_FILENAME = "phpcss/ewpdf.css"; // Pdf style sheet
+			var EW_TOKEN = "";
+			var EW_CSS_FLIP = false;
+			var EW_CONFIRM_CANCEL = true;
+		</script>
+				<script type="text/javascript" src="phpjs/jsrender.min.js"></script>
+		<script type="text/javascript" src="phpjs/ewp12.js"></script>
+				<script type="text/javascript">
+			var ewVar = [];
+			var ewLanguage = new ew_Language({"clickrecaptcha":"Bitte reCAPTCHA anklicken","confirmcancel":"Wollen Sie wirklich abbrechen?","lightboxtitle":" ","lightboxcurrent":"Bild {current} von {total}","lightboxprevious":"Zurück","lightboxnext":"Weiter","lightboxclose":"Schliessen","lightboxxhrerror":"Dieser Inhalt wurde nicht geladen.","lightboximgerror":"Dieses Bild wurde nicht geladen.","countselected":"%s ausgewählt","currentpassword":"Derzeitiges Passwort: ","deleteconfirmmsg":"Wollen Sie die ausgewählten Daten wirklich löschen?","deletefilterconfirm":"Wirklih den Filter %s löschen?","enterfiltername":"Bitte Namen für Filter eingeben","enternewpassword":"Bitte neues Passwort eingeben","enteroldpassword":"Bitte altes Passwort eingeben","enterpassword":"Bitte Passwort eingeben","enterpwd":"Bitte Passwort eingeben","enterusername":"Bitte Benutzernamen eingeben","entervalidatecode":"Bitte den angezeigten Validierungs-Code eingeben","entersenderemail":"Bitte geben Sie einen Absender für die E-Mail ein","enterpropersenderemail":"Zuviele Absenderadressen oder ungültiges Format","enterrecipientemail":"Bitte E-Mail Empfänger angeben","enterproperrecipientemail":"Zuviele Empfänger oder ungültiges Format","enterproperccemail":"Zuviele CC Empfänger oder ungültiges Format","enterproperbccemail":"Zuviele BCC Empfänger oder ungültiges Format","entersubject":"Bitte geben Sie das Betreff ein","enteruid":"Bitte geben Sie die Benutzer-ID ein","entervalidemail":"Bitte geben Sie eine gültige E-Mail-Adresse an!","exporttoemailtext":"Als Email versenden","filtername":"Filter Name","incorrectemail":"Ungültige E-Mail","incorrectfield":"Ungültiges Feld","incorrectfloat":"Ungültige Fliesskommazahl","incorrectguid":"Ungültige GUID","incorrectinteger":"Ungültige Integer","incorrectphone":"Ungültige Telefonnummer","incorrectregexp":"Ungültiger Regulärer Ausdruck","incorrectrange":"Spanne muss zwischen %1 und %2 liegen","incorrectssn":"Ungültige Sozialversicherungsnummer","incorrecttime":"Ungültige Zeit, Format = (hh:mm:ss)","incorrectzip":"Ungültige Postleitzahl","insertfailed":"Einfügen gescheitert","invalidrecord":"Ungültiger Datensatz! fehlender Schlüssel","loading":"Lade...","maxfilesize":"Max. Dateigröße (% s Bytes) überschritten.","messageok":"OK","mismatchpassword":"Kennworte stimmt nicht überein","next":"Weiter","noaddrecord":"Keine Einträge zum Hinzufügen","nofieldselected":"Kein Feld für die Aktualisierung ausgewählt","norecordselected":"Keine Datensätze ausgewählt","passwordstrength":"Passwortstärke: %p","passwordtoosimple":"Das Kennwort ist nicht komplex genug","pleaseselect":"Bitte auswählen","pleasewait":"Bitte warten...","prev":"Zurück","quicksearchauto":"Auto","quicksearchautoshort":"(*)","quicksearchall":"Alle Suchbegriffe","quicksearchallshort":"Alle","quicksearchany":"Beliebiger Suchbegriff","quicksearchanyshort":"Beliebiges","quicksearchexact":"Exakter Ausdruck","quicksearchexactshort":"Exakt","sendemailsuccess":"E-Mail erfolgreich gesendet","sessionwillexpire":"Ihre Sitzung wird in %s Sekunden automatische beendet. Klicken Sie OK um die Sitzung aufrecht zu erhalten.","sessionexpired":"Ihre Sitzung ist abgelaufen","uploading":"Hochladen...","uploadstart":"Starten","uploadcancel":"Abbrechen","uploaddelete":"Löschen","uploadoverwrite":"Alte Datei überschreiben?","uploaderrmsgmaxfilesize":"Die Datei ist zu groß","uploaderrmsgminfilesize":"Die Datei ist zu klein","uploaderrmsgacceptfiletypes":"Dateityp nicht erlaubt","uploaderrmsgmaxnumberoffiles":"Maximale Anzahl von Dateien überschritten","uploaderrmsgmaxfilelength":"Dateiname zu lang für das Eingabefeld","useradministrator":"Administrator","useranonymous":"Anonym","userdefault":"Standard","userleveladministratorname":"User level name for user level -1 must be 'Administrator'","userlevelanonymousname":"User level name for user level -2 must be 'Anonymous'","userlevelidinteger":"User Level-ID muss integer sein","userleveldefaultname":"User level name for user level 0 must be 'Default'","userlevelidincorrect":"User defined User Level ID must be larger than 0","userlevelnameincorrect":"User defined User Level name cannot be 'Administrator' or 'Default'","valuenotexist":"Wert existiert nicht","wrongfiletype":"Dateityp ist nicht erlaubt."});		</script>
+				
+		<link rel="stylesheet" title="custom" href="phpcss/custom.css?v=5">
+<link rel="stylesheet" type="text/css" href="fontawesome/css/all.css">
+<link rel="stylesheet" type="text/css" href="highslide/highslide.css">
+<script type="text/javascript" src="highslide/highslide-full.js"></script>
+<link rel="stylesheet" type="text/css" href="customPackages/bootstrap-toggle/bootstrap-toggle.min.css">
+<script type="text/javascript" src="customPackages/bootstrap-toggle/bootstrap-toggle.min.js"></script>
+<link rel="stylesheet" type="text/css" href="customPackages/DataTables/datatables.min.css">
+<script type="text/javascript" src="customPackages/DataTables/datatables.min.js"></script>
+<link rel="stylesheet" type="text/css" href="customPackages/jquery-confirm/jquery-confirm.css">
+<script type="text/javascript" src="customPackages/jquery-confirm/jquery-confirm.js"></script>
+<link rel="stylesheet" type="text/css" href="customPackages/jquery-ui/jquery-ui.min.css">
+<script type="text/javascript" src="customPackages/jquery-ui/jquery-ui.min.js"></script>
+<link rel="stylesheet" type="text/css" href="cookieconsent/cookieconsent.min.css">
+<script type="text/javascript" src="customPackages/styleSwitcher.js"></script>
+<script type="text/javascript" src="customPackages/html2canvas.js"></script>
+<link rel="icon" href="favicon.png" type="image/png">		<script type="text/javascript" src="phpjs/userfn12.js"></script>
+		<script type="text/javascript">
+			hs.graphicsDir = 'highslide/graphics/';
+			hs.outlineType = 'rounded-white';
+			hs.outlineWhileAnimating = true;
+		</script>
+	
+</head>
+
+		<body>
+											<div class="ewLayout">
+					<!-- header (begin) -->
+					<div id="ewHeaderRow" class="hidden-xs ewHeaderRow"><div id="breedmaster-header"><table style="border-collapse: collapse" width="100%">
+	<tbody>
+		<tr>
+			<td background="/phpimages/part2.jpg"><img alt="banner" height="141" src="/phpimages/part1.jpg" width="461" /></td>
+			<td background="/phpimages/part4.jpg">
+			<a href="#" target="blank"><img alt="banner" height="141" src="/phpimages/banner_danesworld(3).jpg" width="285" /></a>
+			</td>
+			<td background="/phpimages/part6.jpg"><img alt="banner" height="141" src="/phpimages/part5.jpg" width="224" /></td>
+		</tr>
+	</tbody>
+</table></div></div>
+											<nav style="z-index: 999999" id="ewMobileMenu" role="navigation" class="navbar navbar-default visible-xs hidden-print">
+							<div class="container-fluid"><!-- Brand and toggle get grouped for better mobile display -->
+								<div class="navbar-header">
+									<button data-target="#ewMenu" data-toggle="collapse" class="navbar-toggle" type="button">
+										<span class="sr-only">Toggle navigation</span>
+										<span class="icon-bar"></span>
+										<span class="icon-bar"></span>
+										<span class="icon-bar"></span>
+									</button>
+									<a class="navbar-brand" href="#">DANES World Pedigreedatenbank</a>
+								</div>
+								<div id="ewMenu" class="collapse navbar-collapse" style="height: auto;"><!-- Begin Main Menu -->
+																		<!-- Begin Main Menu -->
+<ul id="MobileMenu" class="nav navbar-nav">
+<li id="mmi_home_php"><a href="home.php"><img src="phpimages/house.png" alt="Home" width="16" height="16" > Home</a></li>
+<li id="mmci_Suche" class="dropdown"><a class="ewDropdown" href="#"><img src="phpimages/find.png" alt="Suchen" width="16" height="16" > Suchen<span class="icon-arrow-down"></span></a><ul class="dropdown-menu" role="menu">
+<li id="mmi_hunde" class="active"><a href="javascript:void(0);"><i class="fad fa-dog fa-lg fa-fw"></i> Hunde</a></li>
+<li id="mmi_deckruden"><a href="deckrudenlist.php"><i class="fa fa-mars fa-lg fa-fw"></i> Deckrüden</a></li>
+<li id="mmi_welpenportal_php"><a href="welpenportal.php"><i class="fad fa-list-alt fa-lg fa-fw"></i> Welpenportal</a></li>
+<li id="mmi_wurfankuendigung"><a href="wurfankuendigunglist.php"><i class="fad fa-list-alt fa-lg fa-fw"></i> Wurfankündigungen</a></li>
+<li id="mmi_zuechter"><a href="zuechterlist.php"><i class="fad fa-address-card fa-lg fa-fw fa-swap-opacity"></i> Zuchtstätten</a></li>
+<li class="dropdown-header">Sonstiges</li>
+<li id="mmi_termine"><a href="terminelist.php"><i class="far fa-calendar fa-lg fa-fw"></i> Termine</a></li>
+</ul>
+</li>
+<li id="mmci_3f" class="dropdown"><a class="ewDropdown" href="#"><img src="phpimages/fragezeichen_rot.png" width="16" height="16" >&nbsp;<span class="icon-arrow-down"></span></a><ul class="dropdown-menu" role="menu">
+<li id="mci_impressum"><a href="seite.php?seite=impressum"><i class="fad fa-file-alt fa-lg fa-fw"></i> Impressum</a></li>
+<li id="mci_kontakt"><a href="seite.php?seite=kontakt"><i class="far fa-envelope fa-lg fa-fw"></i> Kontakt</a></li>
+<li id="mci_about"><a href="seite.php?seite=about"><i class="fad fa-info-square fa-lg fa-fw"></i> Über</a></li>
+</ul>
+</li>
+<li id="mmi_login"><a href="login.php"><i class="fad fa-sign-in fa-lg fa-fw fa-swap-opacity"></i> Anmelden</a></li>
+</ul>
+<ul class="nav navbar-nav navbar-right"></ul><!-- End Main Menu -->
+								</div><!-- /.navbar-collapse -->
+							</div><!-- /.container-fluid -->
+						</nav>
+										<!-- header (end) -->
+					<div id="ewMenuRow"  class="hidden-xs" >
+						<div class="ewMenu">
+							<!-- Begin Main Menu -->
+<div class="navbar navbar-default"><ul id="ewHorizMenu" class="nav navbar-nav">
+<li id="mi_home_php"><a href="home.php"><img src="phpimages/house.png" alt="Home" width="16" height="16" > Home</a></li>
+<li id="mci_Suche" class="dropdown"><a href="#"><img src="phpimages/find.png" alt="Suchen" width="16" height="16" > Suchen <b class="caret"></b></a><ul class="dropdown-menu" role="menu">
+<li id="mi_hunde" class="active"><a href="javascript:void(0);"><i class="fad fa-dog fa-lg fa-fw"></i> Hunde</a></li>
+<li id="mi_deckruden"><a href="deckrudenlist.php"><i class="fa fa-mars fa-lg fa-fw"></i> Deckrüden</a></li>
+<li id="mi_welpenportal_php"><a href="welpenportal.php"><i class="fad fa-list-alt fa-lg fa-fw"></i> Welpenportal</a></li>
+<li id="mi_wurfankuendigung"><a href="wurfankuendigunglist.php"><i class="fad fa-list-alt fa-lg fa-fw"></i> Wurfankündigungen</a></li>
+<li id="mi_zuechter"><a href="zuechterlist.php"><i class="fad fa-address-card fa-lg fa-fw fa-swap-opacity"></i> Zuchtstätten</a></li>
+<li class="dropdown-header">Sonstiges</li>
+<li id="mi_termine"><a href="terminelist.php"><i class="far fa-calendar fa-lg fa-fw"></i> Termine</a></li>
+</ul>
+</li>
+<li id="mci_3f" class="dropdown"><a href="#"><img src="phpimages/fragezeichen_rot.png" width="16" height="16" >&nbsp; <b class="caret"></b></a><ul class="dropdown-menu" role="menu">
+<li id="mci_impressum"><a href="seite.php?seite=impressum"><i class="fad fa-file-alt fa-lg fa-fw"></i> Impressum</a></li>
+<li id="mci_kontakt"><a href="seite.php?seite=kontakt"><i class="far fa-envelope fa-lg fa-fw"></i> Kontakt</a></li>
+<li id="mci_about"><a href="seite.php?seite=about"><i class="fad fa-info-square fa-lg fa-fw"></i> Über</a></li>
+</ul>
+</li>
+<li id="mi_login"><a href="login.php"><i class="fad fa-sign-in fa-lg fa-fw fa-swap-opacity"></i> Anmelden</a></li>
+</ul>
+<ul class="nav navbar-nav navbar-right"></ul></div><!-- End Main Menu -->
+						</div>
+					</div>
+
+					
+<style>
+#schnellzugriff-container {
+  position: fixed;
+  top: 15%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+}
+
+#schnellzugriff {
+  font-size: 2em;
+}
+
+#overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(10, 10, 10, 0.75);
+  z-index: 100;
+}
+</style>
+
+
+<div id="overlay" style="display: none;"></div>
+
+
+<div id="schnellzugriff-container" style="display: none;">
+<form id="formAjaxSchnellzugriff" method="GET" style="display: inline-block" onsubmit="return false;">
+  <input id="schnellzugriff" placeholder="Schnellzugriff..." autocomplete="off" type="text" style="min-width: 540px;">
+</form>
+</div>
+</div>					<div id="ewContentTable" class="ewContentTable">
+						<div id="ewContentRow">
+							<div id="ewContentColumn" class="ewContentColumn">
+								<!-- right column (begin) -->
+								<h4 class="hidden-xs ewSiteTitle"></h4>
+													<script type="text/javascript">
+
+// Form object
+var CurrentPageID = EW_PAGE_ID = "list";
+var CurrentForm = fhundelist = new ew_Form("fhundelist", "list");
+fhundelist.FormKeyCountName = 'key_count';
+
+// Form_CustomValidate event
+fhundelist.Form_CustomValidate = 
+ function(fobj) { // DO NOT CHANGE THIS LINE!
+
+ 	// Your custom validation code here, return false if invalid. 
+ 	return true;
+ }
+
+// Use JavaScript validation or not
+fhundelist.ValidateRequired = true;
+
+// Dynamic selection lists
+fhundelist.Lists["x_namekpl"] = {"LinkField":"x_namekpl","Ajax":true,"AutoFill":false,"DisplayFields":["x_namekpl","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":""};
+fhundelist.Lists["x_zwinger"] = {"LinkField":"x_zwingernamekpl","Ajax":true,"AutoFill":false,"DisplayFields":["x_zwingernamekpl","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":""};
+fhundelist.Lists["x_geschlecht"] = {"LinkField":"x_nkey","Ajax":true,"AutoFill":false,"DisplayFields":["x_wert","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":""};
+fhundelist.Lists["x_rasse"] = {"LinkField":"x_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_rasse","","",""],"ParentFields":[],"ChildFields":["x_typus"],"FilterFields":[],"Options":[],"Template":""};
+fhundelist.Lists["x_typus"] = {"LinkField":"x_typus_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_typus","","",""],"ParentFields":[],"ChildFields":["x_fellfarbe[]"],"FilterFields":[],"Options":[],"Template":""};
+fhundelist.Lists["x_fellfarbe[]"] = {"LinkField":"x_farbe_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_farbe","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":""};
+fhundelist.Lists["x_verband[]"] = {"LinkField":"x_verein_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_kurz","x_name","x_welpen",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"<span class=\"text-info\">{{:df1}}</span> <small class=\"text-muted\">({{:df2}}) <small class=\"text-muted\">({{:df3}})</small>"};
+
+// Form object for search
+var CurrentSearchForm = fhundelistsrch = new ew_Form("fhundelistsrch");
+
+// Validate function for search
+fhundelistsrch.Validate = function(fobj) {
+	if (!this.ValidateRequired)
+		return true; // Ignore validation
+	fobj = fobj || this.Form;
+	var infix = "";
+	elm = this.GetElements("x" + infix + "_wurftag");
+	if (elm && !ew_CheckEuroDate(elm.value))
+		return this.OnError(elm, "Falsches Datumsformat (tt.mm.jjjj)");
+
+	// Fire Form_CustomValidate event
+	if (!this.Form_CustomValidate(fobj))
+		return false;
+	return true;
+}
+
+// Form_CustomValidate event
+fhundelistsrch.Form_CustomValidate = 
+ function(fobj) { // DO NOT CHANGE THIS LINE!
+
+ 	// Your custom validation code here, return false if invalid. 
+ 	return true;
+ }
+
+// Use JavaScript validation or not
+fhundelistsrch.ValidateRequired = true; // Use JavaScript validation
+
+// Dynamic selection lists
+fhundelistsrch.Lists["x_namekpl"] = {"LinkField":"x_namekpl","Ajax":true,"AutoFill":false,"DisplayFields":["x_namekpl","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":""};
+fhundelistsrch.Lists["x_zwinger"] = {"LinkField":"x_zwingernamekpl","Ajax":true,"AutoFill":false,"DisplayFields":["x_zwingernamekpl","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":""};
+fhundelistsrch.Lists["x_geschlecht"] = {"LinkField":"x_nkey","Ajax":true,"AutoFill":false,"DisplayFields":["x_wert","","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":""};
+fhundelistsrch.Lists["x_rasse"] = {"LinkField":"x_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_rasse","","",""],"ParentFields":[],"ChildFields":["x_typus"],"FilterFields":[],"Options":[],"Template":""};
+fhundelistsrch.Lists["x_typus"] = {"LinkField":"x_typus_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_typus","","",""],"ParentFields":["x_rasse"],"ChildFields":["x_fellfarbe[]"],"FilterFields":["x_id_rasse"],"Options":[],"Template":""};
+fhundelistsrch.Lists["x_fellfarbe[]"] = {"LinkField":"x_farbe_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_farbe","","",""],"ParentFields":["x_typus"],"ChildFields":[],"FilterFields":["x_typus"],"Options":[],"Template":""};
+fhundelistsrch.Lists["x_verband[]"] = {"LinkField":"x_verein_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_kurz","x_name","x_welpen",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"<span class=\"text-info\">{{:df1}}</span> <small class=\"text-muted\">({{:df2}}) <small class=\"text-muted\">({{:df3}})</small>"};
+</script>
+<style type="text/css">
+.ewTablePreviewRow { /* main table preview row color */
+	background-color: #FFFFFF; /* preview row color */
+}
+.ewTablePreviewRow .ewGrid {
+	display: table;
+}
+.ewTablePreviewRow .ewGrid .ewTable {
+	width: auto;
+}
+</style>
+<div id="ewPreview" class="hide"><ul class="nav nav-tabs"></ul><div class="tab-content"><div class="tab-pane fade"></div></div></div>
+<script type="text/javascript" src="phpjs/ewpreview.min.js"></script>
+<script type="text/javascript">
+var EW_PREVIEW_PLACEMENT = EW_CSS_FLIP ? "left" : "right";
+var EW_PREVIEW_SINGLE_ROW = false;
+var EW_PREVIEW_OVERLAY = false;
+</script>
+<script type="text/javascript">
+
+// Write your client script here, no need to add script tags.
+</script>
+<div class="ewToolbar">
+<ul class="breadcrumb ewBreadcrumbs"><li id="ewBreadcrumb1"><a href="home.php" title="Homepage" class="ewHome"><span data-phrase="HomePage" class="glyphicon glyphicon-home ewIcon" data-caption="Homepage"></span></a></li><li id="ewBreadcrumb2" class="active"><span id="ewPageCaption">Hunde</span></li></ul><div class="ewExportOption ewListOptionSeparator" style="white-space: nowrap;" data-name="button"><div class="btn-group ewButtonGroup"><a class="btn btn-default ewExportLink ewPrint"  title="Druckansicht" data-caption="Druckansicht" onclick="ew_Export(document.fhundelist,'hundelist.php','print',false,true);"><span data-phrase="PrinterFriendly" class="icon-print ewIcon" data-caption="Druckansicht"></span></a></div></div><div class="ewSearchOption ewListOptionSeparator" style="white-space: nowrap;" data-name="button"><div class="btn-group ewButtonGroup"><button class="btn btn-default ewSearchToggle active"  type="button" title="Suchfeld" data-caption="Suchfeld" data-toggle="button" data-form="fhundelistsrch"><span data-phrase="SearchBtn" class="glyphicon glyphicon-search ewIcon" data-caption="Suche"></span></button><a class="btn btn-default ewShowAll"  title="Zurücksetzen" data-caption="Zurücksetzen" href="hundelist.php?cmd=reset"><span data-phrase="ResetSearchBtn" class="icon-reset-search ewIcon" data-caption="Zurücksetzen"></span></a><a class="btn btn-default ewAdvancedSearch"  title="Erweiterte Suche" data-caption="Erweiterte Suche" href="hundesrch.php"><span data-phrase="AdvancedSearchBtn" class="icon-advanced-search ewIcon" data-caption="Erweiterte Suche"></span></a><button class="btn btn-default ewHighlight active"  type="button" title="Hervorheben" data-caption="Hervorheben" data-toggle="button" data-form="fhundelistsrch" data-name="hunde_Highlight"><span data-phrase="HighlightBtn" class="icon-highlight ewIcon" data-caption="Hervorheben"></span></button></div></div><div class="ewFilterOption fhundelistsrch ewListOptionSeparator" data-name="button"><div class="btn-group ewButtonDropdown"><button class="dropdown-toggle btn btn-default" title="Filter" data-toggle="dropdown"><span data-phrase="Filters" class="icon-filter ewIcon" data-caption="Filter"></span><b class="caret"></b></button><ul class="dropdown-menu ewMenu"><li><a class="ewSaveFilter"  data-form="fhundelistsrch" href="#">Aktuellen Filter speichern</a></li><li><a class="ewDeleteFilter"  data-form="fhundelistsrch" href="#">Filter löschen</a></li></ul></div></div><div class="ewLanguageOption"><div class="btn-group" data-toggle="buttons"><label class="btn btn-default ewTooltip" data-container="body" data-placement="bottom" title="NL"><input type="radio" name="ewLanguage" autocomplete="off" onchange="ew_SetLanguage(this);" value="nl">nl</label><label class="btn btn-default ewTooltip" data-container="body" data-placement="bottom" title="Englisch"><input type="radio" name="ewLanguage" autocomplete="off" onchange="ew_SetLanguage(this);" value="en">en</label><label class="btn btn-default ewTooltip active" data-container="body" data-placement="bottom" title="Deutsch"><input type="radio" name="ewLanguage" autocomplete="off" onchange="ew_SetLanguage(this);" value="de" checked>de</label></div></div><div class="clearfix"></div>
+</div>
+<form name="fhundelistsrch" id="fhundelistsrch" class="form-inline ewForm" action="hundelist.php">
+<div id="fhundelistsrch_SearchPanel" class="ewSearchPanel collapse in">
+<input type="hidden" name="cmd" value="search">
+<input type="hidden" name="t" value="hunde">
+	<div class="ewBasicSearch">
+<div id="xsr_1" class="ewRow">
+	<div id="xsc_namekpl" class="ewCell form-group">
+		<label class="ewSearchCaption ewLabel">Name</label>
+		<span class="ewSearchOperator">enthält<input type="hidden" name="z_namekpl" id="z_namekpl" value="LIKE"></span>
+		<span class="ewSearchField">
+<span id="as_x_namekpl" style="white-space: nowrap; z-index: 8960">
+	<input type="text" name="sv_x_namekpl" id="sv_x_namekpl" value="" size="45" maxlength="121" class="form-control">
+</span>
+<input type="hidden" data-table="hunde" data-field="x_namekpl" data-value-separator=", " name="x_namekpl" id="x_namekpl" value="">
+<input type="hidden" name="q_x_namekpl" id="q_x_namekpl" value="s=YsqkUig0KKAxddSwcuu_qND42ek00nJtooRE6vL--758eY3MqzO4okL9zA8IoHdKpZLA6DDY4gX61oUoDO-6soGBkdicxiLXnR9yx5oKSXl0xT3IX6d6qLqzML4okmVv9X25dKYH6IGxoKzfHQVuBmECLf3_QLOMvPxJf0WlljNihOeBQoMD_Csb-mKpP1tbcFd_8sv9tZVDQYOk6T3K_r6CfI-e5FF2&d=">
+<script type="text/javascript">
+fhundelistsrch.CreateAutoSuggest({"id":"x_namekpl","forceSelect":false});
+</script>
+</span>
+	</div>
+</div>
+<div id="xsr_2" class="ewRow">
+	<div id="xsc_zwinger" class="ewCell form-group">
+		<label class="ewSearchCaption ewLabel">Zwinger</label>
+		<span class="ewSearchOperator">enthält<input type="hidden" name="z_zwinger" id="z_zwinger" value="LIKE"></span>
+		<span class="ewSearchField">
+<span id="as_x_zwinger" style="white-space: nowrap; z-index: 8940">
+	<input type="text" name="sv_x_zwinger" id="sv_x_zwinger" value="" size="45" maxlength="55" class="form-control">
+</span>
+<input type="hidden" data-table="hunde" data-field="x_zwinger" data-value-separator=", " name="x_zwinger" id="x_zwinger" value="">
+<input type="hidden" name="q_x_zwinger" id="q_x_zwinger" value="s=jY2T6jz9fIE7_VOuqCpGtBlOimiyO1asavXyYgpqg2dBYOf-gqrw75yRHr3EuL6bcDCG_1Djb19XV2E-Qy93Y4cLc5oFI8atHfbTuOzwcqxH0sYdNMH8QweEaxa18L7nLYvGRgRGl36fFHb3UhjR3cDi28dHsp87ucwvhODgKsF74UvqNf28_2YaBYszx02ZuzmGFA7DIJGuIITtnyiqhr7RQTB5KSmT&d=">
+<script type="text/javascript">
+fhundelistsrch.CreateAutoSuggest({"id":"x_zwinger","forceSelect":false});
+</script>
+</span>
+	</div>
+</div>
+<div id="xsr_3" class="ewRow">
+	<div id="xsc_geschlecht" class="ewCell form-group">
+		<label for="x_geschlecht" class="ewSearchCaption ewLabel">Geschlecht</label>
+		<span class="ewSearchOperator">&nbsp;<input type="hidden" name="z_geschlecht" id="z_geschlecht" value="="></span>
+		<span class="ewSearchField">
+<select data-table="hunde" data-field="x_geschlecht" data-value-separator=", " id="x_geschlecht" name="x_geschlecht" class="form-control">
+<option value="" selected>
+Bitte auswählen</option>
+</select>
+<input type="hidden" name="s_x_geschlecht" id="s_x_geschlecht" value="s=5JQcX7gRiAHCxkLhHtDAiIoqb_cGtwZoOEBOWsBIMzjAm6LC6uJIyqTLasSybxwjHI5oJUI2FotTp8a5J80Rf57pKYM7drI4KDuMEqQTAtos2otiA_E8R9KqkoHVYwTuU4trLFZoobVVS7z3v0K_XNEGZXw-aXEoBmQV93QUEeu-D32wbJ1EktIVDLen-ITaJ0LvOE-msEu7zk8b7UTAcUrRzLmV7sxdpgPzaQvsG07vMbJw&d=&f0=Pe4WFON9eXgmMDS0ULGczTLTAFB0JXUWfw9r0g..&t0=3&fn0=">
+</span>
+	</div>
+</div>
+<div id="xsr_4" class="ewRow">
+	<div id="xsc_rasse" class="ewCell form-group">
+		<label for="x_rasse" class="ewSearchCaption ewLabel">Rasse</label>
+		<span class="ewSearchOperator">&nbsp;<input type="hidden" name="z_rasse" id="z_rasse" value="="></span>
+		<span class="ewSearchField">
+<select data-table="hunde" data-field="x_rasse" data-value-separator=", " id="x_rasse" name="x_rasse" class="form-control" onchange="ew_UpdateOpt.call(this);">
+<option value="" selected>
+Bitte auswählen</option>
+</select>
+<input type="hidden" name="s_x_rasse" id="s_x_rasse" value="s=qCHJgZTnyoRbPMW2LRf_8T7O_5Kb5EjIW2MH6OhkX14z9y-673_w8PX5FfsbUZ4Gq3-l5TtOAu1fv47RjFyokDvc2GweOnb0YO9Ak8wXsimGlH73W0phUdQewiR8IjQsUOyatTmDsKN8kdwApgRKb_tvZepEK3AL-DYQtvYRh_uz-DhOsGmxpfWvmDbCpHVY&d=&f0=gV2TTHpoJe-Bf5j3L_w4W-MG-UZFt5_60MRptg..&t0=3&fn0=">
+</span>
+	</div>
+</div>
+<div id="xsr_5" class="ewRow">
+	<div id="xsc_typus" class="ewCell form-group">
+		<label for="x_typus" class="ewSearchCaption ewLabel">Varietät</label>
+		<span class="ewSearchOperator">&nbsp;<input type="hidden" name="z_typus" id="z_typus" value="="></span>
+		<span class="ewSearchField">
+<select data-table="hunde" data-field="x_typus" data-value-separator=", " id="x_typus" name="x_typus" class="form-control" onchange="ew_UpdateOpt.call(this);" data-autoselect='true'>
+<option value="" selected>
+Bitte auswählen</option>
+</select>
+<input type="hidden" name="s_x_typus" id="s_x_typus" value="s=9oAoTuvZH8KIs5fegJHsnhl5sSof89IFkPLNYM6cnDi8ZxOstZU4j5t_07Bee8tOhvQ0r-TcRSGq3xhubzLmVBNBn1Dl4plMuz7MqIRZmUgN90sbWWIX66JOYnJo_dp-696QyR7pAwETlX8i-zxE6AnVtbkWZA8dCK5gHS92_m_veQyQC_efiIATKYHnkHbggOZ7KIinjMV7zEjSmx3cNgbbVs232imRtQdd7V0eGjST9w6v&d=&f0=2IUQqm7WJ_ozE2SUTaxzi-F3ntNIAhrHgM9vZI__8EY.&t0=3&fn0=&f1=Q9DJH8WOMLYTwALz24wCzcgY2m-lt4gNYiTfIB_CIABLi2o-&t1=3&fn1=">
+</span>
+	</div>
+</div>
+<div id="xsr_6" class="ewRow">
+	<div id="xsc_fellfarbe" class="ewCell form-group">
+		<label class="ewSearchCaption ewLabel">Fellfarbe</label>
+		<span class="ewSearchOperator">&nbsp;<input type="hidden" name="z_fellfarbe" id="z_fellfarbe" value="="></span>
+		<span class="ewSearchField">
+<div class="ewDropdownList has-feedback">
+	<span onclick="" class="form-control dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+		Bitte auswählen	</span>
+	<span class="glyphicon glyphicon-remove form-control-feedback ewDropdownListClear"></span>
+	<span class="form-control-feedback"><span class="caret"></span></span>
+	<div id="dsl_x_fellfarbe" data-repeatcolumn="5" class="dropdown-menu">
+		<div class="ewItems" style="position: relative; overflow-x: hidden; min-width: 500px; max-height: 400px; overflow-y: auto;">
+		</div>
+	</div>
+	<div id="tp_x_fellfarbe" class="ewTemplate"><input type="checkbox" data-table="hunde" data-field="x_fellfarbe" data-value-separator=", " name="x_fellfarbe[]" id="x_fellfarbe[]" value="{value}" data-autoselect='true'></div>
+</div>
+<input type="hidden" name="s_x_fellfarbe" id="s_x_fellfarbe" value="s=IQaLRmpyfCRTj3ha0S6l3JmxF7Tx7XZtlIP_mTf7ytsjkIiIdTege-bA7yVcyOE8Xp_01lTZ9Fk-ECR87jtwfhk744_aSZbW7GZ72iAHfsVeijysqh_-YjlREvJYlbVXZujZg64LzA-4axKRlO2vBCgQo6j5VkweUsYhpUb6Vq2Idd7_bHVrJT-jvkpZfOFltLbqjgm4nX5CSs9vZVNMKlB6pWXuOXWZuigeWvbf6hmBEgFY&d=&f0=lQbKonVGODhoyK9El0Rw1r82cRO-xTbZpZUzVEtBUHI.&t0=3&fn0=&f1=RcPhD1lt7Fpxml2gwSnZW10gpQ32YC9CXW5sIBivcU0.&t1=16&fn1=">
+</span>
+	</div>
+</div>
+<div id="xsr_7" class="ewRow">
+	<div id="xsc_wurftag" class="ewCell form-group">
+		<label for="x_wurftag" class="ewSearchCaption ewLabel">Wurftag</label>
+		<span class="ewSearchOperator"><select name="z_wurftag" id="z_wurftag" class="form-control" onchange="ewForms(this).SrchOprChanged(this);"><option value="=" >=</option><option value="<>" >&lt;&gt;</option><option value="<" >&lt;</option><option value="<=" >&lt;=</option><option value=">" >&gt;</option><option value=">=" >&gt;=</option><option value="IS NULL" >IST Null</option><option value="IS NOT NULL" >Ist nicht Null</option><option value="BETWEEN" >zwischen</option></select></span>
+		<span class="ewSearchField">
+<input type="text" data-table="hunde" data-field="x_wurftag" data-format="7" name="x_wurftag" id="x_wurftag" size="10" value="" class="form-control" data-toggle="tooltip" title="Das Datum muss im Format tt.mm.jjjj (23.09.1986) eingegeben werden!" type='date'>
+</span>
+		<span class="ewSearchCond btw1_wurftag" style="display: none">&nbsp;und&nbsp;</span>
+		<span class="ewSearchField btw1_wurftag" style="display: none">
+<input type="text" data-table="hunde" data-field="x_wurftag" data-format="7" name="y_wurftag" id="y_wurftag" size="10" value="" class="form-control" data-toggle="tooltip" title="Das Datum muss im Format tt.mm.jjjj (23.09.1986) eingegeben werden!" type='date'>
+</span>
+	</div>
+</div>
+<div id="xsr_8" class="ewRow">
+	<div id="xsc_verband" class="ewCell form-group">
+		<label class="ewSearchCaption ewLabel">Verband</label>
+		<span class="ewSearchOperator">enthält<input type="hidden" name="z_verband" id="z_verband" value="LIKE"></span>
+		<span class="ewSearchField">
+<div class="ewDropdownList has-feedback">
+	<span onclick="" class="form-control dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+		Bitte auswählen	</span>
+	<span class="glyphicon glyphicon-remove form-control-feedback ewDropdownListClear"></span>
+	<span class="form-control-feedback"><span class="caret"></span></span>
+	<div id="dsl_x_verband" data-repeatcolumn="3" class="dropdown-menu">
+		<div class="ewItems" style="position: relative; overflow-x: hidden;">
+		</div>
+	</div>
+	<div id="tp_x_verband" class="ewTemplate"><input type="checkbox" data-table="hunde" data-field="x_verband" data-value-separator="[]" name="x_verband[]" id="x_verband[]" value="{value}"></div>
+</div>
+<input type="hidden" name="s_x_verband" id="s_x_verband" value="s=KYLDQI-MpLIzlpNS0-8t_JeGNUQ-ncxgmXovUSCyXEAk50PPj1dzWkU2kfrUzqxZOnVUukEfmhEuZNGvZkNtEpYNza-Fbh6KrAzWU5V6rmPIF-SJeMvsVfRbEj2oT3HWYhYN2g7XKPoT6AL5oxBI5fOu1WfVdWq5QAJBU6sTxS5UecvtDSCHD93xSUb6EuZS0vEZqA..&d=&f0=SJTn9plT5_XPJMn0YAay1RzC2G6Uu5P3enkTHyHrWRg.&t0=2&fn0=">
+</span>
+	</div>
+</div>
+<div id="xsr_9" class="ewRow">
+	<div class="ewQuickSearch input-group">
+	<input type="text" name="psearch" id="psearch" class="form-control" value="WS69691106">
+	<input type="hidden" name="psearchtype" id="psearchtype" value="">
+	<div class="input-group-btn">
+		<button type="button" data-toggle="dropdown" class="btn btn-default"><span id="searchtype">(*)&nbsp;</span><span class="caret"></span></button>
+		<ul class="dropdown-menu pull-right" role="menu">
+			<li class="active"><a href="javascript:void(0);" onclick="ew_SetSearchType(this)">Auto</a></li>
+			<li><a href="javascript:void(0);" onclick="ew_SetSearchType(this,'=')">Exakter Ausdruck</a></li>
+			<li><a href="javascript:void(0);" onclick="ew_SetSearchType(this,'AND')">Alle Suchbegriffe</a></li>
+			<li><a href="javascript:void(0);" onclick="ew_SetSearchType(this,'OR')">Beliebiger Suchbegriff</a></li>
+		</ul>
+	<button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit">Suche</button>
+	</div>
+	</div>
+</div>
+	</div>
+</div>
+</form>
+<div class="ewMessageDialog"></div><div class="panel panel-default ewGrid">
+<div class="panel-heading ewGridUpperPanel">
+<form name="ewPagerForm" class="form-inline ewForm ewPagerForm" action="hundelist.php">
+<div class="ewPager">
+<span>Seite&nbsp;</span>
+<div class="ewPrevNext"><div class="input-group">
+<div class="input-group-btn">
+<!--first page button-->
+		<a class="btn btn-default btn-sm disabled" title="Erste"><span class="icon-first ewIcon"></span></a>
+	<!--previous page button-->
+		<a class="btn btn-default btn-sm disabled" title="Zurück"><span class="icon-prev ewIcon"></span></a>
+	</div>
+<!--current page number-->
+	<input class="form-control input-sm" type="text" name="pageno" value="1">
+<div class="input-group-btn">
+<!--next page button-->
+		<a class="btn btn-default btn-sm disabled" title="Weiter"><span class="icon-next ewIcon"></span></a>
+	<!--last page button-->
+		<a class="btn btn-default btn-sm disabled" title="Letzte"><span class="icon-last ewIcon"></span></a>
+	</div>
+</div>
+</div>
+<span>&nbsp;von&nbsp;1</span>
+</div>
+<div class="ewPager ewRec">
+	<span>Datensätze&nbsp;1&nbsp;bis&nbsp;1&nbsp;von&nbsp;1</span>
+</div>
+</form>
+<div class="ewListOtherOptions">
+</div>
+<div class="clearfix"></div>
+</div>
+<form name="fhundelist" id="fhundelist" class="form-inline ewForm ewListForm" action="hundelist.php" method="post">
+<input type="hidden" name="t" value="hunde">
+<input type="hidden" name="exporttype" id="exporttype" value="">
+<div id="gmp_hunde" class="table-responsive ewGridMiddlePanel">
+<table id="tbl_hundelist" class="table ewTable">
+<thead><!-- Table header -->
+	<tr class="ewTableHeader">
+<th class="ewListOptionHeader" data-name="checkbox"><span id="elh_hunde_checkbox" class="hunde_checkbox"><input type="checkbox" name="key" id="key" onclick="ew_SelectAllKey(this);"></span></th><th class="ewListOptionHeader" data-name="pedigree"><span id="elh_hunde_pedigree" class="hunde_pedigree">&nbsp;</span></th><th class="ewListOptionHeader" data-name="hauptbild"><span id="elh_hunde_hauptbild" class="hunde_hauptbild">&nbsp;</span></th>		
+			<th data-name="namekpl"><div class="ewPointer" onclick="ew_Sort(event,'hundelist.php?order=namekpl&amp;ordertype=ASC',2);"><div id="elh_hunde_namekpl" class="hunde_namekpl">
+			<div class="ewTableHeaderBtn" style="white-space: nowrap;"><span class="ewTableHeaderCaption">Name&nbsp;(*)</span><span class="ewTableHeaderSort"></span></div>
+        </div></div></th>
+			
+		
+		
+			<th data-name="rasse"><div class="ewPointer" onclick="ew_Sort(event,'hundelist.php?order=rasse&amp;ordertype=ASC',2);"><div id="elh_hunde_rasse" class="hunde_rasse">
+			<div class="ewTableHeaderBtn" style="white-space: nowrap;"><span class="ewTableHeaderCaption">Rasse</span><span class="ewTableHeaderSort"></span></div>
+        </div></div></th>
+			
+			<th data-name="typus"><div class="ewPointer" onclick="ew_Sort(event,'hundelist.php?order=typus&amp;ordertype=ASC',2);"><div id="elh_hunde_typus" class="hunde_typus">
+			<div class="ewTableHeaderBtn" style="white-space: nowrap;"><span class="ewTableHeaderCaption">Varietät</span><span class="ewTableHeaderSort"></span></div>
+        </div></div></th>
+			
+			<th data-name="fellfarbe"><div class="ewPointer" onclick="ew_Sort(event,'hundelist.php?order=fellfarbe&amp;ordertype=ASC',2);"><div id="elh_hunde_fellfarbe" class="hunde_fellfarbe">
+			<div class="ewTableHeaderBtn" style="white-space: nowrap;"><span class="ewTableHeaderCaption">Fellfarbe</span><span class="ewTableHeaderSort"></span></div>
+        </div></div></th>
+			
+			<th data-name="wurftag"><div class="ewPointer" onclick="ew_Sort(event,'hundelist.php?order=wurftag&amp;ordertype=ASC',2);"><div id="elh_hunde_wurftag" class="hunde_wurftag">
+			<div class="ewTableHeaderBtn" style="white-space: nowrap;"><span class="ewTableHeaderCaption">Wurftag</span><span class="ewTableHeaderSort"></span></div>
+        </div></div></th>
+			
+			<th data-name="verband"><div class="ewPointer" onclick="ew_Sort(event,'hundelist.php?order=verband&amp;ordertype=ASC',2);"><div id="elh_hunde_verband" class="hunde_verband">
+			<div class="ewTableHeaderBtn" style="white-space: nowrap;"><span class="ewTableHeaderCaption">Verband</span><span class="ewTableHeaderSort"></span></div>
+        </div></div></th>
+			
+		
+			<th data-name="wuerfe"><div class="ewPointer" onclick="ew_Sort(event,'hundelist.php?order=wuerfe&amp;ordertype=ASC',2);"><div id="elh_hunde_wuerfe" class="hunde_wuerfe">
+			<div class="ewTableHeaderBtn" style="white-space: nowrap;"><span class="ewTableHeaderCaption">Würfe</span><span class="ewTableHeaderSort"></span></div>
+        </div></div></th>
+			
+			<th data-name="nachkommen"><div class="ewPointer" onclick="ew_Sort(event,'hundelist.php?order=nachkommen&amp;ordertype=ASC',2);"><div id="elh_hunde_nachkommen" class="hunde_nachkommen">
+			<div class="ewTableHeaderBtn" style="white-space: nowrap;"><span class="ewTableHeaderCaption">Welpen</span><span class="ewTableHeaderSort"></span></div>
+        </div></div></th>
+			
+			<th data-name="ik"><div class="ewPointer" onclick="ew_Sort(event,'hundelist.php?order=ik&amp;ordertype=ASC',2);"><div id="elh_hunde_ik" class="hunde_ik">
+			<div class="ewTableHeaderBtn" style="white-space: nowrap;"><span class="ewTableHeaderCaption">IK (%)</span><span class="ewTableHeaderSort"></span></div>
+        </div></div></th>
+			
+			<th data-name="avk"><div class="ewPointer" onclick="ew_Sort(event,'hundelist.php?order=avk&amp;ordertype=ASC',2);"><div id="elh_hunde_avk" class="hunde_avk">
+			<div class="ewTableHeaderBtn" style="white-space: nowrap;"><span class="ewTableHeaderCaption">AVK (%)</span><span class="ewTableHeaderSort"></span></div>
+        </div></div></th>
+			
+			<th data-name="iv"><div class="ewPointer" onclick="ew_Sort(event,'hundelist.php?order=iv&amp;ordertype=ASC',2);"><div id="elh_hunde_iv" class="hunde_iv">
+			<div class="ewTableHeaderBtn" style="white-space: nowrap;"><span class="ewTableHeaderCaption">VI (%)</span><span class="ewTableHeaderSort"></span></div>
+        </div></div></th>
+			
+			<th data-name="vater"><div class="ewPointer" onclick="ew_Sort(event,'hundelist.php?order=vater&amp;ordertype=ASC',2);"><div id="elh_hunde_vater" class="hunde_vater">
+			<div class="ewTableHeaderBtn" style="white-space: nowrap;"><span class="ewTableHeaderCaption">Vater/Mutter&nbsp;(*)</span><span class="ewTableHeaderSort"></span></div>
+        </div></div></th>
+			
+		
+		
+	</tr>
+</thead>
+<tbody>
+	<tr data-rowindex="1" id="r1_hunde" data-rowtype="1">
+<td class="ewListOptionBody" data-name="checkbox"><span id="el1_hunde_checkbox" class="hunde_checkbox"><input type="checkbox" name="key_m[]" value="351298" onclick='ew_ClickMultiCheckbox(event);'></span></td><td class="ewListOptionBody" data-name="pedigree"><span id="el1_hunde_pedigree" class="hunde_pedigree"><a class='btn btn-default btn-xs' href='pedigree.php?id=351298' target='_blank' data-toggle='tooltip' title='Pedigree anzeigen'><img src='phpimages/pedigree.gif' alt='Pedigree' ></a></span></td><td class="ewListOptionBody" data-name="hauptbild"><span id="el1_hunde_hauptbild" class="hunde_hauptbild">&nbsp;</span></td>				<td data-name="namekpl" style="white-space: nowrap;">
+<span id="el1_hunde_namekpl" class="hunde_namekpl">
+<span>
+<span title='Hündin' data-toggle='tooltip' class='hn-zwinger'>Legado N Danekraaft's <span class='hn-geschlecht-huendin'>How Can I Tell You?</span> <span class='hn-suffix'></span></span></span>
+</span>
+</td>
+						<td data-name="rasse" style="white-space: nowrap;">
+<span id="el1_hunde_rasse" class="hunde_rasse">
+<span>
+Deutsche Dogge</span>
+</span>
+</td>
+				<td data-name="typus" style="white-space: nowrap;">
+<span id="el1_hunde_typus" class="hunde_typus">
+<span data-autoselect='true'>
+gelb/gestromt</span>
+</span>
+</td>
+				<td data-name="fellfarbe" style="white-space: nowrap;">
+<span id="el1_hunde_fellfarbe" class="hunde_fellfarbe">
+<span data-autoselect='true'>
+gelb<br><span class='farbdetail'></span></span>
+</span>
+</td>
+				<td data-name="wurftag" style="white-space: nowrap;">
+<span id="el1_hunde_wurftag" class="hunde_wurftag">
+<span>
+26.09.2020<span id="tt_hunde_x1_wurftag" style="display: none">
+</span></span>
+</span>
+</td>
+				<td data-name="verband" style="white-space: nowrap;">
+<span id="el1_hunde_verband" class="hunde_verband">
+<span>
+AKC<br><span class="hunde_Highlight ewHighlightSearch">WS69691106</span><span id="tt_hunde_x1_verband" style="display: none">
+</span></span>
+</span>
+</td>
+					<td data-name="wuerfe" style="white-space: nowrap;text-align: right;">
+<span id="el1_hunde_wuerfe" class="hunde_wuerfe">
+<span>
+2</span>
+</span>
+</td>
+				<td data-name="nachkommen" style="white-space: nowrap;text-align: right;">
+<span id="el1_hunde_nachkommen" class="hunde_nachkommen">
+<span>
+4</span>
+</span>
+</td>
+				<td data-name="ik" style="white-space: nowrap;text-align: right;">
+<span id="el1_hunde_ik" class="hunde_ik">
+<span>
+0,00</span>
+</span>
+</td>
+				<td data-name="avk" style="white-space: nowrap;text-align: right;">
+<span id="el1_hunde_avk" class="hunde_avk">
+<span>
+93,27</span>
+</span>
+</td>
+				<td data-name="iv" style="white-space: nowrap;text-align: right;">
+<span id="el1_hunde_iv" class="hunde_iv">
+<span>
+82,54</span>
+</span>
+</td>
+				<td data-name="vater" style="white-space: nowrap;">
+<span id="el1_hunde_vater" class="hunde_vater">
+<span>
+PRF Fendane Have I Gone Mad<br>Danekraafts IT'S A JUNGLE OUT HERE</span>
+</span>
+</td>
+				</tr>
+</tbody>
+<tfoot><!-- Table footer -->
+	<tr class="ewTableFooter">
+<td class="ewListOptionFooter" data-name="checkbox"><span id="elf_hunde_checkbox" class="hunde_checkbox">&nbsp;</span></td><td class="ewListOptionFooter" data-name="pedigree"><span id="elf_hunde_pedigree" class="hunde_pedigree">&nbsp;</span></td><td class="ewListOptionFooter" data-name="hauptbild"><span id="elf_hunde_hauptbild" class="hunde_hauptbild">&nbsp;</span></td>				<td data-name="namekpl"><span id="elf_hunde_namekpl" class="hunde_namekpl">
+		&nbsp;
+		</span></td>
+						<td data-name="rasse"><span id="elf_hunde_rasse" class="hunde_rasse">
+		&nbsp;
+		</span></td>
+				<td data-name="typus"><span id="elf_hunde_typus" class="hunde_typus">
+		&nbsp;
+		</span></td>
+				<td data-name="fellfarbe"><span id="elf_hunde_fellfarbe" class="hunde_fellfarbe">
+		&nbsp;
+		</span></td>
+				<td data-name="wurftag"><span id="elf_hunde_wurftag" class="hunde_wurftag">
+		&nbsp;
+		</span></td>
+				<td data-name="verband"><span id="elf_hunde_verband" class="hunde_verband">
+		&nbsp;
+		</span></td>
+					<td data-name="wuerfe"><span id="elf_hunde_wuerfe" class="hunde_wuerfe">
+<span class="ewAggregate">&sum;</span>
+2		</span></td>
+				<td data-name="nachkommen"><span id="elf_hunde_nachkommen" class="hunde_nachkommen">
+<span class="ewAggregate">&sum;</span>
+4		</span></td>
+				<td data-name="ik"><span id="elf_hunde_ik" class="hunde_ik">
+<span class="ewAggregate">Ø</span>
+0,00		</span></td>
+				<td data-name="avk"><span id="elf_hunde_avk" class="hunde_avk">
+<span class="ewAggregate">Ø</span>
+93,27		</span></td>
+				<td data-name="iv"><span id="elf_hunde_iv" class="hunde_iv">
+<span class="ewAggregate">Ø</span>
+82,54		</span></td>
+				<td data-name="vater"><span id="elf_hunde_vater" class="hunde_vater">
+		&nbsp;
+		</span></td>
+				</tr>
+</tfoot>	
+</table>
+<input type="hidden" name="a_list" id="a_list" value="">
+</div>
+</form>
+<div class="panel-footer ewGridLowerPanel">
+<form name="ewPagerForm" class="ewForm form-inline ewPagerForm" action="hundelist.php">
+<div class="ewPager">
+<span>Seite&nbsp;</span>
+<div class="ewPrevNext"><div class="input-group">
+<div class="input-group-btn">
+<!--first page button-->
+		<a class="btn btn-default btn-sm disabled" title="Erste"><span class="icon-first ewIcon"></span></a>
+	<!--previous page button-->
+		<a class="btn btn-default btn-sm disabled" title="Zurück"><span class="icon-prev ewIcon"></span></a>
+	</div>
+<!--current page number-->
+	<input class="form-control input-sm" type="text" name="pageno" value="1">
+<div class="input-group-btn">
+<!--next page button-->
+		<a class="btn btn-default btn-sm disabled" title="Weiter"><span class="icon-next ewIcon"></span></a>
+	<!--last page button-->
+		<a class="btn btn-default btn-sm disabled" title="Letzte"><span class="icon-last ewIcon"></span></a>
+	</div>
+</div>
+</div>
+<span>&nbsp;von&nbsp;1</span>
+</div>
+<div class="ewPager ewRec">
+	<span>Datensätze&nbsp;1&nbsp;bis&nbsp;1&nbsp;von&nbsp;1</span>
+</div>
+</form>
+<div class="ewListOtherOptions">
+</div>
+<div class="clearfix"></div>
+</div>
+</div>
+<script type="text/javascript">
+fhundelistsrch.Init();
+fhundelistsrch.FilterList = {"psearch":"WS69691106","psearchtype":""};
+fhundelist.Init();
+</script>
+<script type="text/javascript">
+
+// Write your table-specific startup script here
+// document.write("page loaded");
+
+$(".ewAdvancedSearch").remove(); 
+</script>
+			<!-- right column (end) -->
+				</div>
+		</div>
+		</div>
+		<!-- content (end) -->
+		<!-- footer (begin) -->
+
+
+				<div id="ewFooterRow" class="ewFooterRow">
+			<div class="ewFooterText">© 2007-2026 <a href="showpage.php?seite=impressum">Impressum</a> | <a href="showpage.php?seite=datenschutz">Datenschutz</a>  | <a href="showpage.php?seite=nutzungsbedingungen">ANB</a> • powerd by <a href="http://www.breedmaster.de" target="_blank">BREED Master</a></div>
+			<!-- Place other links, for example, disclaimer, here -->
+		</div>
+		<!-- footer (end) -->
+		</div>
+	
+	
+	<!-- search  dialog -->
+	<div id="ewSearchDialog" class="modal" role="dialog" aria-labelledby="ewSearchDialogTitle" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="ewSearchDialogTitle"></h4>
+				</div>
+				<div class="modal-body"></div>
+				<div class="modal-footer"><button type="button" class="btn btn-primary ewButton">Suche</button><button type="button" class="btn btn-default ewButton" data-dismiss="modal">Abbrechen</button></div>
+			</div>
+		</div>
+	</div>
+	<!-- add option dialog -->
+	<div id="ewAddOptDialog" class="modal" role="dialog" aria-labelledby="ewAddOptDialogTitle" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="ewAddOptDialogTitle"></h4>
+				</div>
+				<div class="modal-body"></div>
+				<div class="modal-footer"><button type="button" class="btn btn-primary ewButton">Hinzufügen</button><button type="button" class="btn btn-default ewButton" data-dismiss="modal">Abbrechen</button></div>
+			</div>
+		</div>
+	</div>
+	<!-- email dialog -->
+	<div id="ewEmailDialog" class="modal" role="dialog" aria-labelledby="ewEmailDialogTitle" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="ewEmailDialogTitle"></h4>
+				</div>
+				<div class="modal-body">
+					<form id="ewEmailForm" class="form-horizontal ewForm ewEmailForm" action="hundelist.php">
+<input type="hidden" name="export" id="export" value="email">
+	<div class="form-group">
+		<label class="col-sm-2 control-label ewLabel" for="sender">Von</label>
+		<div class="col-sm-10"><input type="text" class="form-control ewControl" name="sender" id="sender"></div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-2 control-label ewLabel" for="recipient">An</label>
+		<div class="col-sm-10"><input type="text" class="form-control ewControl" name="recipient" id="recipient"></div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-2 control-label ewLabel" for="cc">Cc</label>
+		<div class="col-sm-10"><input type="text" class="form-control ewControl" name="cc" id="cc"></div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-2 control-label ewLabel" for="bcc">Bcc</label>
+		<div class="col-sm-10"><input type="text" class="form-control ewControl" name="bcc" id="bcc"></div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-2 control-label ewLabel" for="subject">Betreff</label>
+		<div class="col-sm-10"><input type="text" class="form-control ewControl" name="subject" id="subject"></div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-2 control-label ewLabel" for="message">Nachricht</label>
+		<div class="col-sm-10"><textarea class="form-control ewControl" rows="6" name="message" id="message"></textarea></div>
+	</div>
+<!--
+	<div class="form-group">
+		<label class="col-sm-2 control-label ewLabel">Senden als</label>
+		<div class="col-sm-10">
+		<label class="radio-inline ewRadio" style="white-space: nowrap;"><input type="radio" name="contenttype" value="html" checked>HTML</label>
+		<label class="radio-inline ewRadio" style="white-space: nowrap;"><input type="radio" name="contenttype" value="url">URL</label>
+		</div>
+	</div>
+-->
+	<input type="hidden" name="contenttype" value="html">
+</form>
+				</div>
+				<div class="modal-footer"><button type="button" class="btn btn-primary ewButton">Senden</button><button type="button" class="btn btn-default ewButton" data-dismiss="modal">Abbrechen</button></div>
+			</div>
+		</div>
+	</div>
+	<!-- message box -->
+	<div id="ewMsgBox" class="modal" role="dialog" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body"></div>
+				<div class="modal-footer"><button type="button" class="btn btn-primary ewButton" data-dismiss="modal">OK</button></div>
+			</div>
+		</div>
+	</div>
+	<!-- prompt -->
+	<div id="ewPrompt" class="modal" role="dialog" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body"></div>
+				<div class="modal-footer"><button type="button" class="btn btn-primary ewButton">OK</button><button type="button" class="btn btn-default ewButton" data-dismiss="modal">Abbrechen</button></div>
+			</div>
+		</div>
+	</div>
+	<!-- session timer -->
+	<div id="ewTimer" class="modal" role="dialog" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body"></div>
+				<div class="modal-footer"><button type="button" class="btn btn-primary ewButton" data-dismiss="modal">OK</button></div>
+			</div>
+		</div>
+	</div>
+	<!-- tooltip -->
+	<div id="ewTooltip"></div>
+	<script type="text/javascript" src="phpjs/userevt12.js"></script>
+	<script type="text/javascript">
+				$(".ewAddEdit").addClass("btn-success");
+		$(".ewDetailAddGroup").addClass("btn-success");
+		$(".ewMultiDelete").addClass("btn-danger");
+		$(".ewMultiUpdate").addClass("btn-warning");
+		$(".dropdown-toggle").addClass("btn-info");
+
+		// Grid
+		$(".ewGridInsert").addClass("btn-primary");
+		$(".ewGridSave").addClass("btn-primary");
+		$(".ewGridCancel").addClass("btn-danger");
+		$(".ewLanguageOption").remove();
+					$("#ewHeaderRow").after("<div class='pull-right' id='sprachauswahl'><a title='Nederlands' class='flagge' href='/hundelist.php?psearch=WS69691106&language=nl'><img src='phpimages/flags/nl.png'/></a><a title='English' class='flagge' href='/hundelist.php?psearch=WS69691106&language=en'><img src='phpimages/flags/en.png'/></a><a title='Deutsch' class='flagge' href='/hundelist.php?psearch=WS69691106&language=de'><img src='phpimages/flags/de.png'/></a></div>");
+		
+		// Tablecaption einfügen
+					$(".ewToolbar").after("<div style='margin: 0px; padding: 0px;' class='container'><div class='col-md-6'><div id='switch' class='tableheader'>Hundesuche</div><div id='tabledescription' class='tabledescription'><p>Verwenden Sie bei der Suche lieber nur Teilbegriffe um Schreibfehler zu vermeiden. Verzichten Sie auf Endungen wie \'s um bessere Suchergebnisse zu erhalten.</p><p>Starten Sie Ihre Suche zun&auml;chst mit weniger Einschr&auml;nkungen und grenzen die Resultate dann in weiteren Schritten ein.</p><p>Weiterf&uuml;hrende Informationen zur Suche finden Sie im Artikel <a href=\"showpage.php?seite=sortieren\" onclick=\"window.open(this.href, \'SuchenundSortieren\', \'resizable=no,status=no,location=no,toolbar=no,menubar=no,fullscreen=no,scrollbars=yes,dependent=no,width=800,height=800\'); return false;\">Suchen und Sortieren</a>.</p></div></div></div>");
+		
+		// toggle für die Tablecaption definieren
+		$("#switch").click(function() {
+			$("#tabledescription").slideToggle();
+		});
+		$(document).ready(function() {
+
+
+
+			/* Modales Fenster für Schnellzugriff*/
+
+
+			$(document).keydown(function(event) {
+				// Prüfen, ob die Tastenkombination STRG+SHIFT+S gedrückt wurde
+				if (event.ctrlKey && event.shiftKey && event.keyCode === 83) {
+					// Verhindern, dass der Standardbrowser-Shortcut ausgeführt wird
+					event.preventDefault();
+					// Öffnen oder Schließen des Containers und des Overlays
+					toggleSchnellzugriff();
+				}
+
+				// Prüfen, ob die ESC-Taste gedrückt wurde
+				if (event.keyCode === 27) {
+					// Verhindern, dass der Standardbrowser-Shortcut ausgeführt wird
+					event.preventDefault();
+					// Schließen des Containers und des Overlays
+					closeSchnellzugriff();
+				}
+			});
+
+			// Schließen des Containers und des Overlays, wenn außerhalb des Formulars geklickt wird
+			$('#overlay').on('click', function(event) {
+				if (!$(event.target).is('#schnellzugriff') && !$(event.target).is('#formAjaxSchnellzugriff')) {
+					closeSchnellzugriff();
+				}
+			});
+
+
+			function toggleSchnellzugriff() {
+				var $container = $('#schnellzugriff-container');
+				var $overlay = $('#overlay');
+				if ($container.is(':visible')) {
+					closeSchnellzugriff();
+				} else {
+					$overlay.show();
+					$container.show();
+					$('#schnellzugriff').focus();
+				}
+			}
+
+			function closeSchnellzugriff() {
+				$('#schnellzugriff-container').hide();
+				$('#overlay').hide();
+			}
+
+
+			// Wird von jQuery-UI benötigt, da sonst das HTML nicht interpretiert wird
+			$('[data-toggle="tooltip"]').tooltip({
+				content: function() {
+					return $(this).prop('title');
+				}
+			});
+
+
+			// Master-Detail-Copy deaktivieren
+			$('.ewDetailCopy').hide();
+
+			// Sortierbare Tabellen
+			$('.tableFX').DataTable({
+				destroy: true,
+				"language": {
+					"url": "customPackages/DataTables/lang/de.json"
+				},
+				"lengthMenu": [
+					[50, 100, -1],
+					[50, 100, "Alle"]
+				]
+			});
+
+			//Check to see if the window is top if not then display button
+			$(window).scroll(function() {
+				if ($(this).scrollTop() > 100) {
+					$('.scrollToTop').fadeIn();
+				} else {
+					$('.scrollToTop').fadeOut();
+				}
+			});
+
+			//Click event to scroll to top
+			$('.scrollToTop').click(function() {
+				$('html, body').animate({
+					scrollTop: 0
+				}, 800);
+				return false;
+			});
+		});
+		
+window.addEventListener("load", function(){
+window.cookieconsent.initialise({
+  "palette": {
+	"popup": {
+	  "background": "#eb6c44",
+	  "text": "#ffffff"
+	},
+	"button": {
+	  "background": "#f5d948"
+	}
+  },
+  "position": "bottom-right",
+  "content": {
+	"message": "Wir verwenden Cookies um Ihnen besondere Dienste auf unserer Seite zur Verfügung zu stellen.",
+	"dismiss": "Ich habe verstanden!",
+	"link": "Weitere Informationen",
+	"href": "showpage.php?seite=cookieconsent"
+  }
+})});	
+	
+		function search() {
+			var search = $('#schnellzugriff');
+
+			//search.val('');
+			search.focus();
+		}
+		Mousetrap.bind('alt+s', search);
+		</script> <a href="#" class="scrollToTop"></a>  <script>
+<!-- ------ -->
+<!--  Start -->
+<!-- ------ -->
+		
+			$('#toggleQueryLog').click(function(){
+				var src = ($(this).attr('src') === 'phpimages/online.png')
+					? 'phpimages/offline.png'
+					: 'phpimages/online.png'
+				$(this).attr('src', src);
+				
+				$('#querylog_wrapper').fadeToggle(500);
+			});
+	
+<!-- ------ -->
+<!--  Ende -->
+<!-- ------ -->
+
+<!-- ------ -->
+<!--  Start -->
+<!-- ------ -->
+$(function() {
+	$( "#ajaxschnellzugriff" ).button();
+});
+
+jQuery(document).ready(function(){
+	$('#schnellzugriff').autocomplete({	
+		position: {collision: "fit flip"},
+		source:'ajax.php?m=schnellzugriff', minLength:1,
+		select: function( event, ui ) {
+			event.preventDefault(); // Verhindert, dass das Standardverhalten des Browsers ausgeführt wird
+			window.location.href = ui.item.id;
+
+		}
+	});
+});
+<!-- ------ -->
+<!--  Ende -->
+<!-- ------ -->
+	</script>
+</body>
+
+</html>

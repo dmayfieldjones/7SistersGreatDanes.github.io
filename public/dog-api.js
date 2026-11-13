@@ -192,6 +192,9 @@
   // Lookups per member, so no account can sweep the database one dog at a time. Administrators are exempt. Saved with the rest of the state.
   var LOOKUP_PER_HOUR = 30, LOOKUP_PER_DAY = 100;
   var lookups = {};
+  // Automatic lookups on another database (DANES World): a few an hour per member, so the other site sees only a trickle. Past the limit the page
+  // falls back to links the member opens by hand. The server keeps what it found, so a confirmation never trusts what the browser sends back.
+  var EXT_PER_HOUR = 5, externals = {}, stash = {};
   function lookupBudget() {
     if (isAdmin()) return null;
     var now = Date.now(), k = String(actorId), t = (lookups[k] || []).filter(function (x) { return now - x < 86400000; });
@@ -416,6 +419,43 @@
       wantedLog(reg, 'dog');
       return Promise.resolve({ dogId: id, created: true });
     },
+
+    // ---- automatic lookup on another database. findExternal runs only on the server (it does the fetching); the demo here cannot. ----
+    findExternal: function () { return fail('unavailable', 'Automatic lookup needs the server.'); },
+    // server only: count one automatic lookup for this member, or refuse when they have used their hour's share
+    externalBudget: function () {
+      var g = needMember(); if (g) return g;
+      if (isAdmin()) return Promise.resolve({ ok: true });
+      var now = Date.now(), k = String(actorId), t = (externals[k] || []).filter(function (x) { return now - x < 3600000; });
+      externals[k] = t;
+      if (t.length >= EXT_PER_HOUR) return fail('rate_limited', 'You have used your ' + EXT_PER_HOUR + ' automatic lookups for this hour. Open the database searches yourself below, or try again later.');
+      t.push(now); return Promise.resolve({ ok: true });
+    },
+    // server only: remember what the other database returned, for this member, so a confirmation can be checked against it
+    stashCandidates: function (list) {
+      var g = needMember(); if (g) return g;
+      var k = String(actorId), at = Date.now();
+      stash[k] = { at: at, list: (list || []).slice(0, 8).map(function (c, i) { return Object.assign({}, c, { token: at + '-' + i }); }) };
+      return Promise.resolve(copy(stash[k].list));
+    },
+    // The member confirmed one of the dogs the server found: create its page from the server's own copy of that result.
+    importExternal: function (token) {
+      var g = needMember(); if (g) return g;
+      var st = stash[String(actorId)], c = st && Date.now() - st.at < 3600000 && st.list.filter(function (x) { return x.token === String(token); })[0];
+      if (!c) return fail('not_found', 'That lookup has expired. Search again.');
+      var reg = c.number ? norm(c.number) : '', ex = reg ? dogByNumber(reg) : null;
+      var sp = splitTitle(c.name), name = sp.name || c.name, nk = normName(name);
+      if (ex === null) { var same = Object.keys(dogs).filter(function (k) { return (dogs[k].nameKey || '').split('#')[0] === nk && (!c.sex || !dogs[k].sex || dogs[k].sex === c.sex); }); if (same.length === 1 && !reg) ex = same[0]; }
+      if (ex !== null) return Promise.resolve({ dogId: ex, created: false });
+      var n = Object.keys(dogs).filter(function (k) { return (dogs[k].nameKey || '').split('#')[0] === nk; }).length;
+      var key = n ? nk + '#' + (n + 1) : nk, id = reg ? 'r:' + reg : 'n:' + key, a = actorId === 0 ? 1 : actorId;
+      dogs[id] = { id: id, title: sp.title || '', titleSuffix: '', registered: name, call: '', short: '', sex: c.sex || '', color: c.color || '', photo: '', ext: false, litter: null, stub: true, pending: false, visibility: 'members', nameKey: key };
+      if (reg) identifiers.push({ dog: id, registry: AKCNO.test(reg) ? 'AKC' : (c.registry || 'Reg.'), number: reg, author: a, date: NOW() });
+      if (/^\d{4}-\d{2}-\d{2}$/.test(c.born || '')) claims.push(C(nextId++, id, 'fact', 'Whelp date', c.born, { src: 'DANES World', author: a, date: NOW() }));
+      claims.push(C(nextId++, id, 'link', 'Checked on DANES World', '', { url: 'https://www.danesworld.info/hundelist.php?psearch=' + encodeURIComponent(reg || name), author: a, date: NOW() }));
+      delete stash[String(actorId)];
+      return Promise.resolve({ dogId: id, created: true });
+    },
     noteGalaxy: function (dogId, inGalaxy) {
       var d = dogs[dogId]; if (!d) return fail('not_found', 'No such dog.');
       var reg = primaryReg(dogId);
@@ -622,12 +662,12 @@
   // The seed data lives in this file; pedigrees of generated ancestor pages are not saved, they are rebuilt from where each was opened.
   API.exportState = function () {
     return JSON.parse(JSON.stringify({ v: 1, nextId: nextId, authors: authors, logins: LOGINS, dogs: dogs, litters: litters, identifiers: identifiers,
-      people: people, claims: claims, requests: requests, wanted: wantedList, log: log, lookups: lookups }));
+      people: people, claims: claims, requests: requests, wanted: wantedList, log: log, lookups: lookups, externals: externals, stash: stash }));
   };
   API.importState = function (st) {
     st = JSON.parse(JSON.stringify(st || SEED));
     nextId = st.nextId; authors = st.authors; LOGINS = st.logins; dogs = st.dogs; litters = st.litters; identifiers = st.identifiers;
-    people = st.people; claims = st.claims; requests = st.requests; wantedList = st.wanted; log = st.log; lookups = st.lookups || {};
+    people = st.people; claims = st.claims; requests = st.requests; wantedList = st.wanted; log = st.log; lookups = st.lookups || {}; externals = st.externals || {}; stash = st.stash || {};
     Object.keys(priv.peds).forEach(function (k) { if (String(k).indexOf('r:') === 0) delete priv.peds[k]; });
     Object.keys(dogs).filter(function (id) { return dogs[id].origin; }).sort(function (a, b) { return (dogs[a].gen || 0) - (dogs[b].gen || 0); }).forEach(function (id) {
       var o = dogs[id].origin, P = pedOf(o.dog); if (P[o.key]) priv.peds[id] = reroot(P, o.key);

@@ -5,13 +5,14 @@
 // GET  /api/health
 import { readFile } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
+import { searchDanesWorld } from './danesworld.mjs';
 import { fileURLToPath } from 'node:url';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 
 // The calls a browser may make. Anything else (setActor, useLogin, importState, ...) does not exist as far as the outside world goes.
 export const METHODS = new Set([
-  'session', 'authors', 'lookup', 'find', 'lookupByName', 'ourDogs', 'confirmDog', 'claimDog', 'setVisibility', 'noteGalaxy', 'getDog', 'getPedigree',
+  'session', 'authors', 'lookup', 'find', 'lookupByName', 'findExternal', 'importExternal', 'ourDogs', 'confirmDog', 'claimDog', 'setVisibility', 'noteGalaxy', 'getDog', 'getPedigree',
   'openAncestor', 'saveFact', 'addRecord', 'flagClaim', 'correctClaim', 'hideClaim', 'suggestCategory',
   'wanted', 'markAdded', 'accountRequests', 'decideRequest', 'actionLog',
 ]);
@@ -46,7 +47,7 @@ function sane(v, depth = 0) {
   return false;
 }
 
-export function makeHandler({ store, verify, dataDir = join(HERE, '..', 'public', 'data'), adminUsers = ['dmj'], allowOrigin = '*' }) {
+export function makeHandler({ store, verify, dataDir = join(HERE, '..', 'public', 'data'), adminUsers = ['dmj'], allowOrigin = '*', external = searchDanesWorld }) {
   const admins = new Set(adminUsers.map((u) => u.toLowerCase()));
   const headers = {
     'content-type': 'application/json',
@@ -86,24 +87,35 @@ export function makeHandler({ store, verify, dataDir = join(HERE, '..', 'public'
     if (!who && req.method === 'noteGalaxy') return reply(200, { ok: true, result: { ok: true } });
 
     const api = await loadApi(dataDir);
-    return exclusive(async () => {
+
+    // one call against the saved state, retried if someone else saved first; throws {code, message} when the rules refuse
+    const transact = (fn) => exclusive(async () => {
       for (let attempt = 0; attempt < 5; attempt++) {
         const { version, state } = await store.get();
         api.importState(state);
         const before = JSON.stringify(api.exportState());
-        try {
-          if (who) await api.useLogin({ username: who.username, name: who.name, admin: admins.has(who.username) });
-          const result = await api[req.method].apply(api, args);
-          const next = api.exportState();
-          if (JSON.stringify(next) === before) return reply(200, { ok: true, result });
-          if (await store.put(version, next)) return reply(200, { ok: true, result });
-          // someone else saved first: read again and redo the call
-        } catch (e) {
-          if (e && e.code) return error(e.code, e.message);
-          return error('internal', 'Something went wrong.', 500);
-        }
+        if (who) await api.useLogin({ username: who.username, name: who.name, admin: admins.has(who.username) });
+        const result = await fn(api);
+        const next = api.exportState();
+        if (JSON.stringify(next) === before || await store.put(version, next)) return result;
+        // someone else saved first: read again and redo the call
       }
-      return error('internal', 'The server was busy. Try again.', 503);
+      throw { code: 'internal', message: 'The server was busy. Try again.', status: 503 };
     });
+    const fail = (e) => (e && e.code ? error(e.code, e.message, e.status) : error('internal', 'Something went wrong.', 500));
+
+    try {
+      if (req.method === 'findExternal') {
+        // Ask another database for a dog, for a signed-in member, within their hourly share. The fetch happens outside the lock so a slow
+        // site never holds everyone else up, and what comes back is saved on the server: a confirmation is checked against that copy.
+        const q = String((args[0] && args[0].q) || '').trim().slice(0, 140);
+        if (!q) return error('invalid', 'Enter a name or a registration number.');
+        await transact((a) => a.externalBudget());
+        let rows;
+        try { rows = await external(q); } catch { return error('unavailable', 'DANES World could not be reached just now. Open the searches below yourself.', 503); }
+        return reply(200, { ok: true, result: { choices: await transact((a) => a.stashCandidates(rows)) } });
+      }
+      return reply(200, { ok: true, result: await transact((a) => a[req.method].apply(a, args)) });
+    } catch (e) { return fail(e); }
   };
 }
