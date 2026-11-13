@@ -127,6 +127,7 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
 .galcap{position:absolute;left:0;right:0;bottom:0;padding:10px 16px 12px;border-radius:0 0 12px 12px;background:linear-gradient(transparent,rgba(5,6,10,.82));color:#fff;pointer-events:none;font-size:.85rem}
 .galcap b{display:block;font-size:.95rem}.galcap span{color:#c9cde0}
 @media (max-width:560px){#homecv{height:340px}}
+#mfa-qr svg{width:100%;height:100%;display:block}
 </style>
 </head>
 <body>
@@ -167,10 +168,20 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
     <p class="meta" id="lg-msg" role="status" style="margin:0"></p>
   </div>
 </form>
-<div id="mfapanel" class="card" hidden style="max-width:26rem">
+<div id="mfanudge" class="card" hidden style="max-width:34rem;margin:8px 0">
+  <b>Protect your account.</b> Turn on two-step sign-in: a 6-digit code from your phone, in addition to your password. It takes about two minutes.
+  <div style="margin-top:6px"><button class="sm primary" type="button" id="mfanudge-go">Set it up</button> <button class="sm" type="button" id="mfanudge-no">Not now</button></div>
+</div>
+<div id="mfapanel" class="card" hidden style="max-width:30rem">
   <h3 style="margin:0 0 4px">Two-step sign-in</h3>
-  <p class="meta" style="margin:0 0 8px">Add the account to an authenticator app (Google Authenticator, Authy, 1Password and similar) with the key below, then enter the 6-digit code it shows. After that, signing in asks for a code as well as your password.</p>
-  <p class="meta" style="margin:0 0 8px">Key: <code id="mfa-key" style="user-select:all"></code> <a id="mfa-link" href="#">Open in authenticator app</a></p>
+  <p class="meta" style="margin:0 0 6px">After this, signing in asks for a 6-digit code from your phone as well as your password.</p>
+  <ol class="meta" style="margin:0 0 8px;padding-left:1.2rem">
+    <li>Open an authenticator app on your phone (Google Authenticator, Authy, 1Password and similar).</li>
+    <li><b>At a computer:</b> scan the code below with the app. <b>On your phone:</b> tap "Open in authenticator app", or copy the key and paste it into the app.</li>
+    <li>Type the 6-digit code the app shows, then press Turn on.</li>
+  </ol>
+  <div id="mfa-qr" style="width:200px;height:200px;background:#fff;padding:6px;border-radius:8px;margin:0 0 8px"></div>
+  <p class="meta" style="margin:0 0 8px">Key: <code id="mfa-key" style="user-select:all;word-break:break-all"></code> <button class="sm" type="button" id="mfa-copy">Copy key</button> <a id="mfa-link" href="#">Open in authenticator app</a></p>
   <input type="text" id="mfa-code" inputmode="numeric" autocomplete="one-time-code" placeholder="6-digit code" maxlength="6">
   <div style="margin-top:8px"><button class="sm primary" type="button" id="mfa-go">Turn on</button> <button class="sm" type="button" id="mfa-cancel">Cancel</button></div>
   <p class="meta" id="mfa-msg" role="status" style="margin:6px 0 0"></p>
@@ -178,7 +189,7 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
 <p id="signin" class="meta" hidden></p>
 <details id="invite" class="card" hidden style="margin:0 0 12px">
   <summary><b>New here? How this works and how to help</b> &middot; <a href="#" id="invitesignin">Sign in</a></summary>
-  <p class="meta" style="margin:6px 0 0">This page gathers what is already public about a dog and links to the original sources. What you add, under your real name and with a link to the evidence, helps fill the record in and cross-check it. Sign in to add records, dispute others', claim your dogs, and open every ancestor. Accounts are made by the administrator; ask whoever sent you this link.</p>
+  <p class="meta" style="margin:6px 0 0">This page gathers what is already public about a dog and links to the sources. What you add, under your real name with a link to the evidence, helps fill the record in and cross-check it. Sign in to add records, dispute others', claim your dogs and open every ancestor. Ask whoever sent you this link for an account.</p>
 </details>
 <div class="who-box" id="whobox">
   <form id="findform" style="display:inline-flex;gap:6px;align-items:center">
@@ -258,7 +269,7 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
   <p class="meta"><label for="gens">Generations</label> <select id="gens" style="width:auto;display:inline-block"><option>3</option><option selected>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select> &nbsp;Taken from our own pedigree data, or from the database where a member confirmed the dog. A pedigree goes back only as far as its source does.</p>
   <div id="pedgrid" class="pedgrid"></div>
   <p id="pednote" class="meta" style="margin:6px 0 0"></p>
-  <p class="meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg> marks a dog with a photo on River Rock Pedigree. It opens the photo on their site in a new tab; we don't host or copy it. <span>A plus marks health screens or test records we hold; a helix marks DNA or sequence data.</span></p>
+  <p class="meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg> a photo on River Rock Pedigree (it opens their site; we don't copy it). Plus: health screens or test records we hold. Helix: DNA or sequence data.</p>
 </section>
 
 <div class="tabs" role="tablist">
@@ -278,7 +289,7 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
   <div id="parents" class="parents"></div>
 
   <h2 style="margin-top:22px">Where sources differ</h2>
-  <p class="meta" style="margin:0 0 8px">Databases sometimes disagree about a dog, and some copy each other's mistakes. Nothing here is overwritten. Members back the version they can show evidence for, and when three different members agree it is marked resolved.</p>
+  <p class="meta" style="margin:0 0 8px">Databases sometimes disagree, and some copy each other's mistakes. Nothing is overwritten. When three different members back the same version, it is marked resolved. <a href="/databases-disagree.html">An example</a>.</p>
   <div id="diffs"></div>
   <details class="card" id="diff-add" hidden>
     <summary><b>Flag a difference</b></summary>
@@ -335,7 +346,7 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
         <input type="text" id="nr-val" maxlength="40" placeholder="Result, placement, or registration number">
         <input type="date" id="nr-date" required>
       </div>
-      <p class="meta" id="nr-note" style="margin:0" hidden>Results and grades are entered by the dog's owner, from their own certificate, with a link or photo of it. If this is your dog, claim it first. Otherwise use "Mark health screens on file" below.</p>
+      <p class="meta" id="nr-note" style="margin:0" hidden>Owners enter results from their own certificate, with a link or photo. If this is your dog, claim it first; otherwise mark screens below.</p>
       <input type="url" id="nr-url" placeholder="Evidence link (not needed for OFA: built from the registration number)">
       <button class="act primary" type="submit">Add under my name</button>
     </form>
@@ -350,7 +361,7 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
       <span class="meta" style="flex-basis:100%">OFA does not need the dog to be registered anywhere, so a dog with no AKC number can still have one. It only shows that a record exists; we never copy the grade.</span>
     </form>
     <form id="new-screens" class="f">
-      <p class="meta" style="margin:0">Look the dog up at OFA (the link is in Medical screens), then tick the screens you see there. We record only that a screen exists, never the grade or result, and link to OFA for the details.</p>
+      <p class="meta" style="margin:0">Look the dog up at OFA (link in Medical screens), then tick the screens you see. We record only that a screen exists, never the grade or result.</p>
       <div id="ns-boxes" style="display:flex;flex-wrap:wrap;gap:6px 14px;margin:6px 0"></div>
       <button class="act primary" type="submit">Add under my name</button>
     </form>
@@ -374,7 +385,7 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
 <section id="tab-seq" hidden>
   <h2>Genetic data</h2>
   <h3 style="margin:14px 0 6px">Commercial tests</h3>
-  <p class="meta" style="margin:0 0 8px">Commercial tests come from any company or registry: a DNA kit, an AKC DNA profile, a university lab. Each result is one record: provider, kind of test, link, and who added it. We store only the link, never the owner's report. Anyone signed in can dispute a record with a link to their evidence, and the member who added it can post a correction.</p>
+  <p class="meta" style="margin:0 0 8px">Any company or registry: a DNA kit, an AKC DNA profile, a university lab. We store only the link and who added it, never the owner's report. Anyone signed in can dispute a result; the member who added it can correct it.</p>
   <div id="dna-list"></div>
   <details class="card" id="dna-add" hidden>
     <summary><b>Link a genetic result for this dog</b></summary>
@@ -465,6 +476,7 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
 </div>
 </main>
 
+<script src="/qrcode.js"></script>
 <script src="/dog-api.js"></script>
 <script src="/dog-api-remote.js"></script>
 <script>
@@ -1289,7 +1301,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   function finish(res){
     var ar=res&&res.AuthenticationResult,idt=ar&&ar.IdToken;
     if(!idt){authMsg('Sign-in did not complete.');return}
-    applyLogin(idt).then(function(ok){if(ok){try{sessionStorage.setItem(ACCESS_KEY,ar.AccessToken)}catch(e){}$('lg-pass').value='';$('lg-pass2').value='';$('lg-code').value='';challenge=null;setMode('login');showLogin(false);authMsg('');renderTop();return S?load(S.dog.id):showHome()}else authMsg('That account is not set up for the dog pages yet.')});
+    applyLogin(idt).then(function(ok){if(ok){try{sessionStorage.setItem(ACCESS_KEY,ar.AccessToken)}catch(e){}checkMfaNudge();$('lg-pass').value='';$('lg-pass2').value='';$('lg-code').value='';challenge=null;setMode('login');showLogin(false);authMsg('');renderTop();return S?load(S.dog.id):showHome()}else authMsg('That account is not set up for the dog pages yet.')});
   }
   function nextStep(res,user){
     if(res.ChallengeName==='NEW_PASSWORD_REQUIRED'){challenge={session:res.Session,username:user,name:res.ChallengeName};setMode('newpw');$('lg-pass2').focus();authMsg('Choose a new password to finish signing in.');return}
@@ -1321,11 +1333,13 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   $('mfabtn').addEventListener('click',function(){
     var at=null;try{at=sessionStorage.getItem(ACCESS_KEY)}catch(e){}
     $('mfapanel').hidden=false;mfaMsg('');$('mfa-code').value='';
-    if(!at){$('mfa-key').textContent='';$('mfa-link').hidden=true;mfaMsg('Sign out and sign in again, then choose this.');return}
+    if(!at){$('mfa-key').textContent='';$('mfa-link').hidden=true;$('mfa-qr').hidden=true;mfaMsg('Sign out and sign in again, then choose this.');return}
     cognito('AssociateSoftwareToken',{AccessToken:at}).then(function(r){
       $('mfa-key').textContent=r.SecretCode;
       var u=(SESSION&&SESSION.username)||$('lg-user').value||'';
-      $('mfa-link').hidden=false;$('mfa-link').href='otpauth://totp/GDGalaxy:'+encodeURIComponent(u)+'?secret='+r.SecretCode+'&issuer=GDGalaxy';
+      var uri='otpauth://totp/GDGalaxy:'+encodeURIComponent(u)+'?secret='+r.SecretCode+'&issuer=GDGalaxy';
+      $('mfa-link').hidden=false;$('mfa-link').href=uri;
+      try{var qr=qrcode(0,'M');qr.addData(uri);qr.make();$('mfa-qr').innerHTML=qr.createSvgTag(4,2,'QR code for your authenticator app','Scan with your authenticator app');$('mfa-qr').hidden=false}catch(e){$('mfa-qr').hidden=true}
     }).catch(function(){mfaMsg('Could not start setup. Sign in again and retry.')});
   });
   $('mfa-go').addEventListener('click',function(){
@@ -1333,10 +1347,22 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     if(!at)return;
     cognito('VerifySoftwareToken',{AccessToken:at,UserCode:$('mfa-code').value.trim(),FriendlyDeviceName:'Authenticator app'})
       .then(function(r){if(r.Status!=='SUCCESS')throw r;return cognito('SetUserMFAPreference',{AccessToken:at,SoftwareTokenMfaSettings:{Enabled:true,PreferredMfa:true}})})
-      .then(function(){mfaMsg('Two-step sign-in is on. Next time you sign in, it will ask for a code.');$('mfa-key').textContent=''})
+      .then(function(){mfaMsg('Two-step sign-in is on. Next time you sign in, it will ask for a code.');$('mfa-key').textContent='';$('mfa-qr').innerHTML='';$('mfanudge').hidden=true})
       .catch(function(){mfaMsg('That code did not work. Check the app and try the current code.')});
   });
-  $('mfa-cancel').addEventListener('click',function(){$('mfapanel').hidden=true;$('mfa-key').textContent='';mfaMsg('')});
+  $('mfa-cancel').addEventListener('click',function(){$('mfapanel').hidden=true;$('mfa-key').textContent='';$('mfa-qr').innerHTML='';mfaMsg('')});
+  $('mfa-copy').addEventListener('click',function(){
+    var k=$('mfa-key').textContent;if(!k)return;
+    (navigator.clipboard?navigator.clipboard.writeText(k):Promise.reject()).then(function(){mfaMsg('Key copied. Paste it into your authenticator app.')},function(){var r=document.createRange();r.selectNodeContents($('mfa-key'));var s=getSelection();s.removeAllRanges();s.addRange(r);mfaMsg('Select and copy the key shown above.')})
+  });
+  // A gentle prompt after sign-in for anyone who has not turned two-step sign-in on (asked once per visit; "Not now" hides it for the visit)
+  function checkMfaNudge(){
+    var at=null,off=false;try{at=sessionStorage.getItem(ACCESS_KEY);off=sessionStorage.getItem('mfa-nudge-off')==='1'}catch(e){}
+    if(!at||off||!AUTH){$('mfanudge').hidden=true;return}
+    cognito('GetUser',{AccessToken:at}).then(function(r){$('mfanudge').hidden=(r.UserMFASettingList||[]).indexOf('SOFTWARE_TOKEN_MFA')>-1}).catch(function(){$('mfanudge').hidden=true})
+  }
+  $('mfanudge-go').addEventListener('click',function(){$('mfanudge').hidden=true;$('mfabtn').click()});
+  $('mfanudge-no').addEventListener('click',function(){$('mfanudge').hidden=true;try{sessionStorage.setItem('mfa-nudge-off','1')}catch(e){}});
   $('signinbtn').addEventListener('click',function(){showLogin(true)});
   $('invitesignin').addEventListener('click',function(e){e.preventDefault();window.scrollTo(0,0);showLogin(true)});
   $('editsignin').addEventListener('click',function(e){e.preventDefault();window.scrollTo(0,0);showLogin(true)});
@@ -1346,13 +1372,13 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     if(SESSION.role==='visitor'){NAV=[];return showHome()}
     return load(S?S.dog.id:412);
   }
-  $('signoutbtn').addEventListener('click',function(){store(null);try{sessionStorage.removeItem(ACCESS_KEY)}catch(e){}$('mfapanel').hidden=true;DogAPI.signOut().then(function(s){SESSION=s;return afterSessionChange()})});
+  $('signoutbtn').addEventListener('click',function(){$('mfanudge').hidden=true;store(null);try{sessionStorage.removeItem(ACCESS_KEY)}catch(e){}$('mfapanel').hidden=true;DogAPI.signOut().then(function(s){SESSION=s;return afterSessionChange()})});
 
   // ---- start ----
   var DEV=/^(localhost|127\.0\.0\.1)$/.test(location.hostname);   // the "view as" menu is for local development only: it would let anyone become the administrator
   fetch('/data/dog-auth.json').then(function(r){return r.ok?r.json():null}).catch(function(){return null}).then(function(cfg){AUTH=cfg;return DogAPI.init()}).then(function(s){
     SESSION=s;
-    var t=stored();return (AUTH&&t)?applyLogin(t):false;
+    var t=stored();return (AUTH&&t)?applyLogin(t).then(function(ok){checkMfaNudge();return ok}):false;
   }).then(function(){return DogAPI.authors()}).then(function(a){
     authors=a;$('devmenu').hidden=!DEV||DogAPI.remote();$('auth-src').textContent=DEV?'Names come from the authors file. Records store only author numbers.':'';
     renderTop();return showHome();

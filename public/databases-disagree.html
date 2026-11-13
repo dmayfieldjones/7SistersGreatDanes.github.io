@@ -34,18 +34,11 @@ a{color:var(--ink)}
 <body>
 <main>
 <a class="back" href="/dog-page-demo.html">&larr; Back to GDGalaxy</a>
-<h1>When databases disagree: one dog, three answers</h1>
-<p class="meta">Updated November 13, 2026 &middot; A worked example of how GDGalaxy marks a disagreement and how members settle it.</p>
+<h1>When databases disagree</h1>
+<p class="meta">Updated November 13, 2026 &middot; One real example of how GDGalaxy marks a disagreement.</p>
 
-<p>Pedigree databases make mistakes, and some of them copy each other's mistakes. GDGalaxy shows where that happens instead of hiding it. Here is one real example.</p>
+<p>Pedigree databases make mistakes, and some copy each other's mistakes. Batemanor Amanda at Tiparone (harlequin female, born 1994) is listed in all three databases we link to, and they do not agree.</p>
 
-<h2>The dog</h2>
-<p>Batemanor Amanda at Tiparone is a harlequin female born in 1994. She is listed in three of the databases we link to: Quintessa, River Rock, and DANES World. We compared what each one says about her parents and grandparents.</p>
-
-<h2>What agrees</h2>
-<p>Her dam's whole side matches in all three. Her sire's line also matches once you reach Batemanor Apache War Paint, who has the same parents everywhere: Beccas Blucher and Crystal Cameo of Batemanor.</p>
-
-<h2>What does not</h2>
 <div class="tw"><table>
 <thead><tr><th>Database</th><th>Her sire</th><th>Her dam</th></tr></thead>
 <tbody>
@@ -53,22 +46,19 @@ a{color:var(--ink)}
 <tr><td>River Rock</td><td>Batemanor Apache War Dance</td><td>Batemanor Fatal Attractrion at Tiparome</td></tr>
 <tr><td>DANES World</td><td>Batemanor Apache War Paint</td><td>Batemanor Fatal Attraction at Tiparone</td></tr>
 </tbody></table></div>
-<p>There are two kinds of difference.</p>
-<p><strong>Spelling.</strong> The dam's name has two typos in Quintessa and River Rock ("Attractrion" and "Tiparome"). A second dog, Chapala Sulitelma, is spelled "Sulietelma" in the same two. DANES World spells all of them correctly. A typo can also split one dog into two records: in the pedigree data we hold, Sulitelma appears twice with the same parents, once under each spelling.</p>
-<p><strong>Parentage.</strong> Quintessa and River Rock put a dog named Apache War Dance between Amanda and Apache War Paint. In DANES World, Apache War Paint is her sire directly. Everything past that point then sits one generation apart, so comparing the pedigrees position by position reports fifteen differences. Compared by who is whose parent, there is one disagreement and two misspellings.</p>
 
-<h2>Why agreement is not proof</h2>
-<p>River Rock repeats Quintessa's misspellings exactly. Two databases that share a typo probably share a source, so they count as one witness and not two. Two databases against one is therefore not a vote.</p>
+<h2>What differs</h2>
+<ul>
+<li><strong>Spelling.</strong> "Attractrion" and "Tiparome" are typos, and so is "Sulietelma" for Chapala Sulitelma, a few generations back. DANES World has them right. A typo can also split one dog into two records.</li>
+<li><strong>Parentage.</strong> Quintessa and River Rock put Apache War Dance between Amanda and Apache War Paint. DANES World does not. Comparing slot by slot shows fifteen differences, but by who is whose parent there is one.</li>
+<li><strong>Two against one is not a vote.</strong> River Rock repeats Quintessa's typos exactly, so the two probably share a source and count as one witness.</li>
+</ul>
 
-<h2>How the site handles it</h2>
-<p>GDGalaxy does not decide which version is right, and it never overwrites anything. A difference becomes a flag on the dog's page that lists each version and where it was found. Signed-in members back the version they can support and say how they know: a link, a registration number, or where they looked. When three different members back the same version, the flag is marked resolved. The administrator can resolve or reopen any flag. Every vote carries the member's name, the history stays visible, and the original spelling stays searchable.</p>
-<p>Open flags are collected under <strong>Needs checking</strong> in the top bar, for members who want to help.</p>
+<h2>What the site does</h2>
+<p>It never overwrites a record or picks a side. A difference becomes a flag on the dog's page, listing each version and where it was found. Signed-in members back the version they can support and say how they know. When three different members agree, it is marked resolved. Every vote carries a name, the history stays visible, and the old spelling stays searchable. Open flags are under <strong>Needs checking</strong> in the top bar.</p>
 
 <h2>Where this one stands</h2>
-<p>The sire question is open. We do not know whether Apache War Dance is a real dog that DANES World left out, or an extra generation in the other two. A Kennel Club registration or the breeder would settle it.</p>
-
-<h2>What the site does not do yet</h2>
-<p>Today a member raises a flag, and the site tracks the votes. We found this disagreement by comparing the databases ourselves. Automatic comparison across databases is planned, and so is a scan for likely duplicate records.</p>
+<p>The sire is still open. Apache War Dance may be a real dog that DANES World left out, or an extra generation in the other two. A Kennel Club registration or the breeder would settle it. Flags are raised by members for now; automatic comparison across databases is planned.</p>
 </main>
 </body>
 </html>
