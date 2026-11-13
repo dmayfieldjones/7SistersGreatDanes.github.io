@@ -238,3 +238,18 @@ test('network searches are limited to 30 an hour, and a visitor gets nothing', a
   assert.equal(r.status, 429); assert.match(r.error.message, /network 30 times/);
   assert.equal((await call(h, 'findExternal', [{ q: 'Test Sire' }])).status, 401);
 });
+
+test('network searches also have a daily cap, and another member is not affected', async () => {
+  const h = fresh(memoryStore(), { network: NET, external: asked, externalPedigree });
+  // the hourly limit is 30, so spread the calls over simulated hours by moving the clock
+  const realNow = Date.now; let offset = 0; Date.now = () => realNow() + offset;
+  try {
+    for (let i = 0; i < 150; i++) { offset = Math.floor(i / 25) * 3700000; const r = await call(h, 'findExternal', [{ q: 'Test Sire' }], alice()); assert.equal(r.ok, true, 'search ' + i); }
+    offset = 5 * 3700000;   // still inside the same day, in a fresh hour
+    const over = await call(h, 'findExternal', [{ q: 'Test Sire' }], alice());
+    assert.equal(over.status, 429); assert.match(over.error.message, /today's limit of 150/);
+    assert.equal((await call(h, 'findExternal', [{ q: 'Test Sire' }], member('bob', 'Bob Example'))).ok, true);
+    offset = 25 * 3600000;   // a day later it works again
+    assert.equal((await call(h, 'findExternal', [{ q: 'Test Sire' }], alice())).ok, true);
+  } finally { Date.now = realNow; }
+});

@@ -199,7 +199,7 @@
   var lookups = {};
   // Automatic lookups on another database (DANES World): a few an hour per member, so the other site sees only a trickle. Past the limit the page
   // falls back to links the member opens by hand. The server keeps what it found, so a confirmation never trusts what the browser sends back.
-  var EXT_PER_HOUR = 5, NET_PER_HOUR = 30, externals = {}, stash = {};
+  var EXT_PER_HOUR = 5, NET_PER_HOUR = 30, NET_PER_DAY = 150, externals = {}, stash = {};
   // Where sources disagree about a dog. Nothing is overwritten: a flag lists the versions, members vote with their names, and when DIFF_AGREE
   // different members back the same version it is marked resolved (the administrator can resolve or reopen any flag; the history is kept).
   var DIFF_AGREE = 3, DIFF_FIELDS = ['Sire', 'Dam', 'Name', 'Birth date', 'Duplicate record'], diffs = [];
@@ -451,9 +451,10 @@
       var g = needMember(); if (g) return g;
       if (isAdmin()) return Promise.resolve({ ok: true });
       var net = kind === 'network', cap = net ? NET_PER_HOUR : EXT_PER_HOUR;
-      var now = Date.now(), k = String(actorId) + (net ? ':n' : ''), t = (externals[k] || []).filter(function (x) { return now - x < 3600000; });
+      var now = Date.now(), k = String(actorId) + (net ? ':n' : ''), t = (externals[k] || []).filter(function (x) { return now - x < 86400000; });
       externals[k] = t;
-      if (t.length >= cap) return fail('rate_limited', net ? 'You have searched the network ' + cap + ' times this hour. Try again later.' : 'You have used your ' + EXT_PER_HOUR + ' automatic lookups for this hour. Open the database searches yourself below, or try again later.');
+      if (net && t.length >= NET_PER_DAY) return fail('rate_limited', 'You have reached today\'s limit of ' + NET_PER_DAY + ' network searches. Try again tomorrow, or ask us if you need more.');
+      if (t.filter(function (x) { return now - x < 3600000; }).length >= cap) return fail('rate_limited', net ? 'You have searched the network ' + cap + ' times this hour. Try again later.' : 'You have used your ' + EXT_PER_HOUR + ' automatic lookups for this hour. Open the database searches yourself below, or try again later.');
       t.push(now); return Promise.resolve({ ok: true });
     },
     // server only: remember what the other database returned, for this member, so a confirmation can be checked against it
