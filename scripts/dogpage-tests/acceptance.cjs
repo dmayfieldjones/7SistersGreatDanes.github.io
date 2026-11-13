@@ -49,7 +49,7 @@ let pass=0,fail=0;const ok=(c,m)=>{if(c){pass++}else{fail++;console.log('  FAIL:
  ok(/Karen Mayfield-Jones/.test(T('dog-owners')),'members who consented are named');
  ok(d.querySelectorAll('#pedgrid .pn').length===31&&d.querySelectorAll('#pedgrid a.nm').length===31,"a visitor sees our own dog's pedigree with every name a link");
  ok(T('pednote')==='','and is not told to sign in to follow the pedigree back');
- ok(!d.getElementById('invite').hidden&&/help fill it in and check it/.test(T('invite'))&&/real names and evidence/.test(T('invite')),'a visitor is invited to sign up, told that using the site helps populate and cross-check it, and told the rules');
+ ok(!d.getElementById('invite').hidden&&/fill the record in and cross-check it/.test(T('invite'))&&/real name/.test(T('invite'))&&/evidence/.test(T('invite')),'a visitor is invited to sign up, told that using the site helps populate and cross-check it, and told the rules');
  ok(!d.getElementById('editnote').hidden&&/dispute any record/.test(T('editnote')),'a visitor is told on the Records tab that signing in lets them add, correct or dispute');
  await actAs(2);ok(d.getElementById('invite').hidden,'the invitation is gone once signed in');
  ok(d.getElementById('editnote').hidden,'the sign-in prompt on the Records tab is gone once signed in');

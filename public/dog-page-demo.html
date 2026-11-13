@@ -92,6 +92,7 @@ ul.plain{padding-left:1.1rem;margin:0 0 12px}
 .pn .m{color:var(--muted);font-size:.7rem}
 .pn a.cam{display:inline-flex;align-items:center;gap:3px;color:var(--info);font-size:.68rem;text-decoration:none;margin-top:2px}
 .pn a.cam svg{width:12px;height:12px}
+#signin:empty{display:none}
 .pn a.lock{color:var(--info);font-size:.7rem;font-style:italic;text-decoration:none}.pn.locked{opacity:.8;border-style:dashed}
 .pn a.cam .cnt{font-size:.62rem;line-height:1;background:var(--info);color:#fff;border-radius:8px;padding:1px 4px}
 #photopop{position:absolute;z-index:50;background:var(--card,#fff);border:1px solid var(--grid);border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,.18);padding:4px;max-width:20rem;font-size:.82rem}
@@ -141,17 +142,10 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
     <p class="meta" id="lg-msg" role="status" style="margin:0"></p>
   </div>
 </form>
-<p id="signin" class="meta" hidden>You are viewing as a visitor. Sign in to add records, correct your own, or dispute anyone's. Disputes show both sides until they are resolved.</p>
+<p id="signin" class="meta" hidden></p>
 <section id="invite" class="card" hidden style="margin:0 0 12px">
-  <b>Help build the Great Dane record, one dog at a time.</b>
-  <p class="meta" style="margin:4px 0 6px">Every page here is assembled from public pedigree databases, links to other sites, and what members add by hand. By signing in and using it, you help fill it in and check it.</p>
-  <ul class="meta" style="margin:0 0 6px;padding-left:1.1rem">
-    <li><b>Add what you know:</b> a whelp date, a health test, a title, a photo link, always with your name and a link to the evidence.</li>
-    <li><b>Check others' records:</b> if something looks wrong, dispute it with a reason. Both sides stay visible until it is settled.</li>
-    <li><b>Claim your dogs</b> and choose who can see them. Dogs you make public join the shared list.</li>
-    <li><b>Reach further back:</b> sign in to open every ancestor. Dogs people search for that we don't have yet go on a wanted list, so the data grows where people look.</li>
-  </ul>
-  <p class="meta" style="margin:0">No opinions, no anonymous edits: real names and evidence only. Accounts are made by the administrator so everyone is a real person. Ask whoever shared this page with you. <a href="#" id="invitesignin">Sign in</a></p>
+  <b>Help build the Great Dane record.</b>
+  <span class="meta">Sign in to add records, check and dispute others' under your real name, claim your dogs, and open every ancestor. Everything is linked to its evidence, and what you add helps fill the record in and cross-check it. Accounts are made by the administrator; ask whoever sent you this link. <a href="#" id="invitesignin">Sign in</a></span>
 </section>
 <div class="who-box">
   <form id="findform" style="display:inline-flex;gap:6px;align-items:center">
@@ -165,7 +159,7 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
 
 <section id="landing" class="card" hidden style="margin:0 0 16px">
   <h2 style="margin-top:0">Demo Our Dogs</h2>
-  <p class="meta" style="margin:0 0 10px">Piper is our foundation bitch. Below are her and all her offspring, and Mia's puppies. Some records are sample content, marked <b>Demo data</b>. Members can claim the dogs they own and choose to make them public too; those appear under Shared by members. Signing in lets you look up any dog, add records and dispute one.</p>
+  <p class="meta" style="margin:0 0 10px">Piper is our foundation bitch. Below are her, her offspring and Mia's puppies. Records marked <b>Demo data</b> are samples. Members can claim their own dogs and make them public.</p>
   <details class="meta" style="margin:0 0 10px"><summary style="cursor:pointer;font-weight:600">Testing this preview? Read this first</summary>
     <ul style="margin:6px 0 0;padding-left:1.1rem">
       <li><b>Nothing is saved yet.</b> Records, claims and visibility choices you make live only in your browser tab and are gone when you reload. Try everything freely.</li>
@@ -212,7 +206,7 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
 
 <section id="pedigree" style="margin:0 0 18px">
   <h2>Pedigree</h2>
-  <p class="meta"><label for="gens">Generations</label> <select id="gens" style="width:auto;display:inline-block"><option>3</option><option selected>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select> &nbsp;Generated from our own pedigree data when you open this tab. Nothing is stored per dog. Sample data from your Ezra explorer pages, which hold 8 generations above each dog. Cora's sire side is not available.</p>
+  <p class="meta"><label for="gens">Generations</label> <select id="gens" style="width:auto;display:inline-block"><option>3</option><option selected>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select> &nbsp;Generated live from our pedigree data; nothing is stored per dog. Cora's sire side is not available.</p>
   <div id="pedgrid" class="pedgrid"></div>
   <p id="pednote" class="meta" style="margin:6px 0 0"></p>
   <p class="meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg> marks a dog with a photo on River Rock Pedigree. It opens the photo on their site in a new tab; we don't host or copy it.</p>
@@ -261,7 +255,7 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
 
   <h2 style="margin-top:22px">Test results and titles</h2>
   <p class="meta">Each entry needs a date and an evidence link. Flag anything that looks wrong.</p>
-  <div id="editnote" class="card" style="margin:0 0 10px" hidden><b>Want to change something?</b> You are looking as a visitor. <a href="#" id="editsignin">Sign in</a> to add a record, correct one you added, or dispute any record with your real name and a reason. Signed-in members can also claim their own dogs.</div>
+  <div id="editnote" class="card" style="margin:0 0 10px" hidden><a href="#" id="editsignin">Sign in</a> to add a record, correct yours, or dispute any record with a reason.</div>
   <div id="entries"></div>
 
   <details class="card">
