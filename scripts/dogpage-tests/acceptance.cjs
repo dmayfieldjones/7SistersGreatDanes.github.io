@@ -15,7 +15,7 @@ let pass=0,fail=0;const ok=(c,m)=>{if(c){pass++}else{fail++;console.log('  FAIL:
  click(d.getElementById('ourdogsbtn'));await wait(400);
  ok(!d.getElementById('landing').hidden&&d.getElementById('dogview').hidden,'the Our dogs button shows the list');
  const groups=[...d.querySelectorAll('#landing-groups > div')].map(g=>g.textContent.replace(/\s+/g,' ').trim());
- ok(groups.length===5&&/Foundation/.test(groups[0])&&/Rolex × Piper/.test(groups[1])&&/Sean × Piper/.test(groups[2])&&/Ezra × Piper/.test(groups[3])&&/Ezra × Mia/.test(groups[4]),'five groups: Piper, then each litter');
+ ok(groups.length===5&&/Foundation/.test(groups[0])&&/This Is The Right Time × Legado/.test(groups[1])&&/Oops! I Did It Again × Legado/.test(groups[2])&&/Fontana × Legado/.test(groups[3])&&/Fontana × 7sisters/.test(groups[4]),'five groups: Piper, then each litter');
  ok(d.querySelectorAll('#landing [data-demo]').length===21,'21 dogs listed: Piper, her 15 offspring, and Mia\'s 5 puppies');
  click(d.querySelector('[data-demo="416"] .nm'));await wait(1800);ok(/Pumpkin/.test(T('dog-call'))&&d.getElementById('landing').hidden,'clicking the name text inside a card opens that dog (Pumpkin)');click(d.getElementById('ourdogsbtn'));await wait(400);
  click(d.querySelector('[data-demo="413"]'));await wait(1800);ok(T('dog-call').includes('Mia')&&d.getElementById('landing').hidden,'choosing a dog opens its page');
@@ -35,7 +35,7 @@ let pass=0,fail=0;const ok=(c,m)=>{if(c){pass++}else{fail++;console.log('  FAIL:
  console.log('--- Piper\'s offspring and Mia\'s');
  const kids=[...d.querySelectorAll('#offspring > div')].map(g=>g.textContent.replace(/\s+/g,' ').trim());
  ok(d.querySelectorAll('#offspring button').length===15&&kids.length===3,'Piper has 15 offspring in three litters');
- ok(/Rolex × Piper.*5 puppies/.test(kids[0])&&/Sean × Piper.*4 puppies/.test(kids[1])&&/Ezra × Piper.*6 puppies/.test(kids[2]),'litters of 5, 4 and 6');
+ ok(/This Is The Right Time × Legado.*5 puppies/.test(kids[0])&&/Oops! I Did It Again × Legado.*4 puppies/.test(kids[1])&&/Fontana × Legado.*6 puppies/.test(kids[2]),'litters of 5, 4 and 6');
  await find('WS81418801');ok(d.querySelectorAll('#offspring button').length===5&&/Black collar boy/.test(T('offspring'))&&/Purple collar girl/.test(T('offspring')),"Mia's five puppies, known by collar color");
  click(d.querySelector('#offspring button'));await wait(1800);
  ok(/Name to come/.test(T('dog-name'))&&/Black collar boy/.test(T('dog-sub')),"opens a puppy's page: no registered name yet, identified by its collar");

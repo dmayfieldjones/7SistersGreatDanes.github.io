@@ -117,6 +117,8 @@
     dogs[r[0]] = { id: r[0], title: '', titleSuffix: '', registered: '', call: '', short: r[1] + ' collar ' + (r[2] === 'male' ? 'boy' : 'girl'), sex: r[2], color: '', photo: '', ext: false, litter: 'L2026M', visibility: 'public' };
     pupFacts.push(r[0]);
   });
+  // Litters are labeled with the registered names of both parents, never call names.
+  Object.keys(litters).forEach(function (k) { if (k !== 'L412') litters[k].label = litters[k].sire.name + ' \u00d7 ' + litters[k].dam.name; });
   var identifiers = [
     { dog: 412, registry: 'AKC', number: 'WS69691106', author: 1, date: '2026-11-12' },
     { dog: 412, registry: 'OFA', number: 'OFA25G', author: 1, date: '2026-11-12' },
@@ -161,9 +163,9 @@
     C(56, 414, 'ownership', 'Ownership', 'u2', { co: ['u1', 'p5'], start: '2026-02-26', end: '2026-08-01', src: 'AKC' }),
     C(57, 414, 'ownership', 'Ownership', 'u2', { co: ['u1'], start: '2025-01-17', end: '2026-02-26', src: 'AKC' }),
     C(58, 414, 'ownership', 'Ownership', 'u2', { co: ['u1', 'p2', 'p1'], start: '2024-08-19', end: '2025-01-17', src: 'AKC' }),
-    C(7, 412, 'litter', 'Rolex', 'Litter page', { url: '/RolexXPiper', whelp: '2023-07-09' }),
-    C(8, 412, 'litter', 'Sean', 'Litter page', { url: '/SeanXPiper', whelp: '2024-08-19' }),
-    C(9, 412, 'litter', 'Ezra', 'Litter page', { url: '/EzraxPiper', whelp: '2026-03-23' }),
+    C(7, 412, 'litter', 'Fendanesylcrest N Diriso\'s This Is The Right Time', 'Litter page', { url: '/RolexXPiper', whelp: '2023-07-09' }),
+    C(8, 412, 'litter', 'Legado N Izya\'s Oops! I Did It Again', 'Litter page', { url: '/SeanXPiper', whelp: '2024-08-19' }),
+    C(9, 412, 'litter', 'Sonya Danes N Krisda"Our Peace And Harmony"Fontana', 'Litter page', { url: '/EzraxPiper', whelp: '2026-03-23' }),
     C(3, 412, 'test', 'Echocardiogram (sample)', 'Normal', { url: 'https://example.org/sample-cert', ev: 'doc', date: '2026-09-14',
       flags: [{ author: 2, reason: 'Wrong date', evidence: 'https://example.org/sample-report', date: '2026-09-16' }] }),
     C(4, 412, 'test', 'Temperament test (sample)', 'Pass', { url: 'https://example.org/sample-cert-2', ev: 'doc', date: '2026-10-02', author: 2 }),
@@ -281,7 +283,7 @@
       var role = L.dam.reg === reg ? 'her' : (L.sire.reg === reg ? 'his' : null);
       if (!role) return;
       var w = claims.filter(function (c) { return String(c.dog) === String(id) && c.type === 'fact' && c.name === 'Whelp date'; })[0];
-      kids.push({ dogId: d.id, call: d.call, label: d.short || d.call || d.registered || 'Unnamed dog', role: role, whelp: w ? w.value : '', litter: (litters[d.litter] || {}).label || '' });
+      kids.push({ dogId: d.id, call: d.call, label: d.registered || d.short || d.call || 'Unnamed dog', role: role, whelp: w ? w.value : '', litter: (litters[d.litter] || {}).label || '' });
     });
     kids.sort(function (a, b) { return a.whelp < b.whelp ? -1 : (a.whelp > b.whelp ? 1 : (Number(a.dogId) - Number(b.dogId))); });
     return kids;

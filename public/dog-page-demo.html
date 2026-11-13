@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>Great Dane Galactic Gateway | 7Sisters Farm</title>
+<title>GDGalaxy | 7Sisters Farm</title>
 <script src="/private-gate.js" data-key="dog-page-demo" data-codes="1887"></script>
 <style>
 :root{--page:#f9f9f7;--surface:#fcfcfb;--card:#fff;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--grid:#e1e0d9;--rule:#c3c2b7;--accent:#bf141c;--ok:#1b6b3a;--warn:#8a5a00;--info:#1f4f9a}
@@ -131,7 +131,7 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
 <body>
 <main>
 <div id="topbar" style="display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:space-between;margin:0 0 12px;padding-bottom:10px;border-bottom:1px solid var(--grid)">
-  <strong>Great Dane Galactic Gateway <span class="meta" style="font-weight:400">private preview</span></strong>
+  <strong>GDGalaxy <span class="meta" style="font-weight:400">private preview</span></strong>
   <span style="display:inline-flex;gap:10px;align-items:center;flex-wrap:wrap">
     <button class="sm" type="button" data-home="1">Home</button>
     <button class="sm" type="button" id="ourdogsbtn" data-landing="1">Demo Our Dogs</button>
@@ -172,8 +172,8 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
 
 <section id="home" hidden>
   <div class="homehero">
-    <h1>Great Dane Galaxy</h1>
-    <p class="meta" style="margin:-6px 0 12px">A Great Dane Gateway. Enter a registration number to open a dog.</p>
+    <h1>GDGalaxy</h1>
+    <p class="meta" style="margin:-6px 0 12px">Your Great Dane Gateway across platforms. Enter a registration number to open a dog.</p>
     <form id="homeform" class="homeform"><input type="text" id="homefind" placeholder="AKC registration number" aria-label="Registration number" autocomplete="off"><button class="sm primary" type="submit">Find</button></form>
     <div class="demorow"><span class="meta">or take the demo with</span> <button class="sm" type="button" data-demo="412">Piper</button> <button class="sm" type="button" data-demo="413">Mia</button> <button class="sm" type="button" data-demo="414">Cora</button></div>
     <p class="meta" id="homemsg" role="status" style="margin:8px 0 0;min-height:1.2em"></p>
@@ -443,8 +443,10 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
 
   function $(id){return document.getElementById(id)}
   function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
-  function A(id){return authors[id]||{name:'Author #'+id,role:'',status:'unknown'}}
-  function who(id){var a=A(id);return '<span class="who">'+esc(a.name)+'</span> <span class="meta">#'+id+'</span>'+(a.role?' <span class="chip role">'+esc(a.role)+'</span>':'')}
+  function A(id){return authors[id]||{name:'Unknown member',role:'',status:'unknown'}}
+  // Visitors see a short form (Dustin M.) and signed-in members see the full name; the role chip says why the person is trusted. No bare numbers.
+  function shortName(n){var p=String(n).trim().split(/\s+/);return (p.length<2||!/^[A-Z]/.test(p[p.length-1]))?n:p[0]+' '+p[p.length-1].charAt(0)+'.'}
+  function who(id){var a=A(id),full=SESSION&&SESSION.actor!=null;return '<span class="who"'+(full?'':' title="Sign in to see full names"')+'>'+esc(full?a.name:shortName(a.name))+'</span>'+(a.role?' <span class="chip role">'+esc(a.role)+'</span>':'')}
   function pn(id){var pe=(S&&S.people||{})[id]||{label:'Unknown'};return '<span'+(pe.consent?'':' title="Short form shown until this person agrees to be listed"')+'>'+esc(pe.label)+'</span>'}
   // Three separate things: the title (CH, earned), the registered name (never includes the title) and the call name (Piper).
   function labelOf(d){return d.short||d.call||d.registered||'Unnamed dog'}
@@ -585,7 +587,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
       else{
         h+='<div class="val"><span class="title">'+esc(c.name)+':</span> '+esc(c.value)+'</div>';
         if(c.url)h+='<div class="meta"><a href="'+esc(c.url)+'" target="_blank" rel="noopener">evidence link</a></div>';
-        if(c.flags.length&&!old)h+='<ul class="plain meta">'+c.flags.map(function(f){return '<li>Flagged by '+esc(A(f.author).name)+' on '+f.date+': <b>'+esc(f.reason)+'</b>'+(f.evidence?' (<a href="'+esc(f.evidence)+'" target="_blank" rel="noopener">evidence</a>)':'')+'</li>'}).join('')+'</ul>';
+        if(c.flags.length&&!old)h+='<ul class="plain meta">'+c.flags.map(function(f){return '<li>Flagged by '+esc(SESSION&&SESSION.actor!=null?A(f.author).name:shortName(A(f.author).name))+' on '+f.date+': <b>'+esc(f.reason)+'</b>'+(f.evidence?' (<a href="'+esc(f.evidence)+'" target="_blank" rel="noopener">evidence</a>)':'')+'</li>'}).join('')+'</ul>';
         if(!old&&(c.can.flag||c.can.correct||c.can.hide)){
           h+='<div style="margin-top:6px">';
           if(c.can.flag)h+='<form class="f" data-flag="'+c.id+'" style="display:inline-grid;grid-template-columns:auto auto auto;gap:6px;align-items:center"><select name="reason" aria-label="Reason"><option>Wrong dog</option><option>Wrong date</option><option>Wrong result</option><option>Duplicate</option></select><input type="url" name="ev" placeholder="Evidence link" required><button class="sm" type="submit">Flag as incorrect</button></form>';
