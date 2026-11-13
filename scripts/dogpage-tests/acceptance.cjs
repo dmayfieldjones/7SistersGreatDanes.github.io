@@ -2,8 +2,14 @@ const {make}=require('./lib.cjs');
 let pass=0,fail=0;const ok=(c,m)=>{if(c){pass++}else{fail++;console.log('  FAIL:',m)}};
 (async()=>{
  const t=make();const {w,d,wait,T,click,submit,find,actAs,errs}=t;await wait(2200);
- console.log('--- the page opens on Piper, our foundation bitch');
- ok(d.getElementById('landing').hidden&&!d.getElementById('dogview').hidden&&/Legado N Danekraaft/.test(T('dog-name'))&&T('dog-call').includes('Piper'),'a visitor lands on Piper');
+ console.log('--- the page opens on the home screen; the Piper demo button opens Piper, our foundation bitch');
+ ok(!d.getElementById('home').hidden&&d.getElementById('landing').hidden&&d.getElementById('dogview').hidden,'a visitor lands on the home screen');
+ ok(['412','413','414'].every(n=>d.querySelector('#home [data-demo="'+n+'"]')),'the home screen offers Piper, Mia and Cora as demos');
+ ok(d.getElementById('whobox').hidden,'the small search bar is hidden on the home screen');
+ d.getElementById('homefind').value='Piper';submit(d.getElementById('homeform'));await wait(300);ok(/registration number/.test(T('homemsg'))&&d.querySelectorAll('#homemsg a').length===3,'a name (no digits) is told to use a registration number, with three places to look one up');
+ click(d.querySelector('#home [data-demo="412"]'));await wait(1500);
+ ok(d.getElementById('home').hidden&&d.getElementById('landing').hidden&&!d.getElementById('dogview').hidden&&/Legado N Danekraaft/.test(T('dog-name'))&&T('dog-call').includes('Piper'),'the Piper demo button opens Piper');
+ ok(!d.getElementById('whobox').hidden,'the search bar returns on a dog page');
  ok(!d.getElementById('signin').hidden&&!d.getElementById('signinbtn').hidden,'the sign-in button and the visitor note are at the top');
  ok(!/Demo\. Piper's photos are real/.test(d.body.textContent),'the long demo explanation is gone');
  click(d.getElementById('ourdogsbtn'));await wait(400);

@@ -5,7 +5,8 @@ const {make}=require('./lib.cjs');let pass=0,fail=0;const ok=(c,m)=>{if(c)pass++
  console.log('--- deployed address');
  ok(d.getElementById('devmenu').hidden,'the developer view-as menu is hidden on a real site');
  ok(!d.getElementById('signinbtn').hidden,'a Sign in button is shown');ok(d.getElementById('signoutbtn').hidden,'no Sign out while signed out');
- ok(!d.getElementById('signinbtn').hidden&&!d.getElementById('dogview').hidden,'the Sign in button is in the top bar and the page opens on a dog');
+ ok(!d.getElementById('signinbtn').hidden&&!d.getElementById('home').hidden,'the Sign in button is in the top bar and the page opens on the home screen');
+ click(d.querySelector('#home [data-demo="412"]'));await wait(1500);
  ok(!d.getElementById('signin').hidden&&d.getElementById('new-rec').parentNode.hidden,'a visitor cannot add');
  const login=async(u,p,p2)=>{click(d.getElementById('signinbtn'));d.getElementById('lg-user').value=u;d.getElementById('lg-pass').value=p;submit(d.getElementById('loginform'));await wait(300);if(p2){d.getElementById('lg-pass2').value=p2;submit(d.getElementById('loginform'));await wait(1300)}};
  console.log('--- sign-in');
@@ -24,7 +25,7 @@ const {make}=require('./lib.cjs');let pass=0,fail=0;const ok=(c,m)=>{if(c)pass++
  ok(!!w.sessionStorage.getItem('dogpage-id-token'),'the sign-in is kept for this browser session only');
  click(d.getElementById('signoutbtn'));await wait(800);
  ok(!d.getElementById('signin').hidden&&d.getElementById('whoami').hidden,'signing out returns to visitor');ok(!w.sessionStorage.getItem('dogpage-id-token'),'the token is removed');
- ok(!d.getElementById('dogview').hidden&&/Legado N Danekraaft/.test(T('dog-name')),'signing out returns to Piper');ok(/Jason D\./.test(T('dog-breeders')),'back to short names');
+ ok(!d.getElementById('home').hidden&&d.getElementById('dogview').hidden,'signing out returns to the home screen');click(d.querySelector('#home [data-demo="412"]'));await wait(1500);ok(/Legado N Danekraaft/.test(T('dog-name')),'Piper opens again');ok(/Jason D\./.test(T('dog-breeders')),'back to short names');
  console.log('--- a member who is not an administrator');
  await login('trial-member','Temp-pass-1234','My-chosen-password-1');
  ok(/Signed in as Trial member/.test(T('whoami'))&&!/administrator/.test(T('whoami')),'signed in as a member');

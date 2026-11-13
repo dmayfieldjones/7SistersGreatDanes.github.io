@@ -114,6 +114,18 @@ form.inline{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:0}
 form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem}
 .fact-by{font-size:.75rem;color:var(--muted);margin-left:6px}
 @media (max-width:560px){.hero{grid-template-columns:1fr}main{padding:12px 12px 44px}form.f .two{grid-template-columns:1fr}}
+.who-box[hidden]{display:none}
+.homehero{text-align:center;padding:18px 8px 16px}
+.homehero h1{margin:0 0 12px;font-size:1.7rem}
+.homeform{display:flex;gap:8px;justify-content:center;margin:0 0 10px}
+.homeform input{width:min(22rem,70vw);font-size:1.05rem;padding:10px 14px;border-radius:999px}
+.homeform button{font-size:1rem;padding:8px 20px;border-radius:999px}
+.demorow{display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap}
+.galwrap{position:relative}
+#homecv{width:100%;height:440px;display:block;background:#05060a;border:1px solid var(--grid);border-radius:12px}
+.galcap{position:absolute;left:0;right:0;bottom:0;padding:10px 16px 12px;border-radius:0 0 12px 12px;background:linear-gradient(transparent,rgba(5,6,10,.82));color:#fff;pointer-events:none;font-size:.85rem}
+.galcap b{display:block;font-size:.95rem}.galcap span{color:#c9cde0}
+@media (max-width:560px){#homecv{height:340px}}
 </style>
 </head>
 <body>
@@ -121,6 +133,7 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
 <div id="topbar" style="display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:space-between;margin:0 0 12px;padding-bottom:10px;border-bottom:1px solid var(--grid)">
   <strong>Dog pages <span class="meta" style="font-weight:400">private preview</span></strong>
   <span style="display:inline-flex;gap:10px;align-items:center;flex-wrap:wrap">
+    <button class="sm" type="button" data-home="1">Home</button>
     <button class="sm" type="button" id="ourdogsbtn" data-landing="1">Demo Our Dogs</button>
     <span id="devmenu" hidden><label for="me" class="meta">Developer: view as</label> <select id="me" aria-label="Developer: view as" style="width:auto"></select></span>
     <span id="authbox" style="display:inline-flex;gap:8px;align-items:center;flex-wrap:wrap">
@@ -147,7 +160,7 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
   <summary><b>New here? How this works and how to help</b> &middot; <a href="#" id="invitesignin">Sign in</a></summary>
   <p class="meta" style="margin:6px 0 0">This page gathers what is already public about a dog and links to the original sources. What you add, under your real name and with a link to the evidence, helps fill the record in and cross-check it. Sign in to add records, dispute others', claim your dogs, and open every ancestor. Accounts are made by the administrator; ask whoever sent you this link.</p>
 </details>
-<div class="who-box">
+<div class="who-box" id="whobox">
   <form id="findform" style="display:inline-flex;gap:6px;align-items:center">
     <input type="text" id="dogfind" placeholder="Find a dog by registration number" aria-label="Find a dog by registration number" style="width:16rem" autocomplete="off">
     <button class="sm" type="submit">Find</button>
@@ -156,6 +169,16 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
   <span class="meta" id="auth-src"></span>
 </div>
 <div id="status" class="meta" role="status" style="min-height:1.2em;margin:0 0 6px"></div>
+
+<section id="home" hidden>
+  <div class="homehero">
+    <h1>Find a Great Dane</h1>
+    <form id="homeform" class="homeform"><input type="text" id="homefind" placeholder="AKC registration number" aria-label="Registration number" autocomplete="off"><button class="sm primary" type="submit">Find</button></form>
+    <div class="demorow"><span class="meta">or take the demo with</span> <button class="sm" type="button" data-demo="412">Piper</button> <button class="sm" type="button" data-demo="413">Mia</button> <button class="sm" type="button" data-demo="414">Cora</button></div>
+    <p class="meta" id="homemsg" role="status" style="margin:8px 0 0;min-height:1.2em"></p>
+  </div>
+  <div class="galwrap"><canvas id="homecv" aria-label="An animated map of the breed: dots appear year by year, the largest constellations light up in turn, and one dog's family tree is traced across the map"></canvas><div class="galcap" id="homecap" aria-live="off"></div></div>
+</section>
 
 <section id="landing" class="card" hidden style="margin:0 0 16px">
   <h2 style="margin-top:0">Demo Our Dogs</h2>
@@ -432,7 +455,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
 
   // ---- loading ----
   function load(id){
-    return DogAPI.getDog(id).then(function(s){S=s;return DogAPI.getPedigree(id,8).then(function(p){PED={nodes:p.nodes,error:null}},function(e){PED={nodes:null,error:e}})}).then(function(){editing=null;$('landing').hidden=true;$('dogview').hidden=false;renderAll();renderGalaxy()}).catch(function(e){say(e&&e.message?e.message:'That dog could not be loaded.')});
+    return DogAPI.getDog(id).then(function(s){S=s;return DogAPI.getPedigree(id,8).then(function(p){PED={nodes:p.nodes,error:null}},function(e){PED={nodes:null,error:e}})}).then(function(){editing=null;hideHome();$('landing').hidden=true;$('dogview').hidden=false;renderAll();renderGalaxy()}).catch(function(e){say(e&&e.message?e.message:'That dog could not be loaded.')});
   }
   function reload(){return DogAPI.getDog(S.dog.id).then(function(s){S=s;renderAll()})}
   function goTo(id,back){
@@ -471,7 +494,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
       }).join('')+'</div></div>';
     }).join('');
   }
-  function showLanding(){$('landing').hidden=false;$('dogview').hidden=true;renderTop();return DogAPI.ourDogs().then(renderLanding)}
+  function showLanding(){hideHome();$('landing').hidden=false;$('dogview').hidden=true;renderTop();return DogAPI.ourDogs().then(renderLanding)}
   var PH={};
   var CAM='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>';
   var HEALTH='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8M8 12h8"/></svg>';
@@ -859,6 +882,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     if(t.dataset.confirm){run(DogAPI.confirmDog(S.dog.id));return}
     if(t.dataset.claim){run(DogAPI.claimDog(S.dog.id));return}
     if(t.dataset.landing){ev.preventDefault();showLanding();return}
+    if(t.dataset.home){ev.preventDefault();showHome();return}
     var gt=t.closest&&t.closest('[data-goto]');
     if(gt){ev.preventDefault();goTo(gt.dataset.goto);window.scrollTo(0,0);return}
     if(t.dataset.gmode){galMode=t.dataset.gmode;document.querySelectorAll('[data-gmode]').forEach(function(b){b.setAttribute('aria-pressed',b===t?'true':'false')});renderGalaxy();return}
@@ -878,16 +902,154 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   });
   $('gens').addEventListener('change',function(){if(S)renderPed()});
   document.addEventListener('change',function(e){if(e.target&&e.target.id==='vis'&&S)run(DogAPI.setVisibility(S.dog.id,e.target.value))});
-  $('findform').addEventListener('submit',function(e){
-    e.preventDefault();
-    var q=$('dogfind').value.trim(),msg=$('findmsg');
-    if(!q){msg.textContent='';return}
-    msg.textContent='';
-    DogAPI.lookup(q).then(function(r){return goTo(r.dogId)}).catch(function(err){msg.textContent=err&&err.message||'That search failed.'});
-  });
+  $('findform').addEventListener('submit',function(e){e.preventDefault();findDog($('dogfind').value.trim(),$('findmsg'))});
+  $('homeform').addEventListener('submit',function(e){e.preventDefault();findDog($('homefind').value.trim(),$('homemsg'))});
   $('me').addEventListener('change',function(e){
     DogAPI.setActor(e.target.value).then(function(s){SESSION=s;return afterSessionChange()});
   });
+
+  // ---- home: a search box, three demo dogs, and an animated tour of the galaxy (drawn in the browser from the same map data; nothing is stored) ----
+  var homeRaf=0,homeRun=0,homeVisible=true,homeIO=null;
+  function hideHome(){$('home').hidden=true;$('whobox').hidden=false;cancelAnimationFrame(homeRaf);homeRun++}
+  function showHome(){
+    $('landing').hidden=true;$('dogview').hidden=true;$('home').hidden=false;$('whobox').hidden=true;say('');renderTop();
+    cancelAnimationFrame(homeRaf);var run=++homeRun;
+    $('homecap').textContent='Loading the galaxy…';
+    return loadGalaxy().then(function(G){
+      if(run!==homeRun)return;
+      // Piper's own place on the map is the finale of the tour
+      return DogAPI.getDog(412).then(function(s){
+        var l=s.identifiers.filter(function(x){return x.registry==='AKC'})[0];
+        return {reg:l&&l.number,call:s.dog.call||s.dog.short||'Piper'};
+      }).catch(function(){return null}).then(function(star){if(run===homeRun)startHome(G,run,star)});
+    },function(){$('homecap').textContent='The galaxy could not be loaded just now.'});
+  }
+  function startHome(G,run,star){
+    var cv=$('homecv'),ctx=cv.getContext('2d'),cap=$('homecap');if(!ctx)return;
+    var dpr=Math.min(2,window.devicePixelRatio||1),W=cv.clientWidth||700,H=cv.clientHeight||420;
+    cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);
+    var calm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var N=G.N,K=G.cs.length,asp=G.asp,i,c,k;
+    function px(i){return G.qx[i]/65535}function py(i){return G.qy[i]/65535*asp}
+    var bx=G.box,bw=bx[1]-bx[0],bh=bx[3]-bx[2],base=Math.min(W*.96/bw,H*.96/bh),mid=[(bx[0]+bx[1])/2,(bx[2]+bx[3])/2];
+    // the persistent layer: every dog drawn once, as it is "born", in a soft additive glow
+    var OS=2048,ls=(OS-4)/Math.max(bw,bh),lay=document.createElement('canvas');lay.width=Math.ceil(bw*ls)+4;lay.height=Math.ceil(bh*ls)+4;
+    var lc=lay.getContext('2d');lc.globalCompositeOperation='lighter';
+    var cols=G.cs.map(function(_,c){return hsl((c*137.508)%360,74,[64,54,73][c%3])}),hot=G.cs.map(function(_,c){return hsl((c*137.508)%360,85,72)});
+    var maxYr=0;for(i=0;i<N;i++)if(G.yr[i]>maxYr)maxYr=G.yr[i];
+    var cnt=new Int32Array(maxYr+2);for(i=0;i<N;i++)cnt[G.yr[i]+1]++;for(k=0;k<=maxYr;k++)cnt[k+1]+=cnt[k];
+    var order=new Int32Array(N),fill=cnt.slice();for(i=0;i<N;i++)order[fill[G.yr[i]]++]=i;
+    var ptr=0;
+    function born(ty){while(ptr<N&&G.yr[order[ptr]]<ty){var d=order[ptr++];lc.globalAlpha=.5;lc.fillStyle=cols[G.cl[d]];lc.fillRect((px(d)-bx[0])*ls-.8,(py(d)-bx[2])*ls-.8,1.8,1.8)}}
+    // the biggest constellations, each with a handful of "stars" (the dogs with the most puppies) joined like a drawn constellation
+    var mem=[];for(c=0;c<K;c++)mem[c]=[];for(i=0;i<N;i++)mem[G.cl[i]].push(i);
+    var ids=G.cs.map(function(_,c){return c}).sort(function(a,b){return G.cs[b][1]-G.cs[a][1]}).slice(0,Math.min(7,K));
+    var tour=ids.map(function(c){
+      var m=mem[c],sx=0,sy=0;m.forEach(function(d){sx+=px(d);sy+=py(d)});var cx=sx/m.length,cy=sy/m.length;
+      var q9=function(f){var v=m.map(f).sort(function(a,b){return a-b});return v[Math.floor(v.length*.9)]||.03},ex=q9(function(d){return Math.abs(px(d)-cx)}),ey=q9(function(d){return Math.abs(py(d)-cy)});
+      var st=m.slice().sort(function(a,b){return (G.ks[b+1]-G.ks[b])-(G.ks[a+1]-G.ks[a])}).slice(0,12);
+      var ed=[],inT=[0],rest=st.map(function(_,j){return j}).slice(1);
+      while(rest.length){var bi=-1,bj=-1,bd=1e9;inT.forEach(function(a){rest.forEach(function(b){var d=Math.hypot(px(st[a])-px(st[b]),py(st[a])-py(st[b]));if(d<bd){bd=d;bi=a;bj=b}})});ed.push([st[bi],st[bj]]);inT.push(bj);rest.splice(rest.indexOf(bj),1)}
+      return {c:c,m:m,cx:cx,cy:cy,s:Math.max(base*1.6,Math.min(base*7,Math.min(W*.4/ex,H*.36/ey))),st:st,ed:ed};
+    });
+    // the finale: Piper's own ancestors, drawn generation by generation
+    var fin=null;
+    if(star&&star.reg&&G.rh){
+      var h=fnv(String(star.reg).toUpperCase().replace(/[^A-Z0-9]/g,'')),row=-1;for(i=0;i<N;i++)if(G.rh[i]===h){row=i;break}
+      if(row>=0){
+        var anc=new Map([[row,0]]),q=[row],mg=0;
+        while(q.length){var nx=[];q.forEach(function(a){[G.sire[a],G.dam[a]].forEach(function(p){if(p>=0&&!anc.has(p)){anc.set(p,anc.get(a)+1);mg=Math.max(mg,anc.get(a)+1);nx.push(p)}})});q=nx}
+        var ed2=[],x0=9,x1=-9,y0=9,y1=-9;
+        anc.forEach(function(g,a){x0=Math.min(x0,px(a));x1=Math.max(x1,px(a));y0=Math.min(y0,py(a));y1=Math.max(y1,py(a));[G.sire[a],G.dam[a]].forEach(function(p){if(p>=0&&anc.has(p))ed2.push([a,p,g])})});
+        var fw=Math.max(.06,x1-x0),fh=Math.max(.06,y1-y0);
+        fin={row:row,anc:anc,mg:mg,ed:ed2,cx:(x0+x1)/2,cy:(y0+y1)/2,s:Math.min(W*.8/fw,H*.8/fh,base*9)};
+      }
+    }
+    var BUILD=10,TT=4.6,TRAV=1.3,FT=8,CYCLE=BUILD+tour.length*TT+(fin?FT:0);
+    function e3(t){t=Math.max(0,Math.min(1,t));return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2}
+    function lerp(a,b,t){return a+(b-a)*t}
+    var whole={x:mid[0],y:mid[1],s:base};
+    function camAt(e){
+      if(e<BUILD){var t=e/BUILD;return {x:mid[0]+Math.sin(t*2)*.03,y:mid[1]+Math.cos(t*2)*.02,s:base*lerp(.8,1,e3(t))}}
+      var k2=Math.floor((e-BUILD)/TT);
+      if(k2<tour.length){
+        var a=k2?tour[k2-1]:whole,b=tour[k2],t2=e3((e-BUILD-k2*TT)/TRAV),u=(e-BUILD-k2*TT)/TT;
+        return {x:lerp(a.cx!==undefined?a.cx:a.x,b.cx,t2),y:lerp(a.cy!==undefined?a.cy:a.y,b.cy,t2),s:lerp(a.s,b.s,t2)*(1+.07*u)}
+      }
+      var f=fin,la=tour[tour.length-1],t3=e3((e-BUILD-tour.length*TT)/1.8);
+      return {x:lerp(la.cx,f.cx,t3),y:lerp(la.cy,f.cy,t3),s:lerp(la.s,f.s,t3)}
+    }
+    // a few fixed background stars, so the dark is not empty
+    var bg=[];for(i=0;i<110;i++){var r1=fnv('s'+i),r2=fnv('t'+i);bg.push([(r1%10007)/10007*W,(r2%10009)/10009*H,.4+(r1%7)/7*1.1,(r2%13)/13*6.28])}
+    var t0=null,lastCap='',cyc=-1;
+    function setCap(t){if(t!==lastCap){lastCap=t;cap.innerHTML=t}}
+    function frame(ts){
+      if(run!==homeRun||$('home').hidden)return;
+      if(t0===null)t0=ts;
+      var el=calm?CYCLE-.01:(ts-t0)/1000,cy2=Math.floor(el/CYCLE),e=el-cy2*CYCLE;
+      if(cy2!==cyc){cyc=cy2;ptr=0;lc.globalCompositeOperation='source-over';lc.clearRect(0,0,lay.width,lay.height);lc.globalCompositeOperation='lighter'}
+      if(!homeVisible){homeRaf=requestAnimationFrame(frame);return}
+      born(e<BUILD?e3(e/BUILD)*(maxYr+1):maxYr+2);
+      var cam=camAt(e),s=cam.s,ox=W/2-cam.x*s,oy=H/2-cam.y*s;
+      ctx.setTransform(dpr,0,0,dpr,0,0);ctx.globalCompositeOperation='source-over';ctx.globalAlpha=1;ctx.fillStyle='#05060a';ctx.fillRect(0,0,W,H);
+      for(i=0;i<bg.length;i++){var b=bg[i],tw=calm?.7:.55+.45*Math.sin(el*1.3+b[3]);ctx.globalAlpha=.55*tw;ctx.fillStyle='#cfd8ff';ctx.fillRect(b[0],b[1],b[2],b[2])}
+      var inTour=e>=BUILD,dim=inTour?lerp(1,.26,e3((e-BUILD)/1)):1,kk=Math.floor((e-BUILD)/TT),inFin=fin&&kk>=tour.length;
+      if(inFin)dim=.22;
+      // the layer, placed by the camera
+      ctx.globalAlpha=dim;ctx.imageSmoothingEnabled=true;
+      ctx.setTransform(dpr*s/ls,0,0,dpr*s/ls,dpr*(bx[0]*s*-1+ox),dpr*(bx[2]*s*-1+oy));ctx.drawImage(lay,0,0);
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+      var title='',sub='';
+      if(e<BUILD){
+        var yr=Math.min(maxYr,Math.floor(e3(e/BUILD)*(maxYr+1)))+G.y0;
+        ctx.globalAlpha=.9;ctx.fillStyle='rgba(255,255,255,.2)';ctx.font='700 54px system-ui,sans-serif';ctx.textAlign='left';ctx.textBaseline='alphabetic';ctx.fillText(String(yr),18,H-20);
+        title='The breed, born year by year';sub=ptr.toLocaleString()+' dogs so far'
+      }else if(!inFin){
+        var T=tour[kk],u=(e-BUILD-kk*TT),zs=Math.max(1,s/base),sz=Math.min(2.6,1.1+zs*.15);
+        var a1=e3((u-.7)/.9);ctx.globalCompositeOperation='lighter';ctx.globalAlpha=.55*a1;ctx.fillStyle=hot[T.c];
+        for(i=0;i<T.m.length;i++){var d=T.m[i];ctx.fillRect(px(d)*s+ox-sz/2,py(d)*s+oy-sz/2,sz,sz)}
+        ctx.globalCompositeOperation='source-over';
+        // constellation lines grow one by one, then the stars glow
+        var ep=Math.max(0,(u-1.3)/2.2)*T.ed.length;ctx.lineWidth=1.2;
+        for(i=0;i<T.ed.length;i++){var f2=Math.max(0,Math.min(1,ep-i));if(f2<=0)break;var A=T.ed[i][0],B=T.ed[i][1],ax=px(A)*s+ox,ay=py(A)*s+oy,bx2=px(B)*s+ox,by2=py(B)*s+oy;
+          ctx.globalAlpha=.7;ctx.strokeStyle='#fff';ctx.beginPath();ctx.moveTo(ax,ay);ctx.lineTo(lerp(ax,bx2,f2),lerp(ay,by2,f2));ctx.stroke()}
+        for(i=0;i<T.st.length;i++){var d2=T.st[i],sx2=px(d2)*s+ox,sy2=py(d2)*s+oy,pl=calm?0:.5+.5*Math.sin(el*2.2+i);
+          var show=Math.max(0,Math.min(1,(u-1.1-i*.08)/.4));if(!show)continue;
+          var g=ctx.createRadialGradient(sx2,sy2,0,sx2,sy2,16);g.addColorStop(0,'rgba(255,255,255,'+(.9*show)+')');g.addColorStop(.25,'rgba(255,240,200,'+(.35*show)+')');g.addColorStop(1,'rgba(255,200,100,0)');
+          ctx.globalAlpha=.55+.45*pl;ctx.fillStyle=g;ctx.beginPath();ctx.arc(sx2,sy2,16,0,6.3);ctx.fill();ctx.globalAlpha=show;ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(sx2,sy2,2.2,0,6.3);ctx.fill()}
+        var la=e3((u-.5)/.6)*(1-e3((u-TT+.7)/.6));
+        ctx.globalAlpha=la;ctx.fillStyle='#fff';ctx.font='700 30px system-ui,sans-serif';ctx.textAlign='left';ctx.textBaseline='alphabetic';ctx.shadowColor=hot[T.c];ctx.shadowBlur=14;ctx.fillText(G.cs[T.c][0]||('Group '+(T.c+1)),18,44);ctx.shadowBlur=0;
+        title='The '+esc(G.cs[T.c][0]||('Group '+(T.c+1)))+' constellation';sub=T.m.length.toLocaleString()+' dogs, centered on '+G.cs[T.c][2]+'. The bright stars are its most prolific sires and dams.'
+      }else{
+        var u2=e-BUILD-tour.length*TT,reveal=Math.max(0,(u2-1.6)/4.2)*fin.mg;
+        ctx.lineWidth=1.3;
+        fin.ed.forEach(function(E){if(E[2]>reveal)return;var f3=Math.min(1,reveal-E[2]);ctx.globalAlpha=Math.max(.25,.95-E[2]*.07)*Math.min(1,f3+.2);ctx.strokeStyle='#ffc04d';ctx.beginPath();ctx.moveTo(px(E[0])*s+ox,py(E[0])*s+oy);ctx.lineTo(lerp(px(E[0]),px(E[1]),f3)*s+ox,lerp(py(E[0]),py(E[1]),f3)*s+oy);ctx.stroke()});
+        fin.anc.forEach(function(g,a){if(g>reveal)return;ctx.globalAlpha=.95;ctx.fillStyle=g?'#ffc04d':'#fff';ctx.fillRect(px(a)*s+ox-1.7,py(a)*s+oy-1.7,3.4,3.4)});
+        var fx=px(fin.row)*s+ox,fy=py(fin.row)*s+oy,ph=calm?0:(el%2.2)/2.2;
+        for(k=0;k<2;k++){var qq=(ph+k*.5)%1;ctx.globalAlpha=.8*(1-qq);ctx.strokeStyle='#fff';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(fx,fy,6+qq*18,0,6.3);ctx.stroke()}
+        ctx.globalAlpha=1;ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(fx,fy,3,0,6.3);ctx.fill();
+        ctx.font='700 15px system-ui,sans-serif';ctx.textAlign='center';ctx.shadowColor='#000';ctx.shadowBlur=6;ctx.fillText(star.call,fx,fy-16);ctx.shadowBlur=0;
+        title=esc(star.call)+'’s family tree';sub='Her ancestry, '+fin.mg+' generations back, across '+fin.anc.size.toLocaleString()+' dogs. Every pedigree is a path through the galaxy.'
+      }
+      setCap('<b>'+title+'</b><span>'+sub+'</span>');
+      // fade between loops
+      var fo=Math.max(0,Math.min(1,(e-(CYCLE-.9))/.9));
+      if(!calm&&fo>0){ctx.globalAlpha=fo;ctx.fillStyle='#05060a';ctx.fillRect(0,0,W,H)}
+      ctx.globalAlpha=1;
+      if(!calm)homeRaf=requestAnimationFrame(frame)
+    }
+    homeRaf=requestAnimationFrame(frame);
+    if(calm)setCap('<b>'+N.toLocaleString()+' Great Danes, '+K+' constellations</b><span>The whole breed, 1870 to today, each dot a dog and each color a constellation of related lines.</span>');
+    if(!homeIO&&window.IntersectionObserver){homeIO=new IntersectionObserver(function(en){homeVisible=en[0].isIntersecting});homeIO.observe(cv)}
+  }
+  var homeRz=0;window.addEventListener('resize',function(){clearTimeout(homeRz);homeRz=setTimeout(function(){if(!$('home').hidden)showHome()},250)});
+  // one search function for the home box and the box on every dog page
+  function findDog(q,msg){
+    if(!q){msg.textContent='';return}
+    if(!/\d/.test(q)){msg.innerHTML='That looks like a name. Enter a registration number, such as WS69691106. To find a number, search by name at <a href="'+DBD.site+'" target="_blank" rel="noopener">DANES World</a>, <a href="'+DBQ.site+'" target="_blank" rel="noopener">Quintessa</a> or <a href="'+DB.site+'" target="_blank" rel="noopener">River Rock</a>, then paste it here.';return}
+    msg.textContent='';
+    DogAPI.lookup(q).then(function(r){return goTo(r.dogId)}).catch(function(err){msg.textContent=err&&err.message||'That search failed.'});
+  }
 
   // ---- sign-in: a real login against the user pool (Amazon Cognito). The page never sees a password after the call returns. ----
   var AUTH=null, challenge=null, KEY='dogpage-id-token';
@@ -908,7 +1070,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   function finish(res){
     var idt=res&&res.AuthenticationResult&&res.AuthenticationResult.IdToken;
     if(!idt){authMsg('Sign-in did not complete.');return}
-    applyLogin(idt).then(function(ok){if(ok){$('lg-pass').value='';$('lg-pass2').value='';challenge=null;$('lg-new').style.display='none';showLogin(false);authMsg('');renderTop();return load(S?S.dog.id:412)}else authMsg('That account is not set up for the dog pages yet.')});
+    applyLogin(idt).then(function(ok){if(ok){$('lg-pass').value='';$('lg-pass2').value='';challenge=null;$('lg-new').style.display='none';showLogin(false);authMsg('');renderTop();return S?load(S.dog.id):showHome()}else authMsg('That account is not set up for the dog pages yet.')});
   }
   $('loginform').addEventListener('submit',function(e){
     e.preventDefault();authMsg('');
@@ -930,7 +1092,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   // After signing out (or changing who you are): a visitor goes back to Piper, our foundation bitch; a member reloads the page they are on.
   function afterSessionChange(){
     renderTop();
-    if(SESSION.role==='visitor'){NAV=[];return load(412)}
+    if(SESSION.role==='visitor'){NAV=[];return showHome()}
     return load(S?S.dog.id:412);
   }
   $('signoutbtn').addEventListener('click',function(){store(null);DogAPI.signOut().then(function(s){SESSION=s;return afterSessionChange()})});
@@ -942,7 +1104,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     var t=stored();return (AUTH&&t)?applyLogin(t):false;
   }).then(function(){return DogAPI.authors()}).then(function(a){
     authors=a;$('devmenu').hidden=!DEV||DogAPI.remote();$('auth-src').textContent=DEV?'Names come from the authors file. Records store only author numbers.':'';
-    renderTop();return load(412);
+    renderTop();return showHome();
   });
 })();
 </script>
