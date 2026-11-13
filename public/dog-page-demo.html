@@ -178,11 +178,11 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
     <p class="meta" style="margin:-6px 0 12px">Your Great Dane Gateway across platforms. Enter a registration number to open a dog.</p>
     <form id="homeform" class="homeform"><input type="text" id="homefind" placeholder="AKC registration number" aria-label="Registration number" autocomplete="off"><button class="sm primary" type="submit">Find</button></form>
     <div class="demorow"><span class="meta">or take the demo with</span> <button class="sm" type="button" data-demo="412">Piper</button> <button class="sm" type="button" data-demo="413">Mia</button> <button class="sm" type="button" data-demo="414">Cora</button></div>
-    <details class="nonum"><summary class="meta" style="cursor:pointer">No registration number? Members: find or add a dog by name and birth date</summary>
+    <details class="nonum"><summary class="meta" style="cursor:pointer">No registration number? Members: find or add a dog by name (birth date helps)</summary>
       <form id="nameform" class="nameform">
         <span class="meta">Quickest for older dogs: open a descendant that has a number, then click the ancestor in its pedigree. Use this form only if the dog is not in any pedigree here.</span>
         <input type="text" id="nf-name" placeholder="Registered name (titles like CH are fine)" maxlength="120" required autocomplete="off">
-        <input type="date" id="nf-born" aria-label="Birth date" required>
+        <input type="date" id="nf-born" aria-label="Birth date (optional; tells same-named dogs apart)" title="Birth date (optional; tells same-named dogs apart)">
         <select id="nf-sex" aria-label="Sex"><option value="">Sex (optional)</option><option value="female">Female</option><option value="male">Male</option></select>
         <input type="text" id="nf-color" placeholder="Color (optional)" maxlength="40" autocomplete="off">
         <input type="url" id="nf-url" placeholder="Link to where you found it (optional, recommended)" autocomplete="off">
@@ -191,7 +191,7 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
         <textarea id="nf-paste" rows="3" placeholder="Paste the dog's details copied from a pedigree page (name, color, sex, birth date) and the fields below fill in" aria-label="Pasted details"></textarea>
         <span class="meta" id="nf-note" role="status"></span>
         </details>
-        <span class="meta">Older and non-US dogs often have no number in these databases. The name and birth date identify the dog. Signed-in members only.</span>
+        <span class="meta">Older and non-US dogs often have no number in these databases. The registered name identifies the dog; add the birth date if you have it, to tell same-named dogs apart. Signed-in members only.</span>
       </form></details>
     <p class="meta" style="margin:10px 0 0;font-size:.8rem">For personal, non-commercial use only. No scraping, bulk downloading or reselling of records.</p>
     <p class="meta" id="homemsg" role="status" style="margin:8px 0 0;min-height:1.2em"></p>

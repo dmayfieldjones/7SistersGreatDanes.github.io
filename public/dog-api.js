@@ -340,18 +340,28 @@
       var gate = needMember() || lookupBudget(); if (gate) return gate;   // members only: a name search must never let a visitor browse the database
       var name = String(o.name || '').trim().replace(/\s+/g, ' ').slice(0, 120), born = String(o.born || '').trim();
       if (!name) return fail('invalid', 'Enter the dog\'s registered name.');
-      if (!/^\d{4}-\d{2}-\d{2}$/.test(born) || isNaN(Date.parse(born)) || born > NOW()) return fail('invalid', 'Enter the birth date as year-month-day.');
+      if (born && (!/^\d{4}-\d{2}-\d{2}$/.test(born) || isNaN(Date.parse(born)) || born > NOW())) return fail('invalid', 'Enter the birth date as year-month-day, or leave it blank.');
       var sp = splitTitle(name); name = sp.name || name;   // a title typed or pasted with the name (CH, GCH ...) is split off, so it never changes which dog this is
       var url = String(o.url || '').trim();
       if (url && !/^https?:\/\//i.test(url)) return fail('invalid', 'The source link must start with http:// or https://');
-      var key = name.toLowerCase().replace(/[^a-z0-9]+/g, '') + '|' + born;
-      var ex = Object.keys(dogs).filter(function (k) { return dogs[k].nameKey === key; })[0];
-      if (ex !== undefined) return Promise.resolve({ dogId: ex, created: false });
+      var nk = name.toLowerCase().replace(/[^a-z0-9]+/g, ''), key = nk + '|' + born;
+      // With a birth date the match is exact. Without one, a name that matches a single dog opens it; several dogs with that name ask for the date.
+      var same = Object.keys(dogs).filter(function (k) { return dogs[k].nameKey && dogs[k].nameKey.split('|')[0] === nk; });
+      var hit = born ? same.filter(function (k) { return dogs[k].nameKey === key; }) : same;
+      if (hit.length > 1) return fail('invalid', 'More than one dog has that name. Add the birth date to pick the right one.');
+      if (hit.length === 1) return Promise.resolve({ dogId: hit[0], created: false });
+      // A date given for a dog that was started without one completes that dog instead of making a second page.
+      var undated = born ? same.filter(function (k) { return dogs[k].nameKey === nk + '|'; }) : [];
+      if (undated.length === 1) {
+        dogs[undated[0]].nameKey = key;
+        claims.push(C(nextId++, undated[0], 'fact', 'Whelp date', born, { src: url, author: actorId === 0 ? 1 : actorId, date: NOW() }));
+        return Promise.resolve({ dogId: undated[0], created: false });
+      }
       var id = 'n:' + key, sx = o.sex === 'female' || o.sex === 'male' ? o.sex : '', a = actorId === 0 ? 1 : actorId;
       dogs[id] = { id: id, title: sp.name ? sp.title : '', titleSuffix: '', registered: name, call: '', short: '', sex: sx, color: String(o.color || '').trim().toLowerCase().slice(0, 40), photo: '', ext: false, litter: null, stub: true, pending: true, visibility: 'members', nameKey: key };
-      claims.push(C(nextId++, id, 'fact', 'Whelp date', born, { src: url, author: a, date: NOW() }));
+      if (born) claims.push(C(nextId++, id, 'fact', 'Whelp date', born, { src: url, author: a, date: NOW() }));
       if (url) claims.push(C(nextId++, id, 'link', 'Source for this dog', '', { url: url, author: a, date: NOW() }));
-      wantedLog(name + ' (born ' + born + ')', 'dog');
+      wantedLog(name + (born ? ' (born ' + born + ')' : ''), 'dog');
       return Promise.resolve({ dogId: id, created: true });
     },
     lookup: function (number) {
