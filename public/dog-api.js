@@ -41,6 +41,7 @@
   'use strict';
 
   var TITLE = /^(AM|CAN|INT|MEX|NORD|EST|SWD|FIN|JPN|UKC|AKC|CH|GCH\w*|BISS?|BIS|ROM|HOF|AOM|&)$/i;
+  var SCREENS = ['Hips', 'Elbows', 'Cardiac', 'Thyroid', 'Eyes', 'Patellas', 'Shoulders', 'Other'];
   var AKCNO = /^[A-Z]{2}\d{6,}$/;
   // Demo only: which sign-in names map to which demo identity. The real server maps a verified token to a member; nothing here is a security control.
   var LOGINS = { 'dmj': 0, 'trial-member': 9 };
@@ -375,6 +376,7 @@
           claims.forEach(function (c) {
             if (c.dog !== did || c.status !== 'visible') return;
             if (c.type === 'test') hn++;
+            if (c.type === 'screens') hn += String(c.value).split(', ').length;
             if (c.type === 'link' && (/VGL|AKC DNA|Embark|Wisdom|sequence/i.test(c.name) || (c.name === 'DNA test' && c.value !== 'pending'))) dn++;
           });
         }
@@ -418,7 +420,14 @@
     addRecord: function (dogId, rec) {
       var g = needMember(); if (g) return g;
       if (!dogs[dogId]) return fail('not_found', 'No such dog.');
-      if (['test', 'win', 'litter', 'link'].indexOf(rec.type) < 0) return fail('invalid', 'Unknown record type.');
+      if (['test', 'win', 'litter', 'link', 'screens'].indexOf(rec.type) < 0) return fail('invalid', 'Unknown record type.');
+      // Health screens on file: only which screens exist (checked from the OFA record), never the grade or result. The evidence is the OFA record itself.
+      if (rec.type === 'screens') {
+        var cats = (rec.cats || []).filter(function (x, i, a) { return SCREENS.indexOf(x) > -1 && a.indexOf(x) === i; });
+        if (!cats.length) return fail('invalid', 'Choose at least one screen.');
+        var sc = C(nextId++, dogId, 'screens', 'Screens on file at OFA', cats.join(', '), { url: '', date: NOW(), ev: 'link', author: actorId === 0 ? 1 : actorId });
+        claims.push(sc); return Promise.resolve(annotate(sc));
+      }
       if (!rec.name || !String(rec.name).trim()) return fail('invalid', 'A name is required.');
       if (rec.type !== 'link' && !rec.url) return fail('invalid', 'Test results, wins and litters need an evidence link.');
       var c = C(nextId++, dogId, rec.type, String(rec.name).slice(0, 60), String(rec.value || '').slice(0, 40), {

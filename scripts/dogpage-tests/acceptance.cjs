@@ -91,6 +91,14 @@ let pass=0,fail=0;const ok=(c,m)=>{if(c){pass++}else{fail++;console.log('  FAIL:
  ok(/Back to Piper/.test(T('backrow')),'back link');
  const sireName=T('dog-name');click(d.querySelector('#pedgrid a.nm[data-anc="4"]'));await wait(1500);ok(T('dog-name')!==sireName&&T('dog-name').length>5&&T('backrow').includes('Back to'),'one generation deeper opens a different dog, with a way back');
  click(d.querySelector('#backrow a'));await wait(800);click(d.querySelector('#backrow a'));await wait(800);ok(/Legado N Danekraaft/.test(T('dog-name')),'back twice returns to Piper');
+ console.log('--- health screens on file (existence only)');
+ const A2=t.API();await actAs(9);await find('WS69691106');
+ ok(!!d.getElementById('new-screens')&&d.getElementById('ns-boxes').querySelectorAll('input').length===8&&/never the grade or result/.test(T('new-screens')),'a member can tick which OFA screens exist, and is told no grade or result is stored');
+ await A2.addRecord(412,{type:'screens',cats:[]}).then(()=>ok(false,'empty refused'),e=>ok(e.code==='invalid','at least one screen must be ticked'));
+ d.querySelector('#ns-boxes input[value="Hips"]').checked=true;d.querySelector('#ns-boxes input[value="Cardiac"]').checked=true;submit(d.getElementById('new-screens'));await wait(900);
+ ok(/On file at OFA/.test(T('dog-screens'))&&/Hips, Cardiac/.test(T('dog-screens'))&&/See the OFA record/.test(T('dog-screens')),'ticked screens show under Medical screens with a link to the OFA record');
+ await A2.addRecord(412,{type:'screens',cats:['Hips','Bogus']});await find('WS69691106');ok(!/Bogus/.test(T('dog-screens')),'only known screen names are accepted');
+ await find('WS69691106');
  console.log('--- numbers we do not have');
  await find('WS11111111');ok(!d.getElementById('pendingnote').hidden&&/don't have this dog/.test(T('pendingnote')),'pending page');
  ok(/No pedigree data/.test(T('pedgrid')),'no pedigree for a stub');

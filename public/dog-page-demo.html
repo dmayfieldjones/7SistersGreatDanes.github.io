@@ -273,6 +273,15 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
       <button class="act primary" type="submit">Add under my name</button>
     </form>
   </details>
+
+  <details class="card">
+    <summary><b>Mark health screens on file at OFA</b></summary>
+    <form id="new-screens" class="f">
+      <p class="meta" style="margin:0">Look the dog up at OFA (the link is in Medical screens), then tick the screens you see there. We record only that a screen exists, never the grade or result, and link to OFA for the details.</p>
+      <div id="ns-boxes" style="display:flex;flex-wrap:wrap;gap:6px 14px;margin:6px 0"></div>
+      <button class="act primary" type="submit">Add under my name</button>
+    </form>
+  </details>
 </section>
 
 
@@ -442,9 +451,10 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     $('signoutbtn').hidden=!AUTH||!li||!stored();
     $('whoami').hidden=!li;$('whoami').textContent=li?'Signed in as '+SESSION.name+(SESSION.role==='admin'?' (administrator)':''):'';
   }
+  (function(){$('ns-boxes').innerHTML=['Hips','Elbows','Cardiac','Thyroid','Eyes','Patellas','Shoulders','Other'].map(function(c){return '<label style="display:inline-flex;gap:4px;align-items:center"><input type="checkbox" value="'+c+'"> '+c+'</label>'}).join('')})();
   function renderSession(){
     renderTop();
-    ['new-litter','new-rec'].forEach(function(id){$(id).parentNode.hidden=!S.perm.canAdd});
+    ['new-litter','new-rec','new-screens'].forEach(function(id){$(id).parentNode.hidden=!S.perm.canAdd});
     $('editnote').hidden=!!S.perm.canAdd;
     $('invite').hidden=!!S.perm.loggedIn;
     document.querySelectorAll('[data-a]').forEach(function(el){el.textContent=A(el.dataset.a).name});
@@ -612,6 +622,9 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     var regs=S.identifiers.filter(function(i){return i.registry!=='OFA'&&i.registry!=='CHIC'});
     $('dog-regs').innerHTML=regs.length?regs.map(idline).join('<br>'):'<span class="meta">Name and registration number to come</span>';
     $('dog-screens').innerHTML=screens.length?screens.map(idline).join('<br>')+' <span class="chip doc">AKC record</span>':(d.generated?(primaryReg()?'<a href="'+esc(XREF.OFA.replace('{id}',encodeURIComponent(primaryReg())))+'" target="_blank" rel="noopener" title="Opens OFA\'s results for '+esc(primaryReg())+' in a new tab">See OFA results &#8599;</a>':'<span class="meta">No registration number</span>'):'<span class="meta">None listed on AKC yet</span>');
+    (function(){var sc=S.claims.filter(function(c){return c.type==='screens'&&c.status==='visible'});if(!sc.length)return;var u=primaryReg()?XREF.OFA.replace('{id}',encodeURIComponent(primaryReg())):'';
+      var cur=$('dog-screens').innerHTML.replace(/<span class="meta">(None listed|Not checked)[^<]*<\/span>/,'');
+      $('dog-screens').innerHTML=cur+(cur?'<br>':'')+sc.map(function(c){return '<span class="chip doc">On file at OFA</span> '+esc(c.value)+' <span class="meta">&middot; added by '+esc(A(c.author).name)+'</span>'}).join('<br>')+(u?' <a href="'+esc(u)+'" target="_blank" rel="noopener">See the OFA record</a>':'')})();
   }
   function renderModel(){
     $('model-dog').textContent=JSON.stringify(S.dog,null,2);
@@ -817,6 +830,9 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     var f=ev.target,id=S&&S.dog.id;
     if(f.id==='new-rec'){ev.preventDefault();
       run(DogAPI.addRecord(id,{type:$('nr-type').value,name:$('nr-name').value,value:$('nr-val').value,url:$('nr-url').value,date:$('nr-date').value})).then(function(){f.reset();f.parentNode.open=false});return}
+    if(f.id==='new-screens'){ev.preventDefault();
+      var cats=[].slice.call(f.querySelectorAll('input[type=checkbox]:checked')).map(function(x){return x.value});
+      run(DogAPI.addRecord(id,{type:'screens',cats:cats})).then(function(){f.reset();f.parentNode.open=false});return}
     if(f.id==='new-litter'){ev.preventDefault();
       run(DogAPI.addRecord(id,{type:'litter',name:$('nl-mate').value,value:$('nl-kind').value,url:$('nl-url').value,whelp:$('nl-date').value})).then(function(){f.reset();f.parentNode.open=false});return}
     if(f.dataset.fact){ev.preventDefault();
