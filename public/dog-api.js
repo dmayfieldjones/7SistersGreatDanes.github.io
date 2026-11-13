@@ -20,6 +20,7 @@
  *   useLogin({username,name,groups})  demo only: turn a verified sign-in into a role. The real server verifies the signed token itself
  *   signOut()                       back to visitor
  *   authors()                       {authorId: {name, role, status}}
+ *   lookupByName({name, born, sex, url})  for a dog with no registration number: members only: find it by name and birth date, or start its page; the source link is kept as a record
  *   lookup(number)                  find a dog by any registration number (members: or create a stub and log it as wanted; visitors: only public dogs)
  *   ourDogs()                       the public dogs grouped for the "Our dogs" list: the foundation bitch, then each litter
  *   confirmDog(dogId)               a member confirms the name, number and birth date on a page that was filled in automatically; says nothing about owning or breeding the dog
@@ -179,6 +180,17 @@
     { id: 'r1', name: 'Taylor Brooks', role: 'Breeder', verify: 'Kennel website and AKC breeder listing' },
     { id: 'r2', name: 'xX_dane_lover_Xx', role: 'Owner', verify: 'None provided' }
   ];
+  // Lookups per member, so no account can sweep the database one dog at a time. Administrators are exempt. Saved with the rest of the state.
+  var LOOKUP_PER_HOUR = 30, LOOKUP_PER_DAY = 100;
+  var lookups = {};
+  function lookupBudget() {
+    if (isAdmin()) return null;
+    var now = Date.now(), k = String(actorId), t = (lookups[k] || []).filter(function (x) { return now - x < 86400000; });
+    lookups[k] = t;
+    if (t.filter(function (x) { return now - x < 3600000; }).length >= LOOKUP_PER_HOUR || t.length >= LOOKUP_PER_DAY)
+      return fail('rate_limited', 'You have reached the lookup limit for now (' + LOOKUP_PER_HOUR + ' an hour, ' + LOOKUP_PER_DAY + ' a day). Try again later, or ask us if you need more.');
+    t.push(now); return null;
+  }
   var wantedList = {};      // registration number -> {count, first, last, how}
   var log = [];             // administrator action log
 
@@ -322,9 +334,29 @@
     signOut: function () { actorId = null; loginName = null; return API.session(); },
     authors: function () { return Promise.resolve(copy(authors)); },
 
+    // A dog with no registration number (older or non-US dogs) is identified by registered name plus birth date. Members start the page; anyone can reopen it if it is public.
+    lookupByName: function (o) {
+      o = o || {};
+      var gate = needMember() || lookupBudget(); if (gate) return gate;   // members only: a name search must never let a visitor browse the database
+      var name = String(o.name || '').trim().replace(/\s+/g, ' ').slice(0, 120), born = String(o.born || '').trim();
+      if (!name) return fail('invalid', 'Enter the dog\'s registered name.');
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(born) || isNaN(Date.parse(born)) || born > NOW()) return fail('invalid', 'Enter the birth date as year-month-day.');
+      var url = String(o.url || '').trim();
+      if (url && !/^https?:\/\//i.test(url)) return fail('invalid', 'The source link must start with http:// or https://');
+      var key = name.toLowerCase().replace(/[^a-z0-9]+/g, '') + '|' + born;
+      var ex = Object.keys(dogs).filter(function (k) { return dogs[k].nameKey === key; })[0];
+      if (ex !== undefined) return Promise.resolve({ dogId: ex, created: false });
+      var id = 'n:' + key, sx = o.sex === 'female' || o.sex === 'male' ? o.sex : '', a = actorId === 0 ? 1 : actorId;
+      dogs[id] = { id: id, title: '', titleSuffix: '', registered: name, call: '', short: '', sex: sx, color: '', photo: '', ext: false, litter: null, stub: true, pending: true, visibility: 'members', nameKey: key };
+      claims.push(C(nextId++, id, 'fact', 'Whelp date', born, { src: url, author: a, date: NOW() }));
+      if (url) claims.push(C(nextId++, id, 'link', 'Source for this dog', '', { url: url, author: a, date: NOW() }));
+      wantedLog(name + ' (born ' + born + ')', 'dog');
+      return Promise.resolve({ dogId: id, created: true });
+    },
     lookup: function (number) {
       var reg = norm(number), ex = dogByNumber(reg);
       if (!isMember() && !(ex !== null && canSee(dogs[ex]))) return fail('login_required', 'Sign in to look up other dogs.');
+      if (isMember() && !(ex !== null && dogs[ex].visibility === 'public')) { var cap = lookupBudget(); if (cap) return cap; }
       if (ex !== null) {
         var d = dogs[ex];
         if (d.stub) wantedLog(reg, d.pending ? 'dog' : 'names');
@@ -542,12 +574,12 @@
   // The seed data lives in this file; pedigrees of generated ancestor pages are not saved, they are rebuilt from where each was opened.
   API.exportState = function () {
     return JSON.parse(JSON.stringify({ v: 1, nextId: nextId, authors: authors, logins: LOGINS, dogs: dogs, litters: litters, identifiers: identifiers,
-      people: people, claims: claims, requests: requests, wanted: wantedList, log: log }));
+      people: people, claims: claims, requests: requests, wanted: wantedList, log: log, lookups: lookups }));
   };
   API.importState = function (st) {
     st = JSON.parse(JSON.stringify(st || SEED));
     nextId = st.nextId; authors = st.authors; LOGINS = st.logins; dogs = st.dogs; litters = st.litters; identifiers = st.identifiers;
-    people = st.people; claims = st.claims; requests = st.requests; wantedList = st.wanted; log = st.log;
+    people = st.people; claims = st.claims; requests = st.requests; wantedList = st.wanted; log = st.log; lookups = st.lookups || {};
     Object.keys(priv.peds).forEach(function (k) { if (String(k).indexOf('r:') === 0) delete priv.peds[k]; });
     Object.keys(dogs).filter(function (id) { return dogs[id].origin; }).sort(function (a, b) { return (dogs[a].gen || 0) - (dogs[b].gen || 0); }).forEach(function (id) {
       var o = dogs[id].origin, P = pedOf(o.dog); if (P[o.key]) priv.peds[id] = reroot(P, o.key);

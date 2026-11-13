@@ -11,11 +11,11 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 
 // The calls a browser may make. Anything else (setActor, useLogin, importState, ...) does not exist as far as the outside world goes.
 export const METHODS = new Set([
-  'session', 'authors', 'lookup', 'ourDogs', 'confirmDog', 'claimDog', 'setVisibility', 'noteGalaxy', 'getDog', 'getPedigree',
+  'session', 'authors', 'lookup', 'lookupByName', 'ourDogs', 'confirmDog', 'claimDog', 'setVisibility', 'noteGalaxy', 'getDog', 'getPedigree',
   'openAncestor', 'saveFact', 'addRecord', 'flagClaim', 'correctClaim', 'hideClaim', 'suggestCategory',
   'wanted', 'markAdded', 'accountRequests', 'decideRequest', 'actionLog',
 ]);
-const STATUS = { login_required: 401, forbidden: 403, not_found: 404, invalid: 400 };
+const STATUS = { login_required: 401, forbidden: 403, not_found: 404, invalid: 400, rate_limited: 429 };
 const MAX_BODY = 20000, MAX_STRING = 2000;
 
 // The rules module keeps its state in one place, so calls are handled one at a time.
