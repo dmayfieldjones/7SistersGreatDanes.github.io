@@ -322,7 +322,13 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
   </details>
 
   <details class="card">
-    <summary><b>Mark health screens on file at OFA</b></summary>
+    <summary><b>Health screens at OFA</b>: add the dog's OFA number, or mark which screens exist</summary>
+    <form id="new-ident" class="f" style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0">
+      <select id="ni-reg" aria-label="Kind of number"><option>OFA</option><option>CHIC</option></select>
+      <input type="text" id="ni-num" maxlength="30" placeholder="Number from the certificate, for example GD-HD12345G24M-VPI" style="flex:1;min-width:14rem" required>
+      <button class="act primary" type="submit">Add this number</button>
+      <span class="meta" style="flex-basis:100%">OFA does not need the dog to be registered anywhere, so a dog with no AKC number can still have one. It only shows that a record exists; we never copy the grade.</span>
+    </form>
     <form id="new-screens" class="f">
       <p class="meta" style="margin:0">Look the dog up at OFA (the link is in Medical screens), then tick the screens you see there. We record only that a screen exists, never the grade or result, and link to OFA for the details.</p>
       <div id="ns-boxes" style="display:flex;flex-wrap:wrap;gap:6px 14px;margin:6px 0"></div>
@@ -571,7 +577,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     $('photos-412').hidden=d.id!==412;$('photos-none').hidden=d.id===412;
     var pn_=$('pendingnote');
     if(d.pending){pn_.hidden=false;pn_.innerHTML='<b>We don\'t have this dog yet.</b> Your search has been noted so it can be considered for the next update to our data. Meanwhile, the links below go to the places that may have it.'}
-    else if(d.inGalaxy){pn_.hidden=false;pn_.innerHTML='<b>This dog is on the map, but we don\'t have its name or pedigree yet.</b> The map above shows its ancestry anonymously. Open it on Quintessa or River Rock to see names, or add its details to claim it.'}
+    else if(d.inGalaxy&&!d.registered){pn_.hidden=false;pn_.innerHTML='<b>This dog is on the map, but we don\'t have its name or pedigree yet.</b> The map above shows its ancestry anonymously. Open it on Quintessa or River Rock to see names, or add its details to claim it.'}
     else pn_.hidden=true;
     $('backrow').innerHTML=(NAV.length?'<a href="#" data-back="1">&larr; Back to '+esc(NAV[NAV.length-1].label)+'</a>':'');
   }
@@ -694,17 +700,18 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     // Registrations (AKC and others) and Medical screens (OFA and CHIC numbers, as AKC lists them) are separate, like on AKC's own page.
     // A dog's CHIC status is part of its OFA record, so the OFA and CHIC numbers both open the same OFA search, by the AKC number.
     function idline(i){
-      var t=XREF[i.registry],u=t?t.replace('{id}',encodeURIComponent((i.registry==='OFA'||i.registry==='CHIC')?akc:i.number)):'';
+      var t=XREF[i.registry],u=t?t.replace('{id}',encodeURIComponent((i.registry==='OFA'||i.registry==='CHIC')?(akc||i.number):i.number)):'';
       var txt=esc(i.registry)+' '+esc(i.number)+(i.note?' <span class="meta">('+esc(i.note)+')</span>':'');
-      return u?'<a href="'+esc(u)+'" target="_blank" rel="noopener" title="Opens the OFA search for '+esc(akc)+'">'+txt+' &#8599;</a>':txt;
+      return u?'<a href="'+esc(u)+'" target="_blank" rel="noopener" title="Opens the OFA search for '+esc((i.registry==='OFA'||i.registry==='CHIC')?(akc||i.number):i.number)+'">'+txt+' &#8599;</a>':txt;
     }
     var screens=S.identifiers.filter(function(i){return i.registry==='OFA'||i.registry==='CHIC'});
     var regs=S.identifiers.filter(function(i){return i.registry!=='OFA'&&i.registry!=='CHIC'});
     $('dog-regs').innerHTML=regs.length?regs.map(idline).join('<br>'):'<span class="meta">Name and registration number to come</span>';
-    $('dog-screens').innerHTML=screens.length?screens.map(idline).join('<br>')+' <span class="chip doc">AKC record</span>':(d.generated?(primaryReg()?'<a href="'+esc(XREF.OFA.replace('{id}',encodeURIComponent(primaryReg())))+'" target="_blank" rel="noopener" title="Opens OFA\'s results for '+esc(primaryReg())+' in a new tab">See OFA results &#8599;</a>':'<span class="meta">No registration number</span>'):'<span class="meta">None listed on AKC yet</span>');
+    $('dog-screens').innerHTML=screens.length?screens.map(idline).join('<br>')+(akc?' <span class="chip doc">AKC record</span>':' <span class="chip self">added by a member</span>'):(d.generated?(primaryReg()?'<a href="'+esc(XREF.OFA.replace('{id}',encodeURIComponent(primaryReg())))+'" target="_blank" rel="noopener" title="Opens OFA\'s results for '+esc(primaryReg())+' in a new tab">See OFA results &#8599;</a>':'<span class="meta">No registration number</span>'):'<span class="meta">None listed on AKC yet</span>');
     (function(){var sc=S.claims.filter(function(c){return c.type==='screens'&&c.status==='visible'});if(!sc.length)return;var u=primaryReg()?XREF.OFA.replace('{id}',encodeURIComponent(primaryReg())):'';
       var cur=$('dog-screens').innerHTML.replace(/<span class="meta">(None listed|Not checked)[^<]*<\/span>/,'');
       $('dog-screens').innerHTML=cur+(cur?'<br>':'')+sc.map(function(c){return '<span class="chip doc">On file at OFA</span> '+esc(c.value)+' <span class="meta">&middot; added by '+esc(A(c.author).name)+'</span>'}).join('<br>')+(u?' <a href="'+esc(u)+'" target="_blank" rel="noopener">See the OFA record</a>':'')})();
+    if(!akc&&term)$('dog-screens').innerHTML+=(screens.length?'<br>':'')+'<a href="'+esc(XREF.OFA.replace('{id}',encodeURIComponent(term)))+'" target="_blank" rel="noopener" title="Searches OFA for this name. Opens in a new tab.">Search OFA by name &#8599;</a> <span class="meta">(no registration number, so this may not match)</span>';
   }
   function renderModel(){
     $('model-dog').textContent=JSON.stringify(S.dog,null,2);
@@ -780,7 +787,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     galP=fetch('/breed-galaxy.html').then(function(r){return r.text()}).then(function(h){
       var i=h.indexOf('const DATA='),j=h.indexOf('\n',i),D=JSON.parse(h.slice(i+11,j).replace(/;\s*$/,''));
       function unb(s,T){var b=atob(s),u=new Uint8Array(b.length);for(var k=0;k<b.length;k++)u[k]=b.charCodeAt(k);return new T(u.buffer)}
-      var G={N:D.n,asp:D.aspect,y0:D.y0,qx:unb(D.x,Uint16Array),qy:unb(D.y,Uint16Array),yr:unb(D.yr,Uint8Array),f8:unb(D.f,Uint8Array),sire:unb(D.sire,Int32Array),dam:unb(D.dam,Int32Array),cl:unb(D.cl,Uint8Array),cs:D.cs,rh:D.rh?unb(D.rh,Uint32Array):null};
+      var G={N:D.n,asp:D.aspect,y0:D.y0,qx:unb(D.x,Uint16Array),qy:unb(D.y,Uint16Array),yr:unb(D.yr,Uint8Array),f8:unb(D.f,Uint8Array),sire:unb(D.sire,Int32Array),dam:unb(D.dam,Int32Array),cl:unb(D.cl,Uint8Array),cs:D.cs,rh:D.rh?unb(D.rh,Uint32Array):null,nh:D.nh?unb(D.nh,Uint32Array):null};
       var ks=new Int32Array(G.N+1),kl=new Int32Array(2*G.N),c=new Int32Array(G.N),k2;
       for(k2=0;k2<G.N;k2++){if(G.sire[k2]>=0)c[G.sire[k2]]++;if(G.dam[k2]>=0)c[G.dam[k2]]++}
       for(k2=0;k2<G.N;k2++)ks[k2+1]=ks[k2]+c[k2];
@@ -891,10 +898,13 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     var facts=$('galfacts'),akc=primaryReg(),id=S.dog.id;
     $('galopen').href=akc?'/breed-galaxy.html#dog='+encodeURIComponent(akc):'/breed-galaxy.html';
     facts.textContent='Loading the map…';$('galstory').innerHTML='';
-    if(!akc){var cv0=$('galcv');cv0.width=cv0.width;facts.textContent='No registration number on file, so this dog cannot be placed on the map yet.';return}
+    // A dog with no registration number is found by name and birth year instead (the build makes the same code for dogs without a number).
+    var yr=(fact('Whelp date')||{}).value,nmk=S.dog.registered?S.dog.registered.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]/g,''):'',byName=!akc&&nmk.length>=6&&/^\d{4}/.test(yr||'');
+    if(!akc&&!byName){var cv0=$('galcv');cv0.width=cv0.width;facts.textContent='No registration number, or name and birth year, on file, so this dog cannot be placed on the map yet.';return}
     loadGalaxy().then(function(G){
       var row=-1;
       if(G.rh&&akc){var h=fnv(akc.toUpperCase().replace(/[^A-Z0-9]/g,''));for(var i=0;i<G.N;i++)if(G.rh[i]===h){row=i;break}}
+      else if(G.nh&&byName){var h2=fnv(nmk+'|'+yr.slice(0,4));for(var i2=0;i2<G.N;i2++)if(G.nh[i2]===h2){row=i2;break}}
       // tell the backend whether the galaxy has this dog, once per dog per visit; it updates the stub and the wanted list
       if(!galNoted[id]){galNoted[id]=1;DogAPI.noteGalaxy(id,row>=0).then(function(){if(S.dog.id===id)return reload()})}
       if(row<0){facts.textContent='Not in the galaxy yet.'+(S.dog.pending?'':' We\'ve noted that someone looked for it.');return}
@@ -912,6 +922,8 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
       run(DogAPI.addRecord(id,{type:'dna',name:$('nd-name').value,value:$('nd-val').value,url:$('nd-url').value,date:$('nd-date').value})).then(function(){f.reset();f.parentNode.open=false});return}
     if(f.id==='new-rec'){ev.preventDefault();
       run(DogAPI.addRecord(id,{type:$('nr-type').value,name:$('nr-name').value,value:$('nr-val').value,url:$('nr-url').value,date:$('nr-date').value})).then(function(){f.reset();f.parentNode.open=false});return}
+    if(f.id==='new-ident'){ev.preventDefault();
+      run(DogAPI.addIdentifier(id,$('ni-reg').value,$('ni-num').value)).then(function(){f.reset()});return}
     if(f.id==='new-screens'){ev.preventDefault();
       var cats=[].slice.call(f.querySelectorAll('input[type=checkbox]:checked')).map(function(x){return x.value});
       run(DogAPI.addRecord(id,{type:'screens',cats:cats})).then(function(){f.reset();f.parentNode.open=false});return}

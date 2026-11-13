@@ -484,6 +484,20 @@
       delete stash[String(actorId)];
       return Promise.resolve({ dogId: id, created: true });
     },
+    // An OFA or CHIC number copied from the dog's certificate. OFA does not need the dog to be registered anywhere, so a dog with no AKC number
+    // can still have one; it is what lets the pedigree show that health screens exist. One number belongs to one dog.
+    addIdentifier: function (dogId, registry, number) {
+      var g = needMember(); if (g) return g;
+      if (!dogs[dogId]) return fail('not_found', 'No such dog.');
+      registry = String(registry || '').toUpperCase();
+      if (registry !== 'OFA' && registry !== 'CHIC') return fail('invalid', 'Only an OFA or CHIC number can be added here.');
+      var n = String(number || '').trim().toUpperCase().replace(/^#/, '').replace(/\s+/g, '');
+      if (!/^[A-Z0-9][A-Z0-9-]{3,29}$/.test(n)) return fail('invalid', 'That does not look like an ' + registry + ' number. Copy it from the certificate, for example GD-HD12345G24M-VPI.');
+      if (identifiers.some(function (x) { return x.number === n && x.dog !== dogId; })) return fail('invalid', 'That number is already on another dog\'s page.');
+      if (identifiers.some(function (x) { return x.number === n && x.dog === dogId; })) return Promise.resolve({ ok: true });
+      identifiers.push({ dog: dogId, registry: registry, number: n, author: actorId === 0 ? 1 : actorId, date: NOW() });
+      return Promise.resolve({ ok: true });
+    },
     noteGalaxy: function (dogId, inGalaxy) {
       var d = dogs[dogId]; if (!d) return fail('not_found', 'No such dog.');
       var reg = primaryReg(dogId);
@@ -530,7 +544,8 @@
         // Past the visitor limit the data is held but not shown: the slot says so, and a sign-in reveals it.
         if (!isMember() && (dogs[dogId].gen || 0) + Math.floor(Math.log(Number(k)) / Math.LN2) > API.visitorGens) { out[k] = { locked: true }; return; }
         // What we know exists for this dog (never a guess): health screens (OFA or CHIC numbers, test records) and DNA or sequence data.
-        var did = dogByNumber(rg), hn = 0, dn = 0;
+        var did = rg ? dogByNumber(rg) : null, hn = 0, dn = 0;
+        if (did === null && !rg) { var nkk = normName(splitTitle(e[0]).name), tw = Object.keys(dogs).filter(function (z) { return (dogs[z].nameKey || '').split('#')[0] === nkk; })[0]; if (tw !== undefined) did = tw; }   // no number: the page we hold under that name
         if (did !== null) {
           hn = idsOf(did).filter(function (i) { return i.registry === 'OFA' || i.registry === 'CHIC'; }).length;
           claims.forEach(function (c) {

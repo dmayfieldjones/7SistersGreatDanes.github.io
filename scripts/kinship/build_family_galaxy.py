@@ -24,6 +24,7 @@ import multiprocessing as mp
 import os
 import random
 import re
+import unicodedata
 
 import numpy as np
 
@@ -136,6 +137,18 @@ def main():
         return h
     rh = np.array([reg_hash(D[ids[k]]['reg']) for k in keep], '<u4')
     log(f'registration hashes: {int((rh != 0).sum())} of {len(rh)} dogs')
+    # dogs with no registration number (older and foreign dogs) are found by name and birth year instead: the same FNV-1a hash over the cleaned name
+    # (lower case, accents dropped, letters and digits only) + '|' + year. Only for dogs without a registration hash, and the same function runs in the page.
+    def name_hash(name, year):
+        if not year: return 0
+        t = unicodedata.normalize('NFD', K.clean(name))
+        t = re.sub(r'[^a-z0-9]', '', ''.join(c for c in t if not unicodedata.combining(c)).lower())
+        if len(t) < 6: return 0
+        h = 0x811c9dc5
+        for b in (t + '|' + str(int(year))).encode(): h = ((h ^ b) * 0x01000193) & 0xffffffff
+        return h
+    nh = np.array([name_hash(D[ids[k]]['name'], D[ids[k]]['year']) if rh[i] == 0 else 0 for i, k in enumerate(keep)], '<u4')
+    log(f'name+year hashes (dogs with no registration): {int((nh != 0).sum())}')
     # kennels: affix membership (by name only), mapped to rows of the galaxy
     mem = K.membership(D, ids)
     rowof = np.full(N, -1); rowof[keep] = np.arange(len(keep))
@@ -186,7 +199,7 @@ def main():
     data = dict(n=len(keep), all=N, left=round(100 * (1 - len(keep) / N)), aspect=float((hi - lo)[1] / span), x=b64(q[:, 0]), y=b64(q[:, 1]), yr=b64(yr),
                 meta=b64(meta), f=b64(f8), sire=b64(s), dam=b64(d), y0=1870, ex=a.export_end,
                 kn=[[k[0], k[1], k[2], len(k[3]), b64(k[3])] for k in kn],
-                cl=b64(clab.astype('u1')), cs=cs, csweep=csweep, rh=b64(rh))
+                cl=b64(clab.astype('u1')), cs=cs, csweep=csweep, rh=b64(rh), nh=b64(nh))
     html = open(a.template, encoding='utf-8').read().replace('/*DATA*/null', json.dumps(data, separators=(',', ':')))
     open(a.out, 'w', encoding='utf-8').write(html)
     log(f'wrote {a.out} {len(html)//1024} KB')

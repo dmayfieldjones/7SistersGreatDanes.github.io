@@ -158,3 +158,30 @@ test('the same digits from two registries are two different dogs', async () => {
   const b = await importWith([{ name: 'Dog Two', sex: 'male', color: '', born: '', registry: 'NHSB', number: '777', sire: '', dam: '', siteId: '' }], 'Dog Two', t, store);
   assert.notEqual(a.made.result.dogId, b.made.result.dogId);
 });
+
+test('an OFA number can be added to a dog with no AKC number, and the pedigree then shows that screens exist', async () => {
+  const store = memoryStore(), t = alice();
+  const { h, made } = await importWith([DOG], 'Batemanor Amanda at Tiparone', t, store);
+  const id = made.result.dogId;
+  assert.equal((await call(h, 'addIdentifier', [id, 'OFA', 'gd-hd12345g24m-vpi'], t)).ok, true);
+  const d = await call(h, 'getDog', [id], t);
+  assert.ok(d.result.identifiers.some((i) => i.registry === 'OFA' && i.number === 'GD-HD12345G24M-VPI'));
+  const root = (await call(h, 'getPedigree', [id, 8], t)).result.nodes[1];
+  assert.equal(root[4].health, 1);
+  // an ancestor known only by name picks up the same marker once its own page has the number
+  const sire = await open(h, t, id, 'Batemanor APACHE WAR PAINT');
+  assert.equal((await call(h, 'addIdentifier', [sire.result.dogId, 'OFA', 'GD-HD777G24M-NOPI'], t)).ok, true);
+  const sirenode = (await call(h, 'getPedigree', [id, 8], t)).result.nodes[2];
+  assert.equal(sirenode[4].health, 1);
+});
+test('OFA numbers: members only, only OFA or CHIC, a sensible format, and one number for one dog', async () => {
+  const store = memoryStore(), t = alice();
+  const { h, made } = await importWith([DOG], 'Batemanor Amanda at Tiparone', t, store);
+  const id = made.result.dogId;
+  assert.equal((await call(h, 'addIdentifier', [id, 'OFA', 'GD-HD1234G24M'])).status, 401);
+  assert.equal((await call(h, 'addIdentifier', [id, 'AKC', 'WS12345678'], t)).status, 400);
+  assert.equal((await call(h, 'addIdentifier', [id, 'OFA', 'no'], t)).status, 400);
+  assert.equal((await call(h, 'addIdentifier', [id, 'OFA', 'GD-HD1234G24M'], t)).ok, true);
+  const other = (await importWith([{ ...DOG, name: 'Another Dog Entirely', born: '2001-01-01' }], 'Another Dog Entirely', t, store)).made.result.dogId;
+  assert.equal((await call(h, 'addIdentifier', [other, 'OFA', 'GD-HD1234G24M'], t)).status, 400);
+});
