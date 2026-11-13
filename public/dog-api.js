@@ -341,13 +341,14 @@
       var name = String(o.name || '').trim().replace(/\s+/g, ' ').slice(0, 120), born = String(o.born || '').trim();
       if (!name) return fail('invalid', 'Enter the dog\'s registered name.');
       if (!/^\d{4}-\d{2}-\d{2}$/.test(born) || isNaN(Date.parse(born)) || born > NOW()) return fail('invalid', 'Enter the birth date as year-month-day.');
+      var sp = splitTitle(name); name = sp.name || name;   // a title typed or pasted with the name (CH, GCH ...) is split off, so it never changes which dog this is
       var url = String(o.url || '').trim();
       if (url && !/^https?:\/\//i.test(url)) return fail('invalid', 'The source link must start with http:// or https://');
       var key = name.toLowerCase().replace(/[^a-z0-9]+/g, '') + '|' + born;
       var ex = Object.keys(dogs).filter(function (k) { return dogs[k].nameKey === key; })[0];
       if (ex !== undefined) return Promise.resolve({ dogId: ex, created: false });
       var id = 'n:' + key, sx = o.sex === 'female' || o.sex === 'male' ? o.sex : '', a = actorId === 0 ? 1 : actorId;
-      dogs[id] = { id: id, title: '', titleSuffix: '', registered: name, call: '', short: '', sex: sx, color: String(o.color || '').trim().toLowerCase().slice(0, 40), photo: '', ext: false, litter: null, stub: true, pending: true, visibility: 'members', nameKey: key };
+      dogs[id] = { id: id, title: sp.name ? sp.title : '', titleSuffix: '', registered: name, call: '', short: '', sex: sx, color: String(o.color || '').trim().toLowerCase().slice(0, 40), photo: '', ext: false, litter: null, stub: true, pending: true, visibility: 'members', nameKey: key };
       claims.push(C(nextId++, id, 'fact', 'Whelp date', born, { src: url, author: a, date: NOW() }));
       if (url) claims.push(C(nextId++, id, 'link', 'Source for this dog', '', { url: url, author: a, date: NOW() }));
       wantedLog(name + ' (born ' + born + ')', 'dog');
