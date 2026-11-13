@@ -252,8 +252,8 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
   <h2 style="margin-top:22px">Parents</h2>
   <div id="parents" class="parents"></div>
 
-  <details class="card" style="margin-top:14px">
-    <summary><b>Ownership history from AKC</b> <span class="meta">(our dogs only; not part of the shared model)</span></summary>
+  <details class="card" id="own-card" style="margin-top:14px">
+    <summary><b>Ownership history from AKC</b> <span class="meta">(7Sisters dogs only)</span></summary>
     <div id="own-hist" style="margin-top:8px"></div>
   </details>
 
@@ -632,7 +632,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     $('dog-owners').innerHTML+=S.perm.loggedIn?'<div style="margin-top:4px"><span class="meta">Visible to</span> '+(S.perm.canSetVisibility?'<select id="vis" aria-label="Who can see this dog" style="width:auto;font-size:.85rem"><option value="public"'+(vis==='public'?' selected':'')+'>Everyone with the code</option><option value="members"'+(vis==='members'?' selected':'')+'>Signed-in members only</option></select>':'<span class="meta">'+(vis==='public'?'everyone with the code':'signed-in members only')+'</span>')+'</div>':'';
     var ow=S.claims.filter(function(c){return c.type==='ownership'&&c.status==='visible'}).sort(function(x,y){return x.start<y.start?1:-1});
     function oline(c){return pn(c.value)+(c.co&&c.co.length?' <span class="meta">with</span> '+c.co.map(pn).join(', '):'')+' <span class="meta">&middot; '+(c.end?esc(c.start)+' to '+esc(c.end):'since '+esc(c.start))+'</span>'}
-    $('own-hist').innerHTML=ow.length?ow.map(oline).join('<br>'):'<span class="meta">None recorded.</span>';
+    $('own-hist').innerHTML=ow.map(oline).join('<br>');$('own-card').hidden=!ow.length;
     (function(){var c=S.confirm||{},by=c.by||[],h='';
       if(c.auto)h+='<span class="meta">Filled in automatically from pedigree data (loaded by Dustin Mayfield-Jones for this demo).</span> ';
       h+=by.length?'<span class="chip doc">Confirmed</span> <span class="meta">by '+by.map(function(x){return esc(A(x.author).name)+' ('+esc(x.date)+')'}).join(', ')+'</span>':(c.auto?'<span class="chip self">Not confirmed by a member yet</span>':'<span class="meta">Entered by a member.</span>');
