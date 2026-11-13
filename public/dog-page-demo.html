@@ -435,7 +435,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   var DBC={label:'Cosmic Great Danes',site:'https://www.cosmicgreatdanes.com/'};
   function qurl(n){return DBQ.search.replace('{id}',encodeURIComponent(n))}
   // River Rock's own name search (flexible match), as its results page builds it. Opens their results in the member's browser; we fetch nothing.
-  function rurl(n){return DB.site+'pedpoint/pp_searchresults.php?op=search&offset=0&field=Name&where=flexible&gender=ignore&group=0&titles=ignore&bornwhen=ignore&hasparents=ignore&gens=5&pattern='+encodeURIComponent(n)+'&db=pedigree'}
+  function rurl(n){return DB.site+'pedpoint/pp_searchresults.php?op=search&offset=0&field=Name&where=flexible&gender=ignore&group=0&titles=ignore&bornwhen=ignore&hasparents=ignore&gens=5&pattern='+encodeURIComponent(n)+'&orderby=name&db=pedigree&submit=Search'}
   function pedurl(n){return DB.page.replace('{id}',encodeURIComponent(n))}
   function photourl(r){return DB.photo.replace('{reg}',encodeURIComponent(r))}
   // Cross-references: a link is built from a registration number and a template.
