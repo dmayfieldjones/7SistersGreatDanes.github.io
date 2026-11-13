@@ -176,7 +176,7 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
 <section id="home" hidden>
   <div class="homehero">
     <h1>GDGalaxy</h1>
-    <p class="meta" style="margin:-6px 0 12px">Your Great Dane Gateway across platforms.</p>
+    <p class="meta" style="margin:-6px 0 12px">Your Great Dane Gateway across platforms.<span id="homehint"></span></p>
     <form id="homeform" class="homeform"><input type="text" id="homefind" placeholder="AKC registration number" aria-label="Registration number" autocomplete="off"><button class="sm primary" type="submit">Find</button></form>
     <div class="demorow"><span class="meta">or take the demo with</span> <button class="sm" type="button" data-demo="412">Piper</button> <button class="sm" type="button" data-demo="413">Mia</button> <button class="sm" type="button" data-demo="414">Cora</button></div>
     <details class="nonum"><summary class="meta" style="cursor:pointer">No registration number? Members: find or add a dog by name</summary>
@@ -489,8 +489,16 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   // ---- drawing ----
   function renderAll(){renderSession();renderHeader();renderFacts();renderLinks();renderParents();renderOffspring();renderLitters();renderEntries();renderDog();renderModel();renderPed();renderAdmin()}
   // The top bar (sign in / out, who you are) depends on the session only, so it works before any dog is loaded.
+  // The home screen says only what works for the person looking: visitors open 7Sisters dogs, members can look up any dog.
+  function homeState(){
+    var li=!!SESSION&&SESSION.role!=='visitor';
+    $('homefind').placeholder=li?'AKC registration number':'Registration number of a 7Sisters dog';
+    $('homehint').innerHTML=li?'':' Open a <span class="brand7"><b>7</b>Sisters</span> dog below, or <a href="#" id="homesign">sign in</a> to look up any Great Dane.';
+    var ns=document.querySelector('#home .nonum');if(ns)ns.hidden=!li;
+  }
   function renderTop(){
     var li=!!SESSION&&SESSION.role!=='visitor';
+    homeState();
     var opts=[['v','Visitor (not signed in)']].concat([0,1,2].map(function(i){return [String(i),A(i).name+(i?' (#'+i+')':'')]}));
     $('me').innerHTML=opts.map(function(o){return '<option value="'+o[0]+'">'+esc(o[1])+'</option>'}).join('');$('me').value=!SESSION||SESSION.actor===null?'v':String(SESSION.actor);
     $('signin').hidden=li;
@@ -935,6 +943,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     var sx='';rest.slice(1).forEach(function(l){if(/^(f|female|bitch)$/i.test(l))sx='female';else if(/^(m|male|dog)$/i.test(l))sx='male'});
     if(sx){$('nf-sex').value=sx;got.push('sex')}
     $('nf-note').textContent=got.length?'Filled in: '+got.join(', ')+'. Check them, then press the button.':'Could not read that. Fill the fields in by hand.'});
+  document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('#homesign,.signlink');if(a){e.preventDefault();$('signinbtn').click()}});
   function nameLookup(forceNew){var m=$('homemsg');m.textContent='';$('nf-choices').innerHTML='';
     DogAPI.lookupByName({name:$('nf-name').value,sex:$('nf-sex').value,url:$('nf-url').value,forceNew:!!forceNew}).then(function(r){
       if(!r.choices)return goTo(r.dogId);
@@ -951,7 +960,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   // ---- home: a search box, three demo dogs, and an animated tour of the galaxy (drawn in the browser from the same map data; nothing is stored) ----
   var homeRaf=0,homeRun=0,homeVisible=true,homeIO=null;
   function hideHome(){$('home').hidden=true;$('whobox').hidden=false;cancelAnimationFrame(homeRaf);homeRun++}
-  function showHome(){
+  function showHome(){homeState();
     $('landing').hidden=true;$('dogview').hidden=true;$('home').hidden=false;$('whobox').hidden=true;say('');renderTop();
     cancelAnimationFrame(homeRaf);var run=++homeRun;
     $('homecap').textContent='Loading the galaxy…';
@@ -1115,7 +1124,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     if(!q){msg.textContent='';return}
     if(!/\d/.test(q)){msg.innerHTML='That looks like a name. Enter a registration number, such as WS69691106. To find a number, search by name at <a href="'+DBD.site+'" target="_blank" rel="noopener">DANES World</a>, <a href="'+DBQ.site+'" target="_blank" rel="noopener">Quintessa</a> or <a href="'+DB.site+'" target="_blank" rel="noopener">River Rock</a>, then paste it here. If the dog has no number, use &ldquo;No registration number?&rdquo; on the Home screen to find it by name and birth date.';return}
     msg.textContent='';
-    DogAPI.lookup(q).then(function(r){return goTo(r.dogId)}).catch(function(err){msg.textContent=err&&err.message||'That search failed.'});
+    DogAPI.lookup(q).then(function(r){return goTo(r.dogId)}).catch(function(err){if(err&&err.code==='login_required'){msg.innerHTML='That is not a <span class="brand7"><b>7</b>Sisters</span> dog. <a href="#" class="signlink">Sign in</a> to look up any Great Dane.'}else msg.textContent=err&&err.message||'That search failed.'});
   }
 
   // ---- sign-in: a real login against the user pool (Amazon Cognito). The page never sees a password after the call returns. ----
