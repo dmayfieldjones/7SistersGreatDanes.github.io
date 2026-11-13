@@ -384,6 +384,7 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
 </main>
 
 <script src="/dog-api.js"></script>
+<script src="/dog-api-remote.js"></script>
 <script>
 window.PEDDB_LABEL='River Rock Pedigree';
 function extphotofail(img){var a=img.parentNode;a.innerHTML='<span class="noimg" style="aspect-ratio:4/3;color:var(--info);font-weight:600">Photo Available &#8599;</span>'}
@@ -900,7 +901,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   function applyLogin(idToken){
     var c=claims(idToken);
     if(!c||(c.exp&&c.exp*1000<Date.now())){store(null);return Promise.resolve(false)}
-    return DogAPI.useLogin({username:c['cognito:username']||c.username||'',name:c.name,groups:c['cognito:groups']||[]}).then(function(s){SESSION=s;store(idToken);return true},function(e){store(null);say(e&&e.message);return false});
+    return DogAPI.useLogin({username:c['cognito:username']||c.username||'',name:c.name,groups:c['cognito:groups']||[],token:idToken}).then(function(s){SESSION=s;store(idToken);return true},function(e){store(null);say(e&&e.message);return false});
   }
   function authMsg(t){$('lg-msg').textContent=t||''}
   function showLogin(on){$('loginform').hidden=!on;if(on){$('lg-user').focus()}}
@@ -940,7 +941,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     SESSION=s;
     var t=stored();return (AUTH&&t)?applyLogin(t):false;
   }).then(function(){return DogAPI.authors()}).then(function(a){
-    authors=a;$('devmenu').hidden=!DEV;$('auth-src').textContent=DEV?'Names come from the authors file. Records store only author numbers.':'';
+    authors=a;$('devmenu').hidden=!DEV||DogAPI.remote();$('auth-src').textContent=DEV?'Names come from the authors file. Records store only author numbers.':'';
     renderTop();return load(412);
   });
 })();
