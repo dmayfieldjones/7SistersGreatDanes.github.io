@@ -20,7 +20,7 @@
  *   useLogin({username,name,groups})  demo only: turn a verified sign-in into a role. The real server verifies the signed token itself
  *   signOut()                       back to visitor
  *   authors()                       {authorId: {name, role, status}}
- *   lookupByName({name, born, sex, url})  for a dog with no registration number: members only: find it by name and birth date, or start its page; the source link is kept as a record
+ *   lookupByName({name, sex, url, forceNew})  for a dog with no registration number: members only: find it by registered name (several matches come back as choices), or start its page; the source link is kept as a record
  *   lookup(number)                  find a dog by any registration number (members: or create a stub and log it as wanted; visitors: only public dogs)
  *   ourDogs()                       the public dogs grouped for the "Our dogs" list: the foundation bitch, then each litter
  *   confirmDog(dogId)               a member confirms the name, number and birth date on a page that was filled in automatically; says nothing about owning or breeding the dog
@@ -340,35 +340,35 @@
     signOut: function () { actorId = null; loginName = null; return API.session(); },
     authors: function () { return Promise.resolve(copy(authors)); },
 
-    // A dog with no registration number (older or non-US dogs) is identified by registered name plus birth date. Members start the page; anyone can reopen it if it is public.
+    // A dog with no registration number (older or non-US dogs) is found by its registered name. Members only.
+    // One match opens it. Several matches, or a match whose saved source link differs from the one given, come back as choices so the member
+    // picks the right dog or says it is a different one ({forceNew: true}).
     lookupByName: function (o) {
       o = o || {};
       var gate = needMember() || lookupBudget(); if (gate) return gate;   // members only: a name search must never let a visitor browse the database
-      var name = String(o.name || '').trim().replace(/\s+/g, ' ').slice(0, 120), born = String(o.born || '').trim();
+      var name = String(o.name || '').trim().replace(/\s+/g, ' ').slice(0, 120);
       if (!name) return fail('invalid', 'Enter the dog\'s registered name.');
-      if (born && (!/^\d{4}-\d{2}-\d{2}$/.test(born) || isNaN(Date.parse(born)) || born > NOW())) return fail('invalid', 'Enter the birth date as year-month-day, or leave it blank.');
       var sp = splitTitle(name); name = sp.name || name;   // a title typed or pasted with the name (CH, GCH ...) is split off, so it never changes which dog this is
-      var url = String(o.url || '').trim();
-      var site = url ? siteOf(url) : null;
+      var url = String(o.url || '').trim(), site = url ? siteOf(url) : null;
       if (url && (!/^https:\/\//i.test(url) || !site)) return fail('invalid', 'The source link must be an https page on Quintessa, DANES World, River Rock or Cosmic Great Danes.');
-      var nk = name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ''), key = nk + '|' + born;
-      // With a birth date the match is exact. Without one, a name that matches a single dog opens it; several dogs with that name ask for the date.
-      var same = Object.keys(dogs).filter(function (k) { return dogs[k].nameKey && dogs[k].nameKey.split('|')[0] === nk; });
-      var hit = born ? same.filter(function (k) { return dogs[k].nameKey === key; }) : same;
-      if (hit.length > 1) return fail('invalid', 'More than one dog has that name. Add the birth date to pick the right one.');
-      if (hit.length === 1) return Promise.resolve({ dogId: hit[0], created: false });
-      // A date given for a dog that was started without one completes that dog instead of making a second page.
-      var undated = born ? same.filter(function (k) { return dogs[k].nameKey === nk + '|'; }) : [];
-      if (undated.length === 1) {
-        dogs[undated[0]].nameKey = key;
-        claims.push(C(nextId++, undated[0], 'fact', 'Whelp date', born, { src: url, author: actorId === 0 ? 1 : actorId, date: NOW() }));
-        return Promise.resolve({ dogId: undated[0], created: false });
+      var sx = o.sex === 'female' || o.sex === 'male' ? o.sex : '';
+      var nk = name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '');
+      var srcOf = function (k) { return claims.filter(function (c) { return c.dog === k && c.type === 'link' && c.status === 'visible' && c.url; }).map(function (c) { return c.url; }); };
+      var same = Object.keys(dogs).filter(function (k) { return dogs[k].nameKey === nk || (dogs[k].nameKey || '').indexOf(nk + '#') === 0; })
+        .filter(function (k) { return !(sx && dogs[k].sex && dogs[k].sex !== sx); });   // a different sex is a different dog
+      if (same.length && !o.forceNew) {
+        var conflict = same.length > 1 || (url && srcOf(same[0]).length && srcOf(same[0]).indexOf(url) < 0);
+        if (!conflict) return Promise.resolve({ dogId: same[0], created: false });
+        return Promise.resolve({ choices: same.map(function (k) {
+          var l = claims.filter(function (c) { return c.dog === k && c.type === 'link' && c.status === 'visible' && c.url; })[0];
+          return { dogId: k, name: dogs[k].registered, sex: dogs[k].sex, source: l ? l.name : '', url: l ? l.url : '', by: l ? ((authors[l.author] || {}).name || '') : '' };
+        }) });
       }
-      var id = 'n:' + key, sx = o.sex === 'female' || o.sex === 'male' ? o.sex : '', a = actorId === 0 ? 1 : actorId;
-      dogs[id] = { id: id, title: sp.name ? sp.title : '', titleSuffix: '', registered: name, call: '', short: '', sex: sx, color: String(o.color || '').trim().toLowerCase().slice(0, 40), photo: '', ext: false, litter: null, stub: true, pending: true, visibility: 'members', nameKey: key };
-      if (born) claims.push(C(nextId++, id, 'fact', 'Whelp date', born, { src: url, author: a, date: NOW() }));
+      var n = Object.keys(dogs).filter(function (k) { return (dogs[k].nameKey || '').split('#')[0] === nk; }).length;
+      var key = n ? nk + '#' + (n + 1) : nk, id = 'n:' + key, a = actorId === 0 ? 1 : actorId;
+      dogs[id] = { id: id, title: sp.name ? sp.title : '', titleSuffix: '', registered: name, call: '', short: '', sex: sx, color: '', photo: '', ext: false, litter: null, stub: true, pending: true, visibility: 'members', nameKey: key };
       if (url) claims.push(C(nextId++, id, 'link', 'Checked on ' + site, '', { url: url, author: a, date: NOW() }));
-      wantedLog(name + (born ? ' (born ' + born + ')' : ''), 'dog');
+      wantedLog(name, 'dog');
       return Promise.resolve({ dogId: id, created: true });
     },
     lookup: function (number) {

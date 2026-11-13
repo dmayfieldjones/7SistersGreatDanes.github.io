@@ -179,20 +179,19 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
     <p class="meta" style="margin:-6px 0 12px">Your Great Dane Gateway across platforms. Anyone can open <span class="brand7"><b>7</b>Sisters</span> dogs and follow their pedigrees back 10 generations. To look up any other dog by registration number, you need to sign in.</p>
     <form id="homeform" class="homeform"><input type="text" id="homefind" placeholder="AKC registration number" aria-label="Registration number" autocomplete="off"><button class="sm primary" type="submit">Find</button></form>
     <div class="demorow"><span class="meta">or take the demo with</span> <button class="sm" type="button" data-demo="412">Piper</button> <button class="sm" type="button" data-demo="413">Mia</button> <button class="sm" type="button" data-demo="414">Cora</button></div>
-    <details class="nonum"><summary class="meta" style="cursor:pointer">No registration number? Members: find or add a dog by name (birth date helps)</summary>
+    <details class="nonum"><summary class="meta" style="cursor:pointer">No registration number? Members: find or add a dog by name</summary>
       <form id="nameform" class="nameform">
         <span class="meta">Quickest for older dogs: open a descendant that has a number, then click the ancestor in its pedigree. Use this form only if the dog is not in any pedigree here.</span>
         <input type="text" id="nf-name" placeholder="Registered name (titles like CH are fine)" maxlength="120" required autocomplete="off">
-        <input type="date" id="nf-born" aria-label="Birth date (optional; tells same-named dogs apart)" title="Birth date (optional; tells same-named dogs apart)">
         <select id="nf-sex" aria-label="Sex"><option value="">Sex (optional)</option><option value="female">Female</option><option value="male">Male</option></select>
-        <input type="text" id="nf-color" placeholder="Color (optional)" maxlength="40" autocomplete="off">
-        <input type="url" id="nf-url" placeholder="Link to the dog on Quintessa, DANES World or River Rock (recommended)" autocomplete="off">
+        <input type="url" id="nf-url" placeholder="Link to the dog on Quintessa, DANES World or River Rock" autocomplete="off">
         <button class="sm primary" type="submit">Find or start this dog</button>
+        <div id="nf-choices" style="display:grid;gap:6px"></div>
         <details class="meta"><summary style="cursor:pointer">Shortcut: paste the details instead</summary>
-        <textarea id="nf-paste" rows="3" placeholder="Paste the dog's details copied from a pedigree page (name, color, sex, birth date) and the fields below fill in" aria-label="Pasted details"></textarea>
+        <textarea id="nf-paste" rows="3" placeholder="Paste the dog's details copied from a pedigree page (name, sex, link) and the fields above fill in" aria-label="Pasted details"></textarea>
         <span class="meta" id="nf-note" role="status"></span>
         </details>
-        <span class="meta">Older and non-US dogs often have no number in these databases. The registered name identifies the dog; add the birth date if you have it, to tell same-named dogs apart. The link you paste is your confirmation that you saw the dog there, and it is shown on the dog's page under your name. Signed-in members only.</span>
+        <span class="meta">Older and non-US dogs often have no number in these databases. The link you paste is your confirmation that you saw the dog there; it is shown on the dog's page under your name. If more than one dog could match, you pick the right one. Signed-in members only. To suggest another database we should link to, <a href="/contact">contact us</a>.</span>
       </form></details>
     <p class="meta" style="margin:10px 0 0;font-size:.8rem">For personal, non-commercial use only. No scraping, bulk downloading or reselling of records.</p>
     <p class="meta" id="homemsg" role="status" style="margin:8px 0 0;min-height:1.2em"></p>
@@ -926,31 +925,23 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   document.addEventListener('change',function(e){if(e.target&&e.target.id==='vis'&&S)run(DogAPI.setVisibility(S.dog.id,e.target.value))});
   $('findform').addEventListener('submit',function(e){e.preventDefault();findDog($('dogfind').value.trim(),$('findmsg'))});
   // Paste-to-fill for the no-number form: the member copies a dog's details from a pedigree page; we only read what they paste, nothing is fetched.
-  (function(){
-    var MON={jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,oct:10,nov:11,dec:12};
-    function iso(y,m,d){m=+m;d=+d;y=+y;if(y<100)y+=y>30?1900:2000;if(m<1||m>12||d<1||d>31||y<1850)return '';return y+'-'+('0'+m).slice(-2)+'-'+('0'+d).slice(-2)}
-    function date(t){var m;
-      if(m=/\b(\d{4})-(\d{1,2})-(\d{1,2})\b/.exec(t))return iso(m[1],m[2],m[3]);
-      if(m=/\b(\d{1,2})\/(\d{1,2})\/(\d{4})\b/.exec(t))return iso(m[3],m[1],m[2]);   // 2/10/1994 is month/day, as Quintessa writes it
-      if(m=/\b(\d{1,2})\s+([A-Za-z]{3})[a-z]*\.?,?\s+(\d{4})\b/.exec(t)){var mo=MON[m[2].toLowerCase()];return mo?iso(m[3],mo,m[1]):''}
-      if(m=/\b([A-Za-z]{3})[a-z]*\.?\s+(\d{1,2}),?\s+(\d{4})\b/.exec(t)){var mo2=MON[m[1].toLowerCase()];return mo2?iso(m[3],mo2,m[2]):''}
-      return ''}
-    $('nf-paste').addEventListener('input',function(){
-      var lines=this.value.split(/\r?\n/).map(function(x){return x.trim()}).filter(Boolean),got=[];
-      if(!lines.length){$('nf-note').textContent='';return}
-      var url=/https?:\/\/\S+/.exec(this.value);if(url){$('nf-url').value=url[0];got.push('link')}
-      var rest=lines.filter(function(l){return !/^https?:\/\//i.test(l)});
-      var nm=rest[0];if(nm&&!/\d{1,2}\/\d{1,2}\/\d{4}/.test(nm)){$('nf-name').value=nm.replace(/\s+/g,' ');got.push('name')}
-      var sx='',col='';
-      rest.slice(1).forEach(function(l){
-        if(/^(f|female|bitch)$/i.test(l))sx='female';else if(/^(m|male|dog)$/i.test(l))sx='male';
-        else if(!col&&!/\d/.test(l)&&l.length<40)col=l});
-      if(sx){$('nf-sex').value=sx;got.push('sex')}
-      if(col){$('nf-color').value=col;got.push('color')}
-      var dt=date(this.value);if(dt){$('nf-born').value=dt;got.push('birth date')}
-      $('nf-note').textContent=got.length?'Filled in: '+got.join(', ')+'. Check them, then press the button.':'Could not read that. Fill the fields in by hand.'});
-  })();
-  $('nameform').addEventListener('submit',function(e){e.preventDefault();var m=$('homemsg');m.textContent='';DogAPI.lookupByName({name:$('nf-name').value,born:$('nf-born').value,sex:$('nf-sex').value,color:$('nf-color').value,url:$('nf-url').value}).then(function(r){return goTo(r.dogId)}).catch(function(err){m.textContent=err&&err.message||'That search failed.'})});
+  $('nf-paste').addEventListener('input',function(){
+    var lines=this.value.split(/\r?\n/).map(function(x){return x.trim()}).filter(Boolean),got=[];
+    if(!lines.length){$('nf-note').textContent='';return}
+    var url=/https?:\/\/\S+/.exec(this.value);if(url){$('nf-url').value=url[0];got.push('link')}
+    var rest=lines.filter(function(l){return !/^https?:\/\//i.test(l)});
+    if(rest[0]){$('nf-name').value=rest[0].replace(/\s+/g,' ');got.push('name')}
+    var sx='';rest.slice(1).forEach(function(l){if(/^(f|female|bitch)$/i.test(l))sx='female';else if(/^(m|male|dog)$/i.test(l))sx='male'});
+    if(sx){$('nf-sex').value=sx;got.push('sex')}
+    $('nf-note').textContent=got.length?'Filled in: '+got.join(', ')+'. Check them, then press the button.':'Could not read that. Fill the fields in by hand.'});
+  function nameLookup(forceNew){var m=$('homemsg');m.textContent='';$('nf-choices').innerHTML='';
+    DogAPI.lookupByName({name:$('nf-name').value,sex:$('nf-sex').value,url:$('nf-url').value,forceNew:!!forceNew}).then(function(r){
+      if(!r.choices)return goTo(r.dogId);
+      m.textContent='More than one dog could match. Pick the right one, or start a new page if it is a different dog.';
+      $('nf-choices').innerHTML=r.choices.map(function(c){return '<div class="card" style="padding:8px 10px"><b>'+esc(c.name)+'</b>'+(c.sex?' <span class="meta">&middot; '+esc(c.sex)+'</span>':'')+(c.source?' <span class="meta">&middot; '+(c.url?'<a href="'+esc(c.url)+'" target="_blank" rel="noopener">'+esc(c.source)+'</a>':esc(c.source))+(c.by?' by '+esc(c.by):'')+'</span>':'')+' <button class="sm" type="button" data-pick="'+esc(c.dogId)+'">Open this one</button></div>'}).join('')+'<button class="sm" type="button" id="nf-new">None of these: start a new page</button>';
+    }).catch(function(err){m.textContent=err&&err.message||'That search failed.'})}
+  $('nameform').addEventListener('submit',function(e){e.preventDefault();nameLookup(false)});
+  $('nf-choices').addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('button');if(!b)return;if(b.id==='nf-new')nameLookup(true);else if(b.dataset.pick)goTo(b.dataset.pick)});
   $('homeform').addEventListener('submit',function(e){e.preventDefault();findDog($('homefind').value.trim(),$('homemsg'))});
   $('me').addEventListener('change',function(e){
     DogAPI.setActor(e.target.value).then(function(s){SESSION=s;return afterSessionChange()});
