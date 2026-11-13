@@ -3,5 +3,10 @@ Allow: /
 Disallow: /private/
 Disallow: /admin/
 Disallow: /DogShows
+Disallow: /dog-page-demo.html
+Disallow: /breed-galaxy.html
+Disallow: /dog-api.js
+Disallow: /data/
+Crawl-delay: 10
 
 Sitemap: https://7sistersgreatdanes.com/sitemap.xml
