@@ -91,6 +91,10 @@ test('confirming a dog brings its ancestors with it, from one extra request, and
   assert.ok(!JSON.stringify(ped.result.nodes).includes('FORGED'));
   const d = await call(h, 'getDog', [id], t);
   assert.equal(d.result.perm.hasPedigree, true);
+  // the parents are credited to the member who added the dog and to the database they came from, not to an unknown member
+  const par = d.result.parents.filter((x) => x.role === 'Sire' || x.role === 'Dam');
+  assert.equal(par.length, 2);
+  assert.ok(par.every((x) => x.src === 'DANES World pedigree' && x.author >= 100));
   // open the sire, then a Beccas Blucher at two different places in the pedigree: one page, not two
   const keys = Object.keys(ped.result.nodes).filter((k) => /BECCAS BLUCHER/.test(ped.result.nodes[k][0]));
   assert.ok(keys.length >= 2);

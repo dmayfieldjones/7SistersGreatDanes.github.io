@@ -291,7 +291,7 @@
     [[2, 'Sire'], [3, 'Dam']].forEach(function (x) {
       if (!P[x[0]]) return;
       var e = P[x[0]], sp = splitTitle(e[0]);
-      row(x[1], { name: sp.name, title: sp.title, reg: regOf(e[1].split(' · ')[0]) }, x[0], 3, 'pedigree data');
+      row(x[1], { name: sp.name, title: sp.title, reg: regOf(e[1].split(' · ')[0]) }, x[0], d.pedFrom ? d.pedFrom.author : 3, d.pedFrom ? d.pedFrom.src : 'pedigree data');
     });
     return { rows: out, restricted: false };
   }
@@ -465,7 +465,7 @@
       };
       if (ex !== null) {
         // the dog is already here: if it has no pedigree yet, give it this one
-        if (ped && dogs[ex].stub && !dogs[ex].ped && !Object.keys(pedOf(ex)).length) dogs[ex].ped = pedOut(dogs[ex]);
+        if (ped && dogs[ex].stub && !dogs[ex].ped && !Object.keys(pedOf(ex)).length) { dogs[ex].ped = pedOut(dogs[ex]); dogs[ex].pedFrom = { src: 'DANES World pedigree', author: actorId === 0 ? 1 : actorId }; }
         return Promise.resolve({ dogId: ex, created: false });
       }
       var n = Object.keys(dogs).filter(function (k) { return (dogs[k].nameKey || '').split('#')[0] === nk; }).length;
@@ -474,7 +474,7 @@
       if (reg) identifiers.push({ dog: id, registry: AKCNO.test(reg) ? 'AKC' : (c.registry || 'Reg.'), number: reg, author: a, date: NOW() });
       if (/^\d{4}-\d{2}-\d{2}$/.test(c.born || '')) claims.push(C(nextId++, id, 'fact', 'Whelp date', c.born, { src: 'DANES World', author: a, date: NOW() }));
       claims.push(C(nextId++, id, 'link', 'Checked on DANES World', '', { url: 'https://www.danesworld.info/hundelist.php?psearch=' + encodeURIComponent(reg || name), author: a, date: NOW() }));
-      if (ped) dogs[id].ped = pedOut(dogs[id]);
+      if (ped) { dogs[id].ped = pedOut(dogs[id]); dogs[id].pedFrom = { src: 'DANES World pedigree', author: a }; }
       delete stash[String(actorId)];
       return Promise.resolve({ dogId: id, created: true });
     },
