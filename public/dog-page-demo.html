@@ -396,9 +396,10 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
 
   <div class="card">
     <h3 style="margin-top:0">Dogs people looked for that we don't fully have</h3>
-    <p class="meta">Built from searches and page opens. Nothing is looked up on other sites automatically. This is the list to send when asking for a data update, or to check by hand.</p>
+    <p class="meta">Each row is a dog a signed-in member searched for or opened, by registration number or name, that our data lacks or only partly has. The most-asked dogs are the ones worth adding first. Nothing is looked up on other sites automatically. Use the links to check a dog by hand, or send the list when asking for a data update, then press "Mark as added" and the row goes away.</p>
+    <p class="meta">Searches by visitors who are not signed in are not recorded here, because they are turned away before any lookup happens.</p>
     <div class="tw"><table>
-      <thead><tr><th>Registration</th><th>Asked</th><th>What is missing</th><th>Look it up</th><th></th></tr></thead>
+      <thead><tr><th>Dog searched for</th><th>Times searched</th><th>What we have</th><th>Check it on</th><th></th></tr></thead>
       <tbody id="wanted"></tbody>
     </table></div>
     <p style="margin:10px 0 0"><button class="sm" type="button" data-copywanted="1">Copy the list of numbers</button></p>
@@ -729,7 +730,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     Promise.all([DogAPI.accountRequests(),DogAPI.wanted(),DogAPI.actionLog()]).then(function(r){
       var rq=r[0],wk=r[1],lg=r[2];
       $('requests').innerHTML=rq.length?rq.map(function(x){return '<tr><td>'+esc(x.name)+'</td><td>'+esc(x.role)+'</td><td>'+esc(x.verify)+'</td><td><button class="sm" data-approve="'+x.id+'">Approve</button> <button class="sm danger" data-reject="'+x.id+'">Reject</button></td></tr>'}).join(''):'<tr><td colspan="4" class="meta">No pending requests.</td></tr>';
-      $('wanted').innerHTML=wk.length?wk.map(function(w){return '<tr><td>'+esc(w.reg)+'</td><td>'+w.count+'&times; <span class="meta">last '+esc(w.last)+'</span></td><td>'+(w.how==='names'?'On the map, no names':'Not in our data')+'</td><td><a href="'+esc(durl(w.reg))+'" target="_blank" rel="noopener">DANES World</a> &middot; <a href="'+esc(qurl(w.reg))+'" target="_blank" rel="noopener">Quintessa</a> &middot; <a href="'+esc(XREF.OFA.replace('{id}',encodeURIComponent(w.reg)))+'" target="_blank" rel="noopener">OFA</a></td><td><button class="sm" data-added="'+esc(w.reg)+'">Mark added</button></td></tr>'}).join(''):'<tr><td colspan="5" class="meta">Nothing yet. Search for a number we do not have to see it appear here.</td></tr>';
+      $('wanted').innerHTML=wk.length?wk.map(function(w){return '<tr><td>'+esc(w.reg)+'</td><td>'+w.count+(w.count===1?' time':' times')+' <span class="meta">&middot; last '+esc(w.last)+'</span></td><td>'+(w.how==='names'?'<b>Partly.</b> A dot on the galaxy map, but no name, pedigree or details yet.':'<b>Nothing.</b> Not in our data at all.')+'</td><td><a href="'+esc(durl(w.reg))+'" target="_blank" rel="noopener">DANES World</a> &middot; <a href="'+esc(qurl(w.reg))+'" target="_blank" rel="noopener">Quintessa</a> &middot; <a href="'+esc(XREF.OFA.replace('{id}',encodeURIComponent(w.reg)))+'" target="_blank" rel="noopener">OFA</a></td><td><button class="sm" data-added="'+esc(w.reg)+'">Mark as added</button></td></tr>'}).join(''):'<tr><td colspan="5" class="meta">Nothing yet. When a signed-in member searches for a dog we do not have, it appears here.</td></tr>';
       $('log').innerHTML=lg.length?lg.map(function(l){return '<li><b>'+l.date+'</b> &middot; '+esc(l.text)+'</li>'}).join(''):'<li class="meta">No actions yet.</li>';
     }).catch(function(){deny()});
   }
