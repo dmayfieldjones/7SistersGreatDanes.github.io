@@ -344,7 +344,7 @@
       var sp = splitTitle(name); name = sp.name || name;   // a title typed or pasted with the name (CH, GCH ...) is split off, so it never changes which dog this is
       var url = String(o.url || '').trim();
       if (url && !/^https?:\/\//i.test(url)) return fail('invalid', 'The source link must start with http:// or https://');
-      var nk = name.toLowerCase().replace(/[^a-z0-9]+/g, ''), key = nk + '|' + born;
+      var nk = name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ''), key = nk + '|' + born;
       // With a birth date the match is exact. Without one, a name that matches a single dog opens it; several dogs with that name ask for the date.
       var same = Object.keys(dogs).filter(function (k) { return dogs[k].nameKey && dogs[k].nameKey.split('|')[0] === nk; });
       var hit = born ? same.filter(function (k) { return dogs[k].nameKey === key; }) : same;
