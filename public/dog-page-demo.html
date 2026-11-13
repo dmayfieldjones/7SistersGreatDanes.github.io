@@ -139,7 +139,7 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
     <span id="devmenu" hidden><label for="me" class="meta">Developer: view as</label> <select id="me" aria-label="Developer: view as" style="width:auto"></select></span>
     <span id="authbox" style="display:inline-flex;gap:8px;align-items:center;flex-wrap:wrap">
     <button class="sm" type="button" id="signinbtn" hidden>Sign in</button>
-    <span class="meta" id="whoami" hidden></span><button class="sm" type="button" id="signoutbtn" hidden>Sign out</button>
+    <span class="meta" id="whoami" hidden></span><button class="sm" type="button" id="mfabtn" hidden>Two-step sign-in</button> <button class="sm" type="button" id="signoutbtn" hidden>Sign out</button>
   </span>
   </span>
 </div>
@@ -153,10 +153,27 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
       <p class="meta" style="margin:0">This is a temporary password. Choose your own (at least 12 characters, with upper case, lower case and a number).</p>
       <input type="password" id="lg-pass2" placeholder="New password" autocomplete="new-password" minlength="12">
     </div>
-    <div><button class="sm primary" type="submit" id="lg-go">Sign in</button> <button class="sm" type="button" id="lg-cancel">Cancel</button></div>
+    <div id="lg-mfa" style="display:none;gap:8px">
+      <p class="meta" style="margin:0">Enter the 6-digit code from your authenticator app.</p>
+      <input type="text" id="lg-code" inputmode="numeric" autocomplete="one-time-code" placeholder="6-digit code" maxlength="6">
+    </div>
+    <div id="lg-reset" style="display:none;gap:8px">
+      <p class="meta" style="margin:0">We emailed a code to the address on the account. Enter it with a new password (at least 12 characters, with upper case, lower case and a number).</p>
+      <input type="text" id="lg-rcode" inputmode="numeric" autocomplete="one-time-code" placeholder="Emailed code">
+      <input type="password" id="lg-rpass" placeholder="New password" autocomplete="new-password" minlength="12">
+    </div>
+    <div><button class="sm primary" type="submit" id="lg-go">Sign in</button> <button class="sm" type="button" id="lg-cancel">Cancel</button> <a href="#" id="lg-forgot" class="meta">Forgot password?</a></div>
     <p class="meta" id="lg-msg" role="status" style="margin:0"></p>
   </div>
 </form>
+<div id="mfapanel" class="card" hidden style="max-width:26rem">
+  <h3 style="margin:0 0 4px">Two-step sign-in</h3>
+  <p class="meta" style="margin:0 0 8px">Add the account to an authenticator app (Google Authenticator, Authy, 1Password and similar) with the key below, then enter the 6-digit code it shows. After that, signing in asks for a code as well as your password.</p>
+  <p class="meta" style="margin:0 0 8px">Key: <code id="mfa-key" style="user-select:all"></code> <a id="mfa-link" href="#">Open in authenticator app</a></p>
+  <input type="text" id="mfa-code" inputmode="numeric" autocomplete="one-time-code" placeholder="6-digit code" maxlength="6">
+  <div style="margin-top:8px"><button class="sm primary" type="button" id="mfa-go">Turn on</button> <button class="sm" type="button" id="mfa-cancel">Cancel</button></div>
+  <p class="meta" id="mfa-msg" role="status" style="margin:6px 0 0"></p>
+</div>
 <p id="signin" class="meta" hidden></p>
 <details id="invite" class="card" hidden style="margin:0 0 12px">
   <summary><b>New here? How this works and how to help</b> &middot; <a href="#" id="invitesignin">Sign in</a></summary>
@@ -491,6 +508,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     $('signin').hidden=li;
     $('signinbtn').hidden=!AUTH||li;
     $('signoutbtn').hidden=!AUTH||!li||!stored();
+    $('mfabtn').hidden=$('signoutbtn').hidden;
     $('whoami').hidden=!li;$('whoami').textContent=li?'Signed in as '+SESSION.name+(SESSION.role==='admin'?' (administrator)':''):'';
   }
   (function(){$('ns-boxes').innerHTML=['Hips','Elbows','Cardiac','Thyroid','Eyes','Patellas','Shoulders','Other'].map(function(c){return '<label style="display:inline-flex;gap:4px;align-items:center"><input type="checkbox" value="'+c+'"> '+c+'</label>'}).join('')})();
@@ -1128,25 +1146,70 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   }
   function authMsg(t){$('lg-msg').textContent=t||''}
   function showLogin(on){$('loginform').hidden=!on;if(on){$('lg-user').focus()}}
+  // Which step the sign-in form is on: login, newpw (temporary password), mfa (authenticator code), forgot (ask for a code), reset (code + new password).
+  var mode='login', ACCESS_KEY='dogpage-access-token';
+  function setMode(m){
+    mode=m;
+    var pw=(m==='login'||m==='newpw');
+    $('lg-pass').style.display=pw?'':'none';$('lg-pass').required=pw;
+    $('lg-user').readOnly=(m==='newpw'||m==='mfa'||m==='reset');
+    $('lg-new').style.display=(m==='newpw')?'grid':'none';$('lg-pass2').required=(m==='newpw');
+    $('lg-mfa').style.display=(m==='mfa')?'grid':'none';$('lg-code').required=(m==='mfa');
+    $('lg-reset').style.display=(m==='reset')?'grid':'none';$('lg-rcode').required=(m==='reset');$('lg-rpass').required=(m==='reset');
+    $('lg-forgot').style.display=(m==='login')?'':'none';
+    $('lg-go').textContent=m==='forgot'?'Email me a code':m==='reset'?'Change password':m==='mfa'?'Verify':'Sign in';
+  }
   function finish(res){
-    var idt=res&&res.AuthenticationResult&&res.AuthenticationResult.IdToken;
+    var ar=res&&res.AuthenticationResult,idt=ar&&ar.IdToken;
     if(!idt){authMsg('Sign-in did not complete.');return}
-    applyLogin(idt).then(function(ok){if(ok){$('lg-pass').value='';$('lg-pass2').value='';challenge=null;$('lg-new').style.display='none';showLogin(false);authMsg('');renderTop();return S?load(S.dog.id):showHome()}else authMsg('That account is not set up for the dog pages yet.')});
+    applyLogin(idt).then(function(ok){if(ok){try{sessionStorage.setItem(ACCESS_KEY,ar.AccessToken)}catch(e){}$('lg-pass').value='';$('lg-pass2').value='';$('lg-code').value='';challenge=null;setMode('login');showLogin(false);authMsg('');renderTop();return S?load(S.dog.id):showHome()}else authMsg('That account is not set up for the dog pages yet.')});
+  }
+  function nextStep(res,user){
+    if(res.ChallengeName==='NEW_PASSWORD_REQUIRED'){challenge={session:res.Session,username:user,name:res.ChallengeName};setMode('newpw');$('lg-pass2').focus();authMsg('Choose a new password to finish signing in.');return}
+    if(res.ChallengeName==='SOFTWARE_TOKEN_MFA'){challenge={session:res.Session,username:user,name:res.ChallengeName};setMode('mfa');$('lg-code').focus();authMsg('');return}
+    finish(res);
   }
   $('loginform').addEventListener('submit',function(e){
     e.preventDefault();authMsg('');
-    var user=$('lg-user').value.trim();
-    var p=challenge?cognito('RespondToAuthChallenge',{ChallengeName:'NEW_PASSWORD_REQUIRED',ClientId:AUTH.clientId,Session:challenge.session,ChallengeResponses:{USERNAME:challenge.username,NEW_PASSWORD:$('lg-pass2').value}})
-      :cognito('InitiateAuth',{AuthFlow:'USER_PASSWORD_AUTH',ClientId:AUTH.clientId,AuthParameters:{USERNAME:user,PASSWORD:$('lg-pass').value}});
-    p.then(function(res){
-      if(res.ChallengeName==='NEW_PASSWORD_REQUIRED'){challenge={session:res.Session,username:user};$('lg-new').style.display='grid';$('lg-pass2').required=true;$('lg-pass2').focus();authMsg('Choose a new password to finish signing in.');return}
-      finish(res);
-    }).catch(function(err){
+    var user=$('lg-user').value.trim(),p;
+    if(mode==='forgot')p=cognito('ForgotPassword',{ClientId:AUTH.clientId,Username:user}).then(function(){setMode('reset');$('lg-rcode').focus();authMsg('If that account has a verified email, a code is on its way.')});
+    else if(mode==='reset')p=cognito('ConfirmForgotPassword',{ClientId:AUTH.clientId,Username:user,ConfirmationCode:$('lg-rcode').value.trim(),Password:$('lg-rpass').value}).then(function(){$('lg-rcode').value='';$('lg-rpass').value='';$('lg-pass').value='';setMode('login');authMsg('Password changed. Sign in with the new one.')});
+    else if(mode==='mfa')p=cognito('RespondToAuthChallenge',{ChallengeName:'SOFTWARE_TOKEN_MFA',ClientId:AUTH.clientId,Session:challenge.session,ChallengeResponses:{USERNAME:challenge.username,SOFTWARE_TOKEN_MFA_CODE:$('lg-code').value.trim()}}).then(function(res){nextStep(res,user)});
+    else if(mode==='newpw')p=cognito('RespondToAuthChallenge',{ChallengeName:'NEW_PASSWORD_REQUIRED',ClientId:AUTH.clientId,Session:challenge.session,ChallengeResponses:{USERNAME:challenge.username,NEW_PASSWORD:$('lg-pass2').value}}).then(function(res){nextStep(res,user)});
+    else p=cognito('InitiateAuth',{AuthFlow:'USER_PASSWORD_AUTH',ClientId:AUTH.clientId,AuthParameters:{USERNAME:user,PASSWORD:$('lg-pass').value}}).then(function(res){nextStep(res,user)});
+    p.catch(function(err){
       var t=(err&&(err.__type||'')).split('#').pop();
-      authMsg(t==='NotAuthorizedException'||t==='UserNotFoundException'?'Incorrect username or password.':t==='InvalidPasswordException'?(err.message||'That password is not strong enough.'):'Sign-in failed. Try again in a moment.');
+      authMsg(mode==='mfa'&&(t==='CodeMismatchException'||t==='ExpiredCodeException'||t==='NotAuthorizedException')?'That code did not work. Try the current one.'
+        :mode==='reset'&&(t==='CodeMismatchException'||t==='ExpiredCodeException')?'That code did not work. Check it, or ask for a new one.'
+        :t==='LimitExceededException'||t==='TooManyRequestsException'||t==='TooManyFailedAttemptsException'?'Too many tries. Wait a few minutes and try again.'
+        :t==='NotAuthorizedException'||t==='UserNotFoundException'?'Incorrect username or password.'
+        :t==='InvalidPasswordException'?(err.message||'That password is not strong enough.')
+        :mode==='forgot'||mode==='reset'?'That did not work. Try again in a moment.':'Sign-in failed. Try again in a moment.');
     });
   });
-  $('lg-cancel').addEventListener('click',function(){challenge=null;$('lg-new').style.display='none';authMsg('');showLogin(false)});
+  $('lg-forgot').addEventListener('click',function(e){e.preventDefault();authMsg('Enter your username, then ask for a code.');setMode('forgot');$('lg-user').focus()});
+  $('lg-cancel').addEventListener('click',function(){challenge=null;setMode('login');authMsg('');showLogin(false)});
+  // Two-step sign-in (authenticator app) for a signed-in member. Needs the access token from this sign-in; after a reload, sign in again.
+  function mfaMsg(t){$('mfa-msg').textContent=t||''}
+  $('mfabtn').addEventListener('click',function(){
+    var at=null;try{at=sessionStorage.getItem(ACCESS_KEY)}catch(e){}
+    $('mfapanel').hidden=false;mfaMsg('');$('mfa-code').value='';
+    if(!at){$('mfa-key').textContent='';$('mfa-link').hidden=true;mfaMsg('Sign out and sign in again, then choose this.');return}
+    cognito('AssociateSoftwareToken',{AccessToken:at}).then(function(r){
+      $('mfa-key').textContent=r.SecretCode;
+      var u=(SESSION&&SESSION.username)||$('lg-user').value||'';
+      $('mfa-link').hidden=false;$('mfa-link').href='otpauth://totp/GDGalaxy:'+encodeURIComponent(u)+'?secret='+r.SecretCode+'&issuer=GDGalaxy';
+    }).catch(function(){mfaMsg('Could not start setup. Sign in again and retry.')});
+  });
+  $('mfa-go').addEventListener('click',function(){
+    var at=null;try{at=sessionStorage.getItem(ACCESS_KEY)}catch(e){}
+    if(!at)return;
+    cognito('VerifySoftwareToken',{AccessToken:at,UserCode:$('mfa-code').value.trim(),FriendlyDeviceName:'Authenticator app'})
+      .then(function(r){if(r.Status!=='SUCCESS')throw r;return cognito('SetUserMFAPreference',{AccessToken:at,SoftwareTokenMfaSettings:{Enabled:true,PreferredMfa:true}})})
+      .then(function(){mfaMsg('Two-step sign-in is on. Next time you sign in, it will ask for a code.');$('mfa-key').textContent=''})
+      .catch(function(){mfaMsg('That code did not work. Check the app and try the current code.')});
+  });
+  $('mfa-cancel').addEventListener('click',function(){$('mfapanel').hidden=true;$('mfa-key').textContent='';mfaMsg('')});
   $('signinbtn').addEventListener('click',function(){showLogin(true)});
   $('invitesignin').addEventListener('click',function(e){e.preventDefault();window.scrollTo(0,0);showLogin(true)});
   $('editsignin').addEventListener('click',function(e){e.preventDefault();window.scrollTo(0,0);showLogin(true)});
@@ -1156,7 +1219,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     if(SESSION.role==='visitor'){NAV=[];return showHome()}
     return load(S?S.dog.id:412);
   }
-  $('signoutbtn').addEventListener('click',function(){store(null);DogAPI.signOut().then(function(s){SESSION=s;return afterSessionChange()})});
+  $('signoutbtn').addEventListener('click',function(){store(null);try{sessionStorage.removeItem(ACCESS_KEY)}catch(e){}$('mfapanel').hidden=true;DogAPI.signOut().then(function(s){SESSION=s;return afterSessionChange()})});
 
   // ---- start ----
   var DEV=/^(localhost|127\.0\.0\.1)$/.test(location.hostname);   // the "view as" menu is for local development only: it would let anyone become the administrator
