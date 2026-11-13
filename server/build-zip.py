@@ -6,7 +6,7 @@ import hashlib, json, os, sys, zipfile, pathlib
 root = pathlib.Path(__file__).resolve().parent.parent
 out = pathlib.Path(sys.argv[1])
 files = {'package.json': json.dumps({'type': 'module'})}
-for f in ['handler.mjs', 'auth.mjs', 'store.mjs', 'store-dynamo.mjs', 'lambda.mjs', 'danesworld.mjs']:
+for f in sorted(p.name for p in (root / 'server').glob('*.mjs')):   # every server module, so a new file can never be left out of the package
     files['server/' + f] = (root / 'server' / f).read_text()
 files['public/dog-api.js'] = (root / 'public' / 'dog-api.js').read_text()
 for f in ['demo-authors.json', 'our-pedigrees.json']:
