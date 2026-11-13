@@ -288,14 +288,17 @@
   }
 
   // ---- the API ----------------------------------------------------------------------------------------------------------------
+  var loadJSON = function (path) { return fetch(path).then(function (r) { if (!r.ok) throw new Error('none'); return r.json(); }); };
   var API = {
     visitorGens: 10,     // how far back a visitor may follow a pedigree from one of our dogs
+    // Where reference data comes from: the page fetches it from the site; the server reads it from its own files (setLoader).
+    setLoader: function (fn) { loadJSON = fn; },
     init: function () {
       return Promise.all([
-        fetch('/data/demo-authors.json').then(function (r) { return r.json(); }).then(function (j) { authors = j; }).catch(function () { }),
+        loadJSON('/data/demo-authors.json').then(function (j) { authors = j; }).catch(function () { }),
         // The ancestry of our own dogs, and the list of dogs with a photo elsewhere, come from a data file, not from the code. The file
         // holds only what the public explorer pages for our litters already show. In the real system the server provides it.
-        fetch('/data/our-pedigrees.json').then(function (r) { if (!r.ok) throw new Error('none'); return r.json(); }).then(function (j) {
+        loadJSON('/data/our-pedigrees.json').then(function (j) {
           priv.j = j; priv.peds[412] = j.piper; priv.photoRegs = j.hasphoto || []; priv.cosmic = j.cosmic || {};
         }).catch(function () { })
       ]).then(function () { return API.session(); });
@@ -311,7 +314,7 @@
       // Demo only: the user pool is closed to self-sign-up (the administrator creates every account), so any account that signs in is a vetted
       // member. A named account keeps its own identity; any other gets a member number of its own, so its records carry its name.
       if (!(u in LOGINS)) { var nid = 100 + Object.keys(authors).filter(function (k) { return Number(k) >= 100; }).length; authors[nid] = { name: id.name || u, role: 'Member', status: 'active' }; LOGINS[u] = nid; }
-      actorId = LOGINS[u]; loginName = id.name || u;
+      actorId = id.admin ? 0 : LOGINS[u]; loginName = id.name || u;
       return API.session();
     },
     signOut: function () { actorId = null; loginName = null; return API.session(); },
@@ -406,7 +409,7 @@
       var parts = e[1].split(' · '), reg = regOf(parts[0]), ex = dogByNumber(reg);
       if (ex !== null) return Promise.resolve({ dogId: ex });
       var id = 'r:' + reg, sp = splitTitle(e[0]), sx = (parts[2] || '').trim();
-      dogs[id] = { id: id, title: sp.title, titleSuffix: '', registered: sp.name, call: '', sex: sx === 'F' ? 'female' : (sx === 'M' ? 'male' : ''), color: (parts[1] || '').trim().toLowerCase(), photo: '', ext: true, litter: null, generated: true, gen: gen, visibility: 'public' };
+      dogs[id] = { id: id, title: sp.title, titleSuffix: '', registered: sp.name, call: '', sex: sx === 'F' ? 'female' : (sx === 'M' ? 'male' : ''), color: (parts[1] || '').trim().toLowerCase(), photo: '', ext: true, litter: null, generated: true, gen: gen, origin: { dog: dogId, key: key }, visibility: 'public' };
       identifiers.push({ dog: id, registry: AKCNO.test(reg) ? 'AKC' : 'Reg.', number: reg, author: 1, auto: true, date: NOW() });
       var born = (parts[3] || '').trim();
       if (/^\d{4}-\d{2}-\d{2}$/.test(born)) claims.push(C(nextId++, id, 'fact', 'Whelp date', born, { src: 'Pedigree data', author: 1, auto: true, date: NOW() }));
@@ -533,5 +536,24 @@
     actionLog: function () { var g = needAdmin(); if (g) return g; return Promise.resolve(copy(log)); }
   };
 
+  // ---- state: what members add is the only thing that changes. The server saves this document and reloads it for each call. ----
+  // The seed data lives in this file; pedigrees of generated ancestor pages are not saved, they are rebuilt from where each was opened.
+  API.exportState = function () {
+    return JSON.parse(JSON.stringify({ v: 1, nextId: nextId, authors: authors, logins: LOGINS, dogs: dogs, litters: litters, identifiers: identifiers,
+      people: people, claims: claims, requests: requests, wanted: wantedList, log: log }));
+  };
+  API.importState = function (st) {
+    st = JSON.parse(JSON.stringify(st || SEED));
+    nextId = st.nextId; authors = st.authors; LOGINS = st.logins; dogs = st.dogs; litters = st.litters; identifiers = st.identifiers;
+    people = st.people; claims = st.claims; requests = st.requests; wantedList = st.wanted; log = st.log;
+    Object.keys(priv.peds).forEach(function (k) { if (String(k).indexOf('r:') === 0) delete priv.peds[k]; });
+    Object.keys(dogs).filter(function (id) { return dogs[id].origin; }).sort(function (a, b) { return (dogs[a].gen || 0) - (dogs[b].gen || 0); }).forEach(function (id) {
+      var o = dogs[id].origin, P = pedOf(o.dog); if (P[o.key]) priv.peds[id] = reroot(P, o.key);
+    });
+    actorId = null; loginName = null;
+  };
+  var SEED = API.exportState();
+
   root.DogAPI = API;
-})(window);
+  if (typeof module !== 'undefined' && module.exports) module.exports = API;
+})(typeof window !== 'undefined' ? window : globalThis);
