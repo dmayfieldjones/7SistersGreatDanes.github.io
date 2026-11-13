@@ -92,7 +92,9 @@ let pass=0,fail=0;const ok=(c,m)=>{if(c){pass++}else{fail++;console.log('  FAIL:
  const sireName=T('dog-name');click(d.querySelector('#pedgrid a.nm[data-anc="4"]'));await wait(1500);ok(T('dog-name')!==sireName&&T('dog-name').length>5&&T('backrow').includes('Back to'),'one generation deeper opens a different dog, with a way back');
  click(d.querySelector('#backrow a'));await wait(800);click(d.querySelector('#backrow a'));await wait(800);ok(/Legado N Danekraaft/.test(T('dog-name')),'back twice returns to Piper');
  console.log('--- health screens on file (existence only)');
- const A2=t.API();await actAs(9);await find('WS69691106');
+ const A2=t.API();await actAs(1);await find('WS69691106');
+ await A2.addRecord(412,{type:'test',name:'Hips',value:'Good',url:'https://example.org/c'}).then(()=>ok(false,'non-owner result refused'),e=>ok(e.code==='forbidden'&&/owner/.test(e.message),'a member who is not the owner cannot enter a result (grade)'));
+ ok(d.getElementById('nr-note').hidden===false&&d.querySelector('#nr-type option[value="test"]').disabled,'and the form says results are owner-only and turns that option off');
  ok(!!d.getElementById('new-screens')&&d.getElementById('ns-boxes').querySelectorAll('input').length===8&&/never the grade or result/.test(T('new-screens')),'a member can tick which OFA screens exist, and is told no grade or result is stored');
  await A2.addRecord(412,{type:'screens',cats:[]}).then(()=>ok(false,'empty refused'),e=>ok(e.code==='invalid','at least one screen must be ticked'));
  d.querySelector('#ns-boxes input[value="Hips"]').checked=true;d.querySelector('#ns-boxes input[value="Cardiac"]').checked=true;submit(d.getElementById('new-screens'));await wait(900);
@@ -136,6 +138,7 @@ let pass=0,fail=0;const ok=(c,m)=>{if(c){pass++}else{fail++;console.log('  FAIL:
  await API.flagClaim(4,{reason:'x',evidence:'http://e'}).then(()=>ok(false,'flag own refused'),e=>ok(e.code==='forbidden','flag own record -> forbidden'));
  await API.correctClaim(3,'Abnormal').then(()=>ok(false,'correct others refused'),e=>ok(e.code==='forbidden','correct someone else\'s record -> forbidden'));
  await API.addRecord(412,{type:'win',name:'No link',value:'x'}).then(()=>ok(false,'win without evidence refused'),e=>ok(e.code==='invalid','win without an evidence link -> invalid'));
+ ok(d.getElementById('nr-note').hidden,"the dog's owner is not shown the owner-only note");
  // add a record through the form
  d.getElementById('nr-type').value='test';d.getElementById('nr-name').value='Hips';d.getElementById('nr-val').value='Good';d.getElementById('nr-date').value='2026-11-12';d.getElementById('nr-url').value='https://example.org/h';
  const before=d.querySelectorAll('#entries article').length;submit(d.getElementById('new-rec'));await wait(300);ok(d.querySelectorAll('#entries article').length===before+1,'a member adds a record through the form');

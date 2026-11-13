@@ -195,6 +195,13 @@
     k = 'm' + aid; people[k] = { label: (authors[aid] || {}).name || ('Member #' + aid), member: aid, consent: true }; return k;
   }
   function claimOf(dogId) { return claims.filter(function (x) { return x.dog === dogId && x.type === 'claim' && x.status === 'visible'; })[0]; }
+  // Health results (grades) are entered by the dog's owner from their own certificate. Anyone else can only say which screens exist.
+  function canEnterResults(dogId) {
+    if (!isMember()) return false;
+    if (isAdmin()) return true;
+    var c = claimOf(dogId);
+    return !!(c && people[c.value] && people[c.value].member === authorOf(actorId));
+  }
   function canSetVisibility(dogId) {
     if (!isMember()) return false;
     if (isAdmin()) return true;
@@ -350,7 +357,7 @@
         offspring: offspringOf(dogId),
         // Option 2: a visitor sees other people (breeders, co-owners who are not members) only in short form; members see full names.
         people: peopleFor(),
-        perm: { loggedIn: isMember(), canAdd: isMember(), isAdmin: isAdmin(), canSetVisibility: canSetVisibility(dogId), canClaim: isMember() && !claimOf(dogId) }
+        perm: { loggedIn: isMember(), canAdd: isMember(), isAdmin: isAdmin(), canSetVisibility: canSetVisibility(dogId), canClaim: isMember() && !claimOf(dogId), canEnterResults: canEnterResults(dogId) }
       };
       return Promise.resolve(snap);
     },
@@ -429,6 +436,7 @@
         claims.push(sc); return Promise.resolve(annotate(sc));
       }
       if (!rec.name || !String(rec.name).trim()) return fail('invalid', 'A name is required.');
+      if (rec.type === 'test' && !canEnterResults(dogId)) return fail('forbidden', 'Test results are entered by the dog\'s owner, from their own certificate. Claim the dog if it is yours, or tick which screens exist.');
       if (rec.type !== 'link' && !rec.url) return fail('invalid', 'Test results, wins and litters need an evidence link.');
       var c = C(nextId++, dogId, rec.type, String(rec.name).slice(0, 60), String(rec.value || '').slice(0, 40), {
         url: rec.url || '', whelp: rec.whelp || '', date: rec.date || NOW(), ev: rec.type === 'test' ? 'doc' : 'link', author: actorId === 0 ? 1 : actorId });

@@ -262,13 +262,14 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
     <summary><b>Add a record</b></summary>
     <form id="new-rec" class="f">
       <div class="two">
-        <select id="nr-type" aria-label="Record type"><option value="test">Test result</option><option value="win">Show win or title</option><option value="link">Link out</option></select>
+        <select id="nr-type" aria-label="Record type"><option value="test">Test result (owner only)</option><option value="win">Show win or title</option><option value="link">Link out</option></select>
         <input type="text" id="nr-name" maxlength="60" placeholder="Test, event, or system (for example, Hips, or OFA)" required>
       </div>
       <div class="two">
         <input type="text" id="nr-val" maxlength="40" placeholder="Result, placement, or registration number">
         <input type="date" id="nr-date" required>
       </div>
+      <p class="meta" id="nr-note" style="margin:0" hidden>Results and grades are entered by the dog's owner, from their own certificate, with a link or photo of it. If this is your dog, claim it first. Otherwise use "Mark health screens on file" below.</p>
       <input type="url" id="nr-url" placeholder="Evidence link (not needed for OFA: built from the registration number)">
       <button class="act primary" type="submit">Add under my name</button>
     </form>
@@ -456,6 +457,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     renderTop();
     ['new-litter','new-rec','new-screens'].forEach(function(id){$(id).parentNode.hidden=!S.perm.canAdd});
     $('editnote').hidden=!!S.perm.canAdd;
+    (function(){var ok=!!S.perm.canEnterResults,sel=$('nr-type');sel.querySelector('option[value="test"]').disabled=!ok;if(!ok&&sel.value==='test')sel.value='win';$('nr-note').hidden=ok})();
     $('invite').hidden=!!S.perm.loggedIn;
     document.querySelectorAll('[data-a]').forEach(function(el){el.textContent=A(el.dataset.a).name});
   }
