@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>Dog Page Demo | 7Sisters Farm</title>
+<title>Great Dane Galactic Gateway | 7Sisters Farm</title>
 <script src="/private-gate.js" data-key="dog-page-demo" data-codes="1887"></script>
 <style>
 :root{--page:#f9f9f7;--surface:#fcfcfb;--card:#fff;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--grid:#e1e0d9;--rule:#c3c2b7;--accent:#bf141c;--ok:#1b6b3a;--warn:#8a5a00;--info:#1f4f9a}
@@ -131,7 +131,7 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
 <body>
 <main>
 <div id="topbar" style="display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:space-between;margin:0 0 12px;padding-bottom:10px;border-bottom:1px solid var(--grid)">
-  <strong>Dog pages <span class="meta" style="font-weight:400">private preview</span></strong>
+  <strong>Great Dane Galactic Gateway <span class="meta" style="font-weight:400">private preview</span></strong>
   <span style="display:inline-flex;gap:10px;align-items:center;flex-wrap:wrap">
     <button class="sm" type="button" data-home="1">Home</button>
     <button class="sm" type="button" id="ourdogsbtn" data-landing="1">Demo Our Dogs</button>
@@ -965,7 +965,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
         fin={row:row,anc:anc,mg:mg,ed:ed2,cx:(x0+x1)/2,cy:(y0+y1)/2,s:Math.min(W*.8/fw,H*.8/fh,base*9)};
       }
     }
-    var BUILD=10,TT=6.4,TRAV=1.5,PB=1.4,FT=8,CYCLE=BUILD+tour.length*TT+(fin?FT:0);
+    var BUILD=13,BY=12,TT=6.4,TRAV=1.5,PB=1.4,FT=8,CYCLE=BUILD+tour.length*TT+(fin?FT:0);
     function e3(t){t=Math.max(0,Math.min(1,t));return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2}
     function lerp(a,b,t){return a+(b-a)*t}
     var whole={x:mid[0],y:mid[1],s:base};
@@ -982,6 +982,9 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     }
     // a few fixed background stars, so the dark is not empty
     var bg=[];for(i=0;i<110;i++){var r1=fnv('s'+i),r2=fnv('t'+i);bg.push([(r1%10007)/10007*W,(r2%10009)/10009*H,.4+(r1%7)/7*1.1,(r2%13)/13*6.28])}
+    // the clock runs steadily from the first year to this year, whatever year that is; the map shows dogs as far as its data goes
+    var endYear=Math.max(G.y0+maxYr,new Date().getFullYear());
+    function yearAt(e){return G.y0+(endYear-G.y0)*Math.min(1,e/BY)}
     var t0=null,lastCap='',cyc=-1;
     function setCap(t){if(t!==lastCap){lastCap=t;cap.innerHTML=t}}
     function frame(ts){
@@ -990,7 +993,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
       var el=calm?CYCLE-.01:(ts-t0)/1000,cy2=Math.floor(el/CYCLE),e=el-cy2*CYCLE;
       if(cy2!==cyc){cyc=cy2;ptr=0;lc.globalCompositeOperation='source-over';lc.clearRect(0,0,lay.width,lay.height);lc.globalCompositeOperation='lighter'}
       if(!homeVisible){homeRaf=requestAnimationFrame(frame);return}
-      born(e<BUILD?e3(e/BUILD)*(maxYr+1):maxYr+2);
+      born(Math.floor(yearAt(e))-G.y0+1);
       var cam=camAt(e),s=cam.s,ox=W/2-cam.x*s,oy=H/2-cam.y*s;
       ctx.setTransform(dpr,0,0,dpr,0,0);ctx.globalCompositeOperation='source-over';ctx.globalAlpha=1;ctx.fillStyle='#05060a';ctx.fillRect(0,0,W,H);
       for(i=0;i<bg.length;i++){var b=bg[i],tw=calm?.7:.55+.45*Math.sin(el*1.3+b[3]);ctx.globalAlpha=.55*tw;ctx.fillStyle='#cfd8ff';ctx.fillRect(b[0],b[1],b[2],b[2])}
@@ -1003,11 +1006,13 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
       ctx.setTransform(dpr,0,0,dpr,0,0);
       var title='',sub='';
       if(e<BUILD){
-        var yr=Math.min(maxYr,Math.floor(e3(e/BUILD)*(maxYr+1)))+G.y0;
-        ctx.globalAlpha=.9;ctx.fillStyle='rgba(255,255,255,.2)';ctx.font='700 54px system-ui,sans-serif';ctx.textAlign='left';ctx.textBaseline='alphabetic';ctx.fillText(String(yr),18,H-20);
+        var yr=Math.floor(yearAt(e));
+        ctx.globalAlpha=1;ctx.fillStyle='#fff';ctx.font='700 64px system-ui,sans-serif';ctx.textAlign='left';ctx.textBaseline='alphabetic';ctx.shadowColor='rgba(120,160,255,.8)';ctx.shadowBlur=18;ctx.fillText(String(yr),18,68);ctx.shadowBlur=0;
         title='The breed, born year by year';sub=ptr.toLocaleString()+' dogs so far'
       }else if(!inFin){
-        var T=tour[kk],u=(e-BUILD-kk*TT),zs=Math.max(1,s/base),sz=Math.min(2.6,1.1+zs*.15);
+        var T=tour[kk];
+        if(kk===0&&e<BUILD+.8){ctx.globalAlpha=1-e3((e-BUILD)/.8);ctx.fillStyle='#fff';ctx.font='700 64px system-ui,sans-serif';ctx.textAlign='left';ctx.textBaseline='alphabetic';ctx.shadowColor='rgba(120,160,255,.8)';ctx.shadowBlur=18;ctx.fillText(String(endYear),18,68);ctx.shadowBlur=0}
+        var u=(e-BUILD-kk*TT),zs=Math.max(1,s/base),sz=Math.min(2.6,1.1+zs*.15);
         var a1=e3((u-.7)/.9)*(1-e3((u-(TT-PB))/PB));ctx.globalCompositeOperation='lighter';ctx.globalAlpha=.55*a1;ctx.fillStyle=hot[T.c];
         for(i=0;i<T.m.length;i++){var d=T.m[i];ctx.fillRect(px(d)*s+ox-sz/2,py(d)*s+oy-sz/2,sz,sz)}
         ctx.globalCompositeOperation='source-over';
