@@ -6,6 +6,7 @@
 import { readFile } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { searchDanesWorld, fetchPedigree } from './danesworld.mjs';
+import { loadNetwork } from './network.mjs';
 import { fileURLToPath } from 'node:url';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -47,7 +48,7 @@ function sane(v, depth = 0) {
   return false;
 }
 
-export function makeHandler({ store, verify, dataDir = join(HERE, '..', 'public', 'data'), adminUsers = ['dmj'], allowOrigin = '*', external = searchDanesWorld, externalPedigree = fetchPedigree }) {
+export function makeHandler({ store, verify, dataDir = join(HERE, '..', 'public', 'data'), adminUsers = ['dmj'], allowOrigin = '*', external = searchDanesWorld, externalPedigree = fetchPedigree, network = loadNetwork(join(HERE, '..', 'private')) }) {
   const admins = new Set(adminUsers.map((u) => u.toLowerCase()));
   const headers = {
     'content-type': 'application/json',
@@ -110,6 +111,13 @@ export function makeHandler({ store, verify, dataDir = join(HERE, '..', 'public'
         // site never holds everyone else up, and what comes back is saved on the server: a confirmation is checked against that copy.
         const q = String((args[0] && args[0].q) || '').trim().slice(0, 140);
         if (!q) return error('invalid', 'Enter a name or a registration number.');
+        // 1. our own private network: instant, free, and no other site is asked
+        if (network) {
+          await transact((a) => a.externalBudget('network'));
+          const found = network.search(q);
+          if (found.length) return reply(200, { ok: true, result: { choices: await transact((a) => a.stashCandidates(found)) } });
+        }
+        // 2. nothing there: ask DANES World, within the member's smaller hourly share
         await transact((a) => a.externalBudget());
         let rows;
         try { rows = await external(q); } catch { return error('unavailable', 'DANES World could not be reached just now. Open the searches below yourself.', 503); }
@@ -120,7 +128,8 @@ export function makeHandler({ store, verify, dataDir = join(HERE, '..', 'public'
         // added, just without ancestors. The pedigree is passed in by the server alone; whatever else the browser sent is ignored.
         const cand = await transact((a) => a.externalCandidate(args[0]));
         let ped = null;
-        if (cand.siteId) { try { ped = await externalPedigree(cand.siteId); } catch { ped = null; } }
+        if (cand.source === 'network' && network) ped = network.pedigree(cand.netId);
+        else if (cand.siteId) { try { ped = await externalPedigree(cand.siteId); } catch { ped = null; } }
         return reply(200, { ok: true, result: await transact((a) => a.importExternal(args[0], ped)) });
       }
       return reply(200, { ok: true, result: await transact((a) => a[req.method].apply(a, args)) });

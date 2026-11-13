@@ -199,7 +199,7 @@
   var lookups = {};
   // Automatic lookups on another database (DANES World): a few an hour per member, so the other site sees only a trickle. Past the limit the page
   // falls back to links the member opens by hand. The server keeps what it found, so a confirmation never trusts what the browser sends back.
-  var EXT_PER_HOUR = 5, externals = {}, stash = {};
+  var EXT_PER_HOUR = 5, NET_PER_HOUR = 30, externals = {}, stash = {};
   function lookupBudget() {
     if (isAdmin()) return null;
     var now = Date.now(), k = String(actorId), t = (lookups[k] || []).filter(function (x) { return now - x < 86400000; });
@@ -429,12 +429,14 @@
     // ---- automatic lookup on another database. findExternal runs only on the server (it does the fetching); the demo here cannot. ----
     findExternal: function () { return fail('unavailable', 'Automatic lookup needs the server.'); },
     // server only: count one automatic lookup for this member, or refuse when they have used their hour's share
-    externalBudget: function () {
+    // kind 'network' is our own private network (a looser limit, so no one can copy it a dog at a time); anything else is another website
+    externalBudget: function (kind) {
       var g = needMember(); if (g) return g;
       if (isAdmin()) return Promise.resolve({ ok: true });
-      var now = Date.now(), k = String(actorId), t = (externals[k] || []).filter(function (x) { return now - x < 3600000; });
+      var net = kind === 'network', cap = net ? NET_PER_HOUR : EXT_PER_HOUR;
+      var now = Date.now(), k = String(actorId) + (net ? ':n' : ''), t = (externals[k] || []).filter(function (x) { return now - x < 3600000; });
       externals[k] = t;
-      if (t.length >= EXT_PER_HOUR) return fail('rate_limited', 'You have used your ' + EXT_PER_HOUR + ' automatic lookups for this hour. Open the database searches yourself below, or try again later.');
+      if (t.length >= cap) return fail('rate_limited', net ? 'You have searched the network ' + cap + ' times this hour. Try again later.' : 'You have used your ' + EXT_PER_HOUR + ' automatic lookups for this hour. Open the database searches yourself below, or try again later.');
       t.push(now); return Promise.resolve({ ok: true });
     },
     // server only: remember what the other database returned, for this member, so a confirmation can be checked against it
@@ -471,16 +473,16 @@
       if (ex !== null) {
         // the dog is already here: add the number we have just learned, and if it has no pedigree yet, give it this one
         if (reg && !dogByNumber(reg)) identifiers.push({ dog: ex, registry: registryFrom(regLabel(c.registry, c.number)), number: reg, author: actorId === 0 ? 1 : actorId, date: NOW() });
-        if (ped && dogs[ex].stub && !dogs[ex].ped && !Object.keys(pedOf(ex)).length) { dogs[ex].ped = pedOut(dogs[ex]); dogs[ex].pedFrom = { src: 'DANES World pedigree', author: actorId === 0 ? 1 : actorId }; }
+        if (ped && dogs[ex].stub && !dogs[ex].ped && !Object.keys(pedOf(ex)).length) { dogs[ex].ped = pedOut(dogs[ex]); dogs[ex].pedFrom = { src: c.source === 'network' ? 'network pedigree' : 'DANES World pedigree', author: actorId === 0 ? 1 : actorId }; }
         return Promise.resolve({ dogId: ex, created: false });
       }
       var n = Object.keys(dogs).filter(function (k) { return (dogs[k].nameKey || '').split('#')[0] === nk; }).length;
       var key = n ? nk + '#' + (n + 1) : nk, id = reg ? 'r:' + reg : 'n:' + key, a = actorId === 0 ? 1 : actorId;
       dogs[id] = { id: id, title: sp.title || '', titleSuffix: '', registered: name, call: '', short: '', sex: c.sex || '', color: c.color || '', photo: '', ext: false, litter: null, stub: true, pending: false, visibility: 'members', nameKey: key };
       if (reg) identifiers.push({ dog: id, registry: registryFrom(regLabel(c.registry, c.number)), number: reg, author: a, date: NOW() });
-      if (/^\d{4}-\d{2}-\d{2}$/.test(c.born || '')) claims.push(C(nextId++, id, 'fact', 'Whelp date', c.born, { src: 'DANES World', author: a, date: NOW() }));
-      claims.push(C(nextId++, id, 'link', 'Checked on DANES World', '', { url: 'https://www.danesworld.info/hundelist.php?psearch=' + encodeURIComponent(reg || name), author: a, date: NOW() }));
-      if (ped) { dogs[id].ped = pedOut(dogs[id]); dogs[id].pedFrom = { src: 'DANES World pedigree', author: a }; }
+      if (/^\d{4}-\d{2}-\d{2}$/.test(c.born || '')) claims.push(C(nextId++, id, 'fact', 'Whelp date', c.born, { src: c.source === 'network' ? 'Our network' : 'DANES World', author: a, date: NOW() }));
+      if (c.source !== 'network') claims.push(C(nextId++, id, 'link', 'Checked on DANES World', '', { url: 'https://www.danesworld.info/hundelist.php?psearch=' + encodeURIComponent(reg || name), author: a, date: NOW() }));
+      if (ped) { dogs[id].ped = pedOut(dogs[id]); dogs[id].pedFrom = { src: c.source === 'network' ? 'network pedigree' : 'DANES World pedigree', author: a }; }
       delete stash[String(actorId)];
       return Promise.resolve({ dogId: id, created: true });
     },

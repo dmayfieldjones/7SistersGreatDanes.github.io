@@ -7,6 +7,7 @@ import { makeVerifier } from '../../server/auth.mjs';
 import { memoryStore } from '../../server/store.mjs';
 import { readFileSync } from 'node:fs';
 import { parsePedigree } from '../../server/danesworld.mjs';
+import { makeNetwork } from '../../server/network.mjs';
 const PED = parsePedigree(readFileSync(new URL('../../server/test/danesworld-pedigree.html', import.meta.url), 'utf8'));
 let pedCalls = 0;
 const externalPedigree = async () => { pedCalls++; return PED; };
@@ -184,4 +185,56 @@ test('OFA numbers: members only, only OFA or CHIC, a sensible format, and one nu
   assert.equal((await call(h, 'addIdentifier', [id, 'OFA', 'GD-HD1234G24M'], t)).ok, true);
   const other = (await importWith([{ ...DOG, name: 'Another Dog Entirely', born: '2001-01-01' }], 'Another Dog Entirely', t, store)).made.result.dogId;
   assert.equal((await call(h, 'addIdentifier', [other, 'OFA', 'GD-HD1234G24M'], t)).status, 400);
+});
+
+// a made-up network (not real dogs): Zorro's Test Pup (1) out of Test Sire (2) and Test Dam (3); the sire's parents are 4 and 5
+const NET = makeNetwork([[
+  '1|"Pup" Zorros Test Pup |2015-03-04|2|3|||WS12345601|Fawn|M',
+  '2|Test Sire |2010-01-01|4|5|||WS12345602|Fawn|M',
+  '3|Test Dam |2011-02-02|||||KC 98765|Black|F',
+  '4|Grand Sire One |2005-05-05|||||WS12345604|Fawn|M',
+  '5|Grand Dam One |2006-06-06|||||UNREG|Fawn|F',
+  '6|Lonely Dog With No Parents |1999-09-09|||||||F',
+].join('\r\n')]);
+let outside = 0;
+const asked = async () => { outside++; return []; };
+
+test('a member\'s search is answered from the private network, without asking any other website', async () => {
+  outside = 0;
+  const h = fresh(memoryStore(), { network: NET, external: asked, externalPedigree }), t = alice();
+  const f = await call(h, 'findExternal', [{ q: 'CH Zorros Test Pup' }], t);   // a title in front is ignored, so is the quoted call name in the data
+  assert.equal(f.ok, true); assert.equal(f.result.choices.length, 1);
+  const c = f.result.choices[0];
+  assert.equal(c.source, 'network'); assert.equal(c.name, 'Zorros Test Pup'); assert.equal(c.number, 'WS12345601'); assert.equal(c.sire, 'Test Sire');
+  assert.equal(outside, 0);
+});
+test('confirming a network dog adds it with its ancestors from the network, credited to the network, with no other website involved', async () => {
+  outside = 0; pedCalls = 0;
+  const h = fresh(memoryStore(), { network: NET, external: asked, externalPedigree }), t = alice();
+  const f = await call(h, 'findExternal', [{ q: 'Zorros Test Pup' }], t);
+  const made = await call(h, 'importExternal', [f.result.choices[0].token], t);
+  assert.equal(made.ok, true); assert.equal(pedCalls, 0); assert.equal(outside, 0);
+  const id = made.result.dogId, d = await call(h, 'getDog', [id], t);
+  assert.ok(d.result.identifiers.some((i) => i.number === 'WS12345601'));
+  assert.ok(!JSON.stringify(d.result.claims).includes('DANES World'));
+  assert.ok(d.result.parents.filter((x) => x.role === 'Sire' || x.role === 'Dam').every((x) => x.src === 'network pedigree'));
+  const nodes = (await call(h, 'getPedigree', [id, 8], t)).result.nodes;
+  assert.deepEqual([2, 3, 4, 5].map((k) => nodes[k][0]), ['Test Sire', 'Test Dam', 'Grand Sire One', 'Grand Dam One']);
+  assert.equal(Object.keys(nodes).length, 5);   // the dog and four ancestors: nothing is invented past what the network has
+  assert.match(nodes[3][1], /^KC 98765/);        // a non-AKC number keeps its place
+  assert.ok(!/UNREG/.test(JSON.stringify(nodes)));   // a placeholder is not a registration number
+});
+test('a dog the network does not have falls through to the other website, within its smaller share', async () => {
+  outside = 0;
+  const h = fresh(memoryStore(), { network: NET, external, externalPedigree }), t = alice();
+  const f = await call(h, 'findExternal', [{ q: 'Batemanor Amanda at Tiparone' }], t);
+  assert.equal(f.ok, true); assert.equal(f.result.choices[0].source, undefined);
+  assert.equal(seen[seen.length - 1], 'Batemanor Amanda at Tiparone');
+});
+test('network searches are limited to 30 an hour, and a visitor gets nothing', async () => {
+  const h = fresh(memoryStore(), { network: NET, external: asked, externalPedigree }), t = alice();
+  for (let i = 0; i < 30; i++) assert.equal((await call(h, 'findExternal', [{ q: 'Test Sire' }], t)).ok, true);
+  const r = await call(h, 'findExternal', [{ q: 'Test Sire' }], t);
+  assert.equal(r.status, 429); assert.match(r.error.message, /network 30 times/);
+  assert.equal((await call(h, 'findExternal', [{ q: 'Test Sire' }])).status, 401);
 });

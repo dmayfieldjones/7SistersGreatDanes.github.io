@@ -1159,11 +1159,11 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   // Without the server, past the hourly limit, or with no match, fall back to the searches the member opens by hand.
   function autoFind(name){
     if(!DogAPI.remote||!DogAPI.remote())return startPanel(name);
-    $('findpanel').innerHTML='<div class="card" style="padding:10px 12px">Looking for <b>'+esc(name)+'</b> on DANES World&hellip;</div>';
+    $('findpanel').innerHTML='<div class="card" style="padding:10px 12px">Looking for <b>'+esc(name)+'</b>&hellip;</div>';
     return DogAPI.findExternal({q:name}).then(function(r){
       var c=r.choices||[];
-      if(!c.length)return startPanel(name,'DANES World has no dog by that name. Check the spelling, or look in the other databases.');
-      $('findpanel').innerHTML='<div class="card" style="padding:10px 12px;display:grid;gap:8px"><div><b>Is this the dog?</b> Found on DANES World. Confirm the one you meant and we will add it.</div>'
+      if(!c.length)return startPanel(name,'Neither our network nor DANES World has a dog by that name. Check the spelling, or look in the other databases.');
+      $('findpanel').innerHTML='<div class="card" style="padding:10px 12px;display:grid;gap:8px"><div><b>Is this the dog?</b> Found '+(c[0].source==='network'?'in our network':'on DANES World')+'. Confirm the one you meant and we will add it.</div>'
         +c.map(function(d){return '<div class="card" style="padding:8px 10px;margin:0"><b>'+esc(d.name)+'</b><div class="meta">'+[d.sex,d.color,d.born&&'born '+d.born,d.number?esc(d.registry)+' '+esc(d.number):d.registry&&esc(d.registry)+' (no number listed)'].filter(Boolean).join(' &middot; ')+(d.sire||d.dam?'<br>Sire: '+esc(d.sire||'unknown')+' &middot; Dam: '+esc(d.dam||'unknown'):'')+'</div> <button class="sm primary" type="button" data-ext="'+esc(d.token)+'">Yes, add this dog</button></div>'}).join('')
         +'<div><button class="sm" type="button" data-start="'+esc(name)+'">None of these: look elsewhere</button></div></div>'
     }).catch(function(err){
