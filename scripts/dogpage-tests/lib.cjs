@@ -32,7 +32,7 @@ exports.make=function({nopriv=false,host='localhost'}={}){
       if(u.includes('our-pedigrees'))return nopriv?Promise.resolve({ok:false}):Promise.resolve({ok:true,json:()=>Promise.resolve(JSON.parse(fs.readFileSync(PUB+'/data/our-pedigrees.json','utf8')))});
       if(u.includes('demo-authors'))return Promise.resolve({ok:true,json:()=>Promise.resolve(JSON.parse(fs.readFileSync(PUB+'/data/demo-authors.json','utf8')))});
       return Promise.resolve({ok:false})};
-    w.scrollTo=()=>{};w.prompt=()=>null;
+    w.scrollTo=()=>{};w.prompt=()=>null;w.Element.prototype.scrollIntoView=()=>{};
   }});
   const w=dom.window,d=w.document;
   const wait=ms=>new Promise(r=>setTimeout(r,ms));
