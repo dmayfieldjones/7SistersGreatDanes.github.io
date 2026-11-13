@@ -244,7 +244,7 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
 <div class="tabs" role="tablist">
   <button role="tab" aria-selected="true" data-tab="rec">Records<span class="n" id="n-rec"></span></button>
   <button role="tab" aria-selected="false" data-tab="photos">Photos</button>
-  <button role="tab" aria-selected="false" data-tab="seq">DNA data</button>
+  <button role="tab" aria-selected="false" data-tab="seq">Genetic data</button>
   <button role="tab" aria-selected="false" data-tab="model">Data model</button>
   <button role="tab" aria-selected="false" data-tab="admin">Admin view</button>
 </div>
@@ -329,7 +329,7 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
 </section>
 
 <section id="tab-seq" hidden>
-  <h2>DNA data</h2>
+  <h2>Genetic data</h2>
   <h3 style="margin:14px 0 6px">Commercial tests</h3>
   <div class="empty" style="margin-bottom:14px"><b>Results pending.</b><br>Commercial tests come from any company or registry: a DNA kit, an AKC DNA profile, a university lab. When results return, one claim is added: provider, kind of test, link, contributor. We store only the link and who added it, never the owner's report.</div>
   <div class="track">
@@ -518,7 +518,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   // health screens and DNA data are separate icons: a plus for OFA-type screens and test records, a helix for DNA and sequence data; both only where we hold a record
   function dataIcons(k,f){if(!f)return '';var o='';
     if(f.health)o+='<a class="cam" href="#" data-anc="'+k+'" title="Health screens or test records on file: '+f.health+'. Opens this dog\'s page." aria-label="Health records">'+HEALTH+'</a>';
-    if(f.dna)o+='<a class="cam" href="#" data-anc="'+k+'" title="DNA or sequence data on file: '+f.dna+'. Opens this dog\'s page." aria-label="DNA data">'+HELIX+'</a>';
+    if(f.dna)o+='<a class="cam" href="#" data-anc="'+k+'" title="Genetic or sequence data on file: '+f.dna+'. Opens this dog\'s page." aria-label="Genetic data">'+HELIX+'</a>';
     return o}
   function camBtn(k,list){PH[k]=list;var one=list.length===1;
     return '<a class="cam" href="'+(one?esc(list[0].url):'#')+'"'+(one?' target="_blank" rel="noopener"':' data-photos="'+k+'"')+' title="'+(one?esc(list[0].author)+': '+esc(list[0].title)+'. Opens in a new tab.':list.length+' photos. Click to choose one.')+'" aria-label="'+list.length+(one?' photo':' photos')+'">'+CAM+(one?'':'<b class="cnt">'+list.length+'</b>')+'</a>'}

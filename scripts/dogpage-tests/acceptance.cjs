@@ -81,7 +81,7 @@ let pass=0,fail=0;const ok=(c,m)=>{if(c){pass++}else{fail++;console.log('  FAIL:
  await find('WS69691106');
  const camRoot=d.querySelector('#pedgrid .pn.root a.cam');
  ok(camRoot&&camRoot.dataset.photos==='1'&&/^[0-9]+$/.test(camRoot.querySelector('.cnt').textContent),"Piper's pedigree box has one camera icon with a count of her photos");
- ok(!!d.querySelector('#pedgrid .pn.root a[aria-label="Health records"]')&&!!d.querySelector('#pedgrid .pn.root a[aria-label="DNA data"]'),"Piper's box has a health icon (OFA and test records) and a separate helix icon (DNA test)");
+ ok(!!d.querySelector('#pedgrid .pn.root a[aria-label="Health records"]')&&!!d.querySelector('#pedgrid .pn.root a[aria-label="Genetic data"]'),"Piper's box has a health icon (OFA and test records) and a separate helix icon (DNA test)");
  ok(d.querySelectorAll('#pedgrid a[aria-label="Health records"]').length<=3,'ancestors we hold no health record for get no health icon');
  click(camRoot);const pop=d.getElementById('photopop');
  ok(!pop.hidden&&/Piper as a puppy/.test(pop.textContent)&&/Dustin Mayfield-Jones/.test(pop.textContent)&&/Karen Mayfield-Jones/.test(pop.textContent),'clicking the icon lists each photo by title with its author');
