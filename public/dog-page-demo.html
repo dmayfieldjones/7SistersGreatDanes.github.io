@@ -434,6 +434,17 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
   <p class="meta">Confirms real identities. Records are not queued for approval.</p>
 
   <div class="card">
+    <h3 style="margin-top:0">Members and activity</h3>
+    <p class="meta">What each signed-in member has done, from the latest 1,500 changes. "Last seen" is the last time they used the site's server. Only you see this.</p>
+    <div class="tw"><table>
+      <thead><tr><th>Member</th><th>Last seen</th><th>Dogs</th><th>Records</th><th>Flags</th><th>Claims</th><th>Searches today</th></tr></thead>
+      <tbody id="act-members"></tbody>
+    </table></div>
+    <p style="margin:12px 0 6px"><b>Recent activity</b> <select id="act-kind" aria-label="Kind of activity" style="width:auto"><option value="">Everything</option><option value="dog">Dogs added</option><option value="record">Records and numbers</option><option value="flag">Flags and votes</option><option value="claim">Claims and visibility</option></select></p>
+    <ul class="plain" id="act-feed"></ul>
+  </div>
+
+  <div class="card">
     <h3 style="margin-top:0">Open flags (sources that differ)</h3>
     <div id="adm-diffs"></div>
   </div>
@@ -574,6 +585,15 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     }).catch(function(){$('todo').hidden=true})
   }
   $('checkbtn').addEventListener('click',function(){showHome();setTimeout(function(){var t=$('todo');if(t&&!t.hidden)t.scrollIntoView({behavior:'smooth',block:'start'})},400)});
+  var ACT=null;
+  function ago(iso){if(!iso)return 'not yet';var m=Math.round((Date.now()-Date.parse(iso))/60000);return m<2?'just now':m<90?m+' minutes ago':m<2160?Math.round(m/60)+' hours ago':Math.round(m/1440)+' days ago'}
+  function renderActivity(){
+    if(!ACT){return}
+    $('act-members').innerHTML=ACT.members.length?ACT.members.map(function(m){var c=m.counts;return '<tr><td><b>'+esc(m.name)+'</b>'+(m.role?' <span class="chip role">'+esc(m.role)+'</span>':'')+(m.username?'<br><span class="meta">'+esc(m.username)+'</span>':'')+'</td><td>'+esc(ago(m.seen))+'</td><td>'+c.dog+'</td><td>'+c.record+'</td><td>'+c.flag+'</td><td>'+c.claim+'</td><td>'+m.searches24h+'</td></tr>'}).join(''):'<tr><td colspan="7" class="meta">No one has used the site yet.</td></tr>';
+    var k=$('act-kind').value,rows=ACT.feed.filter(function(x){return !k||x.kind===k}).slice(0,100);
+    $('act-feed').innerHTML=rows.length?rows.map(function(x){return '<li><span class="meta">'+esc(x.t.replace('T',' '))+' UTC</span> &middot; <b>'+esc(x.whoName)+'</b> &middot; '+esc(x.text)+(x.dog!==''&&x.dogName?' &middot; <a href="#" data-goto="'+esc(x.dog)+'">'+esc(x.dogName)+'</a>':'')+'</li>'}).join(''):'<li class="meta">Nothing yet.</li>';
+  }
+  $('act-kind').addEventListener('change',renderActivity);
   function diffDone(){return Promise.resolve(S&&$('dogview')&&!$('dogview').hidden?reload():null).then(function(){renderTop();return Promise.all([renderTodo(),renderAdmin()])})}
   function diffAct(p){return p.then(diffDone).catch(function(e){say(e&&e.message||'That did not work.')})}
 
@@ -844,12 +864,13 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     grid.innerHTML=h;
   }
   function renderAdmin(){
-    function deny(){var t='<tr><td colspan="5" class="meta">Administrator only. Sign in as the administrator to see this.</td></tr>';$('requests').innerHTML=t;$('wanted').innerHTML=t;$('adm-diffs').innerHTML='<div class="meta">Administrator only.</div>';$('log').innerHTML='<li class="meta">Administrator only.</li>'}
+    function deny(){var t='<tr><td colspan="5" class="meta">Administrator only. Sign in as the administrator to see this.</td></tr>';$('requests').innerHTML=t;$('wanted').innerHTML=t;$('adm-diffs').innerHTML='<div class="meta">Administrator only.</div>';$('act-members').innerHTML='<tr><td colspan="7" class="meta">Administrator only.</td></tr>';$('act-feed').innerHTML='';$('log').innerHTML='<li class="meta">Administrator only.</li>'}
     if(!SESSION||SESSION.role!=='admin'){deny();return}
     Promise.all([DogAPI.accountRequests(),DogAPI.wanted(),DogAPI.actionLog()]).then(function(r){
       var rq=r[0],wk=r[1],lg=r[2];
       $('requests').innerHTML=rq.length?rq.map(function(x){return '<tr><td>'+esc(x.name)+'</td><td>'+esc(x.role)+'</td><td>'+esc(x.verify)+'</td><td><button class="sm" data-approve="'+x.id+'">Approve</button> <button class="sm danger" data-reject="'+x.id+'">Reject</button></td></tr>'}).join(''):'<tr><td colspan="4" class="meta">No pending requests.</td></tr>';
       $('wanted').innerHTML=wk.length?wk.map(function(w){return '<tr><td>'+esc(w.reg)+'</td><td>'+w.count+(w.count===1?' time':' times')+' <span class="meta">&middot; last '+esc(w.last)+'</span></td><td>'+(w.how==='names'?'<b>Partly.</b> A dot on the galaxy map, but no name, pedigree or details yet.':'<b>Nothing.</b> Not in our data at all.')+'</td><td><a href="'+esc(durl(w.reg))+'" target="_blank" rel="noopener">DANES World</a> &middot; <a href="'+esc(qurl(w.reg))+'" target="_blank" rel="noopener">Quintessa</a> &middot; <a href="'+esc(XREF.OFA.replace('{id}',encodeURIComponent(w.reg)))+'" target="_blank" rel="noopener">OFA</a></td><td><button class="sm" data-added="'+esc(w.reg)+'">Mark as added</button></td></tr>'}).join(''):'<tr><td colspan="5" class="meta">Nothing yet. When a signed-in member searches for a dog we do not have, it appears here.</td></tr>';
+      DogAPI.activityReport().then(function(r){ACT=r;renderActivity()}).catch(function(){});
       DogAPI.openDiffs().then(function(l){$('adm-diffs').innerHTML=l.length?l.map(function(x){return diffCard(x,true)}).join(''):'<div class="empty">No open flags.</div>'});
       $('log').innerHTML=lg.length?lg.map(function(l){return '<li><b>'+l.date+'</b> &middot; '+esc(l.text)+'</li>'}).join(''):'<li class="meta">No actions yet.</li>';
     }).catch(function(){deny()});
@@ -1336,7 +1357,8 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     if(!at){$('mfa-key').textContent='';$('mfa-link').hidden=true;$('mfa-qr').hidden=true;mfaMsg('Sign out and sign in again, then choose this.');return}
     cognito('AssociateSoftwareToken',{AccessToken:at}).then(function(r){
       $('mfa-key').textContent=r.SecretCode;
-      var u=(SESSION&&SESSION.username)||$('lg-user').value||'';
+      // the label in the authenticator app: the username you sign in with, read from your sign-in token (the sign-in box is empty by now); your name if there is none
+      var cl=claims(stored()||'')||{},u=cl['cognito:username']||cl.username||cl.name||$('lg-user').value||'';
       var uri='otpauth://totp/GDGalaxy:'+encodeURIComponent(u)+'?secret='+r.SecretCode+'&issuer=GDGalaxy';
       $('mfa-link').hidden=false;$('mfa-link').href=uri;
       try{var qr=qrcode(0,'M');qr.addData(uri);qr.make();$('mfa-qr').innerHTML=qr.createSvgTag(4,2,'QR code for your authenticator app','Scan with your authenticator app');$('mfa-qr').hidden=false}catch(e){$('mfa-qr').hidden=true}

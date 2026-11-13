@@ -77,7 +77,7 @@
   function registryFrom(raw) { var t = String(raw).trim().split(/\s+/); return AKCNO.test(norm(raw)) ? 'AKC' : (t.length > 1 && /^[A-Za-z]{2,6}$/.test(t[0]) ? t[0].toUpperCase() : 'Reg.'); }
 
   // ---- the stores -------------------------------------------------------------------------------------------------------------
-  var authors = {};
+  var authors = {}, baseAuthors = {};   // baseAuthors: the people in the data file (us and the importer); members added later are saved with the rest of the state
   var priv = { peds: {}, photoRegs: [], cosmic: {} };      // pedigree names and the list of dogs with a photo elsewhere: loaded from a private file
   var actorId = null;                           // demo only. null = visitor (not signed in), 0 = administrator
   var loginName = null;
@@ -202,6 +202,13 @@
   var EXT_PER_HOUR = 5, NET_PER_HOUR = 30, NET_PER_DAY = 150, externals = {}, stash = {};
   // Where sources disagree about a dog. Nothing is overwritten: a flag lists the versions, members vote with their names, and when DIFF_AGREE
   // different members back the same version it is marked resolved (the administrator can resolve or reopen any flag; the history is kept).
+  // Who did what, for the administrator: one short line per change, newest last, capped. The records themselves keep the permanent author and date;
+  // this is only the readable trail. `seen` is each member's last visit, refreshed at most once an hour so it does not cause constant saves.
+  var ACTIVITY_MAX = 1500, activity = [], seen = {};
+  function act(kind, dogId, text) {
+    activity.push({ t: new Date().toISOString().slice(0, 16), who: authorOf(actorId), kind: kind, dog: (dogId === undefined || dogId === null) ? '' : dogId, text: String(text).slice(0, 140) });
+    if (activity.length > ACTIVITY_MAX) activity = activity.slice(-ACTIVITY_MAX);
+  }
   var DIFF_AGREE = 3, DIFF_FIELDS = ['Sire', 'Dam', 'Name', 'Birth date', 'Duplicate record'], diffs = [];
   function diffView(x) {
     var counts = x.options.map(function (o, i) { return x.votes.filter(function (v) { return v.option === i; }).length; });
@@ -344,7 +351,7 @@
     setLoader: function (fn) { loadJSON = fn; },
     init: function () {
       return Promise.all([
-        loadJSON('/data/demo-authors.json').then(function (j) { authors = j; }).catch(function () { }),
+        loadJSON('/data/demo-authors.json').then(function (j) { authors = j; baseAuthors = copy(j); }).catch(function () { }),
         // The ancestry of our own dogs, and the list of dogs with a photo elsewhere, come from a data file, not from the code. The file
         // holds only what the public explorer pages for our litters already show. In the real system the server provides it.
         loadJSON('/data/our-pedigrees.json').then(function (j) {
@@ -364,6 +371,7 @@
       // member. A named account keeps its own identity; any other gets a member number of its own, so its records carry its name.
       if (!(u in LOGINS)) { var nid = 100 + Object.keys(authors).filter(function (k) { return Number(k) >= 100; }).length; authors[nid] = { name: id.name || u, role: 'Member', status: 'active' }; LOGINS[u] = nid; }
       actorId = id.admin ? 0 : LOGINS[u]; loginName = id.name || u;
+      var who = authorOf(actorId); if (!seen[who] || Date.now() - Date.parse(seen[who]) > 3600000) seen[who] = new Date().toISOString();
       return API.session();
     },
     signOut: function () { actorId = null; loginName = null; return API.session(); },
@@ -424,7 +432,7 @@
       var key = n ? nk + '#' + (n + 1) : nk, id = 'n:' + key, a = actorId === 0 ? 1 : actorId;
       dogs[id] = { id: id, title: sp.name ? sp.title : '', titleSuffix: '', registered: name, call: '', short: '', sex: sx, color: '', photo: '', ext: false, litter: null, stub: true, pending: true, visibility: 'members', nameKey: key };
       if (url) claims.push(C(nextId++, id, 'link', 'Checked on ' + site, '', { url: url, author: a, date: NOW() }));
-      wantedLog(name, 'dog');
+      wantedLog(name, 'dog'); act('dog', id, 'Started a page for ' + name);
       return Promise.resolve({ dogId: id, created: true });
     },
     lookup: function (number) {
@@ -439,7 +447,7 @@
       var id = 'r:' + reg;
       dogs[id] = { id: id, title: '', titleSuffix: '', registered: '', call: '', sex: '', color: '', photo: '', ext: false, litter: null, stub: true, pending: true, visibility: 'members' };
       identifiers.push({ dog: id, registry: AKCNO.test(reg) ? 'AKC' : 'Reg.', number: reg, author: 0, date: NOW() });
-      wantedLog(reg, 'dog');
+      wantedLog(reg, 'dog'); act('dog', id, 'Started a page for ' + reg);
       return Promise.resolve({ dogId: id, created: true });
     },
 
@@ -491,7 +499,7 @@
       if (ex !== null) {
         // the dog is already here: add the number we have just learned, and if it has no pedigree yet, give it this one
         if (reg && !dogByNumber(reg)) identifiers.push({ dog: ex, registry: registryFrom(regLabel(c.registry, c.number)), number: reg, author: actorId === 0 ? 1 : actorId, date: NOW() });
-        if (ped && dogs[ex].stub && !dogs[ex].ped && !Object.keys(pedOf(ex)).length) { dogs[ex].ped = pedOut(dogs[ex]); dogs[ex].pedFrom = { src: c.source === 'network' ? 'network pedigree' : 'DANES World pedigree', author: actorId === 0 ? 1 : actorId }; }
+        if (ped && dogs[ex].stub && !dogs[ex].ped && !Object.keys(pedOf(ex)).length) { dogs[ex].ped = pedOut(dogs[ex]); dogs[ex].pedFrom = { src: c.source === 'network' ? 'network pedigree' : 'DANES World pedigree', author: actorId === 0 ? 1 : actorId }; act('dog', ex, 'Added ancestors to ' + name); }
         return Promise.resolve({ dogId: ex, created: false });
       }
       var n = Object.keys(dogs).filter(function (k) { return (dogs[k].nameKey || '').split('#')[0] === nk; }).length;
@@ -501,6 +509,7 @@
       if (/^\d{4}-\d{2}-\d{2}$/.test(c.born || '')) claims.push(C(nextId++, id, 'fact', 'Whelp date', c.born, { src: c.source === 'network' ? 'Our network' : 'DANES World', author: a, date: NOW() }));
       if (c.source !== 'network') claims.push(C(nextId++, id, 'link', 'Checked on DANES World', '', { url: 'https://www.danesworld.info/hundelist.php?psearch=' + encodeURIComponent(reg || name), author: a, date: NOW() }));
       if (ped) { dogs[id].ped = pedOut(dogs[id]); dogs[id].pedFrom = { src: c.source === 'network' ? 'network pedigree' : 'DANES World pedigree', author: a }; }
+      act('dog', id, 'Added ' + name + ' from ' + (c.source === 'network' ? 'our network' : 'DANES World') + (ped ? ', with ancestors' : ''));
       delete stash[String(actorId)];
       return Promise.resolve({ dogId: id, created: true });
     },
@@ -515,7 +524,7 @@
       if (!/^[A-Z0-9][A-Z0-9-]{3,29}$/.test(n)) return fail('invalid', 'That does not look like an ' + registry + ' number. Copy it from the certificate, for example GD-HD12345G24M-VPI.');
       if (identifiers.some(function (x) { return x.number === n && x.dog !== dogId; })) return fail('invalid', 'That number is already on another dog\'s page.');
       if (identifiers.some(function (x) { return x.number === n && x.dog === dogId; })) return Promise.resolve({ ok: true });
-      identifiers.push({ dog: dogId, registry: registry, number: n, author: actorId === 0 ? 1 : actorId, date: NOW() });
+      identifiers.push({ dog: dogId, registry: registry, number: n, author: actorId === 0 ? 1 : actorId, date: NOW() }); act('record', dogId, 'Added an ' + registry + ' number');
       return Promise.resolve({ ok: true });
     },
 
@@ -534,7 +543,7 @@
       var open = diffs.filter(function (x) { return x.dog === dogId && x.field === f.field && x.status === 'open'; })[0];
       if (open) return fail('invalid', 'This difference is already flagged. Add your agreement to it instead.');
       var a = authorOf(actorId), x = { id: 'd' + nextId++, dog: dogId, field: f.field, options: opts, votes: [{ author: a, option: mine, evidence: ev, date: NOW() }], status: 'open', chosen: null, by: '', raisedBy: a, created: NOW(), note: String(f.note || '').trim().slice(0, 300), log: [{ date: NOW(), author: a, text: 'Raised, backing: ' + opts[mine].value }] };
-      diffs.push(x); diffTally(x); return Promise.resolve(diffView(x));
+      diffs.push(x); act('flag', dogId, 'Flagged a difference in ' + f.field); diffTally(x); return Promise.resolve(diffView(x));
     },
     // back one version (your earlier vote on the same flag is replaced); evidence is optional but welcome
     agreeDiff: function (id, option, evidence) {
@@ -546,7 +555,7 @@
       x.votes = x.votes.filter(function (v) { return v.author !== a; });
       x.votes.push({ author: a, option: option, evidence: String(evidence || '').trim().slice(0, 300), date: NOW() });
       x.log.push({ date: NOW(), author: a, text: 'Backed: ' + x.options[option].value });
-      diffTally(x); return Promise.resolve(diffView(x));
+      act('flag', x.dog, 'Backed "' + x.options[option].value + '" (' + x.field + ')'); diffTally(x); return Promise.resolve(diffView(x));
     },
     resolveDiff: function (id, option, note) {
       var g = needAdmin(); if (g) return g;
@@ -554,14 +563,14 @@
       option = Number(option); if (!(option >= 0 && option < x.options.length)) return fail('invalid', 'Choose one of the versions.');
       x.status = 'resolved'; x.chosen = option; x.by = 'admin';
       x.log.push({ date: NOW(), author: 1, text: 'Administrator resolved: ' + x.options[option].value + (note ? '. ' + String(note).slice(0, 200) : '') });
-      logAction('Administrator resolved a difference (' + x.field + ') as: ' + x.options[option].value);
+      logAction('Administrator resolved a difference (' + x.field + ') as: ' + x.options[option].value); act('flag', x.dog, 'Resolved a difference in ' + x.field);
       return Promise.resolve(diffView(x));
     },
     reopenDiff: function (id) {
       var g = needAdmin(); if (g) return g;
       var x = diffs.filter(function (d) { return d.id === id; })[0]; if (!x) return fail('not_found', 'No such flag.');
       x.status = 'open'; x.chosen = null; x.by = '';
-      x.log.push({ date: NOW(), author: 1, text: 'Administrator reopened this flag' });
+      x.log.push({ date: NOW(), author: 1, text: 'Administrator reopened this flag' }); act('flag', x.dog, 'Reopened a difference in ' + x.field);
       return Promise.resolve(diffView(x));
     },
     // the work queue: every open flag, for any signed-in member who wants to help check records (least-backed first, so the lonely ones get looked at)
@@ -666,7 +675,8 @@
       if (old && !(old.author === actorId || isAdmin())) return fail('forbidden', 'Only the author or an administrator can correct this. You can dispute it instead.');
       if (old) old.status = 'superseded';
       var c = C(nextId++, dogId, 'fact', name, value, { src: src || '', ver: old ? old.ver + 1 : 1, author: actorId === 0 ? 1 : actorId, date: NOW() });
-      claims.push(c); return Promise.resolve(annotate(c));
+      claims.push(c); act('record', dogId, (old ? 'Corrected ' : 'Added ') + name);
+      return Promise.resolve(annotate(c));
     },
     addRecord: function (dogId, rec) {
       var g = needMember(); if (g) return g;
@@ -677,21 +687,22 @@
         var cats = (rec.cats || []).filter(function (x, i, a) { return SCREENS.indexOf(x) > -1 && a.indexOf(x) === i; });
         if (!cats.length) return fail('invalid', 'Choose at least one screen.');
         var sc = C(nextId++, dogId, 'screens', 'Screens on file at OFA', cats.join(', '), { url: '', date: NOW(), ev: 'link', author: actorId === 0 ? 1 : actorId });
-        claims.push(sc); return Promise.resolve(annotate(sc));
+        claims.push(sc); act('record', dogId, 'Marked health screens at OFA'); return Promise.resolve(annotate(sc));
       }
       if (!rec.name || !String(rec.name).trim()) return fail('invalid', 'A name is required.');
       if (rec.type === 'test' && !canEnterResults(dogId)) return fail('forbidden', 'Test results are entered by the dog\'s owner, from their own certificate. Claim the dog if it is yours, or tick which screens exist.');
       if (rec.type !== 'link' && !rec.url) return fail('invalid', 'Test results, wins and litters need an evidence link.');
       var c = C(nextId++, dogId, rec.type, String(rec.name).slice(0, 60), String(rec.value || '').slice(0, 40), {
         url: rec.url || '', whelp: rec.whelp || '', date: rec.date || NOW(), ev: rec.type === 'test' ? 'doc' : 'link', author: actorId === 0 ? 1 : actorId });
-      claims.push(c); return Promise.resolve(annotate(c));
+      claims.push(c); act('record', dogId, 'Added ' + ({ test: 'a test result', win: 'a win or title', litter: 'a litter', link: 'a link', dna: 'a genetic result' }[rec.type] || 'a record') + ': ' + c.name);
+      return Promise.resolve(annotate(c));
     },
     flagClaim: function (claimId, f) {
       var g = needMember(); if (g) return g;
       var c = claimById(claimId); if (!c) return fail('not_found', 'No such record.');
       if (c.author === actorId) return fail('forbidden', 'You cannot dispute your own record. Post a correction instead.');
       if (!f || !f.evidence) return fail('invalid', 'Link to your evidence.');
-      c.flags.push({ author: actorId === 0 ? 1 : actorId, reason: f.reason || 'Disputed', evidence: f.evidence, date: NOW() });
+      c.flags.push({ author: actorId === 0 ? 1 : actorId, reason: f.reason || 'Disputed', evidence: f.evidence, date: NOW() }); act('flag', c.dog, 'Disputed "' + c.name + '": ' + (f.reason || 'Disputed'));
       return Promise.resolve(annotate(c));
     },
     correctClaim: function (claimId, value) {
@@ -700,7 +711,8 @@
       if (!(c.author === actorId || isAdmin())) return fail('forbidden', 'Only the author or an administrator can post a correction.');
       c.status = 'superseded';
       var n = C(nextId++, c.dog, c.type, c.name, value, { url: c.url, ev: c.ev, ver: c.ver + 1, author: c.author, date: NOW() });
-      claims.push(n); return Promise.resolve(annotate(n));
+      claims.push(n); act('record', c.dog, 'Corrected "' + c.name + '"');
+      return Promise.resolve(annotate(n));
     },
     hideClaim: function (claimId, reason) {
       var g = needAdmin(); if (g) return g;
@@ -715,7 +727,7 @@
       d.confirmedBy = d.confirmedBy || [];
       if (d.confirmedBy.some(function (x) { return x.author === authorOf(actorId); })) return Promise.resolve({ ok: true });
       d.confirmedBy.push({ author: authorOf(actorId), date: NOW() });
-      logAction((((authors[actorId] || {}).name) || actorId) + ' confirmed the details on ' + (d.registered || primaryReg(dogId) || 'a dog'));
+      act('record', dogId, 'Confirmed the details'); logAction((((authors[actorId] || {}).name) || actorId) + ' confirmed the details on ' + (d.registered || primaryReg(dogId) || 'a dog'));
       return Promise.resolve({ ok: true });
     },
     claimDog: function (dogId) {
@@ -725,7 +737,7 @@
       if (ex) return (people[ex.value] && people[ex.value].member === authorOf(actorId)) ? Promise.resolve({ ok: true }) : fail('forbidden', 'This dog has already been claimed. If that is a mistake, tell the administrator.');
       claims.push(C(nextId++, dogId, 'claim', 'Claimed by', personFor(authorOf(actorId)), { start: NOW(), author: authorOf(actorId) }));
       if (!d.visibility) d.visibility = 'members';
-      logAction((((authors[actorId] || {}).name) || actorId) + ' claimed ' + (d.call || d.registered || primaryReg(dogId) || 'a dog'));
+      act('claim', dogId, 'Claimed this dog'); logAction((((authors[actorId] || {}).name) || actorId) + ' claimed ' + (d.call || d.registered || primaryReg(dogId) || 'a dog'));
       return Promise.resolve({ ok: true });
     },
     ourDogs: function () {
@@ -751,7 +763,7 @@
       var d = dogs[dogId]; if (!d) return fail('not_found', 'No such dog.');
       if (v !== 'public' && v !== 'members') return fail('invalid', 'Choose who can see this dog.');
       if (!canSetVisibility(dogId)) return fail('forbidden', 'Only the member who claimed this dog, or an administrator, can change who sees it.');
-      d.visibility = v; logAction('Visibility of ' + (d.call || d.registered) + ' set to ' + v + ' by ' + ((authors[actorId] || {}).name || actorId));
+      d.visibility = v; act('claim', dogId, 'Set visibility to ' + v); logAction('Visibility of ' + (d.call || d.registered) + ' set to ' + v + ' by ' + ((authors[actorId] || {}).name || actorId));
       return Promise.resolve({ ok: true });
     },
     suggestCategory: function (text) {
@@ -774,6 +786,23 @@
       logAction(approve ? 'Approved account for ' + r.name + ' (' + r.role + '). Real name confirmed via: ' + r.verify + '.' : 'Rejected account request from ' + r.name + '. No verifiable real identity.');
       return Promise.resolve({ ok: true });
     },
+    // Members and what they have been doing, for the administrator only. Counts come from the recent trail (the last ACTIVITY_MAX lines).
+    activityReport: function () {
+      var g = needAdmin(); if (g) return g;
+      var nowMs = Date.now(), user = {}, ids = {};
+      Object.keys(LOGINS).forEach(function (u) { user[LOGINS[u] === 0 ? 1 : LOGINS[u]] = u; });
+      Object.keys(seen).forEach(function (k) { ids[k] = 1; }); activity.forEach(function (x) { ids[x.who] = 1; });
+      var label = function (id) { var d = dogs[id]; return d ? (titled(d) || d.short || String(id)) : ''; };
+      var members = Object.keys(ids).map(function (k) {
+        var id = Number(k), a = authors[id] || { name: 'Member ' + id, role: '' }, c = { dog: 0, record: 0, flag: 0, claim: 0 }, last = '';
+        activity.forEach(function (x) { if (x.who === id) { if (c[x.kind] !== undefined) c[x.kind]++; last = x.t; } });
+        var keys = [String(id) + ':n'].concat(id === 1 ? ['0:n'] : []);
+        var searches = keys.reduce(function (n, key) { return n + (externals[key] || []).filter(function (t) { return nowMs - t < 86400000; }).length; }, 0);
+        return { id: id, name: a.name, role: a.role || '', username: user[id] || '', seen: seen[k] || '', last: last, counts: c, searches24h: searches };
+      }).sort(function (a, b) { return a.seen < b.seen ? 1 : -1; });
+      var feed = activity.slice(-300).reverse().map(function (x) { return { t: x.t, who: x.who, whoName: (authors[x.who] || { name: 'Member ' + x.who }).name, kind: x.kind, dog: x.dog, dogName: label(x.dog), text: x.text }; });
+      return Promise.resolve({ members: members, feed: feed, kept: activity.length, max: ACTIVITY_MAX });
+    },
     actionLog: function () { var g = needAdmin(); if (g) return g; return Promise.resolve(copy(log)); }
   };
 
@@ -781,12 +810,12 @@
   // The seed data lives in this file; pedigrees of generated ancestor pages are not saved, they are rebuilt from where each was opened.
   API.exportState = function () {
     return JSON.parse(JSON.stringify({ v: 1, nextId: nextId, authors: authors, logins: LOGINS, dogs: dogs, litters: litters, identifiers: identifiers,
-      people: people, claims: claims, requests: requests, wanted: wantedList, log: log, lookups: lookups, externals: externals, stash: stash, diffs: diffs }));
+      people: people, claims: claims, requests: requests, wanted: wantedList, log: log, lookups: lookups, externals: externals, stash: stash, diffs: diffs, activity: activity, seen: seen }));
   };
   API.importState = function (st) {
     st = JSON.parse(JSON.stringify(st || SEED));
-    nextId = st.nextId; authors = st.authors; LOGINS = st.logins; dogs = st.dogs; litters = st.litters; identifiers = st.identifiers;
-    people = st.people; claims = st.claims; requests = st.requests; wantedList = st.wanted; log = st.log; lookups = st.lookups || {}; externals = st.externals || {}; stash = st.stash || {}; diffs = st.diffs || [];
+    nextId = st.nextId; authors = Object.assign({}, baseAuthors, st.authors || {}); LOGINS = st.logins; dogs = st.dogs; litters = st.litters; identifiers = st.identifiers;
+    people = st.people; claims = st.claims; requests = st.requests; wantedList = st.wanted; log = st.log; lookups = st.lookups || {}; externals = st.externals || {}; stash = st.stash || {}; diffs = st.diffs || []; activity = st.activity || []; seen = st.seen || {};
     Object.keys(priv.peds).forEach(function (k) { if (/^[rna]:/.test(String(k))) delete priv.peds[k]; });   // every pedigree held for an added dog is rebuilt from the saved state
     Object.keys(dogs).filter(function (id) { return dogs[id].origin; }).sort(function (a, b) { return (dogs[a].gen || 0) - (dogs[b].gen || 0); }).forEach(function (id) {
       var o = dogs[id].origin, P = pedOf(o.dog); if (P[o.key]) priv.peds[id] = reroot(P, o.key);

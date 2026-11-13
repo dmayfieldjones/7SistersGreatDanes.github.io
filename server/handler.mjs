@@ -13,7 +13,7 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 
 // The calls a browser may make. Anything else (setActor, useLogin, importState, ...) does not exist as far as the outside world goes.
 export const METHODS = new Set([
-  'session', 'authors', 'lookup', 'find', 'lookupByName', 'findExternal', 'importExternal', 'addIdentifier', 'raiseDiff', 'agreeDiff', 'resolveDiff', 'reopenDiff', 'openDiffs', 'ourDogs', 'confirmDog', 'claimDog', 'setVisibility', 'noteGalaxy', 'getDog', 'getPedigree',
+  'session', 'authors', 'lookup', 'find', 'lookupByName', 'findExternal', 'importExternal', 'addIdentifier', 'raiseDiff', 'agreeDiff', 'resolveDiff', 'reopenDiff', 'openDiffs', 'activityReport', 'ourDogs', 'confirmDog', 'claimDog', 'setVisibility', 'noteGalaxy', 'getDog', 'getPedigree',
   'openAncestor', 'saveFact', 'addRecord', 'flagClaim', 'correctClaim', 'hideClaim', 'suggestCategory',
   'wanted', 'markAdded', 'accountRequests', 'decideRequest', 'actionLog',
 ]);
