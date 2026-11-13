@@ -477,10 +477,10 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   // ---- drawing ----
   function renderAll(){renderSession();renderHeader();renderFacts();renderLinks();renderParents();renderOffspring();renderLitters();renderEntries();renderDog();renderModel();renderPed();renderAdmin()}
   // The top bar (sign in / out, who you are) depends on the session only, so it works before any dog is loaded.
-  // The home screen says only what works for the person looking: visitors open 7Sisters dogs, members can look up any dog.
+  // The home screen says only what works for the person looking: visitors are invited to sign in, members just search.
   function homeState(){
     var li=!!SESSION&&SESSION.role!=='visitor';
-    $('homehint').innerHTML=li?'':' Open a <span class="brand7"><b>7</b>Sisters</span> dog below, or <a href="#" id="homesign">sign in</a> to look up any Great Dane.';
+    $('homehint').innerHTML=li?'':' <a href="#" id="homesign">Sign in</a> to look up any Great Dane.';
   }
   function renderTop(){
     var li=!!SESSION&&SESSION.role!=='visitor';
