@@ -168,10 +168,6 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
     <p class="meta" id="lg-msg" role="status" style="margin:0"></p>
   </div>
 </form>
-<div id="mfanudge" class="card" hidden style="max-width:34rem;margin:8px 0">
-  <b>Protect your account.</b> Turn on two-step sign-in: a 6-digit code from your phone, in addition to your password. It takes about two minutes.
-  <div style="margin-top:6px"><button class="sm primary" type="button" id="mfanudge-go">Set it up</button> <button class="sm" type="button" id="mfanudge-no">Not now</button></div>
-</div>
 <div id="mfapanel" class="card" hidden style="max-width:30rem">
   <h3 style="margin:0 0 4px">Two-step sign-in</h3>
   <p class="meta" style="margin:0 0 6px">After this, signing in asks for a 6-digit code from your phone as well as your password.</p>
@@ -1369,7 +1365,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     if(!at)return;
     cognito('VerifySoftwareToken',{AccessToken:at,UserCode:$('mfa-code').value.trim(),FriendlyDeviceName:'Authenticator app'})
       .then(function(r){if(r.Status!=='SUCCESS')throw r;return cognito('SetUserMFAPreference',{AccessToken:at,SoftwareTokenMfaSettings:{Enabled:true,PreferredMfa:true}})})
-      .then(function(){mfaMsg('Two-step sign-in is on. Next time you sign in, it will ask for a code.');$('mfa-key').textContent='';$('mfa-qr').innerHTML='';$('mfanudge').hidden=true})
+      .then(function(){mfaMsg('Two-step sign-in is on. Next time you sign in, it will ask for a code.');$('mfa-key').textContent='';$('mfa-qr').innerHTML='';$('mfabtn').textContent='Two-step sign-in is on'})
       .catch(function(){mfaMsg('That code did not work. Check the app and try the current code.')});
   });
   $('mfa-cancel').addEventListener('click',function(){$('mfapanel').hidden=true;$('mfa-key').textContent='';$('mfa-qr').innerHTML='';mfaMsg('')});
@@ -1379,12 +1375,10 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   });
   // A gentle prompt after sign-in for anyone who has not turned two-step sign-in on (asked once per visit; "Not now" hides it for the visit)
   function checkMfaNudge(){
-    var at=null,off=false;try{at=sessionStorage.getItem(ACCESS_KEY);off=sessionStorage.getItem('mfa-nudge-off')==='1'}catch(e){}
-    if(!at||off||!AUTH){$('mfanudge').hidden=true;return}
-    cognito('GetUser',{AccessToken:at}).then(function(r){$('mfanudge').hidden=(r.UserMFASettingList||[]).indexOf('SOFTWARE_TOKEN_MFA')>-1}).catch(function(){$('mfanudge').hidden=true})
+    var at=null;try{at=sessionStorage.getItem(ACCESS_KEY)}catch(e){}
+    if(!at||!AUTH){$('mfabtn').textContent='Two-step sign-in';return}
+    cognito('GetUser',{AccessToken:at}).then(function(r){$('mfabtn').textContent=(r.UserMFASettingList||[]).indexOf('SOFTWARE_TOKEN_MFA')>-1?'Two-step sign-in is on':'Turn on two-step sign-in'}).catch(function(){$('mfabtn').textContent='Two-step sign-in'})
   }
-  $('mfanudge-go').addEventListener('click',function(){$('mfanudge').hidden=true;$('mfabtn').click()});
-  $('mfanudge-no').addEventListener('click',function(){$('mfanudge').hidden=true;try{sessionStorage.setItem('mfa-nudge-off','1')}catch(e){}});
   $('signinbtn').addEventListener('click',function(){showLogin(true)});
   $('invitesignin').addEventListener('click',function(e){e.preventDefault();window.scrollTo(0,0);showLogin(true)});
   $('editsignin').addEventListener('click',function(e){e.preventDefault();window.scrollTo(0,0);showLogin(true)});
@@ -1394,7 +1388,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     if(SESSION.role==='visitor'){NAV=[];return showHome()}
     return load(S?S.dog.id:412);
   }
-  $('signoutbtn').addEventListener('click',function(){$('mfanudge').hidden=true;store(null);try{sessionStorage.removeItem(ACCESS_KEY)}catch(e){}$('mfapanel').hidden=true;DogAPI.signOut().then(function(s){SESSION=s;return afterSessionChange()})});
+  $('signoutbtn').addEventListener('click',function(){store(null);try{sessionStorage.removeItem(ACCESS_KEY)}catch(e){}$('mfapanel').hidden=true;DogAPI.signOut().then(function(s){SESSION=s;return afterSessionChange()})});
 
   // ---- start ----
   var DEV=/^(localhost|127\.0\.0\.1)$/.test(location.hostname);   // the "view as" menu is for local development only: it would let anyone become the administrator
