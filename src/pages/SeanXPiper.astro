@@ -6,6 +6,12 @@ import { timeSincePastDate } from '../utils/dateAge'
 const birthDate = new Date(Date.UTC(2024, 7, 19))
 const birthDateIso = '2024-08-19'
 const ageToday = timeSincePastDate(birthDate)
+const whelpDate = birthDate.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  timeZone: 'UTC',
+})
 ---
 
 <BaseLayout
@@ -42,6 +48,10 @@ const ageToday = timeSincePastDate(birthDate)
             <div class="info-item">
               <span class="label">Litter Number:</span>
               <span class="value">WS848503</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Whelped:</span>
+              <span class="value">{whelpDate}</span>
             </div>
             <div class="info-item">
               <span class="label">Litter's age today:</span>
