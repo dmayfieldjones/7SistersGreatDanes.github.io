@@ -60,6 +60,12 @@
     for (var i = 0; i < parts.length; i++) { var t = parts[i].trim(); if (AKCNO.test(t)) return t; }
     return parts[0].trim();
   }
+  // The sites a member may cite as the source for a dog. We link to them and never copy from them.
+  var SOURCE_SITES = { 'quintessa.net.au': 'Quintessa', 'danesworld.info': 'DANES World', 'breedpedigrees.com': 'River Rock', 'cosmicgreatdanes.com': 'Cosmic Great Danes' };
+  function siteOf(url) {
+    var h; try { h = new URL(url).hostname.toLowerCase(); } catch (e) { return null; }
+    return Object.keys(SOURCE_SITES).filter(function (d) { return h === d || h.slice(-d.length - 1) === '.' + d; }).map(function (d) { return SOURCE_SITES[d]; })[0] || null;
+  }
   function norm(q) { return String(q).toUpperCase().replace(/\s+/g, ''); }
 
   // ---- the stores -------------------------------------------------------------------------------------------------------------
@@ -343,7 +349,8 @@
       if (born && (!/^\d{4}-\d{2}-\d{2}$/.test(born) || isNaN(Date.parse(born)) || born > NOW())) return fail('invalid', 'Enter the birth date as year-month-day, or leave it blank.');
       var sp = splitTitle(name); name = sp.name || name;   // a title typed or pasted with the name (CH, GCH ...) is split off, so it never changes which dog this is
       var url = String(o.url || '').trim();
-      if (url && !/^https?:\/\//i.test(url)) return fail('invalid', 'The source link must start with http:// or https://');
+      var site = url ? siteOf(url) : null;
+      if (url && (!/^https:\/\//i.test(url) || !site)) return fail('invalid', 'The source link must be an https page on Quintessa, DANES World, River Rock or Cosmic Great Danes.');
       var nk = name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ''), key = nk + '|' + born;
       // With a birth date the match is exact. Without one, a name that matches a single dog opens it; several dogs with that name ask for the date.
       var same = Object.keys(dogs).filter(function (k) { return dogs[k].nameKey && dogs[k].nameKey.split('|')[0] === nk; });
@@ -360,7 +367,7 @@
       var id = 'n:' + key, sx = o.sex === 'female' || o.sex === 'male' ? o.sex : '', a = actorId === 0 ? 1 : actorId;
       dogs[id] = { id: id, title: sp.name ? sp.title : '', titleSuffix: '', registered: name, call: '', short: '', sex: sx, color: String(o.color || '').trim().toLowerCase().slice(0, 40), photo: '', ext: false, litter: null, stub: true, pending: true, visibility: 'members', nameKey: key };
       if (born) claims.push(C(nextId++, id, 'fact', 'Whelp date', born, { src: url, author: a, date: NOW() }));
-      if (url) claims.push(C(nextId++, id, 'link', 'Source for this dog', '', { url: url, author: a, date: NOW() }));
+      if (url) claims.push(C(nextId++, id, 'link', 'Checked on ' + site, '', { url: url, author: a, date: NOW() }));
       wantedLog(name + (born ? ' (born ' + born + ')' : ''), 'dog');
       return Promise.resolve({ dogId: id, created: true });
     },
