@@ -33,7 +33,7 @@
  *   getPedigree(dogId, gens)        names and numbers for the pedigree: anyone for a public dog, otherwise members only
  *   openAncestor(dogId, key)        open (or create) the page for an ancestor in this dog's pedigree (members only)
  *   saveFact(dogId, name, value, src)   add or correct a single-valued fact (born, died, cause of death)
- *   addRecord(dogId, record)        add a test result, win, litter or link
+ *   addRecord(dogId, record)        add a test result, win, litter, link or genetic result (type 'dna': a link to the owner's report; any member may add, any other member may dispute)
  *   flagClaim(claimId, {reason, evidence})   dispute a record (any member except its author)
  *   correctClaim(claimId, value)    new version of a record (its author, or an admin)
  *   hideClaim(claimId, reason)      hide a record, kept in the data (admin only)
@@ -512,7 +512,7 @@
     addRecord: function (dogId, rec) {
       var g = needMember(); if (g) return g;
       if (!dogs[dogId]) return fail('not_found', 'No such dog.');
-      if (['test', 'win', 'litter', 'link', 'screens'].indexOf(rec.type) < 0) return fail('invalid', 'Unknown record type.');
+      if (['test', 'win', 'litter', 'link', 'screens', 'dna'].indexOf(rec.type) < 0) return fail('invalid', 'Unknown record type.');
       // Health screens on file: only which screens exist (checked from the OFA record), never the grade or result. The evidence is the OFA record itself.
       if (rec.type === 'screens') {
         var cats = (rec.cats || []).filter(function (x, i, a) { return SCREENS.indexOf(x) > -1 && a.indexOf(x) === i; });

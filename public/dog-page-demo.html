@@ -233,7 +233,7 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
       <dt>Details</dt><dd id="dog-confirm"></dd>
       <span id="dog-facts" style="display:contents"></span>
       <dt>Also on</dt><dd id="dog-ped"></dd>
-      <dt>Genetic data</dt><dd>Commercial DNA test ordered, results pending</dd>
+      <dt>Genetic data</dt><dd id="dog-dna">None linked yet</dd>
     </dl>
   </div>
 </div>
@@ -348,15 +348,19 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
 <section id="tab-seq" hidden>
   <h2>Genetic data</h2>
   <h3 style="margin:14px 0 6px">Commercial tests</h3>
-  <div class="empty" style="margin-bottom:14px"><b>Results pending.</b><br>Commercial tests come from any company or registry: a DNA kit, an AKC DNA profile, a university lab. When results return, one claim is added: provider, kind of test, link, contributor. We store only the link and who added it, never the owner's report.</div>
-  <div class="track">
-    <div class="row"><span class="who">DNA kit: SNP array</span><span class="chip self">pending</span></div>
-    <p class="meta" style="margin:0">About 200,000 markers, not a whole genome. Labeled as an array so no one mistakes it for sequence.</p>
-  </div>
-  <div class="track">
-    <div class="row"><span class="who">AKC DNA profile</span><span class="chip self">link only</span></div>
-    <p class="meta" style="margin:0">The profile belongs to the owner. A member can add the AKC DNA number as a link, so others know a profile exists.</p>
-  </div>
+  <p class="meta" style="margin:0 0 8px">Commercial tests come from any company or registry: a DNA kit, an AKC DNA profile, a university lab. Each result is one record: provider, kind of test, link, and who added it. We store only the link, never the owner's report. Anyone signed in can dispute a record with a link to their evidence, and the member who added it can post a correction.</p>
+  <div id="dna-list"></div>
+  <details class="card" id="dna-add" hidden>
+    <summary><b>Link a genetic result for this dog</b></summary>
+    <form class="f" id="new-dna" style="display:grid;gap:8px;margin-top:8px">
+      <input type="text" id="nd-name" maxlength="60" placeholder="Provider and kind of test (for example, Embark SNP array, or AKC DNA profile)" required>
+      <input type="text" id="nd-val" maxlength="40" placeholder="Short result or number, such as the AKC DNA number (optional)">
+      <input type="url" id="nd-url" placeholder="Link to the results page or report" required>
+      <input type="date" id="nd-date" required>
+      <div><button class="sm primary" type="submit">Add this result</button></div>
+    </form>
+  </details>
+  <p class="meta" id="dna-signin" hidden>Sign in to link a result or to dispute one.</p>
   <h3 style="margin:18px 0 6px">Sequence data</h3>
   <p class="meta" style="margin:0 0 8px">Research sequence from NCBI SRA, viewed in a genome browser. Nothing is shown until real data exists.</p>
   <div class="track">
@@ -606,7 +610,21 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   }
   function renderEntries(){
     var rows=S.claims.filter(function(c){return c.type==='test'||c.type==='win'});
-    $('entries').innerHTML=rows.map(function(c){
+    $('entries').innerHTML=rows.map(entryCard).join('')||'<div class="empty">No entries yet.</div>';
+    $('n-rec').textContent='('+S.claims.filter(function(c){return c.status==='visible'}).length+')';
+    renderSeq();
+  }
+  // genetic results: the owner's report is never stored, only a link and who added it. Disputes and corrections work as they do on the Records tab.
+  function renderSeq(){
+    var rows=S.claims.filter(function(c){return c.type==='dna'});
+    $('dna-list').innerHTML=rows.map(entryCard).join('')||'<div class="empty" style="margin-bottom:14px"><b>No genetic results linked yet.</b><br>If this is your dog, add a link to its results below.</div>';
+    var vis=rows.filter(function(c){return c.status==='visible'}).length;
+    $('dog-dna').textContent=vis?vis+(vis===1?' result linked':' results linked')+' (see the Genetic data tab)':'None linked yet';
+    $('dna-add').hidden=!(S.perm&&S.perm.canAdd);
+    $('dna-signin').hidden=!!(S.perm&&S.perm.canAdd);
+  }
+  function entryCard(c){
+    return (function(c){
       var hidden=c.status==='hidden',old=c.status==='superseded';
       var h='<article class="card'+(hidden?' hidden-entry':'')+(old?' old':'')+'">';
       h+='<div class="row">'+who(c.author)+'<span>'+c.date+'</span><span class="chip demo">Demo data</span>';
@@ -629,8 +647,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
         }
       }
       return h+'</article>';
-    }).join('')||'<div class="empty">No entries yet.</div>';
-    $('n-rec').textContent='('+S.claims.filter(function(c){return c.status==='visible'}).length+')';
+    })(c);
   }
   function fact(n){return S.claims.filter(function(c){return c.type==='fact'&&c.name===n&&c.status==='visible'})[0]}
   function factForm(f,cur){
@@ -889,6 +906,8 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   // ---- actions: every change goes through the API ----
   document.addEventListener('submit',function(ev){
     var f=ev.target,id=S&&S.dog.id;
+    if(f.id==='new-dna'){ev.preventDefault();
+      run(DogAPI.addRecord(id,{type:'dna',name:$('nd-name').value,value:$('nd-val').value,url:$('nd-url').value,date:$('nd-date').value})).then(function(){f.reset();f.parentNode.open=false});return}
     if(f.id==='new-rec'){ev.preventDefault();
       run(DogAPI.addRecord(id,{type:$('nr-type').value,name:$('nr-name').value,value:$('nr-val').value,url:$('nr-url').value,date:$('nr-date').value})).then(function(){f.reset();f.parentNode.open=false});return}
     if(f.id==='new-screens'){ev.preventDefault();
