@@ -525,7 +525,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   function A(id){return authors[id]||{name:'Unknown member',role:'',status:'unknown'}}
   // Visitors see a short form (Dustin M.) and signed-in members see the full name; the role chip says why the person is trusted. No bare numbers.
   function shortName(n){var p=String(n).trim().split(/\s+/);return (p.length<2||!/^[A-Z]/.test(p[p.length-1]))?n:p[0]+' '+p[p.length-1].charAt(0)+'.'}
-  function who(id){var a=A(id),full=SESSION&&SESSION.actor!=null;return '<span class="who"'+(full?'':' title="Sign in to see full names"')+'>'+esc(full?a.name:shortName(a.name))+'</span>'+(a.role?' <span class="chip role">'+esc(a.role)+'</span>':'')}
+  function who(id){var a=A(id),full=SESSION&&SESSION.actor!=null;return '<span class="who"'+(full?'':' title="Sign in to see full names"')+'>'+esc(full?a.name:shortName(a.name))+'</span>'+(/importer/i.test(a.role||'')?' <span class="chip role" title="Added by a program, not by a person">'+esc(a.role)+'</span>':'')}   // a person's general title (owner, breeder) says nothing about their tie to this dog, so only the program label shows
   function pn(id){var pe=(S&&S.people||{})[id]||{label:'Unknown'};return '<span'+(pe.consent?'':' title="Short form shown until this person agrees to be listed"')+'>'+esc(pe.label)+'</span>'}
   // Three separate things: the title (CH, earned), the registered name (never includes the title) and the call name (Piper).
   function labelOf(d){return d.short||d.call||d.registered||'Unnamed dog'}
