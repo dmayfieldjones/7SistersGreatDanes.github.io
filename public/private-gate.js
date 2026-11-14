@@ -35,7 +35,7 @@
     '#pv-lock h1{font-size:1.3rem;margin:0 0 .6rem}' +
     '#pv-lock p{color:#52514e;font-size:.9rem;margin:0 0 1rem}' +
     '#pv-lock form{display:flex;justify-content:center;gap:.5rem}' +
-    '#pv-lock input{width:7rem;padding:.45rem .65rem;border-radius:8px;border:2px solid rgba(0,0,0,.35);font-size:.9rem;text-align:center;background:#fff;color:#0b0b0b}' +
+    '#pv-lock input{width:7rem;padding:.45rem .65rem;border-radius:8px;border:2px solid rgba(0,0,0,.35);font-size:16px;text-align:center;background:#fff;color:#0b0b0b}' +
     '#pv-lock button{font-weight:600;background:#bf141c;color:#fff;border:none;border-radius:8px;padding:.45rem 1rem;cursor:pointer}' +
     '#pv-lock .err{color:#bf141c;font-weight:600;font-size:.85rem;margin:.75rem 0 0}' +
     '@media (prefers-color-scheme:dark){#pv-lock{background:#0d0d0d}#pv-lock .box{background:#1a1a19;color:#fff;border-color:rgba(255,255,255,.2)}#pv-lock p{color:#c3c2b7}#pv-lock input{background:#0d0d0d;color:#fff;border-color:rgba(255,255,255,.35)}}'

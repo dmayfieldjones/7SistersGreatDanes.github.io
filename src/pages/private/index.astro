@@ -168,7 +168,9 @@ const tools = [
     border: 2px solid rgba(0, 0, 0, 0.35);
     background: #ffffff;
     color: #0b0b0b;
-    font-size: 0.9rem;
+    /* 16px or more: iOS zooms the page in on focus for smaller text boxes
+       and leaves it zoomed, which pushed everything off to the right. */
+    font-size: 16px;
     text-align: center;
   }
   .pv-gate-box button {
