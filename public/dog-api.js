@@ -637,7 +637,7 @@
         // Option 2: a visitor sees other people (breeders, co-owners who are not members) only in short form; members see full names.
         people: peopleFor(),
         diffs: diffs.filter(function (x) { return x.dog === dogId; }).map(diffView),
-        perm: { loggedIn: isMember(), canAdd: isMember(), isAdmin: isAdmin(), canSetVisibility: canSetVisibility(dogId), canClaim: isMember() && !claimOf(dogId), canEnterResults: canEnterResults(dogId), hasPedigree: Object.keys(pedOf(dogId)).length > 1 }
+        perm: { loggedIn: isMember(), canAdd: isMember(), isAdmin: isAdmin(), canSetVisibility: canSetVisibility(dogId), canClaim: isMember() && !claimOf(dogId), canUnclaim: !!claimOf(dogId) && canSetVisibility(dogId), canEnterResults: canEnterResults(dogId), hasPedigree: Object.keys(pedOf(dogId)).length > 1 }
       };
       return Promise.resolve(snap);
     },
@@ -794,6 +794,18 @@
       });
       if (shared.length) groups.push({ title: 'Shared by members', dogs: shared });
       return Promise.resolve(groups);
+    },
+    // Give up a claim (a mistaken one, or a dog that is no longer yours). The dog and everything on its page stay; only the claim goes, and the
+    // claim record is kept as withdrawn. The member who claimed it, or the administrator, may do this.
+    unclaimDog: function (dogId) {
+      var g = needMember(); if (g) return g;
+      var d = dogs[dogId]; if (!d) return fail('not_found', 'No such dog.');
+      var c = claimOf(dogId); if (!c) return Promise.resolve({ ok: true });
+      if (!canSetVisibility(dogId)) return fail('forbidden', 'Only the member who claimed this dog, or an administrator, can give up the claim.');
+      c.status = 'withdrawn'; c.withdrawn = { date: NOW(), author: authorOf(actorId) };
+      act('claim', dogId, 'Gave up the claim on this dog');
+      logAction((((authors[authorOf(actorId)] || {}).name) || actorId) + ' gave up the claim on ' + (d.call || d.registered || primaryReg(dogId) || 'a dog'));
+      return Promise.resolve({ ok: true });
     },
     setVisibility: function (dogId, v) {
       var g = needMember(); if (g) return g;

@@ -68,3 +68,22 @@ test('the people in the data file keep their names on the server, so the adminis
   assert.ok(r.members.some((m) => m.name === 'Dustin Mayfield-Jones' && m.username === 'dmj'));
   assert.ok(!r.members.some((m) => /^Member \d+$/.test(m.name)));
 });
+
+test('a claim can be given up by the member who made it or by the administrator, and by no one else', async () => {
+  const h = fresh();
+  const dog = (await call(h, 'lookup', ['WS99999903'], ann)).result.dogId;
+  await call(h, 'claimDog', [dog], ann);
+  assert.equal((await call(h, 'getDog', [dog], ben)).result.perm.canUnclaim, false);
+  assert.equal((await call(h, 'unclaimDog', [dog], ben)).status, 403);                 // someone else's claim
+  assert.equal((await call(h, 'unclaimDog', [dog])).status, 401);                        // a visitor
+  assert.equal((await call(h, 'getDog', [dog], ann)).result.perm.canUnclaim, true);
+  assert.equal((await call(h, 'unclaimDog', [dog], ann)).ok, true);
+  let d = (await call(h, 'getDog', [dog], ben)).result;
+  assert.equal(d.perm.canClaim, true); assert.equal(d.perm.canUnclaim, false);           // the dog is free to claim again
+  assert.equal((await call(h, 'claimDog', [dog], ben)).ok, true);                        // ben claims it
+  assert.equal((await call(h, 'unclaimDog', [dog], dmj)).ok, true);                      // the administrator can release anyone's claim
+  assert.equal((await call(h, 'getDog', [dog], ben)).result.perm.canClaim, true);
+  const feed = (await call(h, 'activityReport', [], dmj)).result.feed.filter((x) => /Gave up/.test(x.text));
+  assert.equal(feed.length, 2);
+  assert.equal((await call(h, 'unclaimDog', [dog], ann)).ok, true);                      // already unclaimed: nothing to do, no error
+});
