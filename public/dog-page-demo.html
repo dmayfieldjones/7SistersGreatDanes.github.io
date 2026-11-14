@@ -749,7 +749,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   function fact(n){return S.claims.filter(function(c){return c.type==='fact'&&c.name===n&&c.status==='visible'})[0]}
   function factForm(f,cur){
     var inp=f.kind==='text'?'<input type="text" name="v" maxlength="60" required placeholder="Name or kennel" value="'+esc(cur?cur.value:'')+'"><label class="meta"><input type="checkbox" name="akc"'+(cur&&cur.src?' checked':'')+'> From AKC record</label>'
-      :f.kind==='date'?'<input type="date" name="v" required value="'+esc(cur?cur.value:'')+'">'
+      :f.kind==='date'?'<input type="text" name="v" required pattern="\\d{4}(-\\d{2}-\\d{2})?" maxlength="10" placeholder="2002-03-07, or just the year" title="A full date such as 2002-03-07, or just the year when that is all that is known" value="'+esc(cur?cur.value:'')+'">'
       :'<select name="v" required><option value="">Choose…</option>'+CAUSES.map(function(c){return '<option'+(cur&&cur.value===c?' selected':'')+'>'+esc(c)+'</option>'}).join('')+'</select><input type="text" name="other" maxlength="60" placeholder="Describe (short)" hidden>';
     return '<form class="inline" data-fact="'+esc(f.name)+'" oninput="var o=this.elements.other;if(o){var sh=this.elements.v.value===\'Other\';o.hidden=!sh;o.required=sh}">'+inp+'<button class="sm primary" type="submit">Save</button>'+(cur?'<button class="sm" type="button" data-fcancel="1">Cancel</button>':'')+(f.kind==='cause'?' <button class="sm" type="button" data-suggest="1">Suggest a category</button>':'')+'</form>';
   }
@@ -1001,8 +1001,10 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     if(!akc&&!byName){var cv0=$('galcv');cv0.width=cv0.width;facts.textContent='No registration number, or name and birth year, on file, so this dog cannot be placed on the map yet.';return}
     loadGalaxy().then(function(G){
       var row=-1;
-      if(G.rh&&akc){var h=fnv(akc.toUpperCase().replace(/[^A-Z0-9]/g,''));for(var i=0;i<G.N;i++)if(G.rh[i]===h){row=i;break}}
-      else if(G.nh&&byName){var h2=fnv(nmk+'|'+yr.slice(0,4));for(var i2=0;i2<G.N;i2++)if(G.nh[i2]===h2){row=i2;break}}
+      var hits=0;   // two dogs can share a short number or a name and year: never guess between them
+      if(G.rh&&akc){var h=fnv(akc.toUpperCase().replace(/[^A-Z0-9]/g,''));for(var i=0;i<G.N;i++)if(G.rh[i]===h){if(row<0)row=i;hits++}}
+      else if(G.nh&&byName){var h2=fnv(nmk+'|'+yr.slice(0,4));for(var i2=0;i2<G.N;i2++)if(G.nh[i2]===h2){if(row<0)row=i2;hits++}}
+      if(hits>1){row=-1;facts.textContent='More than one dog on the map shares this number, so we cannot tell which one is this dog yet.';return}
       // tell the backend whether the galaxy has this dog, once per dog per visit; it updates the stub and the wanted list
       if(!galNoted[id]){galNoted[id]=1;DogAPI.noteGalaxy(id,row>=0).then(function(){if(S.dog.id===id)return reload()})}
       if(row<0){facts.textContent='Not in the galaxy yet.'+(S.dog.pending?'':' We\'ve noted that someone looked for it.');return}

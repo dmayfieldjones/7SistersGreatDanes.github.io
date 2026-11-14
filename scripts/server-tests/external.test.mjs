@@ -311,3 +311,43 @@ test('an ancestor\'s page credits the member and source that added the pedigree,
   assert.ok(grand.dogId);
   assert.equal((await call(h, 'authors', [], t)).result[rows[0].author].name, 'Alice Example');
 });
+
+// ---- a bare stud-book number is not proof of identity ----
+const bare = (name) => ({ name, sex: 'male', color: 'brindle', born: '', registry: '', number: '609', sire: '', dam: '', siteId: '' });
+const pageFor = async (store, t, row) => {
+  const h = fresh(store, { network: null, external: async () => [row], externalPedigree });
+  const c = await call(h, 'findExternal', [{ q: row.name }], t);
+  return { h, r: (await call(h, 'importExternal', [c.result.choices[0].token], t)).result };
+};
+test('two dogs that share a bare number such as 609 stay two dogs, and each is found again by its own name', async () => {
+  const store = memoryStore(), t = alice();
+  const a = await pageFor(store, t, bare('Nero Test'));
+  const b = await pageFor(store, t, bare("Nero Test Messter's"));
+  assert.notEqual(a.r.dogId, b.r.dogId);
+  assert.equal(a.r.created, true); assert.equal(b.r.created, true);
+  const again = await pageFor(store, t, bare('Nero Test'));
+  assert.equal(again.r.dogId, a.r.dogId); assert.equal(again.r.created, false);
+  const d = await call(a.h, 'getDog', [a.r.dogId], t);
+  assert.deepEqual(d.result.identifiers.map((i) => i.number), ['609']);         // the number is kept, just never used alone to decide who a dog is
+});
+test('ancestors with the same bare number but different names open as different pages', async () => {
+  const store = memoryStore(), t = alice();
+  const net = makeNetwork([[
+    '1|Child Dog |2000-01-01|2|3|||WS12345601|Fawn|M',
+    '2|Nero Test ||||||609|Brindle|M',
+    '3|Nero Test Messters ||||||609|Brindle|F',
+  ].join('\n')]);
+  const h = fresh(store, { network: net, external: asked, externalPedigree });
+  const c = await call(h, 'findExternal', [{ q: 'Child Dog' }], t);
+  const id = (await call(h, 'importExternal', [c.result.choices[0].token], t)).result.dogId;
+  const sire = (await call(h, 'openAncestor', [id, 2], t)).result.dogId, dam = (await call(h, 'openAncestor', [id, 3], t)).result.dogId;
+  assert.notEqual(sire, dam);
+});
+test('a birth date can be a full date or just a year, and nothing else', async () => {
+  const h = fresh(memoryStore(), { network: null }), t = alice();
+  const id = (await call(h, 'lookup', ['WS99999902'], t)).result.dogId;
+  assert.equal((await call(h, 'saveFact', [id, 'Whelp date', '1880'], t)).ok, true);
+  assert.equal((await call(h, 'saveFact', [id, 'Whelp date', '2002-03-07'], t)).ok, true);
+  assert.equal((await call(h, 'saveFact', [id, 'Whelp date', 'c. 1880'], t)).status, 400);
+  assert.equal((await call(h, 'saveFact', [id, 'Death date', '03/07/2002'], t)).status, 400);
+});
