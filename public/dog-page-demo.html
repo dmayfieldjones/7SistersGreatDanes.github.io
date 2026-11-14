@@ -1088,8 +1088,8 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
 
   // ---- home: a search box, three demo dogs, and an animated tour of the galaxy (drawn in the browser from the same map data; nothing is stored) ----
   var homeRaf=0,homeRun=0,homeVisible=true,homeIO=null;
-  function hideHome(){$('home').hidden=true;$('whobox').hidden=false;cancelAnimationFrame(homeRaf);homeRun++}
-  function showHome(){homeState();$('findpanel').innerHTML='';
+  function hideHome(){$('ourdogsbtn').hidden=false;$('home').hidden=true;$('whobox').hidden=false;cancelAnimationFrame(homeRaf);homeRun++}
+  function showHome(){$('ourdogsbtn').hidden=true;homeState();$('findpanel').innerHTML='';
     $('landing').hidden=true;$('dogview').hidden=true;$('home').hidden=false;$('whobox').hidden=true;say('');renderTop();renderTodo();
     cancelAnimationFrame(homeRaf);var run=++homeRun;
     $('homecap').textContent='Loading the galaxy…';
