@@ -492,7 +492,7 @@
     stashCandidates: function (list) {
       var g = needMember(); if (g) return g;
       var k = String(actorId), at = Date.now();
-      stash[k] = { at: at, list: (list || []).slice(0, 8).map(function (c, i) { return Object.assign({}, c, { token: at + '-' + i }); }) };
+      stash[k] = { at: at, list: (list || []).slice(0, 30).map(function (c, i) { return Object.assign({}, c, { token: at + '-' + i }); }) };
       return Promise.resolve(copy(stash[k].list));
     },
     // The member confirmed one of the dogs the server found: create its page from the server's own copy of that result.

@@ -116,6 +116,9 @@ export function makeHandler({ store, verify, dataDir = join(HERE, '..', 'public'
           await transact((a) => a.externalBudget('network'));
           const found = network.search(q);
           if (found.length) return reply(200, { ok: true, result: { choices: await transact((a) => a.stashCandidates(found)) } });
+          // no dog has exactly that name: a kennel name or part of a name shows the dogs that contain it (a short list, never the whole file)
+          const part = network.searchPartial(q, 25);
+          if (part.total) return reply(200, { ok: true, result: { choices: await transact((a) => a.stashCandidates(part.rows)), partial: { total: part.total, shown: part.rows.length, query: q } } });
         }
         // 2. nothing there: ask DANES World, within the member's smaller hourly share
         await transact((a) => a.externalBudget());

@@ -41,8 +41,18 @@ export function makeNetwork(texts) {
     const r = pickReg(d.reg), s = dogs.get(d.sire), m = dogs.get(d.dam);
     return { netId: d.id, source: 'network', name: d.name, sex: d.sex, color: d.color, born: born(d), registry: r.registry, number: r.number, sire: s ? s.name : '', dam: m ? m.name : '' };
   };
+  // every dog's cleaned name, once, so a kennel or part of a name can be found by scanning (about 120,000 names take a few milliseconds)
+  const keyed = [...dogs.values()].map((d) => ({ id: d.id, key: nameKey(d.name), name: d.name })).filter((x) => x.key);
   return {
     size: dogs.size,
+    // a kennel name or part of a name: dogs whose name contains it, names that start with it first, then alphabetical; only the first `limit` come back
+    // with the total, so a member sees there is more and refines the search instead of paging through the database
+    searchPartial(q, limit = 25) {
+      const k = nameKey(String(q).trim().slice(0, 140));
+      if (k.length < 4) return { total: 0, rows: [] };
+      const hits = keyed.filter((x) => x.key.includes(k)).sort((a, b) => (b.key.startsWith(k) - a.key.startsWith(k)) || (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
+      return { total: hits.length, rows: hits.slice(0, limit).map((x) => row(dogs.get(x.id))) };
+    },
     // a registration number, or a name (titles and a quoted call name are ignored); at most 8 dogs come back
     search(q) {
       q = String(q).trim().slice(0, 140);

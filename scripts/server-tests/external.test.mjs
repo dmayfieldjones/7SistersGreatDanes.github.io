@@ -262,7 +262,7 @@ const TWINS = makeNetwork([[
   '7|Twin Dog |1990-01-01|2|3|||WS12345607|Fawn|M',
   '8|Twin Dog |2001-01-01|2|3|||WS12345608|Fawn|M',
 ].join('\n')]);
-const lateNet = (net) => { const f = { on: false }; return { f, net: { size: net.size, search: (q) => net.search(q), pedigree: (id) => (f.on ? net.pedigree(id) : null) } }; };
+const lateNet = (net) => { const f = { on: false }; return { f, net: { size: net.size, search: (q) => net.search(q), searchPartial: (q, n) => net.searchPartial(q, n), pedigree: (id) => (f.on ? net.pedigree(id) : null) } }; };
 
 test('a page added with no ancestors fills itself in, once the network can supply them, without a button', async () => {
   const { f, net } = lateNet(TWINS), store = memoryStore(), t = alice();
@@ -350,4 +350,32 @@ test('a birth date can be a full date or just a year, and nothing else', async (
   assert.equal((await call(h, 'saveFact', [id, 'Whelp date', '2002-03-07'], t)).ok, true);
   assert.equal((await call(h, 'saveFact', [id, 'Whelp date', 'c. 1880'], t)).status, 400);
   assert.equal((await call(h, 'saveFact', [id, 'Death date', '03/07/2002'], t)).status, 400);
+});
+
+// ---- a kennel name or part of a name ----
+const KENNEL = makeNetwork([[
+  ...Array.from({ length: 30 }, (_, i) => `${100 + i}|Zork N Kennelname's Pup ${String(i).padStart(2, '0')} |2010-01-01|||||WS7000${String(i).padStart(4, '0')}|Fawn|F`),
+  '200|Kennelname Kings Landing |2005-05-05|||||WS70009999|Black|M',
+  '201|Quite Different Dog |2001-01-01|||||WS70008888|Fawn|M',
+].join('\n')]);
+test('a kennel name finds the dogs that contain it, names that start with it first, as a short list with the total', async () => {
+  const h = fresh(memoryStore(), { network: KENNEL, external: asked, externalPedigree }), t = alice();
+  const r = await call(h, 'findExternal', [{ q: 'Kennelname' }], t);
+  assert.equal(r.ok, true);
+  assert.equal(r.result.partial.total, 31); assert.equal(r.result.partial.shown, 25); assert.equal(r.result.partial.query, 'Kennelname');
+  assert.equal(r.result.choices.length, 25);
+  assert.equal(r.result.choices[0].name, 'Kennelname Kings Landing');                  // names starting with it come first
+  assert.ok(r.result.choices.every((c) => /kennelname/i.test(c.name)));
+  // a result can be opened exactly like an exact match: it is confirmed by the member and added with its record
+  const made = await call(h, 'importExternal', [r.result.choices[0].token], t);
+  assert.equal(made.ok, true);
+  assert.match(JSON.stringify((await call(h, 'getDog', [made.result.dogId], t)).result.dog), /Kennelname Kings Landing/);
+});
+test('an exact name still wins over a partial one, and a very short query finds nothing', async () => {
+  const h = fresh(memoryStore(), { network: KENNEL, external: asked, externalPedigree }), t = alice();
+  const exact = await call(h, 'findExternal', [{ q: 'Kennelname Kings Landing' }], t);
+  assert.equal(exact.result.partial, undefined); assert.equal(exact.result.choices.length, 1);
+  const tiny = await call(h, 'findExternal', [{ q: 'Zo' }], t);                        // too short: it falls through to the other website, which finds nothing
+  assert.equal(tiny.ok, true); assert.deepEqual(tiny.result.choices, []);
+  assert.equal((await call(h, 'findExternal', [{ q: 'Kennelname' }])).status, 401);   // never for a visitor
 });
