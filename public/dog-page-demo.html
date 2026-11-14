@@ -637,8 +637,8 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   var HELIX='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 3c0 5 10 5 10 9s-10 4-10 9M17 3c0 5-10 5-10 9s10 4 10 9"/><path d="M8.5 7h7M8.5 17h7"/></svg>';
   // health screens and DNA data are separate icons: a plus for OFA-type screens and test records, a helix for DNA and sequence data; both only where we hold a record
   function dataIcons(k,f){if(!f)return '';var o='';
-    if(f.health)o+='<a class="cam" href="#" data-anc="'+k+'" title="Health screens or test records on file: '+f.health+'. Opens this dog\'s page." aria-label="Health records">'+HEALTH+'</a>';
-    if(f.dna)o+='<a class="cam" href="#" data-anc="'+k+'" title="Genetic or sequence data on file: '+f.dna+'. Opens this dog\'s page." aria-label="Genetic data">'+HELIX+'</a>';
+    if(f.health)o+='<a class="cam" href="#" data-anc="'+k+'" data-goto-tab="rec" title="Health screens or test records on file: '+f.health+'. Opens this dog\'s page." aria-label="Health records">'+HEALTH+'</a>';
+    if(f.dna)o+='<a class="cam" href="#" data-anc="'+k+'" data-goto-tab="seq" title="Genetic or sequence data on file: '+f.dna+'. Opens this dog\'s page." aria-label="Genetic data">'+HELIX+'</a>';
     return o}
   function camBtn(k,list){PH[k]=list;var one=list.length===1;
     return '<a class="cam" href="'+(one?esc(list[0].url):'#')+'"'+(one?' target="_blank" rel="noopener"':' data-photos="'+k+'"')+' title="'+(one?esc(list[0].author)+': '+esc(list[0].title)+'. Opens in a new tab.':list.length+' photos. Click to choose one.')+'" aria-label="'+list.length+(one?' photo':' photos')+'">'+CAM+(one?'':'<b class="cnt">'+list.length+'</b>')+'</a>'}
@@ -1044,7 +1044,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     if(ph){ev.preventDefault();var pp=$('photopop');if(!pp.hidden&&pp.dataset.for===ph.dataset.photos){pp.hidden=true;return}pp.dataset.for=ph.dataset.photos;showPhotoPop(ph);return}
     if(!(t.closest&&t.closest('#photopop')))$('photopop').hidden=true;
     var an=t.closest&&t.closest('[data-anc]');
-    if(an){ev.preventDefault();var k=Number(an.dataset.anc);if(k!==1)DogAPI.openAncestor(S.dog.id,k).then(function(r){return goTo(r.dogId)}).catch(function(e){say(e&&e.message)});return}
+    if(an){ev.preventDefault();var k=Number(an.dataset.anc);if(k===1){var gt=an.dataset.gotoTab;if(gt){var tb=document.querySelector('[data-tab="'+gt+'"]');if(tb)tb.click();var sc=$('tab-'+gt);if(sc)sc.scrollIntoView({behavior:'smooth'})}return}DogAPI.openAncestor(S.dog.id,k).then(function(r){return goTo(r.dogId)}).catch(function(e){say(e&&e.message)});return}
     if(t.dataset.back){ev.preventDefault();var pv=NAV.pop();if(pv)goTo(pv.id,true);return}
     if(t.dataset.unclaim){if(!confirm('Give up the claim on this dog? The dog and its page stay; only the claim is removed.'))return;run(DogAPI.unclaimDog(S.dog.id));return}
     if(t.dataset.fillped){t.disabled=true;window.scrollTo({top:0,behavior:'smooth'});autoFind(S.dog.registered).then(function(){t.disabled=false});return}

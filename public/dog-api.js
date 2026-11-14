@@ -667,9 +667,8 @@
           hn = idsOf(did).filter(function (i) { return i.registry === 'OFA' || i.registry === 'CHIC'; }).length;
           claims.forEach(function (c) {
             if (c.dog !== did || c.status !== 'visible') return;
-            if (c.type === 'test') hn++;
             if (c.type === 'screens') hn += String(c.value).split(', ').length;
-            if (c.type === 'link' && (/VGL|AKC DNA|Embark|Wisdom|sequence/i.test(c.name) || (c.name === 'DNA test' && c.value !== 'pending'))) dn++;
+            if (c.type === 'link' && (/Embark|Wisdom|sequence/i.test(c.name) || (c.name === 'DNA test' && c.value !== 'pending'))) dn++;
           });
         }
         out[k] = [e[0], e[1], rr, list, { health: hn, dna: dn }];
