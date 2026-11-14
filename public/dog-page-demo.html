@@ -539,7 +539,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   function load(id){
     return DogAPI.getDog(id).then(function(s){S=s;return DogAPI.getPedigree(id,8).then(function(p){PED={nodes:p.nodes,error:null}},function(e){PED={nodes:null,error:e}})}).then(function(){editing=null;hideHome();$('landing').hidden=true;$('dogview').hidden=false;renderAll();renderGalaxy()}).catch(function(e){say(e&&e.message?e.message:'That dog could not be loaded.')});
   }
-  function reload(){return DogAPI.getDog(S.dog.id).then(function(s){S=s;renderAll()})}
+  function reload(){var id=S.dog.id;return DogAPI.getDog(id).then(function(s){S=s;return DogAPI.getPedigree(id,8).then(function(p){PED={nodes:p.nodes,error:null}},function(e){PED={nodes:null,error:e}})}).then(function(){renderAll()})}   // the pedigree too, so a number or ancestors added a moment ago show at once
   function goTo(id,back){$('findpanel').innerHTML='';
     id=idArg(id);
     if(!back&&S&&id!==S.dog.id){NAV.push({id:S.dog.id,label:labelOf(S.dog)});if(NAV.length>30)NAV.shift()}
@@ -817,6 +817,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     var t=esc(name)+(openable?' – open this dog\'s page':'');
     return '<a class="nm" data-anc="'+k+'" title="'+t+'" href="#">'+esc(name)+'</a>';
   }
+  var fillTried={};
   function renderPed(){
     var D=Number($('gens').value),rows=1<<D,grid=$('pedgrid'),P=PED.nodes;
     $('pednote').textContent='';
@@ -824,6 +825,8 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     if(PED.error){msg(PED.error.code==='login_required'?'Sign in to see names in the pedigree.':esc(PED.error.message||'The pedigree could not be loaded.'));return}
     if(!P||!P[1]){
       var canFill=S.perm&&S.perm.canAdd&&S.dog.registered&&DogAPI.remote&&DogAPI.remote();
+      // the server fills it in from the private network when it is sure which dog this is (once per dog per visit); otherwise the button below is the way
+      if(canFill&&!fillTried[S.dog.id]){fillTried[S.dog.id]=1;var fid=S.dog.id;DogAPI.fillPedigree(fid).then(function(r){if(r&&r.attached&&S&&S.dog.id===fid)return reload()}).catch(function(){})}
       msg(canFill?'No pedigree has been added for this dog yet. <button class="sm primary" type="button" data-fillped="1">Look up its ancestors</button>':(S.dog.inGalaxy?'The map above knows this dog\'s ancestry but not the names, so there is no pedigree to draw yet.':'No pedigree data for this dog yet.'));return}
     if(window.matchMedia&&matchMedia('(max-width:640px)').matches){
       // phones: an indented outline, one dog per row, instead of a sideways-scrolling chart

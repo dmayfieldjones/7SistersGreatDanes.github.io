@@ -33,7 +33,7 @@ a{color:var(--ink)}
 </head>
 <body>
 <main>
-<a class="back" href="/dog-page-demo.html">&larr; Back to GDGalaxy</a>
+<a class="back" id="backlink" href="/dog-page-demo.html">&larr; Back to GDGalaxy</a>
 <h1>When databases disagree</h1>
 <p class="meta">Updated November 13, 2026 &middot; One real example of how GDGalaxy marks a disagreement.</p>
 
@@ -60,5 +60,11 @@ a{color:var(--ink)}
 <h2>Where this one stands</h2>
 <p>The sire is still open. Apache War Dance may be a real dog that DANES World left out, or an extra generation in the other two. A Kennel Club registration or the breeder would settle it. Flags are raised by members for now; automatic comparison across databases is planned.</p>
 </main>
+<script>
+// Came from GDGalaxy: go back a step instead of adding a new history entry, so the browser's Back button does not loop between the two pages
+document.getElementById('backlink').addEventListener('click',function(e){
+  try{if(document.referrer&&new URL(document.referrer).pathname.indexOf('dog-page-demo.html')>-1&&history.length>1){e.preventDefault();history.back()}}catch(x){}
+});
+</script>
 </body>
 </html>

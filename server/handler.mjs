@@ -13,7 +13,7 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 
 // The calls a browser may make. Anything else (setActor, useLogin, importState, ...) does not exist as far as the outside world goes.
 export const METHODS = new Set([
-  'session', 'authors', 'lookup', 'find', 'lookupByName', 'findExternal', 'importExternal', 'addIdentifier', 'raiseDiff', 'agreeDiff', 'resolveDiff', 'reopenDiff', 'openDiffs', 'activityReport', 'ourDogs', 'confirmDog', 'claimDog', 'setVisibility', 'noteGalaxy', 'getDog', 'getPedigree',
+  'session', 'authors', 'lookup', 'find', 'lookupByName', 'findExternal', 'importExternal', 'addIdentifier', 'raiseDiff', 'agreeDiff', 'resolveDiff', 'reopenDiff', 'openDiffs', 'activityReport', 'fillPedigree', 'ourDogs', 'confirmDog', 'claimDog', 'setVisibility', 'noteGalaxy', 'getDog', 'getPedigree',
   'openAncestor', 'saveFact', 'addRecord', 'flagClaim', 'correctClaim', 'hideClaim', 'suggestCategory',
   'wanted', 'markAdded', 'accountRequests', 'decideRequest', 'actionLog',
 ]);
@@ -122,6 +122,18 @@ export function makeHandler({ store, verify, dataDir = join(HERE, '..', 'public'
         let rows;
         try { rows = await external(q); } catch { return error('unavailable', 'DANES World could not be reached just now. Open the searches below yourself.', 503); }
         return reply(200, { ok: true, result: { choices: await transact((a) => a.stashCandidates(rows)) } });
+      }
+      if (req.method === 'fillPedigree') {
+        // A page with no pedigree is filled in from our private network when the network has exactly one dog it could be: the same name, a
+        // compatible sex, and the same birth year when both know it. Nothing is guessed; an unclear match is left for the member to confirm.
+        if (!network) return reply(200, { ok: true, result: { attached: false } });
+        const need = await transact((a) => a.pedigreeNeed(args[0]));
+        if (!need.needs) return reply(200, { ok: true, result: { attached: false } });
+        const yr = /^\d{4}/.test(need.born) ? need.born.slice(0, 4) : '';
+        const hits = network.search(need.name).filter((c) => (!need.sex || !c.sex || c.sex === need.sex) && (!yr || !c.born || c.born.slice(0, 4) === yr));
+        if (hits.length !== 1) return reply(200, { ok: true, result: { attached: false } });
+        const ped = network.pedigree(hits[0].netId);
+        return reply(200, { ok: true, result: await transact((a) => a.attachPedigree(args[0], ped)) });
       }
       if (req.method === 'importExternal') {
         // Confirming a dog: one more request to the same site for its pedigree, so its ancestors come with it. If that fails the dog is still

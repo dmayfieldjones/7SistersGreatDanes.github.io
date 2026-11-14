@@ -303,10 +303,27 @@
     place(ped, sire, 2); place(ped, dam, 3);
     return ped;
   }
+  // the ancestors another source lists ({2: {name, color, registry, number}, ...}) in the page's own pedigree shape, rooted at dog d
+  function pedFromExternal(d, ped) {
+    var born = (claims.filter(function (x) { return x.dog === d.id && x.name === 'Whelp date' && x.status === 'visible'; })[0] || {}).value || '';
+    var P = { 1: [titled(d) || d.short, (primaryReg(d.id) || '') + ' \u00b7 ' + (d.color || '') + ' \u00b7 ' + (d.sex === 'female' ? 'F' : d.sex === 'male' ? 'M' : '') + ' \u00b7 ' + born] };
+    Object.keys(ped || {}).forEach(function (k) {
+      var v = ped[k]; k = Number(k);
+      if (!(k >= 2 && k <= 63) || !v || !v.name) return;
+      P[k] = [String(v.name).slice(0, 120), regLabel(v.registry, v.number).slice(0, 30) + ' \u00b7 ' + String(v.color || '').slice(0, 20) + ' \u00b7 ' + (k % 2 ? 'F' : 'M') + ' \u00b7 '];
+    });
+    return P;
+  }
   function pedOf(dogId) {
     if (!priv.peds[dogId] && dogs[dogId] && dogs[dogId].ped) priv.peds[dogId] = dogs[dogId].ped;   // a dog added from another database keeps its own pedigree
     if (!priv.peds[dogId]) { var b = buildPed(dogId); if (b) priv.peds[dogId] = b; }
     return priv.peds[dogId] || {};
+  }
+  // who added the pedigree this page draws from: the page's own record, or the page it was opened from (an ancestor's page inherits it)
+  function pedSourceOf(dogId) {
+    var d = dogs[dogId];
+    for (var i = 0; d && i < 12; i++) { if (d.pedFrom) return d.pedFrom; d = d.origin ? dogs[d.origin.dog] : null; }
+    return null;
   }
   function parentsOf(dogId) {
     var d = dogs[dogId], L = d && litters[d.litter], out = [];
@@ -320,7 +337,7 @@
     [[2, 'Sire'], [3, 'Dam']].forEach(function (x) {
       if (!P[x[0]]) return;
       var e = P[x[0]], sp = splitTitle(e[0]);
-      row(x[1], { name: sp.name, title: sp.title, reg: regOf(e[1].split(' · ')[0]) }, x[0], d.pedFrom ? d.pedFrom.author : 3, d.pedFrom ? d.pedFrom.src : 'pedigree data');
+      row(x[1], { name: sp.name, title: sp.title, reg: regOf(e[1].split(' · ')[0]) }, x[0], (pedSourceOf(dogId) || { author: 3 }).author, (pedSourceOf(dogId) || { src: 'pedigree data' }).src);
     });
     return { rows: out, restricted: false };
   }
@@ -487,15 +504,7 @@
       var reg = regKey(c.registry, c.number), ex = reg ? dogByNumber(reg) : null;
       var sp = splitTitle(c.name), name = sp.name || c.name, nk = normName(name);
       if (ex === null) { var same = Object.keys(dogs).filter(function (k) { return (dogs[k].nameKey || '').split('#')[0] === nk && (!c.sex || !dogs[k].sex || dogs[k].sex === c.sex); }); if (same.length === 1 && (!reg || idsOf(same[0]).length === 0)) ex = same[0]; }   // a dog we only knew by name is the same dog; a number found now is added to it
-      var pedOut = function (d) {
-        var P = { 1: [titled(d) || d.short, (primaryReg(d.id) || '') + ' \u00b7 ' + (d.color || '') + ' \u00b7 ' + (d.sex === 'female' ? 'F' : d.sex === 'male' ? 'M' : '') + ' \u00b7 ' + ((claims.filter(function (x) { return x.dog === d.id && x.name === 'Whelp date' && x.status === 'visible'; })[0] || {}).value || '')] };
-        Object.keys(ped || {}).forEach(function (k) {
-          var v = ped[k]; k = Number(k);
-          if (!(k >= 2 && k <= 63) || !v || !v.name) return;
-          P[k] = [String(v.name).slice(0, 120), regLabel(v.registry, v.number).slice(0, 30) + ' \u00b7 ' + String(v.color || '').slice(0, 20) + ' \u00b7 ' + (k % 2 ? 'F' : 'M') + ' \u00b7 '];
-        });
-        return P;
-      };
+      var pedOut = function (d) { return pedFromExternal(d, ped); };
       if (ex !== null) {
         // the dog is already here: add the number we have just learned, and if it has no pedigree yet, give it this one
         if (reg && !dogByNumber(reg)) identifiers.push({ dog: ex, registry: registryFrom(regLabel(c.registry, c.number)), number: reg, author: actorId === 0 ? 1 : actorId, date: NOW() });
@@ -577,6 +586,25 @@
     openDiffs: function () {
       var g = needMember(); if (g) return g;
       return Promise.resolve(diffs.filter(function (x) { return x.status === 'open'; }).map(function (x) { var d = dogs[x.dog] || {}; var o = diffView(x); o.dogName = titled(d) || d.short || String(x.dog); return o; }).sort(function (a, b) { return Math.max.apply(null, a.counts) - Math.max.apply(null, b.counts); }));
+    },
+    // ---- a page with no pedigree fills itself in from the private network, with no button to press ----
+    fillPedigree: function () { return fail('unavailable', 'Needs the server.'); },
+    // server only: does this dog's page lack a pedigree, and what do we know about the dog (so the server can look for it)
+    pedigreeNeed: function (dogId) {
+      var g = needMember(); if (g) return g;
+      var d = dogs[dogId]; if (!d) return fail('not_found', 'No such dog.');
+      var born = (claims.filter(function (x) { return x.dog === dogId && x.name === 'Whelp date' && x.status === 'visible'; })[0] || {}).value || '';
+      var has = !d.generated && Object.keys(pedOf(dogId)).length > 1;
+      return Promise.resolve({ needs: !has && !d.generated && !!d.registered, name: d.registered || '', sex: d.sex || '', born: born });
+    },
+    // server only: give a dog the ancestors the network lists, if it still has none
+    attachPedigree: function (dogId, ped) {
+      var g = needMember(); if (g) return g;
+      var d = dogs[dogId]; if (!d) return fail('not_found', 'No such dog.');
+      if (!ped || !Object.keys(ped).length || d.generated || Object.keys(pedOf(dogId)).length > 1) return Promise.resolve({ attached: false });
+      d.ped = pedFromExternal(d, ped); d.pedFrom = { src: 'network pedigree', author: actorId === 0 ? 1 : actorId };
+      act('dog', dogId, 'Added ancestors to ' + (d.registered || 'a dog'));
+      return Promise.resolve({ attached: true });
     },
     noteGalaxy: function (dogId, inGalaxy) {
       var d = dogs[dogId]; if (!d) return fail('not_found', 'No such dog.');

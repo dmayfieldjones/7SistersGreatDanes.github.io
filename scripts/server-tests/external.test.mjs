@@ -253,3 +253,61 @@ test('network searches also have a daily cap, and another member is not affected
     assert.equal((await call(h, 'findExternal', [{ q: 'Test Sire' }], alice())).ok, true);
   } finally { Date.now = realNow; }
 });
+
+// ---- a page with no pedigree fills itself in from the network ----
+const TWINS = makeNetwork([[
+  '1|Zorros Test Pup |2015-03-04|2|3|||WS12345601|Fawn|M',
+  '2|Test Sire |2010-01-01|||||WS12345602|Fawn|M',
+  '3|Test Dam |2011-02-02|||||KC 98765|Black|F',
+  '7|Twin Dog |1990-01-01|2|3|||WS12345607|Fawn|M',
+  '8|Twin Dog |2001-01-01|2|3|||WS12345608|Fawn|M',
+].join('\n')]);
+const lateNet = (net) => { const f = { on: false }; return { f, net: { size: net.size, search: (q) => net.search(q), pedigree: (id) => (f.on ? net.pedigree(id) : null) } }; };
+
+test('a page added with no ancestors fills itself in, once the network can supply them, without a button', async () => {
+  const { f, net } = lateNet(TWINS), store = memoryStore(), t = alice();
+  const h = fresh(store, { network: net, external: asked, externalPedigree });
+  const c = await call(h, 'findExternal', [{ q: 'Zorros Test Pup' }], t);
+  const id = (await call(h, 'importExternal', [c.result.choices[0].token], t)).result.dogId;
+  assert.equal((await call(h, 'getDog', [id], t)).result.perm.hasPedigree, false);
+  f.on = true;
+  const r = await call(h, 'fillPedigree', [id], t);
+  assert.equal(r.ok, true); assert.equal(r.result.attached, true);
+  const d = await call(h, 'getDog', [id], t);
+  assert.equal(d.result.perm.hasPedigree, true);
+  assert.deepEqual((await call(h, 'fillPedigree', [id], t)).result, { attached: false });   // it never overwrites
+  assert.ok((await call(h, 'activityReport', [], member('dmj', 'Admin'))).result.feed.some((x) => /Added ancestors/.test(x.text)));
+});
+test('filling in is refused for a visitor and skipped when the network cannot tell which dog it is', async () => {
+  const { f, net } = lateNet(TWINS), store = memoryStore(), t = alice();
+  const h = fresh(store, { network: net, external: asked, externalPedigree });
+  assert.equal((await call(h, 'fillPedigree', [412])).status, 401);
+  // two dogs share a name: with no birth year on the page the network will not guess; with the right year it picks the right one
+  const row = (born) => ({ name: 'Twin Dog', sex: 'male', color: '', born, registry: '', number: '', sire: '', dam: '', siteId: '' });
+  const twinPage = async (born) => {
+    const hh = fresh(memoryStore(), { network: net, external: async () => [row(born)], externalPedigree });
+    const c = await call(hh, 'findExternal', [{ q: 'Zzz Not In Network ' + born }], t);
+    const id = (await call(hh, 'importExternal', [c.result.choices[0].token], t)).result.dogId;
+    return { hh, id };
+  };
+  f.on = true;
+  const none = await twinPage('');
+  assert.equal((await call(none.hh, 'fillPedigree', [none.id], t)).result.attached, false);
+  const yr = await twinPage('2001-01-01');
+  assert.equal((await call(yr.hh, 'fillPedigree', [yr.id], t)).result.attached, true);
+  const nodes = (await call(yr.hh, 'getPedigree', [yr.id, 8], t)).result.nodes;
+  assert.equal(nodes[2][0], 'Test Sire');
+});
+
+test('an ancestor\'s page credits the member and source that added the pedigree, not the generic importer', async () => {
+  const h = fresh(memoryStore(), { network: NET, external: asked, externalPedigree }), t = alice();
+  const c = await call(h, 'findExternal', [{ q: 'Zorros Test Pup' }], t);
+  const id = (await call(h, 'importExternal', [c.result.choices[0].token], t)).result.dogId;
+  const sire = (await call(h, 'openAncestor', [id, 2], t)).result.dogId;                 // click the sire
+  const rows = (await call(h, 'getDog', [sire], t)).result.parents.filter((x) => x.role === 'Sire' || x.role === 'Dam');
+  assert.ok(rows.length >= 1);
+  assert.ok(rows.every((x) => x.src === 'network pedigree' && x.author >= 100), JSON.stringify(rows.map((x) => [x.src, x.author])));
+  const grand = (await call(h, 'openAncestor', [sire, 2], t)).result;                    // and one more step back: still credited to the same member
+  assert.ok(grand.dogId);
+  assert.equal((await call(h, 'authors', [], t)).result[rows[0].author].name, 'Alice Example');
+});
