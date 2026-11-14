@@ -93,7 +93,7 @@ test('calls the browser must never make do not exist', async () => {
 
 test('claiming a dog, choosing who sees it, and who else may change that', async () => {
   const h = fresh();
-  const sam = member('sam', 'Sam Quinn'), kit = member('kit', 'Kit Lee');
+  const sam = member('sam', 'Sam Quinn'), kit = member('kit', 'Kit Lee'), admin = member('dmj', 'Admin Person');
   const mia = (await call(h, 'getDog', [413], sam)).result;
   assert.equal(mia.perm.canClaim, false, 'Mia is already claimed by us');
   assert.equal((await call(h, 'claimDog', [413], sam)).status, 403, 'and cannot be claimed over');
@@ -102,10 +102,11 @@ test('claiming a dog, choosing who sees it, and who else may change that', async
   assert.equal((await call(h, 'claimDog', [found.dogId], sam)).ok, true);
   assert.equal((await call(h, 'claimDog', [found.dogId], kit)).status, 403, 'someone else cannot claim a claimed dog');
   assert.equal((await call(h, 'setVisibility', [found.dogId, 'public'], kit)).status, 403);
-  assert.equal((await call(h, 'getDog', [found.dogId])).status, 401, 'members-only until the owner shares it');
-  assert.equal((await call(h, 'setVisibility', [found.dogId, 'public'], sam)).ok, true);
+  assert.equal((await call(h, 'setVisibility', [found.dogId, 'public'], sam)).status, 403, 'a claim is not verified, so the claimant does not decide who sees the dog');
+  assert.equal((await call(h, 'getDog', [found.dogId])).status, 401, 'members-only until the administrator opens it');
+  assert.equal((await call(h, 'setVisibility', [found.dogId, 'public'], admin)).ok, true);
   assert.equal((await call(h, 'getDog', [found.dogId])).ok, true, 'a visitor can now see it');
-  assert.equal((await call(h, 'setVisibility', [found.dogId, 'bogus'], sam)).status, 400);
+  assert.equal((await call(h, 'setVisibility', [found.dogId, 'bogus'], admin)).status, 400);
 });
 
 test('health results (grades) are entered only by the owner; anyone may mark which screens exist', async () => {

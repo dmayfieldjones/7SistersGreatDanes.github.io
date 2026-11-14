@@ -173,7 +173,8 @@ let pass=0,fail=0;const ok=(c,m)=>{if(c){pass++}else{fail++;console.log('  FAIL:
  ok(d.querySelectorAll('#parents a[data-anc]').length>=1,"the other parent is not linked to a page a visitor cannot open");
  ok(!d.getElementById('vis'),'a visitor has no visibility control');
  await find('WS11111111');ok(/not a 7Sisters dog.*Sign in/.test(T('findpanel')),'the search box tells a visitor to sign in');
- await actAs(2);await find('WS81418801');ok(!!d.getElementById('vis')&&d.getElementById('vis').value==='public','the claiming member sees the control, set to public');
+ await actAs(2);await find('WS81418801');ok(!d.getElementById('vis'),'the claiming member sees no visibility control: a claim is not verified, so only the administrator decides');
+ await actAs(0);await find('WS81418801');ok(!!d.getElementById('vis')&&d.getElementById('vis').value==='public','the administrator sees the control, set to public');
  d.getElementById('vis').value='members';d.getElementById('vis').dispatchEvent(new w.Event('change',{bubbles:true}));await wait(500);
  await actAs('v');await API.getDog(413).then(()=>ok(false,'hidden dog should refuse a visitor'),e=>ok(e.code==='login_required','a dog set to members-only is closed to visitors'));
  await API.getPedigree(413).then(()=>ok(false,'visitor pedigree of a members-only dog refused'),e=>ok(e.code==='login_required','a visitor cannot get the pedigree of a dog that is not public'));
@@ -181,7 +182,8 @@ let pass=0,fail=0;const ok=(c,m)=>{if(c){pass++}else{fail++;console.log('  FAIL:
  await find('WS69691106');ok(![...d.querySelectorAll('#offspring button')].some(b=>/Mia/.test(b.textContent))&&[...d.querySelectorAll('#offspring button')].some(b=>/Heart Of Gold/.test(b.textContent)),"a members-only dog drops out of its parent's offspring list for visitors");
  await API.setVisibility(413,'public').then(()=>ok(false,'visitor setVisibility refused'),e=>ok(e.code==='login_required','a visitor cannot change visibility'));
  await API.setActor(9);await API.setVisibility(413,'public').then(()=>ok(false,'non-claimant refused'),e=>ok(e.code==='forbidden','a member who did not claim the dog cannot change who sees it'));
- await API.setActor(2);await API.setVisibility(413,'bogus').then(()=>ok(false,'bad value refused'),e=>ok(e.code==='invalid','an unknown visibility value is refused'));
+ await API.setActor(2);await API.setVisibility(413,'public').then(()=>ok(false,'claimant refused'),e=>ok(e.code==='forbidden','the member who claimed the dog cannot change who sees it'));
+ await API.setActor(0);await API.setVisibility(413,'bogus').then(()=>ok(false,'bad value refused'),e=>ok(e.code==='invalid','an unknown visibility value is refused'));
  await API.setVisibility(413,'public');await API.setActor(null);await API.getDog(413).then(()=>ok(true),()=>ok(false,'public again should open'));
  await API.setActor(0);await API.setVisibility(413,'members');await API.setVisibility(413,'public');ok(true,'an administrator can change it too');
  await API.setActor(null);

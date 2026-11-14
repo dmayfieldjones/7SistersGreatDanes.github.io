@@ -27,7 +27,8 @@
  *   ourDogs()                       the public dogs grouped for the "Our dogs" list: the foundation bitch, then each litter
  *   confirmDog(dogId)               a member confirms the name, number and birth date on a page that was filled in automatically; says nothing about owning or breeding the dog
  *   claimDog(dogId)                 a member says "this dog is mine" (only while it is unclaimed); the dog starts members-only and its owner can then make it public
- *   setVisibility(dogId, v)         'public' (everyone with the code) or 'members' (signed in only): the member who claimed the dog, or an administrator
+ *   setVisibility(dogId, v)         'public' (everyone with the code) or 'members' (signed in only): administrator only (a claim is not verified, so it does not decide this)
+ *   unclaimDog(dogId)               give up a claim: the member who made it, or an administrator
  *   noteGalaxy(dogId, inGalaxy)     the page reports whether the galaxy file has the dog; the server updates the stub and the wanted list
  *   getDog(dogId)                   everything the page needs about one dog, with per-record permissions already worked out
  *   getPedigree(dogId, gens)        names and numbers for the pedigree: anyone for a public dog, otherwise members only
@@ -259,7 +260,10 @@
     var c = claimOf(dogId);
     return !!(c && people[c.value] && people[c.value].member === authorOf(actorId));
   }
-  function canSetVisibility(dogId) {
+  // Who sees a dog (everyone with the code, or signed-in members) is the administrator's to set. A claim is not verified, so it does not decide that.
+  function canSetVisibility(dogId) { return isMember() && isAdmin(); }
+  // The member who claimed a dog, or the administrator: may give the claim up
+  function canManageClaim(dogId) {
     if (!isMember()) return false;
     if (isAdmin()) return true;
     var c = claims.filter(function (x) { return x.dog === dogId && x.type === 'claim' && x.status === 'visible'; })[0];
@@ -637,7 +641,7 @@
         // Option 2: a visitor sees other people (breeders, co-owners who are not members) only in short form; members see full names.
         people: peopleFor(),
         diffs: diffs.filter(function (x) { return x.dog === dogId; }).map(diffView),
-        perm: { loggedIn: isMember(), canAdd: isMember(), isAdmin: isAdmin(), canSetVisibility: canSetVisibility(dogId), canClaim: isMember() && !claimOf(dogId), canUnclaim: !!claimOf(dogId) && canSetVisibility(dogId), canEnterResults: canEnterResults(dogId), hasPedigree: Object.keys(pedOf(dogId)).length > 1 }
+        perm: { loggedIn: isMember(), canAdd: isMember(), isAdmin: isAdmin(), canSetVisibility: canSetVisibility(dogId), canClaim: isMember() && !claimOf(dogId), canUnclaim: !!claimOf(dogId) && canManageClaim(dogId), canEnterResults: canEnterResults(dogId), hasPedigree: Object.keys(pedOf(dogId)).length > 1 }
       };
       return Promise.resolve(snap);
     },
@@ -801,7 +805,7 @@
       var g = needMember(); if (g) return g;
       var d = dogs[dogId]; if (!d) return fail('not_found', 'No such dog.');
       var c = claimOf(dogId); if (!c) return Promise.resolve({ ok: true });
-      if (!canSetVisibility(dogId)) return fail('forbidden', 'Only the member who claimed this dog, or an administrator, can give up the claim.');
+      if (!canManageClaim(dogId)) return fail('forbidden', 'Only the member who claimed this dog, or an administrator, can give up the claim.');
       c.status = 'withdrawn'; c.withdrawn = { date: NOW(), author: authorOf(actorId) };
       act('claim', dogId, 'Gave up the claim on this dog');
       logAction((((authors[authorOf(actorId)] || {}).name) || actorId) + ' gave up the claim on ' + (d.call || d.registered || primaryReg(dogId) || 'a dog'));
@@ -811,7 +815,7 @@
       var g = needMember(); if (g) return g;
       var d = dogs[dogId]; if (!d) return fail('not_found', 'No such dog.');
       if (v !== 'public' && v !== 'members') return fail('invalid', 'Choose who can see this dog.');
-      if (!canSetVisibility(dogId)) return fail('forbidden', 'Only the member who claimed this dog, or an administrator, can change who sees it.');
+      if (!canSetVisibility(dogId)) return fail('forbidden', 'Only an administrator can change who sees a dog.');
       d.visibility = v; act('claim', dogId, 'Set visibility to ' + v); logAction('Visibility of ' + (d.call || d.registered) + ' set to ' + v + ' by ' + ((authors[actorId] || {}).name || actorId));
       return Promise.resolve({ ok: true });
     },
