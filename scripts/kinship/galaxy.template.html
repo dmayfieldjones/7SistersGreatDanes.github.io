@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
 <title>The Great Dane Galaxy | 7Sisters Farm</title>
+<link rel="preload" href="/data/galaxy-core.json" as="fetch" crossorigin>
 <script src="/private-gate.js" data-key="breed-galaxy" data-codes="1887"></script>
 <script src="/project-nav.js" data-current="galaxy" defer></script>
 <style>
@@ -91,6 +92,7 @@ h1{font-size:1.5rem;margin:0 0 2px;letter-spacing:.01em}
   <p class="sub">Every connected dog in the pedigree file, about <span id="total"></span> of them, from the 1880s to the 2020s. Each dot is one dog and each thread joins a dog to its parents, so every filament is a line of descent. Press play to watch the breed grow, or click any dog to light up everything it came from and everything it gave rise to.</p>
   <div class="stage" id="stage">
     <canvas id="gl"></canvas>
+    <div id="ld" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--ink2)">Loading the pedigree&hellip;</div>
     <canvas id="ov"></canvas>
     <div class="read"><div class="yr" id="yr">1880</div><div class="n" id="rn"></div><div class="f" id="rf"></div></div>
     <div class="card" id="card"></div>
@@ -147,19 +149,23 @@ h1{font-size:1.5rem;margin:0 0 2px;letter-spacing:.01em}
   <p class="notes"><b>How to read it.</b> Position comes from a force layout of the whole pedigree: dogs that share many ancestors end up near each other, so the axes mean nothing and only distance does. The oldest dogs (amber in Era view) sit along the right edge. About <span id="imp"></span> of dogs have no recorded birth year; theirs is estimated from their parents and offspring, and the tooltip says so. After about 2020 the records thin out, so the later years hold only our own litters and their ancestors. Inbreeding is the 10-generation figure and is lower for early dogs only because their pedigrees are shorter. About <span id="left"></span> of the file sits in small disconnected pedigrees and is left out. The page holds no dog names or registration numbers; kennel names are matched from registered names and stored only as which dogs carry them.</p>
 </div>
 <script>
-const DATA=/*DATA*/null
-</script>
-<script>
-(function(){
+(async function(){
 'use strict'
 const $=id=>document.getElementById(id)
+// The data lives in two JSON files so the page itself is small. The core file draws the map; the extra file
+// (dog-number fingerprints and kennel member lists) is only needed for search and kennel picks, so it loads later.
+let DATA
+try{DATA=await fetch('/data/galaxy-core.json').then(r=>{if(!r.ok)throw 0;return r.json()})}
+catch(e){$('ld').textContent='The pedigree data did not load. Reload the page to try again.';return}
+$('ld').remove()
+let EX=null,exP=null,RH=null
+const loadExtra=()=>exP||(exP=fetch('/data/galaxy-extra.json').then(r=>r.json()).then(j=>{EX=j;RH=j.rh?unb(j.rh,Uint32Array):null;return j}))
 const N=DATA.n,Y0=DATA.y0,ASPECT=DATA.aspect
 const unb=(s,T)=>{const b=atob(s),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return new T(u.buffer)}
 const qx=unb(DATA.x,Uint16Array),qy=unb(DATA.y,Uint16Array),yrs=unb(DATA.yr,Uint8Array),meta=unb(DATA.meta,Uint8Array),f8=unb(DATA.f,Uint8Array)
 const sire=unb(DATA.sire,Int32Array),dam=unb(DATA.dam,Int32Array)
 const px=new Float32Array(N),py=new Float32Array(N),year=new Float32Array(N)
 for(let i=0;i<N;i++){px[i]=qx[i]/65535;py[i]=qy[i]/65535;year[i]=yrs[i]+Y0}
-const RH=DATA.rh?unb(DATA.rh,Uint32Array):null
 const fnv=s=>{let h=0x811c9dc5;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,0x01000193)}return h>>>0}
 const CL=unb(DATA.cl,Uint8Array),CS=DATA.cs.map(([name,n,med,share],i)=>({name:name||('Group '+(i+1)),named:!!name,n,med,share,i}))
 const NC=CS.length
@@ -213,8 +219,8 @@ const COATSEL=new Set()   // coat categories picked in the legend; empty = all
 
 // --- kennels ---
 const KCOL=['#ffd166','#4de1ff','#ff5fd2','#8aff6a']
-const KN=DATA.kn.map(([name,med,cur,n,b])=>({name,med,cur,n,b,rows:null}))
-const rowsOf=k=>k.rows||(k.rows=unb(k.b,Int32Array))
+const KN=DATA.kn.map(([name,med,cur,n],i)=>({name,med,cur,n,i,rows:null}))
+const rowsOf=k=>k.rows||(k.rows=unb(EX.kb[k.i],Int32Array))   // only after loadExtra()
 let SEL=[]
 const pct=(a,p)=>a[Math.min(a.length-1,Math.floor(p*a.length))]
 function kstats(k){
@@ -230,7 +236,8 @@ function renderSel(){
   for(const c of document.querySelectorAll('.chip')){const s=SEL.find(x=>x.i===+c.dataset.i);c.setAttribute('aria-pressed',!!s);if(s){c.style.background=s.col;c.style.borderColor=s.col}}
   const kd=$('ksearch');kd.placeholder=SEL.length?'Add another kennel':'Search '+KN.length.toLocaleString()+' kennels'
 }
-function toggleK(i){
+async function toggleK(i){
+  if(!EX)await loadExtra()
   const at=SEL.findIndex(s=>s.i===i)
   if(at>=0)SEL.splice(at,1)
   else{if(SEL.length>=4)SEL.shift();const used=SEL.map(s=>s.col),col=KCOL.find(c=>!used.includes(c));SEL.push({i,k:KN[i],col,st:kstats(KN[i])})}
@@ -402,9 +409,9 @@ function pick(mx,my){
 // --- find a dog by registration number ---
 // The page holds only a short hash of each number, so this finds a dog you already know the number of.
 function locate(i){if(year[i]>cur)setYear(Math.ceil(year[i]));K=14;const s=S();TX=W/2-px[i]*s;TY=H/2-py[i]*ASPECT*s;traceFrom(i)}
-if(!RH)$('dogform').style.display='none'
-else $('dogform').addEventListener('submit',e=>{e.preventDefault()
+$('dogform').addEventListener('submit',async e=>{e.preventDefault()
   const q=$('dogq').value.toUpperCase().replace(/[^A-Z0-9]/g,''),msg=$('dogmsg');if(!q){msg.textContent='';return}
+  await loadExtra();if(!RH){msg.textContent='Dog search is not available in this file.';return}
   const h=fnv(q),hits=[];for(let i=0;i<N;i++)if(RH[i]===h)hits.push(i)
   if(!hits.length){msg.textContent='No dog with that number in this file.';return}
   msg.textContent=hits.length>1?hits.length+' records share that number; showing the first. Check its birth year.':''
@@ -482,11 +489,12 @@ addEventListener('resize',()=>{reset();spark()})
  $('m-sweep').innerHTML=sw.map(r=>`<li>Setting ${r.resolution}: ${r.groups} groups, modularity ${r.modularity.toFixed(3)}${r===b?' <b>(best)</b>':''}</li>`).join('')}
 reset();setMode('con');spark();readout()
 requestAnimationFrame(()=>{reset();setMode(mode);requestAnimationFrame(()=>draw())})
+setTimeout(loadExtra,2500)   // fetch search and kennel data once the map is up, so the first search is instant
 document.addEventListener('visibilitychange',()=>{if(!document.hidden){last=performance.now();draw()}})
 if(!matchMedia('(prefers-reduced-motion: reduce)').matches){cur=MINY;pg=0;scrub.value=cur;playing=true;flash=1;$('play').textContent='Pause';last=performance.now();setTimeout(()=>{last=performance.now();requestAnimationFrame(tick)},900)}
 else setYear(MAXY)
 // deep link from a dog page: breed-galaxy.html#dog=<registration number>
-{const m=/[#&]dog=([^&]+)/.exec(location.hash);if(m&&RH){playing=false;$('play').textContent='Play';setYear(MAXY);$('dogq').value=decodeURIComponent(m[1]);$('dogform').dispatchEvent(new Event('submit',{cancelable:true}))}}
+{const m=/[#&]dog=([^&]+)/.exec(location.hash);if(m){playing=false;$('play').textContent='Play';setYear(MAXY);$('dogq').value=decodeURIComponent(m[1]);$('dogform').dispatchEvent(new Event('submit',{cancelable:true}))}}
 })()
 </script>
 </body>

@@ -196,12 +196,17 @@ def main():
         cs.append([cnames[c], len(r), int(np.median(yrk[r])), round(100 * cshare[c])])
         log(f'  constellation {c + 1}: {cs[-1]}')
     b64 = lambda x: base64.b64encode(x.tobytes()).decode()
-    data = dict(n=len(keep), all=N, left=round(100 * (1 - len(keep) / N)), aspect=float((hi - lo)[1] / span), x=b64(q[:, 0]), y=b64(q[:, 1]), yr=b64(yr),
+    # The page is small; the data sits in two JSON files beside it. Core draws the map. Extra (dog-number
+    # fingerprints, kennel member lists) loads later, for search and kennel picks. The dog page demo reads them too.
+    core = dict(n=len(keep), all=N, left=round(100 * (1 - len(keep) / N)), aspect=float((hi - lo)[1] / span), x=b64(q[:, 0]), y=b64(q[:, 1]), yr=b64(yr),
                 meta=b64(meta), f=b64(f8), sire=b64(s), dam=b64(d), y0=1870, ex=a.export_end,
-                kn=[[k[0], k[1], k[2], len(k[3]), b64(k[3])] for k in kn],
-                cl=b64(clab.astype('u1')), cs=cs, csweep=csweep, rh=b64(rh), nh=b64(nh))
-    html = open(a.template, encoding='utf-8').read().replace('/*DATA*/null', json.dumps(data, separators=(',', ':')))
-    open(a.out, 'w', encoding='utf-8').write(html)
+                kn=[[k[0], k[1], k[2], len(k[3])] for k in kn],
+                cl=b64(clab.astype('u1')), cs=cs, csweep=csweep)
+    extra = dict(rh=b64(rh), nh=b64(nh), kb=[b64(k[3]) for k in kn])
+    ddir = os.path.join(os.path.dirname(os.path.abspath(a.out)), 'data'); os.makedirs(ddir, exist_ok=True)
+    for name, obj in (('galaxy-core.json', core), ('galaxy-extra.json', extra)):
+        open(os.path.join(ddir, name), 'w', encoding='utf-8').write(json.dumps(obj, separators=(',', ':')))
+    html = open(a.template, encoding='utf-8').read()
     log(f'wrote {a.out} {len(html)//1024} KB')
 
 

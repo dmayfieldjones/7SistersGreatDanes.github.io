@@ -883,8 +883,8 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   function fnv(t){var h=0x811c9dc5;for(var i=0;i<t.length;i++){h^=t.charCodeAt(i);h=Math.imul(h,0x01000193)}return h>>>0}
   function loadGalaxy(){
     if(galP)return galP;
-    galP=fetch('/breed-galaxy.html').then(function(r){return r.text()}).then(function(h){
-      var i=h.indexOf('const DATA='),j=h.indexOf('\n',i),D=JSON.parse(h.slice(i+11,j).replace(/;\s*$/,''));
+    galP=Promise.all([fetch('/data/galaxy-core.json').then(function(r){return r.json()}),fetch('/data/galaxy-extra.json').then(function(r){return r.json()})]).then(function(a){
+      var D=a[0];D.rh=a[1].rh;D.nh=a[1].nh;
       function unb(s,T){var b=atob(s),u=new Uint8Array(b.length);for(var k=0;k<b.length;k++)u[k]=b.charCodeAt(k);return new T(u.buffer)}
       var G={N:D.n,asp:D.aspect,y0:D.y0,qx:unb(D.x,Uint16Array),qy:unb(D.y,Uint16Array),yr:unb(D.yr,Uint8Array),f8:unb(D.f,Uint8Array),sire:unb(D.sire,Int32Array),dam:unb(D.dam,Int32Array),cl:unb(D.cl,Uint8Array),cs:D.cs,rh:D.rh?unb(D.rh,Uint32Array):null,nh:D.nh?unb(D.nh,Uint32Array):null};
       var ks=new Int32Array(G.N+1),kl=new Int32Array(2*G.N),c=new Int32Array(G.N),k2;
