@@ -1096,7 +1096,8 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     return loadGalaxy().then(function(G){
       if(run!==homeRun)return;
       // Piper's own place on the map is the finale of the tour
-      return DogAPI.getDog(412).then(function(s){
+      // the finale is a nicety: a slow answer from the server must not hold the animation back, so it gets 1.5 s
+      return Promise.race([DogAPI.getDog(412),new Promise(function(_,no){setTimeout(no,1500)})]).then(function(s){
         var l=s.identifiers.filter(function(x){return x.registry==='AKC'})[0];
         return {reg:l&&l.number,call:s.dog.call||s.dog.short||'Piper'};
       }).catch(function(){return null}).then(function(star){if(run===homeRun)startHome(G,run,star)});
@@ -1402,6 +1403,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
 
   // ---- start ----
   var DEV=/^(localhost|127\.0\.0\.1)$/.test(location.hostname);   // the "view as" menu is for local development only: it would let anyone become the administrator
+  loadGalaxy().catch(function(){});   // start the big download now, alongside sign-in, instead of after it
   fetch('/data/dog-auth.json').then(function(r){return r.ok?r.json():null}).catch(function(){return null}).then(function(cfg){AUTH=cfg;return DogAPI.init()}).then(function(s){
     SESSION=s;
     var t=stored();return (AUTH&&t)?applyLogin(t).then(function(ok){checkMfaNudge();return ok}):false;
