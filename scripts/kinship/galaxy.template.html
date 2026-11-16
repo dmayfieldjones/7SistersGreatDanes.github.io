@@ -274,24 +274,27 @@ const E_VS=HEAD+`uniform float ea;void main(){gl_Position=pos();float age=cur-yr
  float fl=1.+flash*2.*exp(-max(age,0.)*1.6);vc=c*vis*dim*ea*fl;}`
 const E_FS=`precision mediump float;varying vec3 vc;void main(){gl_FragColor=vec4(vc,max(vc.r,max(vc.g,vc.b)));}`
 const pP=prog(P_VS,P_FS),pE=prog(E_VS,E_FS)
-const U=(p,n)=>gl.getUniformLocation(p,n)
+const ULOC=new Map(),ALOC=new Map()   // GL lookups are slow, so each is asked for once
+const U=(p,n)=>{let m=ULOC.get(p);if(!m)ULOC.set(p,m=new Map());let l=m.get(n);if(l===undefined)m.set(n,l=gl.getUniformLocation(p,n));return l}
+const AL=(p,n)=>{let m=ALOC.get(p);if(!m)ALOC.set(p,m=new Map());let l=m.get(n);if(l===undefined)m.set(n,l=gl.getAttribLocation(p,n));return l}
 
 // points: x y yr r g b
 const PV=new Float32Array(N*6)
 for(let i=0;i<N;i++){PV[i*6]=px[i];PV[i*6+1]=py[i]*ASPECT;PV[i*6+2]=year[i]}
 // edges: two vertices per link, both carrying the child's year and color
-let nE=0;let EI=[]
-for(let i=0;i<N;i++){if(sire[i]>=0)EI.push(i,sire[i]);if(dam[i]>=0)EI.push(i,dam[i])}
-nE=EI.length/2
+let nE=0
+for(let i=0;i<N;i++){if(sire[i]>=0)nE++;if(dam[i]>=0)nE++}
+let EI=new Int32Array(nE*2)
+{let k=0;for(let i=0;i<N;i++){if(sire[i]>=0){EI[k++]=i;EI[k++]=sire[i]}if(dam[i]>=0){EI[k++]=i;EI[k++]=dam[i]}}}
 // edges ordered by the child's birth year, so each frame draws only the edges already born
 const EYMAX=400,eCnt=new Int32Array(EYMAX+2)
 for(let e=0;e<nE;e++)eCnt[Math.round(year[EI[e*2]])+1]++
 for(let y=1;y<eCnt.length;y++)eCnt[y]+=eCnt[y-1]            // eCnt[y] = edges with child year < y
-{const pos=eCnt.slice(),o=new Array(EI.length);for(let e=0;e<nE;e++){const y=Math.round(year[EI[e*2]]),k=pos[y]++;o[k*2]=EI[e*2];o[k*2+1]=EI[e*2+1]}EI=o}
+{const pos=eCnt.slice(),o=new Int32Array(EI.length);for(let e=0;e<nE;e++){const y=Math.round(year[EI[e*2]]),k=pos[y]++;o[k*2]=EI[e*2];o[k*2+1]=EI[e*2+1]}EI=o}
 const bornEdges=y=>eCnt[Math.max(0,Math.min(EYMAX,Math.floor(y)+1))]
 const EV=new Float32Array(nE*2*6)
 for(let e=0;e<nE;e++){const c=EI[e*2],p=EI[e*2+1]
-  EV.set([px[c],py[c]*ASPECT,year[c],0,0,0],e*12);EV.set([px[p],py[p]*ASPECT,year[c],0,0,0],e*12+6)}
+  const o=e*12;EV[o]=px[c];EV[o+1]=py[c]*ASPECT;EV[o+2]=year[c];EV[o+6]=px[p];EV[o+7]=py[p]*ASPECT;EV[o+8]=year[c]}
 function recolor(){
   const f=colorOf[mode]
   for(let i=0;i<N;i++){const c=f(i);PV[i*6+3]=c[0]/255;PV[i*6+4]=c[1]/255;PV[i*6+5]=c[2]/255}
@@ -302,7 +305,7 @@ function recolor(){
 }
 const bufP=gl.createBuffer(),bufE=gl.createBuffer()
 function bind(p,buf){gl.bindBuffer(gl.ARRAY_BUFFER,buf)
-  for(const [n,sz,o] of [['p',2,0],['yr',1,2],['c',3,3]]){const l=gl.getAttribLocation(p,n);gl.enableVertexAttribArray(l);gl.vertexAttribPointer(l,sz,gl.FLOAT,false,24,o*4)}}
+  for(const [n,sz,o] of [['p',2,0],['yr',1,2],['c',3,3]]){const l=AL(p,n);gl.enableVertexAttribArray(l);gl.vertexAttribPointer(l,sz,gl.FLOAT,false,24,o*4)}}
 
 // --- view ---
 let W=1,H=1,dpr=1,K=1,TX=0,TY=0,base=1
@@ -488,7 +491,7 @@ addEventListener('resize',()=>{reset();spark()})
  $('m-ncon').textContent=NC;$('m-q').textContent=b.modularity.toFixed(3);$('m-nmi').textContent=b.stability.toFixed(2)
  $('m-sweep').innerHTML=sw.map(r=>`<li>Setting ${r.resolution}: ${r.groups} groups, modularity ${r.modularity.toFixed(3)}${r===b?' <b>(best)</b>':''}</li>`).join('')}
 reset();setMode('con');spark();readout()
-requestAnimationFrame(()=>{reset();setMode(mode);requestAnimationFrame(()=>draw())})
+requestAnimationFrame(()=>{reset();requestAnimationFrame(()=>draw())})
 setTimeout(loadExtra,2500)   // fetch search and kennel data once the map is up, so the first search is instant
 document.addEventListener('visibilitychange',()=>{if(!document.hidden){last=performance.now();draw()}})
 if(!matchMedia('(prefers-reduced-motion: reduce)').matches){cur=MINY;pg=0;scrub.value=cur;playing=true;flash=1;$('play').textContent='Pause';last=performance.now();setTimeout(()=>{last=performance.now();requestAnimationFrame(tick)},900)}
