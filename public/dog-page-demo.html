@@ -123,11 +123,14 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
 .homeform button{font-size:1rem;padding:8px 20px;border-radius:999px}
 .demorow{display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap}
 .galwrap{position:relative}
+#home.booting .homehero>:not(h1){visibility:hidden}   /* until the server answers, the title and clip show and the rest of the top part holds its space, so nothing jumps */
+#homevid[hidden],#homecv[hidden],#homecap[hidden]{display:none}   /* the display rules below would otherwise override the hidden attribute */
+#homevid{width:100%;height:440px;display:block;object-fit:cover;background:#05060a;border:1px solid var(--grid);border-radius:12px}
 #homecv{width:100%;height:440px;display:block;background:#05060a;border:1px solid var(--grid);border-radius:12px}
 .galcap{position:absolute;left:0;right:0;bottom:0;padding:10px 16px 12px;border-radius:0 0 12px 12px;background:linear-gradient(transparent,rgba(5,6,10,.82));color:#fff;pointer-events:none;font-size:.85rem}
 .galcap b{display:block;font-size:.95rem}.galcap span{color:#c9cde0}
 #status:empty{min-height:0!important;margin:0!important}#findpanel:empty{margin:0!important}
-@media (max-width:560px){.homehero{padding:2px 8px 10px}.homehero h1{margin-bottom:8px}#homecv{height:clamp(250px,calc(100svh - 390px),420px)}}
+@media (max-width:560px){.homehero{padding:2px 8px 10px}.homehero h1{margin-bottom:8px}#homecv,#homevid{height:clamp(250px,calc(100svh - 390px),420px)}}
 #mfa-qr svg{width:100%;height:100%;display:block}
 </style>
 </head>
@@ -210,7 +213,7 @@ form.inline input,form.inline select{width:auto;padding:4px 7px;font-size:.85rem
     <p class="meta" id="homemsg" role="status" style="margin:8px 0 0;min-height:1.2em"></p>
   </div>
   <div id="todo" class="card" hidden style="margin:14px 0"></div>
-  <div class="galwrap"><canvas id="homecv" aria-label="An animated map of the breed: dots appear year by year, the largest constellations light up in turn, and one dog's family tree is traced across the map"></canvas><div class="galcap" id="homecap" aria-live="off"></div></div>
+  <div class="galwrap"><video id="homevid" muted loop playsinline preload="auto" poster="/img/galaxy-home-poster.jpg" hidden aria-label="An animated map of the breed: dots appear year by year, the largest constellations light up in turn, and one dog's family tree is traced across the map"></video><canvas id="homecv" aria-label="An animated map of the breed: dots appear year by year, the largest constellations light up in turn, and one dog's family tree is traced across the map"></canvas><div class="galcap" id="homecap" aria-live="off"></div></div>
 </section>
 
 <section id="landing" class="card" hidden style="margin:0 0 16px">
@@ -1087,11 +1090,22 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
   });
 
   // ---- home: a search box, three demo dogs, and an animated tour of the galaxy (drawn in the browser from the same map data; nothing is stored) ----
-  var homeRaf=0,homeRun=0,homeVisible=true,homeIO=null;
-  function hideHome(){$('ourdogsbtn').hidden=false;$('home').hidden=true;$('whobox').hidden=false;cancelAnimationFrame(homeRaf);homeRun++}
-  function showHome(){$('ourdogsbtn').hidden=true;homeState();$('findpanel').innerHTML='';
+  var homeRaf=0,homeRun=0,homeVisible=true,homeIO=null,clipFailed=/[?&]live\b/.test(location.search),booted=false;   // ?live draws the animation in the browser even when the clip is there (the recorder needs this)
+  function hideHome(){var hv=$('homevid');if(hv&&!hv.paused)hv.pause();$('ourdogsbtn').hidden=false;$('home').hidden=true;$('whobox').hidden=false;cancelAnimationFrame(homeRaf);homeRun++}
+  function showHome(){$('home').classList.remove('booting');$('ourdogsbtn').hidden=true;homeState();$('findpanel').innerHTML='';
     $('landing').hidden=true;$('dogview').hidden=true;$('home').hidden=false;$('whobox').hidden=true;say('');renderTop();renderTodo();
     cancelAnimationFrame(homeRaf);var run=++homeRun;
+    // The intro is a recorded clip (scripts/kinship/record_home_clip.cjs), so it starts at once without the galaxy data.
+    // If the clip is missing or cannot play, or the visitor prefers less motion, the page draws the same animation live.
+    var hv=$('homevid'),calmPref=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(hv&&!calmPref&&!clipFailed){
+      hv.hidden=false;$('homecv').hidden=true;$('homecap').hidden=true;
+      hv.onerror=function(){clipFailed=true;if(!$('home').hidden)showHome()};
+      if(!hv.getAttribute('src'))hv.src='/video/galaxy-home.mp4';
+      var pl=hv.play();if(pl&&pl.catch)pl.catch(function(){});
+      return Promise.resolve();
+    }
+    if(hv){hv.pause();hv.hidden=true}$('homecv').hidden=false;$('homecap').hidden=false;
     $('homecap').textContent='Loading the galaxy…';
     return loadGalaxy().then(function(G){
       if(run!==homeRun)return;
@@ -1119,7 +1133,10 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
     var cnt=new Int32Array(maxYr+2);for(i=0;i<N;i++)cnt[G.yr[i]+1]++;for(k=0;k<=maxYr;k++)cnt[k+1]+=cnt[k];
     var order=new Int32Array(N),fill=cnt.slice();for(i=0;i<N;i++)order[fill[G.yr[i]]++]=i;
     var ptr=0;
-    function born(ty){while(ptr<N&&G.yr[order[ptr]]<ty){var d=order[ptr++];lc.globalAlpha=.5;lc.fillStyle=cols[G.cl[d]];lc.fillRect((px(d)-bx[0])*ls-.8,(py(d)-bx[2])*ls-.8,1.8,1.8)}}
+    // The first dogs are few and faint, so they are drawn larger and brighter with a soft halo; the boost fades away as the map fills (by ~20,000 dogs) so the dense years keep their look.
+    function born(ty){while(ptr<N&&G.yr[order[ptr]]<ty){var d=order[ptr++],eb=Math.max(0,1-ptr/20000),X=(px(d)-bx[0])*ls+.1,Y=(py(d)-bx[2])*ls+.1;lc.fillStyle=cols[G.cl[d]];
+      if(eb>0){lc.globalAlpha=.2*eb;lc.fillRect(X-3,Y-3,6,6)}
+      var sz=1.8+1.8*eb;lc.globalAlpha=.5+.5*eb;lc.fillRect(X-sz/2,Y-sz/2,sz,sz)}}
     // the biggest constellations, each with a handful of "stars" (the dogs with the most puppies) joined like a drawn constellation
     var mem=[];for(c=0;c<K;c++)mem[c]=[];for(i=0;i<N;i++)mem[G.cl[i]].push(i);
     var ids=G.cs.map(function(_,c){return c}).sort(function(a,b){return G.cs[b][1]-G.cs[a][1]}).slice(0,Math.min(7,K));
@@ -1207,7 +1224,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
       if(e<BUILD){
         var yr=Math.floor(yearAt(e));
         ctx.globalAlpha=1;ctx.fillStyle='#fff';ctx.font='700 64px system-ui,sans-serif';ctx.textAlign='left';ctx.textBaseline='alphabetic';ctx.shadowColor='rgba(120,160,255,.8)';ctx.shadowBlur=18;ctx.fillText(String(yr),18,68);ctx.shadowBlur=0;
-        title='The breed, born year by year';sub=ptr.toLocaleString()+' dogs so far'
+        title='The breed, born year by year';sub='Each dot is a Great Dane, lit in the year it was born'
       }else if(!inFin){
         var T=tour[kk];
         if(kk===0&&e<BUILD+.8){ctx.globalAlpha=1-e3((e-BUILD)/.8);ctx.fillStyle='#fff';ctx.font='700 64px system-ui,sans-serif';ctx.textAlign='left';ctx.textBaseline='alphabetic';ctx.shadowColor='rgba(120,160,255,.8)';ctx.shadowBlur=18;ctx.fillText(String(endYear),18,68);ctx.shadowBlur=0}
@@ -1225,7 +1242,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
           ctx.globalAlpha=.55+.45*pl;ctx.fillStyle=g;ctx.beginPath();ctx.arc(sx2,sy2,16,0,6.3);ctx.fill();ctx.globalAlpha=show;ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(sx2,sy2,2.2,0,6.3);ctx.fill()}
         var la=e3((u-.5)/.6)*(1-e3((u-TT+PB+.3)/.6));
         ctx.globalAlpha=la;ctx.fillStyle='#fff';ctx.font='700 30px system-ui,sans-serif';ctx.textAlign='left';ctx.textBaseline='alphabetic';ctx.shadowColor=hot[T.c];ctx.shadowBlur=14;ctx.fillText(G.cs[T.c][0]||('Group '+(T.c+1)),18,44);ctx.shadowBlur=0;
-        title='The '+esc(G.cs[T.c][0]||('Group '+(T.c+1)))+' constellation';sub=T.m.length.toLocaleString()+' dogs, centered on '+G.cs[T.c][2]+'. The bright stars are its most prolific sires and dams.'
+        title='The '+esc(G.cs[T.c][0]||('Group '+(T.c+1)))+' constellation';sub='Most of its dogs were born around '+G.cs[T.c][2]+'. The bright stars are its most prolific sires and dams.'
       }else{
         var u2=e-BUILD-tour.length*TT,reveal=Math.max(0,(u2-1.6)/4.2)*fin.mg;
         ctx.lineWidth=1.3;
@@ -1235,7 +1252,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
         for(k=0;k<2;k++){var qq=(ph+k*.5)%1;ctx.globalAlpha=.8*(1-qq);ctx.strokeStyle='#fff';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(fx,fy,6+qq*18,0,6.3);ctx.stroke()}
         ctx.globalAlpha=1;ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(fx,fy,3,0,6.3);ctx.fill();
         ctx.font='700 15px system-ui,sans-serif';ctx.textAlign='center';ctx.shadowColor='#000';ctx.shadowBlur=6;ctx.fillText(star.call,fx,fy-16);ctx.shadowBlur=0;
-        title=esc(star.call)+'’s family tree';sub='Her ancestry, '+fin.mg+' generations back, across '+fin.anc.size.toLocaleString()+' dogs. Every pedigree is a path through the galaxy.'
+        title=esc(star.call)+'’s family tree';sub='Her ancestry, '+fin.mg+' generations back. Every pedigree is a path through the galaxy.'
       }
       setCap('<b>'+title+'</b><span>'+sub+'</span>');
       // fade between loops
@@ -1245,7 +1262,7 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
       if(!calm)homeRaf=requestAnimationFrame(frame)
     }
     homeRaf=requestAnimationFrame(frame);
-    if(calm)setCap('<b>'+N.toLocaleString()+' Great Danes, '+K+' constellations</b><span>The whole breed, 1870 to today, each dot a dog and each color a constellation of related lines.</span>');
+    if(calm)setCap('<b>The breed, 1870 to today</b><span>Each dot is a Great Dane and each color is a group of related lines.</span>');
     if(!homeIO&&window.IntersectionObserver){homeIO=new IntersectionObserver(function(en){homeVisible=en[0].isIntersecting});homeIO.observe(cv)}
   }
   var homeRz=0;window.addEventListener('resize',function(){clearTimeout(homeRz);homeRz=setTimeout(function(){if(!$('home').hidden)showHome()},250)});
@@ -1403,14 +1420,23 @@ function noimg(el){var sp=document.createElement('span');sp.className='noimg';sp
 
   // ---- start ----
   var DEV=/^(localhost|127\.0\.0\.1)$/.test(location.hostname);   // the "view as" menu is for local development only: it would let anyone become the administrator
-  loadGalaxy().catch(function(){});   // start the big download now, alongside sign-in, instead of after it
+  // the galaxy data is needed for the pin on a dog's map and for search, not for the intro clip, so it loads after the clip has the bandwidth
+  setTimeout(function(){loadGalaxy().catch(function(){})},2500);
+  // Show the title and the clip at once; the search box and demo buttons appear when the server has answered (showHome clears 'booting').
+  (function(){var hv=$('homevid');
+    if(!hv||clipFailed||(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches))return;
+    $('home').classList.add('booting');$('home').hidden=false;$('ourdogsbtn').hidden=true;$('whobox').hidden=true;
+    hv.hidden=false;$('homecv').hidden=true;$('homecap').hidden=true;
+    hv.onerror=function(){clipFailed=true;if(booted&&!$('home').hidden)showHome()};
+    hv.src='/video/galaxy-home.mp4';var pl=hv.play();if(pl&&pl.catch)pl.catch(function(){});
+  })();
   fetch('/data/dog-auth.json').then(function(r){return r.ok?r.json():null}).catch(function(){return null}).then(function(cfg){AUTH=cfg;return DogAPI.init()}).then(function(s){
     SESSION=s;
     var t=stored();return (AUTH&&t)?applyLogin(t).then(function(ok){checkMfaNudge();return ok}):false;
   }).then(function(){return DogAPI.authors()}).then(function(a){
     authors=a;$('devmenu').hidden=!DEV||DogAPI.remote();$('auth-src').textContent=DEV?'Names come from the authors file. Records store only author numbers.':'';
-    renderTop();return showHome();
-  });
+    renderTop();booted=true;return showHome();
+  }).catch(function(){$('home').classList.remove('booting');$('homemsg').textContent='The server is not answering just now. Reload in a moment to try again.'});
 })();
 </script>
 <div id="photopop" hidden></div>

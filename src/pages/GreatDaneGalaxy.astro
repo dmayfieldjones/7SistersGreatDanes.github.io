@@ -1,0 +1,75 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+---
+
+<BaseLayout
+  title="The Great Dane Galaxy | 7Sisters Farm"
+  description="A short animation of Great Danes appearing on a map of the breed, year by year."
+  canonical="https://7sistersgreatdanes.com/GreatDaneGalaxy"
+  image="https://7sistersgreatdanes.com/img/galaxy-og.jpg"
+  noindex
+  breadcrumbs={[{ name: 'The Great Dane Galaxy', path: '/GreatDaneGalaxy' }]}
+>
+  <div class="content">
+    <div class="post-title">
+      <h1>The Great Dane Galaxy</h1>
+    </div>
+    <main class="content-wrapper galaxy-teaser">
+      <video
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="auto"
+        poster="/img/galaxy-home-poster.jpg"
+        src="/video/galaxy-home.mp4"
+        aria-label="An animated map of the breed: dots appear year by year, the largest constellations light up in turn, and one dog's family tree is traced across the map"
+      ></video>
+      <p>
+        Every dot is a Great Dane, placed by how closely related it is to the others and lit in the year it was born.
+      </p>
+      <section class="galaxy-method">
+        <h2>How the groups are made</h2>
+        <p>
+          The groups come from the Leiden method for network clustering, which
+          cuts the network where parent links are sparse between groups. We ran
+          it at eight resolution settings, each with several random seeds, and
+          kept the partition with the highest modularity. Modularity is nearly
+          flat across neighboring settings, so the exact number of groups is not
+          sharply determined. Each group is named for the kennel whose dogs fill
+          the most of it while sitting mostly inside it.
+        </p>
+      </section>
+    </main>
+  </div>
+</BaseLayout>
+
+<style>
+  .galaxy-teaser {
+    max-width: 860px;
+    margin: 0 auto;
+  }
+  .galaxy-teaser video {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 800 / 440;
+    background: #05060a;
+    border-radius: 12px;
+  }
+  .galaxy-teaser > p {
+    margin: 1rem 0 0;
+    text-align: center;
+  }
+  .galaxy-method {
+    margin-top: 2rem;
+  }
+  .galaxy-method h2 {
+    font-size: 1.1rem;
+    margin: 0 0 0.5rem;
+  }
+  .galaxy-method p {
+    margin: 0;
+    font-size: 0.95rem;
+  }
+</style>

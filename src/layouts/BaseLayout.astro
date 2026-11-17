@@ -18,6 +18,7 @@ interface Props {
   ogType?: string
   siteName?: string
   breadcrumbs?: Breadcrumb[]
+  noindex?: boolean
 }
 
 const {
@@ -29,6 +30,7 @@ const {
   ogType = 'website',
   siteName = '7Sisters Farm',
   breadcrumbs,
+  noindex = false,
 } = Astro.props
 
 const gaId = 'G-SDSX26JETX'
@@ -65,6 +67,7 @@ const breadcrumbSchema =
       type="image/png"
     />
     <title>{title}</title>
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
     {description && <meta name="description" content={description} />}
     {
       keywords && keywords.length > 0 && (
